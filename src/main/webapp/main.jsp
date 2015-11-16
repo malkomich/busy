@@ -31,61 +31,46 @@ THE SOFTWARE.
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="malkomich">
+<meta name="description" content="Main Page">
+
 <link rel="icon" href="favicon.ico">
 
-<title>buSy</title>
+<title>BuSy - Página Principal</title>
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<link href="css/cover.css" rel="stylesheet" type="text/css">
-<link href="css/signin.css" rel="stylesheet" type="text/css">
+
+<link href="css/cover.css" rel="stylesheet">
+<link href="css/main.css" rel="stylesheet">
+
 </head>
 <body>
-	<div class="site-wrapper">
+	<jsp:include page="include/header.jsp" />
+	<div class="container">
 
-		<div class="site-wrapper-inner">
+		<div class="cover-container">
+		</div><!-- cover-container -->
 
-			<div class="cover-container">
-				<jsp:include page="include/header.jsp" />
-
-				<div class="inner cover">
-					<form class="form-signin reduce" action="#" method="POST">
-						<h2 class="form-signin-heading">Please sign in</h2>
-
-						<div class="input-group">
-							<span class="input-group-addon"><i
-								class="glyphicon glyphicon-user"></i> </span> <input type="email"
-								id="inputEmail" class="form-control" placeholder="Email address"
-								required="required" />
-						</div>
-
-						<div class="input-group">
-							<span class="input-group-addon"><i
-								class="glyphicon glyphicon-lock"></i> </span> <input type="password"
-								id="inputPassword" class="form-control" placeholder="Password"
-								required="required" size="20" />
-						</div>
-						<div class="checkbox">
-							<label> <input type="checkbox" value="remember-me">
-								Remember me
-							</label>
-						</div>
-						<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
-							in</button>
-					</form>
+		<div class="modal fade" id="events-modal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h3>Event</h3>
+					</div>
+					<div class="modal-body" style="height: 400px"></div>
+					<div class="modal-footer">
+						<a href="#" data-dismiss="modal" class="btn">Close</a>
+					</div>
 				</div>
-
 			</div>
-
-			<jsp:include page="include/footer.jsp" />
-
 		</div>
 
+		<jsp:include page="include/footer.jsp" />
+
 	</div>
-
-
+	<!-- container -->
 
 	<!-- Bootstrap core JavaScript
     ================================================== -->
@@ -94,5 +79,6 @@ THE SOFTWARE.
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 </body>
 </html>
