@@ -1,63 +1,78 @@
 package busy.location;
 
-public class Address {
+import java.io.Serializable;
 
-	public Address(String address1, String address2, int zipCode, City city) {
-		// TODO Auto-generated constructor stub
+public class Address implements Serializable {
+
+	private static final long serialVersionUID = -843704810974065837L;
+
+	private int id;
+	private String address1;
+	private String address2;
+	private String zipCode;
+	private City city;
+
+	public Address(String address1, String address2, String zipCode,
+			City city) {
+		this.address1 = address1;
+		this.address2 = address2;
+		this.zipCode = zipCode;
+		this.city = city;
 	}
 
 	public Address() {
-		// TODO Auto-generated constructor stub
+
 	}
-	
+
 	public void setAddress1(String address1) {
-		// TODO Auto-generated method stub
-		
+		this.address1 = address1;
 	}
-	
+
 	public String getAddress1() {
-		// TODO Auto-generated method stub
-		return null;
+		return address1;
 	}
 
 	public void setAddress2(String address2) {
-		// TODO Auto-generated method stub
-		
+		this.address2 = address2;
 	}
-	
+
 	public String getAddress2() {
-		// TODO Auto-generated method stub
-		return null;
+		return address2;
 	}
 
-	public void setZipCode(int zipCode) {
-		// TODO Auto-generated method stub
-		
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
 	}
 
-	public Integer getZipCode() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getZipCode() {
+		return zipCode;
 	}
-	
+
 	public void setCity(City city) {
-		// TODO Auto-generated method stub
-		
+		this.city = city;
 	}
 
 	public City getCity() {
-		// TODO Auto-generated method stub
-		return null;
+		return city;
 	}
-	
-	public void setId(int id) {
-		// TODO Auto-generated method stub
-		
+
+	@SuppressWarnings("unused")
+	private void setId(Integer id) {
+		this.id = id;
 	}
-	
+
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return id;
 	}
-	
+
+	@Override
+	public String toString() {
+		return address1 + " " + address2 + ", " + zipCode + " "
+				+ city.toString();
+	}
+
+	public Integer getCityId() {
+		return (city != null) ? city.getId() : null;
+	}
+
 }

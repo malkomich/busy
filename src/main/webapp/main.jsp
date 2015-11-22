@@ -24,6 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ***************************************** -->
 
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,7 +37,7 @@ THE SOFTWARE.
 
 <link rel="icon" href="favicon.ico">
 
-<title>BuSy - Página Principal</title>
+<title><spring:message code="main.page.title" /></title>
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -48,8 +50,8 @@ THE SOFTWARE.
 	<jsp:include page="include/header.jsp" />
 	<div class="container">
 
-		<div class="cover-container">
-		</div><!-- cover-container -->
+		<div class="cover-container"></div>
+		<!-- cover-container -->
 
 		<div class="modal fade" id="events-modal">
 			<div class="modal-dialog">
@@ -72,8 +74,6 @@ THE SOFTWARE.
 	</div>
 	<!-- container -->
 
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

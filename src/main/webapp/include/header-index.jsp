@@ -1,12 +1,17 @@
-<div class="masthead clearfix">
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+
+<div class="clearfix">
 	<div class="inner">
 		<a href="/"><img src="img/busy-logo_2.png" align="left"></a>
 		<nav>
 			<ul class="nav masthead-nav">
 				<li>
 					<form action="register" method="get">
-						<button type="submit" class="btn btn-lg btn-primary btn-block">Sign
-							Up</button>
+
+						<spring:message code="register.button" var="registerButton" />
+						<button type="submit" class="btn btn-lg btn-primary btn-block">
+							${registerButton}</button>
+
 					</form>
 				</li>
 			</ul>

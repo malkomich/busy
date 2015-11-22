@@ -2,6 +2,7 @@ package busy.user.web;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.openqa.selenium.By;
 import org.springframework.stereotype.Component;
 
 import busy.BusyPage;
@@ -15,33 +16,54 @@ import busy.BusyPage;
 @Component
 public class LoginPage extends BusyPage {
 
+	private static final String PATH = "/";
+	private static final String DESCRIPTION = "Login Page";
+
+	private static final String EMAIL_SELECTOR = "#email";
+	private static final String PASSWORD_SELECTOR = "#password";
+	private static final String SUBMIT_SELECTOR = "#submit";
+	private static final String ERROR_SELECTOR = "label.error";
+
 	@Override
 	public String relativePath() {
-		return "/";
+
+		return PATH;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.fluentlenium.core.FluentPage#isAt()
 	 */
 	@Override
 	public void isAt() {
-		assertThat(title()).contains("Mantente ocupado");
+
+		String description = getDriver().findElement(By.xpath("//meta[@name='description']"))
+				.getAttribute("content");
+		assertThat(description).contains(DESCRIPTION);
 	}
 
-	public void setEmail(String email) {
-		fill("#inputEmail").with(email);
+	public LoginPage setEmail(String email) {
+
+		fill(EMAIL_SELECTOR).with(email);
+		return this;
 	}
 
-	public void setPassword(String password) {
-		fill("#inputPassword").with(password);
+	public LoginPage setPassword(String password) {
+
+		fill(PASSWORD_SELECTOR).with(password);
+		return this;
 	}
 
-	public void submit() {
-		submit("#login-form");
+	public LoginPage submit() {
+
+		submit(SUBMIT_SELECTOR);
+		return this;
 	}
 
 	public boolean errorIsShown() {
-		return false;
+
+		return !find(ERROR_SELECTOR).isEmpty();
 	}
 
 }

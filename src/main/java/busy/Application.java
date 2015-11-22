@@ -2,7 +2,12 @@ package busy;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * Spring Boot Application class. It runs the whole application with an embedded
@@ -13,8 +18,23 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @ComponentScan(basePackages = {"busy"})
-public class Application {
+public class Application extends WebMvcConfigurerAdapter {
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
+	}
+
+	/**
+	 * Injection of the message properties files, so internationalization is
+	 * enabled.
+	 * 
+	 * @return
+	 */
+	@Bean
+	@Scope(value="singleton")
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename("classpath:messages/messages");
+		messageSource.setUseCodeAsDefaultMessage(true);
+		return messageSource;
 	}
 }

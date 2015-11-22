@@ -12,7 +12,7 @@ Then the Main page is shown
 
 Examples:
 |email|password|
-|"user@domain.com"|"pass"|
+|"admin@busy.com"|"123456"|
 
 Scenario Outline: User log in wrong
 Given user is on login page
@@ -24,5 +24,5 @@ Then an error message is shown
 Examples:
 |email|password|
 |""|""|
-|"wrong_user@gmail.com"|"pass"|
-|"user@domain.com"|"wrong_pass"|
+|"wrong_user@gmail.com"|"123456"|
+|"admin@busy.com"|"wrong_pass"|

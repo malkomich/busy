@@ -107,3 +107,7 @@ form em {
 .input-group input{
 	margin-bottom: 0px !important;
 }
+
+label.error {
+	position: fixed;
+}

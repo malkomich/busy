@@ -24,7 +24,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ***************************************** -->
 
-<!DOCTYPE html>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -34,7 +37,7 @@ THE SOFTWARE.
 <link rel="icon" href="favicon.ico">
 <meta name="description" content="Login Page">
 
-<title>BuSy: Mantente ocupado, mantenlos ocupados</title>
+<title><spring:message code="login.page.title" /></title>
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -52,30 +55,78 @@ THE SOFTWARE.
 				<jsp:include page="include/header-index.jsp" />
 
 				<div class="inner cover">
-					<form class="form-signin reduce" action="/" method="POST" id="login-form">
-						<h2 class="form-signin-heading">Please sign in</h2>
+					<form:form class="form-signin reduce" action="/" method="POST"
+						modelAttribute="loginForm" commandName="loginForm">
+
+						<!-- Form title -->
+						<spring:message code="login.form.title" var="formTitle" />
+						<h2 class="form-signin-heading">${formTitle}</h2>
 
 						<div class="input-group">
+
+							<!-- User Icon -->
 							<span class="input-group-addon"><i
-								class="glyphicon glyphicon-user"></i> </span> <input type="email"
-								id="inputEmail" class="form-control" placeholder="Email address"
-								required="required" />
+								class="glyphicon glyphicon-user"></i> </span>
+
+							<!-- Email Input -->
+							<spring:message code="email.placeholder" var="emailPlaceHolder" />
+							<form:input id="email" type="email" class="form-control"
+								placeholder="${emailPlaceHolder}" required="required"
+								path="email" />
+
+							<!-- Email errors -->
+							<spring:bind path="email">
+								<c:if test="${status.error}">
+									<c:forEach items="${status.errorMessages}" var="error">
+										<label for="inputEmail" class="form-validation-icon error"><span
+											class="glyphicon glyphicon-exclamation-sign"
+											aria-hidden="true"></span> <span id="email.errors"
+											class="error">${error}</span></label>
+									</c:forEach>
+								</c:if>
+							</spring:bind>
+
 						</div>
 
 						<div class="input-group">
+
+							<!-- Password Icon -->
 							<span class="input-group-addon"><i
-								class="glyphicon glyphicon-lock"></i> </span> <input type="password"
-								id="inputPassword" class="form-control" placeholder="Password"
-								required="required" size="20" />
+								class="glyphicon glyphicon-lock"></i> </span>
+
+							<!-- Password Input -->
+							<spring:message code="password.placeholder"
+								var="passwordPlaceHolder" />
+							<form:password id="password" class="form-control"
+								placeholder="${passwordPlaceHolder}" required="required" size="50"
+								path="password" />
+
+							<!-- Password errors -->
+							<spring:bind path="password">
+								<c:if test="${status.error}">
+									<c:forEach items="${status.errorMessages}" var="error">
+										<label for="inputEmail" class="form-validation-icon error"><span
+											class="glyphicon glyphicon-exclamation-sign"
+											aria-hidden="true"></span> <span id="email.errors"
+											class="error">${error}</span></label>
+									</c:forEach>
+								</c:if>
+							</spring:bind>
+
 						</div>
 						<div class="checkbox">
+
 							<label> <input type="checkbox" value="remember-me">
-								Remember me
+								<spring:message code="remember.checkbox" />
 							</label>
+
 						</div>
-						<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
-							in</button>
-					</form>
+
+						<spring:message code="login.submit" var="loginSubmit" />
+						<button id="submit" class="btn btn-lg btn-primary btn-block" type="submit">
+							${loginSubmit}</button>
+
+					</form:form>
 				</div>
 
 			</div>
@@ -88,8 +139,6 @@ THE SOFTWARE.
 
 
 
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>

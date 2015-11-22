@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.test.context.jdbc.Sql;
 
 import busy.AbstractFunctionalTest;
-import busy.user.web.HomePage;
 import busy.user.web.LoginPage;
+import busy.user.web.MainPage;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -21,13 +21,14 @@ import cucumber.api.java.en.When;
  * @author malkomich
  *
  */
-@Sql("/sql/insert_test.sql")
+
+@Sql("classpath:sql/insert-person.sql")
 public class LogInSteps extends AbstractFunctionalTest {
 
 	final Logger log = LoggerFactory.getLogger(LogInSteps.class);
 
 	@Page
-	private HomePage homePage;
+	private MainPage mainPage;
 
 	@Page
 	private LoginPage loginPage;
@@ -55,12 +56,13 @@ public class LogInSteps extends AbstractFunctionalTest {
 
 	@Then("^the Main page is shown$")
 	public void mainPageIsShown() throws Throwable {
-		FluentLeniumAssertions.assertThat(homePage).isAt();
+		FluentLeniumAssertions.assertThat(mainPage).isAt();
 	}
 
 	@Then("^an error message is shown$")
 	public void an_error_message_is_shown() throws Throwable {
 		assertTrue(loginPage.errorIsShown());
+		FluentLeniumAssertions.assertThat(loginPage).isAt();
 	}
 
 }

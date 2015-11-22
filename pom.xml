@@ -32,19 +32,6 @@
 		<resource.directory>src/main/resources</resource.directory>
 	</properties>
 
-	<profiles>
-		<!-- Datasource configuration profile for Heroku deployments -->
-		<profile>
-			<id>heroku</id>
-			<properties>
-				<spring.profiles.active>heroku</spring.profiles.active>
-				<profile.name>${profile.name}</profile.name>
-				<db.driverClass>${db.driverClass}</db.driverClass>
-				<db.connectionURL>${db.connectionURL}</db.connectionURL>
-			</properties>
-		</profile>
-	</profiles>
-
 	<dependencies>
 		<!-- ============ Spring ============ -->
 		<dependency>
@@ -76,6 +63,11 @@
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>jstl</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
 
 		<!-- ============ Unit Testing ============ -->
 		<dependency>
@@ -94,6 +86,10 @@
 					<groupId>junit</groupId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
 		</dependency>
 
 		<!-- ============ Integration Testing ============ -->
@@ -144,6 +140,8 @@
 	<build>
 		<finalName>busy</finalName>
 		<plugins>
+
+			<!-- Java compiler configuration -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
@@ -152,10 +150,17 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 				</configuration>
 			</plugin>
+
+			<!-- Spring Boot Lifecycle implementation -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- Enable maven resource filters in application.properties files -->
+					<addResources>false</addResources>
+				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 

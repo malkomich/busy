@@ -1,102 +1,131 @@
 package busy.user;
 
+import java.io.Serializable;
+
 import busy.location.Address;
 
-public class User {
+public class User implements Serializable {
 
-	public User(String firstName, String lastName, String email, String password,
-			String nif, Address address, String phone, Boolean active,
-			Boolean admin) {
-		// TODO Auto-generated constructor stub
+	private static final long serialVersionUID = 4782710436663959256L;
+
+	private int id;
+	private String firstName;
+	private String lastName;
+	private String email;
+	private String pasword;
+	private String nif;
+	private Address address;
+	private String phone;
+	private Boolean active;
+	private Boolean admin;
+
+	public User(String firstName, String lastName, String email,
+			String password, String nif, String phone,
+			Boolean active, Boolean admin, Address address) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.pasword = password;
+		this.nif = nif;
+		this.phone = phone;
+		this.active = (active != null) ? active : true;
+		this.admin = (admin != null) ? admin : false;
+		this.address = address;
 	}
 
 	public User() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public void setFirstName(String firstName) {
-		// TODO Auto-generated method stub
-
+		this.firstName = firstName;
 	}
-	
+
 	public String getFirstName() {
-		// TODO Auto-generated method stub
-		return null;
+		return firstName;
 	}
 
 	public void setLastName(String lastName) {
-		// TODO Auto-generated method stub
-
+		this.lastName = lastName;
 	}
-	
+
 	public String getLastName() {
-		// TODO Auto-generated method stub
-		return null;
+		return lastName;
 	}
 
 	public void setEmail(String email) {
-		// TODO Auto-generated method stub
-
+		this.email = email;
 	}
-	
+
 	public String getEmail() {
-		// TODO Auto-generated method stub
-		return null;
+		return email;
 	}
 
 	public void setPassword(String password) {
-		// TODO Auto-generated method stub
-
+		this.pasword = password;
 	}
 
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return pasword;
 	}
-	
+
 	public void setNif(String nif) {
-		// TODO Auto-generated method stub
-		
+		this.nif = nif;
 	}
 
 	public String getNif() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public void setAddress() {
-		// TODO Auto-generated method stub
-
+		return nif;
 	}
 
-	public Address getAddress() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public void setPhone() {
-		// TODO Auto-generated method stub
-
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	public String getPhone() {
-		// TODO Auto-generated method stub
-		return null;
+		return phone;
+	}
+
+	public void setActive(Boolean active) {
+		this.active = (active != null) ? active : true;
+	}
+
+	public Boolean isActive() {
+		return active;
+	}
+
+	@SuppressWarnings("unused")
+	private void setAdmin(Boolean admin) {
+		this.admin = (admin != null) ? admin : false;
+	}
+
+	public Boolean isAdmin() {
+		return admin;
 	}
 	
-	public void setActive() {
-		// TODO Auto-generated method stub
-
+	public void setAddress(Address address) {
+		this.address = address;
 	}
 
-	public boolean isActive() {
-		// TODO Auto-generated method stub
-		return false;
+	public Address getAddress() {
+		return address;
 	}
 
-	public boolean isAdmin() {
-		// TODO Auto-generated method stub
-		return false;
+	@SuppressWarnings("unused")
+	private void setId(Integer id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public String toString() {
+		return firstName + " " + lastName + " (" + email + " --> " + pasword;
+	}
+
+	public Integer getAddressId() {
+		return (address != null) ? address.getId() : null;
 	}
 
 }

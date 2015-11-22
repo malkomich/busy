@@ -1,43 +1,52 @@
 package busy.location;
 
-public class Country {
+import java.io.Serializable;
+
+public class Country implements Serializable {
+
+	private static final long serialVersionUID = -1791719052398890417L;
+
+	private int id;
+	private String name;
+	private String code;
 
 	public Country(String name, String code) {
-		// TODO Auto-generated constructor stub
+		this.name = name;
+		this.code = code;
 	}
 
 	public Country() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public void setName(String name) {
-		// TODO Auto-generated method stub
 
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	public void setCode(String code) {
-		// TODO Auto-generated method stub
-
+		this.code = code;
 	}
 
 	public String getCode() {
-		// TODO Auto-generated method stub
-		return null;
+		return code;
 	}
-	
-	public void setId(int id) {
-		// TODO Auto-generated method stub
-		
+
+	@SuppressWarnings("unused")
+	private void setId(Integer id) {
+		this.id = id;
 	}
 
 	public int getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return id;
+	}
+
+	@Override
+	public String toString() {
+		return name + " [" + code + "]";
 	}
 
 }
