@@ -22,7 +22,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 public class HerokuConfig {
 
 	@Value("${spring.datasource.url}")
-	protected String url;
+	String url;
 
 	/**
 	 * This is an specific DataSource of a PostGreSQL database in the production
