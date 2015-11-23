@@ -23,6 +23,7 @@ Then an error message is shown
 
 Examples:
 |email|password|
-|""|""|
+|"admin@busy.com"|""|
+|""|"123456"|
 |"wrong_user@gmail.com"|"123456"|
 |"admin@busy.com"|"wrong_pass"|

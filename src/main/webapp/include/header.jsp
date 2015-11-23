@@ -31,7 +31,7 @@
 					class="dropdown-toggle" id="userMenu" aria-haspopup="true"
 					aria-expanded="true"><span><img class="img-circle"
 							height="30" width="30"
-							src="https://trello-avatars.s3.amazonaws.com/26b1569836c6a987d4b9d77ac0ca1c79/30.png"
+							src="img/user.png"
 							alt="${user.firstName}" title="${user.firstName}"></span> <span id="span-username">
 							${user.firstName}</span> <b class="caret"></b> </a>
 					<ul class="dropdown-menu" aria-labelledby="userMenu">
