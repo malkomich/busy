@@ -164,6 +164,21 @@
 		</plugins>
 	</build>
 
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.3</version>
+				<configuration>
+					<reportOutputDirectory>${project.basedir}</reportOutputDirectory>
+					<destDir>../../busydoc</destDir>
+				</configuration>
+
+			</plugin>
+		</plugins>
+	</reporting>
+
 	<scm>
 		<connection>scm:git:https://github.com/malkomich/busy.git</connection>
 		<developerConnection>scm:git:https://github.com/malkomich/busy.git
