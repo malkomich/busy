@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-	<person id="1" first_name="Aurelio" last_name="García"
-		email="admin@busy.com" password="123456" active="true"
-		admin_role="true" />
-	<person id="2" first_name="Dionisio" last_name="González"
-		email="active_user@gmail.com" password="123456" active="true"
-		admin_role="false" />
-	<person id="3" first_name="Godofredo" last_name="Gómez"
-		email="blocked_user@gmail.com" password="123456" active="false"
+	<person id="1" first_name="Nombre" last_name="Apellidos"
+		email="user@domain.com" password="pass" active="true"
 		admin_role="false" />
 </dataset>

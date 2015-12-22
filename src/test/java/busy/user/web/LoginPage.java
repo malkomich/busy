@@ -23,6 +23,7 @@ public class LoginPage extends BusyPage {
 	private static final String PASSWORD_SELECTOR = "#password";
 	private static final String SUBMIT_SELECTOR = "#submit";
 	private static final String ERROR_SELECTOR = "label.error";
+	private static final String SIGNUP_SELECTOR = "#signupButton";
 
 	@Override
 	public String relativePath() {
@@ -64,6 +65,11 @@ public class LoginPage extends BusyPage {
 	public boolean errorIsShown() {
 
 		return !find(ERROR_SELECTOR).isEmpty();
+	}
+	
+	public LoginPage clickSignUp() {
+		click(SIGNUP_SELECTOR);
+		return this;
 	}
 
 }

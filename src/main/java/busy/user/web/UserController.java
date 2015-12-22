@@ -74,7 +74,7 @@ public class UserController {
 		model.addAttribute(USER_SESSION, user);
 		return MAIN_PAGE;
 	}
-
+	
 	/**
 	 * Login Form Validator. It validate if email exists, and if the user with
 	 * this email have the given password.

@@ -70,9 +70,9 @@ THE SOFTWARE.
 
 							<!-- Email Input -->
 							<spring:message code="email.placeholder" var="emailPlaceHolder" />
-							<form:input id="email" type="email" class="form-control"
+							<form:input id="email" class="form-control" cssErrorClass="form-control has-error"
 								placeholder="${emailPlaceHolder}" required="required"
-								path="email" />
+								path="email" tabindex="1" />
 
 							<!-- Email errors -->
 							<spring:bind path="email">
@@ -97,9 +97,9 @@ THE SOFTWARE.
 							<!-- Password Input -->
 							<spring:message code="password.placeholder"
 								var="passwordPlaceHolder" />
-							<form:password id="password" class="form-control"
+							<form:password id="password" class="form-control" cssErrorClass="form-control has-error"
 								placeholder="${passwordPlaceHolder}" required="required" size="50"
-								path="password" />
+								path="password" tabindex="2" />
 
 							<!-- Password errors -->
 							<spring:bind path="password">

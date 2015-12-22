@@ -8,6 +8,7 @@ import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.Rollback;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -35,7 +36,7 @@ public class CityDBTest extends AbstractDBTest {
 		SecureSetter.setId(country, 1);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	@Rollback(true)
 	public void nameNull() {
 
@@ -44,7 +45,7 @@ public class CityDBTest extends AbstractDBTest {
 		repository.save(city);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	@Rollback(true)
 	public void nameTooLong() {
 
@@ -52,7 +53,7 @@ public class CityDBTest extends AbstractDBTest {
 		repository.save(city);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	@Rollback(true)
 	public void nameDuplicated() {
 
@@ -62,7 +63,7 @@ public class CityDBTest extends AbstractDBTest {
 		repository.save(city2);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	@Rollback(true)
 	public void countryNull() {
 
@@ -71,7 +72,7 @@ public class CityDBTest extends AbstractDBTest {
 		repository.save(city);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	@Rollback(true)
 	public void countryNotExists() {
 

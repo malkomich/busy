@@ -1,9 +1,9 @@
 package busy.user;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -54,13 +54,13 @@ public class UserServiceTest {
 	 */
 	@Test
 	public void findUserSuccess() {
-		String email = "admin@busy.com";
+		String email = "user@domain.com";
 		when(userDao.findByEmail(email)).thenReturn(
-				new User("Aurelio", "García", email, "123456", null, null, true, true, null));
+				new User("Nombre", "Apellidos", email, "pass", null, null, true, false, null));
 
 		User user = service.findUserByEmail(email);
 		assertNotNull(user);
-		assertEquals("García", user.getLastName());
-		assertTrue(user.isAdmin());
+		assertEquals("Apellidos", user.getLastName());
+		assertFalse(user.isAdmin());
 	}
 }

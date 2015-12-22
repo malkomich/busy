@@ -1,5 +1,9 @@
 package busy;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
@@ -7,9 +11,13 @@ import org.fluentlenium.adapter.FluentTest;
 import org.fluentlenium.core.FluentPage;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationContextLoader;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -28,6 +36,12 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @IntegrationTest
 public class AbstractFunctionalTest extends FluentTest {
 
+	@Autowired
+    private ApplicationContext context;
+	
+	@Autowired
+	protected JdbcTemplate template;
+	
 	/**
 	 * Absolute path of the root URL, to let from now the use of relative URL
 	 * paths.
@@ -55,5 +69,29 @@ public class AbstractFunctionalTest extends FluentTest {
 	@PreDestroy
 	public void tearDown() {
 		this.quit();
+	}
+	
+	protected String getSQLScript(String path) {
+		
+		Resource resource = context.getResource(path);
+		BufferedReader reader = null;
+		StringBuilder stBuilder = new StringBuilder();
+		try {
+			reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
+			String line;
+			while ((line = reader.readLine()) != null)
+				stBuilder.append(line);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return stBuilder.toString();
 	}
 }

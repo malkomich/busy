@@ -9,7 +9,7 @@
 					<form action="register" method="get">
 
 						<spring:message code="register.button" var="registerButton" />
-						<button type="submit" class="btn btn-lg btn-primary btn-block">
+						<button id="signupButton" type="submit" class="btn btn-lg btn-primary btn-block">
 							${registerButton}</button>
 
 					</form>

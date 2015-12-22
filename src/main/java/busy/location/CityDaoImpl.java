@@ -2,6 +2,7 @@ package busy.location;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.sql.DataSource;
@@ -10,34 +11,48 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import busy.util.SecureSetter;
 
+import static busy.util.SQLUtil.*;
+
 @Repository
 public class CityDaoImpl implements CityDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT city.id AS cityId, city.name AS cityName, "
-			+ "country.id AS countryId, country.name AS countryName, country.code FROM city "
-			+ "LEFT JOIN country ON city.country_id = country.id";
+	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_CITY + "." + ID + " AS " + ALIAS_CITYID + ","
+			+ TABLE_CITY + "." + NAME + " AS " + ALIAS_CITYNAME + "," + TABLE_COUNTRY + "." + ID + " AS "
+			+ ALIAS_COUNTRYID + "," + TABLE_COUNTRY + "." + NAME + " AS " + ALIAS_COUNTRYNAME + "," + CODE + " FROM "
+			+ TABLE_CITY + " LEFT JOIN " + TABLE_COUNTRY + " ON " + TABLE_CITY + "." + COUNTRYID + "=" + TABLE_COUNTRY
+			+ "." + ID;
 
-	private static final String SQL_INSERT = "INSERT INTO city (name, country_id) VALUES (?, ?)";
+	private static final String SQL_INSERT = "INSERT INTO " + TABLE_CITY + "(" + NAME + "," + COUNTRYID
+			+ ") VALUES (?, ?)";
 
-	private static final String SQL_UPDATE = "UPDATE city SET name = ?, country_id = ? WHERE id = ?";
+	private static final String SQL_UPDATE = "UPDATE " + TABLE_CITY + " SET " + NAME + "= ?," + COUNTRYID + "= ? WHERE "
+			+ ID + "= ?";
 
 	private JdbcTemplate jdbcTemplate;
+
+	private SimpleJdbcInsert jdbcInsert;
 
 	@Autowired
 	public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
 		jdbcTemplate = new JdbcTemplate(dataSource);
+
+		jdbcInsert = new SimpleJdbcInsert(dataSource);
+		jdbcInsert.withTableName(TABLE_CITY);
+		jdbcInsert.setGeneratedKeyName(ID);
+		jdbcInsert.setColumnNames(Arrays.asList(NAME, COUNTRYID));
+
 	}
 
 	@Override
 	public List<City> findAll() {
 
 		return jdbcTemplate.query(SQL_SELECT_ALL, new CityRowMapper());
-
 	}
 
 	@Override
@@ -59,13 +74,13 @@ public class CityDaoImpl implements CityDao {
 		public City mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			City city = new City();
-			SecureSetter.setId(city, rs.getInt("cityId"));
-			city.setName(rs.getString("cityName"));
+			SecureSetter.setId(city, rs.getInt(ALIAS_CITYID));
+			city.setName(rs.getString(ALIAS_CITYNAME));
 
 			Country country = new Country();
-			SecureSetter.setId(country, rs.getInt("countryId"));
-			country.setName(rs.getString("countryName"));
-			country.setCode(rs.getString("code"));
+			SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRYID));
+			country.setName(rs.getString(ALIAS_COUNTRYNAME));
+			country.setCode(rs.getString(CODE));
 
 			city.setCountry(country);
 

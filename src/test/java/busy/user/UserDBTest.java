@@ -206,10 +206,10 @@ public class UserDBTest extends AbstractDBTest {
 	@DatabaseSetup("userSet.xml")
 	public void findUserByEmailSuccesfully() {
 
-		User user = repository.findByEmail("admin@busy.com");
+		User user = repository.findByEmail("user@domain.com");
 		assertNotNull(user);
-		assertEquals("García", user.getLastName());
-		assertTrue(user.isAdmin());
+		assertEquals("Apellidos", user.getLastName());
+		assertFalse(user.isAdmin());
 	}
 
 }

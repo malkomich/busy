@@ -2,8 +2,11 @@ package busy.user.web;
 
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.Email;
+
 public class LoginForm {
 
+	@Email
 	@NotNull
 	private String email;
 	

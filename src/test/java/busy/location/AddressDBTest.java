@@ -8,6 +8,7 @@ import java.util.Iterator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
@@ -34,7 +35,7 @@ public class AddressDBTest extends AbstractDBTest {
 		SecureSetter.setId(city, 1);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	public void address1TooLong() {
 
 		Address address = new Address();
@@ -43,7 +44,7 @@ public class AddressDBTest extends AbstractDBTest {
 		repository.save(address);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	public void address2TooLong() {
 
 		Address address = new Address();
@@ -52,7 +53,7 @@ public class AddressDBTest extends AbstractDBTest {
 		repository.save(address);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	public void zipCodeTooLong() {
 
 		Address address = new Address();
@@ -61,14 +62,14 @@ public class AddressDBTest extends AbstractDBTest {
 		repository.save(address);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	public void cityNull() {
 
 		Address address = new Address("Calle Ejemplo", "1, 1ºA", "47005", null);
 		repository.save(address);
 	}
 
-	@Test(expected = Exception.class)
+	@Test(expected = DataIntegrityViolationException.class)
 	public void cityNotExists() {
 
 		City newCity = new City("París", new Country("Francia", "FR"));
