@@ -19,10 +19,15 @@ public class LoginPage extends BusyPage {
 	private static final String PATH = "/";
 	private static final String DESCRIPTION = "Login Page";
 
+	/*
+	 * CSS Selectors
+	 */
 	private static final String EMAIL_SELECTOR = "#email";
 	private static final String PASSWORD_SELECTOR = "#password";
+	
 	private static final String SUBMIT_SELECTOR = "#submit";
 	private static final String ERROR_SELECTOR = "label.error";
+	
 	private static final String SIGNUP_SELECTOR = "#signupButton";
 
 	@Override

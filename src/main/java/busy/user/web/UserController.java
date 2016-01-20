@@ -31,17 +31,20 @@ public class UserController {
 	 */
 	static final String USER_SESSION = "user";
 	static final String LOGIN_REQUEST = "loginForm";
+	static final String REGISTER_REQUEST = "registerForm";
 
 	/**
 	 * URL Paths.
 	 */
 	private static final String PATH_ROOT = "/";
+	private static final String PATH_REGISTER = "signup";
 
 	/**
 	 * JSP's
 	 */
 	private static final String LOGIN_PAGE = "login";
 	private static final String MAIN_PAGE = "main";
+	private static final String REGISTER_PAGE = "register";
 
 	@Autowired
 	private UserService userService;
@@ -75,6 +78,14 @@ public class UserController {
 		return MAIN_PAGE;
 	}
 	
+	@RequestMapping(value = PATH_REGISTER, method = RequestMethod.GET)
+	public String showRegister(Model model) {
+		
+		RegisterForm registerForm = new RegisterForm();
+		model.addAttribute(REGISTER_REQUEST, registerForm);
+		return REGISTER_PAGE;
+	}
+
 	/**
 	 * Login Form Validator. It validate if email exists, and if the user with
 	 * this email have the given password.

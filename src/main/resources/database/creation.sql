@@ -57,3 +57,9 @@ CREATE TABLE person (
 	address_id			integer			NULL REFERENCES address(id)
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE registry (
+	person_id			integer			NOT NULL PRIMARY KEY REFERENCES person(id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	confirmation_id		text			NOT NULL
+);

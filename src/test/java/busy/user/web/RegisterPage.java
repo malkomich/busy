@@ -3,6 +3,7 @@ package busy.user.web;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.Select;
 
 import busy.BusyPage;
 
@@ -11,6 +12,9 @@ public class RegisterPage extends BusyPage {
 	private static final String PATH = "register";
 	private static final String DESCRIPTION = "Register Page";
 
+	/*
+	 * CSS Selectors
+	 */
 	private static final String FIRSTNAME_SELECTOR = "#firstname";
 	private static final String LASTNAME_SELECTOR = "#lastname";
 	private static final String EMAIL_SELECTOR = "#email";
@@ -21,7 +25,10 @@ public class RegisterPage extends BusyPage {
 	private static final String PHONE_SELECTOR = "#phone";
 	private static final String PASSWORD_SELECTOR = "#password";
 	private static final String PASSCONFIRM_SELECTOR = "#confirmedPassword";
+	
 	private static final String SUBMIT_SELECTOR = "#submit";
+	private static final String ERROR_SELECTOR = "label.error";
+	private static final String EMAIL_SENT_SELECTOR = "#email-sent";
 	
 	@Override
 	public String relativePath() {
@@ -68,11 +75,19 @@ public class RegisterPage extends BusyPage {
 	
 	public RegisterPage selectCountry(String country) {
 
+		Select select = new Select(getDriver().findElement(By.cssSelector(COUNTRY_SELECTOR)));
+		select.deselectAll();
+		select.selectByVisibleText(country);
+		
 		return this;
 	}
 	
 	public RegisterPage selectCity(String city) {
 
+		Select select = new Select(getDriver().findElement(By.cssSelector(CITY_SELECTOR)));
+		select.deselectAll();
+		select.selectByVisibleText(city);
+		
 		return this;
 	}
 	
@@ -107,8 +122,12 @@ public class RegisterPage extends BusyPage {
 	}
 
 	public boolean errorIsShown() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return !find(ERROR_SELECTOR).isEmpty();
+	}
+	
+	public boolean emailIsSent() {
+		return !find(EMAIL_SENT_SELECTOR).isEmpty();
 	}
 
 }

@@ -160,7 +160,7 @@ public class UserDBTest extends AbstractDBTest {
 		assertEquals("71121212D", resultuser.getNif());
 		assertNull(resultuser.getAddress());
 		assertEquals("902202122", resultuser.getPhone());
-		assertTrue(resultuser.isActive());
+		assertFalse(resultuser.isActive());
 		assertFalse(resultuser.isAdmin());
 	}
 
@@ -190,7 +190,7 @@ public class UserDBTest extends AbstractDBTest {
 		assertTrue(resultuser.getAddress().getAddress1().contains("Calle Mayor"));
 
 		assertEquals("902202122", resultuser.getPhone());
-		assertTrue(resultuser.isActive());
+		assertFalse(resultuser.isActive());
 		assertFalse(resultuser.isAdmin());
 	}
 
@@ -211,5 +211,5 @@ public class UserDBTest extends AbstractDBTest {
 		assertEquals("Apellidos", user.getLastName());
 		assertFalse(user.isAdmin());
 	}
-
+	
 }

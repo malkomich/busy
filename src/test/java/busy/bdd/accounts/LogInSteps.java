@@ -47,23 +47,23 @@ public class LogInSteps extends AbstractFunctionalTest {
 		template.execute(getSQLScript(scriptPath));
 	}
 
-	@Given("^user is on login page$")
+	@Given("^the user is on login page$")
 	public void user_is_on_login_page() throws Throwable {
 		goTo(loginPage).await().untilPage();
 		FluentLeniumAssertions.assertThat(loginPage).isAt();
 	}
 
-	@When("^user introduces email \"([^\"]*)\"$")
+	@When("^the user introduces email \"([^\"]*)\"$")
 	public void user_introduces_email(String email) throws Throwable {
 		loginPage.setEmail(email);
 	}
 
-	@When("^user introduces password \"([^\"]*)\"$")
+	@When("^the user introduces password \"([^\"]*)\"$")
 	public void user_introduces_password(String password) throws Throwable {
 		loginPage.setPassword(password);
 	}
 
-	@When("^user press Log In button$")
+	@When("^the user press Log In button$")
 	public void user_press_Log_In_button() throws Throwable {
 		loginPage.submit();
 	}
@@ -73,7 +73,7 @@ public class LogInSteps extends AbstractFunctionalTest {
 		FluentLeniumAssertions.assertThat(mainPage).isAt();
 	}
 
-	@Then("^an error message is shown$")
+	@Then("^an error message in the Login page is shown$")
 	public void an_error_message_is_shown() throws Throwable {
 		assertTrue(loginPage.errorIsShown());
 		FluentLeniumAssertions.assertThat(loginPage).isAt();

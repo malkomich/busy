@@ -26,4 +26,4 @@ out/
 
 # Temporary files
 *~
-error.log
+*.log
