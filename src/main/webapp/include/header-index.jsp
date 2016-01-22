@@ -6,11 +6,11 @@
 		<nav>
 			<ul class="nav masthead-nav">
 				<li>
-					<form action="register" method="get">
+					<form action="/signup" method="get">
 
-						<spring:message code="register.button" var="registerButton" />
+						<spring:message code="signup.button" var="signupButton" />
 						<button id="signupButton" type="submit" class="btn btn-lg btn-primary btn-block">
-							${registerButton}</button>
+							${signupButton}</button>
 
 					</form>
 				</li>

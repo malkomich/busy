@@ -5,6 +5,7 @@
  * Database tables' creation
  */
 
+DROP TABLE IF EXISTS registry;
 DROP TABLE IF EXISTS person;
 DROP SEQUENCE IF EXISTS person_seq;
 DROP TABLE IF EXISTS address;

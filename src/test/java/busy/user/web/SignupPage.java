@@ -7,10 +7,10 @@ import org.openqa.selenium.support.ui.Select;
 
 import busy.BusyPage;
 
-public class RegisterPage extends BusyPage {
+public class SignupPage extends BusyPage {
 
-	private static final String PATH = "register";
-	private static final String DESCRIPTION = "Register Page";
+	private static final String PATH = "/signup";
+	private static final String DESCRIPTION = "Signup Page";
 
 	/*
 	 * CSS Selectors
@@ -18,24 +18,23 @@ public class RegisterPage extends BusyPage {
 	private static final String FIRSTNAME_SELECTOR = "#firstname";
 	private static final String LASTNAME_SELECTOR = "#lastname";
 	private static final String EMAIL_SELECTOR = "#email";
-	private static final String NIF_SELECTOR = "#nif";
 	private static final String COUNTRY_SELECTOR = "#country";
 	private static final String CITY_SELECTOR = "#city";
 	private static final String ZIPCODE_SELECTOR = "#zipcode";
 	private static final String PHONE_SELECTOR = "#phone";
 	private static final String PASSWORD_SELECTOR = "#password";
 	private static final String PASSCONFIRM_SELECTOR = "#confirmedPassword";
-	
+
 	private static final String SUBMIT_SELECTOR = "#submit";
 	private static final String ERROR_SELECTOR = "label.error";
 	private static final String EMAIL_SENT_SELECTOR = "#email-sent";
-	
+
 	@Override
 	public String relativePath() {
 
 		return PATH;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -44,90 +43,83 @@ public class RegisterPage extends BusyPage {
 	@Override
 	public void isAt() {
 
-		String description = getDriver().findElement(By.xpath("//meta[@name='description']"))
-				.getAttribute("content");
+		String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
 		assertThat(description).contains(DESCRIPTION);
 	}
-	
-	public RegisterPage setFirstname(String firstname) {
+
+	public SignupPage setFirstname(String firstname) {
 
 		fill(FIRSTNAME_SELECTOR).with(firstname);
 		return this;
 	}
-	
-	public RegisterPage setLastname(String lastname) {
+
+	public SignupPage setLastname(String lastname) {
 
 		fill(LASTNAME_SELECTOR).with(lastname);
 		return this;
 	}
-	
-	public RegisterPage setEmail(String email) {
+
+	public SignupPage setEmail(String email) {
 
 		fill(EMAIL_SELECTOR).with(email);
 		return this;
 	}
-	
-	public RegisterPage setNif(String nif) {
 
-		fill(NIF_SELECTOR).with(nif);
-		return this;
-	}
-	
-	public RegisterPage selectCountry(String country) {
+	public SignupPage selectCountry(String country) {
 
 		Select select = new Select(getDriver().findElement(By.cssSelector(COUNTRY_SELECTOR)));
-		select.deselectAll();
 		select.selectByVisibleText(country);
+
+		waitForJSandJQueryToLoad();
 		
 		return this;
 	}
-	
-	public RegisterPage selectCity(String city) {
+
+	public SignupPage selectCity(String city) {
 
 		Select select = new Select(getDriver().findElement(By.cssSelector(CITY_SELECTOR)));
-		select.deselectAll();
 		select.selectByVisibleText(city);
-		
+
 		return this;
 	}
-	
-	public RegisterPage setZipcode(String zipcode) {
+
+	public SignupPage setZipcode(String zipcode) {
 
 		fill(ZIPCODE_SELECTOR).with(zipcode);
 		return this;
 	}
-	
-	public RegisterPage setPhoneNumber(String phone) {
+
+	public SignupPage setPhoneNumber(String phone) {
 
 		fill(PHONE_SELECTOR).with(phone);
 		return this;
 	}
 
-	public RegisterPage setPassword(String password) {
+	public SignupPage setPassword(String password) {
 
 		fill(PASSWORD_SELECTOR).with(password);
 		return this;
 	}
-	
-	public RegisterPage setPasswordConfirmation(String passConfirm) {
+
+	public SignupPage setPasswordConfirmation(String passConfirm) {
 
 		fill(PASSCONFIRM_SELECTOR).with(passConfirm);
 		return this;
 	}
 
-	public RegisterPage submit() {
+	public SignupPage submit() {
 
 		submit(SUBMIT_SELECTOR);
 		return this;
 	}
 
 	public boolean errorIsShown() {
-		
+
 		return !find(ERROR_SELECTOR).isEmpty();
 	}
-	
+
 	public boolean emailIsSent() {
 		return !find(EMAIL_SENT_SELECTOR).isEmpty();
 	}
-
+	
 }

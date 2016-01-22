@@ -2,6 +2,7 @@ package busy.location;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -26,6 +28,8 @@ public class CityDaoImpl implements CityDao {
 			+ ALIAS_COUNTRYID + "," + TABLE_COUNTRY + "." + NAME + " AS " + ALIAS_COUNTRYNAME + "," + CODE + " FROM "
 			+ TABLE_CITY + " LEFT JOIN " + TABLE_COUNTRY + " ON " + TABLE_CITY + "." + COUNTRYID + "=" + TABLE_COUNTRY
 			+ "." + ID;
+	
+	private static final String SQL_SELECT_BY_COUNTRY = SQL_SELECT_ALL + " WHERE " + CODE + "= ?";
 
 	private static final String SQL_INSERT = "INSERT INTO " + TABLE_CITY + "(" + NAME + "," + COUNTRYID
 			+ ") VALUES (?, ?)";
@@ -49,12 +53,32 @@ public class CityDaoImpl implements CityDao {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see busy.location.CityDao#findAll()
+	 */
 	@Override
 	public List<City> findAll() {
 
 		return jdbcTemplate.query(SQL_SELECT_ALL, new CityRowMapper());
 	}
+	
+	/* (non-Javadoc)
+	 * @see busy.location.CityDao#findByCountry(busy.location.Country)
+	 */
+	@Override
+	public List<City> findByCountryCode(String countryCode) {
+		
+		try {
+			return jdbcTemplate.query(SQL_SELECT_BY_COUNTRY, new CityRowMapper(), countryCode);
+		} catch (EmptyResultDataAccessException e) {
 
+			return new ArrayList<>();
+		}
+	}
+
+	/* (non-Javadoc)
+	 * @see busy.location.CityDao#save(busy.location.City)
+	 */
 	@Override
 	public void save(City city) {
 

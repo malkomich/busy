@@ -25,7 +25,7 @@ THE SOFTWARE.
 ***************************************** -->
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <html>
@@ -46,6 +46,7 @@ THE SOFTWARE.
 <link href="css/cover.css" rel="stylesheet" type="text/css">
 <link href="css/signin.css" rel="stylesheet" type="text/css">
 </head>
+
 <body>
 	<div class="site-wrapper">
 
@@ -70,7 +71,8 @@ THE SOFTWARE.
 
 							<!-- Email Input -->
 							<spring:message code="email.placeholder" var="emailPlaceHolder" />
-							<form:input id="email" class="form-control" cssErrorClass="form-control has-error"
+							<form:input id="email" class="form-control"
+								cssErrorClass="form-control has-error"
 								placeholder="${emailPlaceHolder}" required="required"
 								path="email" tabindex="1" />
 
@@ -97,9 +99,10 @@ THE SOFTWARE.
 							<!-- Password Input -->
 							<spring:message code="password.placeholder"
 								var="passwordPlaceHolder" />
-							<form:password id="password" class="form-control" cssErrorClass="form-control has-error"
-								placeholder="${passwordPlaceHolder}" required="required" size="50"
-								path="password" tabindex="2" />
+							<form:password id="password" class="form-control"
+								cssErrorClass="form-control has-error"
+								placeholder="${passwordPlaceHolder}" required="required"
+								size="50" path="password" tabindex="2" />
 
 							<!-- Password errors -->
 							<spring:bind path="password">
@@ -123,8 +126,8 @@ THE SOFTWARE.
 						</div>
 
 						<spring:message code="login.submit" var="loginSubmit" />
-						<button id="submit" class="btn btn-lg btn-primary btn-block" type="submit">
-							${loginSubmit}</button>
+						<button id="submit" class="btn btn-lg btn-primary btn-block"
+							type="submit">${loginSubmit}</button>
 
 					</form:form>
 				</div>

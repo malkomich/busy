@@ -1,9 +1,11 @@
 package busy.bdd;
 
 import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-import cucumber.api.CucumberOptions;
-import cucumber.api.junit.Cucumber;
+import busy.bdd.accounts.log_in.LogInTest;
+import busy.bdd.accounts.sign_up.SignUpTest;
 
 /**
  * Execute all BDD Features in the path given to the "glue" parameter
@@ -15,8 +17,8 @@ import cucumber.api.junit.Cucumber;
  * @author malkomich
  *
  */
-@RunWith(Cucumber.class)
-@CucumberOptions(glue = "busy.bdd", plugin = {"html:target/cucumber"})
+@RunWith(Suite.class)
+@SuiteClasses({ LogInTest.class, SignUpTest.class })
 public class RunStories {
 
 }

@@ -6,11 +6,21 @@ interface CityDao {
 
 	/**
 	 * Finds the collection of all registries of City in the database. It will
-	 * return an empty List when no Users exist.
+	 * return an empty List when no Cities exist.
 	 * 
 	 * @return List of existing Citys
 	 */
 	List<City> findAll();
+	
+	/**
+	 * Finds the collection of all registries of City in the database which
+	 * belong to the country given. It will return an empty List when no Cities
+	 * fullfill the restriction.
+	 * 
+	 * @param country
+	 * @return
+	 */
+	List<City> findByCountryCode(String countryCode);
 
 	/**
 	 * Create or update a City registry in the database.

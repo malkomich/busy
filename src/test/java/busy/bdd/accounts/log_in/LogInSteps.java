@@ -1,4 +1,4 @@
-package busy.bdd.accounts;
+package busy.bdd.accounts.log_in;
 
 import static org.junit.Assert.assertTrue;
 
@@ -35,7 +35,7 @@ public class LogInSteps extends AbstractFunctionalTest {
 	@Before
 	public void runOnce() {
 
-		String scriptPath = "classpath:database/test/insert-person.sql";
+		String scriptPath = "classpath:database/test/login-prepare.sql";
 		template.execute(getSQLScript(scriptPath));
 
 	}
@@ -43,7 +43,7 @@ public class LogInSteps extends AbstractFunctionalTest {
 	@After
 	public void rollback() {
 
-		String scriptPath = "classpath:database/test/drop-person.sql";
+		String scriptPath = "classpath:database/test/login-rollback.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 
@@ -78,5 +78,5 @@ public class LogInSteps extends AbstractFunctionalTest {
 		assertTrue(loginPage.errorIsShown());
 		FluentLeniumAssertions.assertThat(loginPage).isAt();
 	}
-
+	
 }

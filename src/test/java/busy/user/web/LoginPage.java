@@ -3,7 +3,6 @@ package busy.user.web;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.openqa.selenium.By;
-import org.springframework.stereotype.Component;
 
 import busy.BusyPage;
 
@@ -13,7 +12,6 @@ import busy.BusyPage;
  * @author malkomich
  *
  */
-@Component
 public class LoginPage extends BusyPage {
 
 	private static final String PATH = "/";
@@ -73,7 +71,7 @@ public class LoginPage extends BusyPage {
 	}
 	
 	public LoginPage clickSignUp() {
-		click(SIGNUP_SELECTOR);
+		submit(SIGNUP_SELECTOR);
 		return this;
 	}
 

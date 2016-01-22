@@ -22,6 +22,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import com.gargoylesoftware.htmlunit.WebClient;
+
+
 /**
  * Basic class configurated to let subclasses easily automate integration
  * testing using a library called 'FluentLenium' to take advantage of Selenium
@@ -37,11 +40,11 @@ import org.springframework.test.context.web.WebAppConfiguration;
 public class AbstractFunctionalTest extends FluentTest {
 
 	@Autowired
-    private ApplicationContext context;
-	
+	private ApplicationContext context;
+
 	@Autowired
 	protected JdbcTemplate template;
-	
+
 	/**
 	 * Absolute path of the root URL, to let from now the use of relative URL
 	 * paths.
@@ -62,7 +65,7 @@ public class AbstractFunctionalTest extends FluentTest {
 
 	@PostConstruct
 	public void setUp() {
-		this.initFluent(new HtmlUnitDriver());
+		this.initFluent(new BusyDriver(true));
 		this.initTest();
 	}
 
@@ -70,9 +73,9 @@ public class AbstractFunctionalTest extends FluentTest {
 	public void tearDown() {
 		this.quit();
 	}
-	
+
 	protected String getSQLScript(String path) {
-		
+
 		Resource resource = context.getResource(path);
 		BufferedReader reader = null;
 		StringBuilder stBuilder = new StringBuilder();
@@ -93,5 +96,23 @@ public class AbstractFunctionalTest extends FluentTest {
 			}
 		}
 		return stBuilder.toString();
+	}
+}
+
+class BusyDriver extends HtmlUnitDriver {
+
+	public BusyDriver() {
+		super();
+	}
+	
+	public BusyDriver( boolean enableJavascript ) {
+		super(enableJavascript);
+	}
+	
+	@Override
+	protected WebClient modifyWebClient(WebClient client) {
+		super.modifyWebClient(client);
+		client.getOptions().setThrowExceptionOnScriptError(false);
+		return client;
 	}
 }

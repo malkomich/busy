@@ -50,6 +50,9 @@ public class AddressDaoImpl implements AddressDao {
 		jdbcInsert.setColumnNames(Arrays.asList(ADDR1, ADDR2, ZIPCODE, CITYID));
 	}
 
+	/* (non-Javadoc)
+	 * @see busy.location.AddressDao#findAll()
+	 */
 	@Override
 	public List<Address> findAll() {
 
@@ -57,6 +60,9 @@ public class AddressDaoImpl implements AddressDao {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see busy.location.AddressDao#save(busy.location.Address)
+	 */
 	@Override
 	public void save(Address address) {
 

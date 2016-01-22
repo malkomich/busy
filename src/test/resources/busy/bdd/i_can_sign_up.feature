@@ -12,7 +12,6 @@ Feature: A new user will be able to sign up in the system
 		When the user introduces the first name <firstname>
 		And the user introduces the last name <lastname>
 		And the user introduces the email <email>
-		And the user introduces the nif <nif>
 		And the user selects the country <country>
 		And the user selects the city <city>
 		And the user introduces the zip code <zipcode>
@@ -27,15 +26,13 @@ Feature: A new user will be able to sign up in the system
 		And the Login page is shown automatically
 		
 		Examples:
-			|firstname|lastname|email|nif|country|city|zipcode|phone|password|passwordconfirm|
-			|"Nombre"|"Apellidos"|"user@domain.com"|"72256481D"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
-			|"Nombre"|"Apellidos"|"user@domain.com"|""|""|""|""|""|"pass"|"pass"|
+			|firstname|lastname|email|country|city|zipcode|phone|password|passwordconfirm|
+			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
 		
 	Scenario Outline: Sign up error
-		When the user introduces the firstname <firstname>
-		And the user introduces the lastname <lastname>
+		When the user introduces the first name <firstname>
+		And the user introduces the last name <lastname>
 		And the user introduces the email <email>
-		And the user introduces the nif <nif>
 		And the user selects the country <country>
 		And the user selects the city <city>
 		And the user introduces the zip code <zipcode>
@@ -43,18 +40,19 @@ Feature: A new user will be able to sign up in the system
 		And the user introduces the password <password>
 		And the user introduces the password confirmation <passwordconfirm>
 		And the user press Sign Up button
-		Then an error message in the Register page is shown
+		Then an error message in the SignUp page is shown
 		
 		Examples:
-			|firstname|lastname|email|nif|country|city|zipcode|phone|password|passwordconfirm|
-			|""|""|""|""|""|""|""|""|""|""|
-			|""|"Apellidos"|"user@domain.com"|"72256481D"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
-			|"Nombre"|""|"user@domain.com"|"72256481D"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
-			|"Nombre"|"Apellidos"|""|"72256481D"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
-			|"Nombre"|"Apellidos"|"user@domain.com"|"72256481D"|"España"|"Valladolid"|"47007"|"654321987"|""|"pass"|
-			|"Nombre"|"Apellidos"|"user@domain.com"|"72256481D"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|""|
-			|"Nombre"|"Apellidos"|"user@domain.com"|"72256481D"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"wrong_pass"|
-			|"Nombre"|"Apellidos"|"wrong_email.com"|"72256481D"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
-			|"Nombre"|"Apellidos"|"user@domain.com"|"72256481D"|"España"|"Valladolid"|"47007"|"5"|"pass"|"pass"|
-			|"Nombre"|"Apellidos"|"user@domain.com"|"ABCDEFGHI"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
-			|"Nombre"|"Apellidos"|"user@domain.com"|"72256481D"|"España"|"Valladolid"|"123456789AB"|"654321987"|"pass"|"pass"|
+			|firstname|lastname|email|country|city|zipcode|phone|password|passwordconfirm|
+			|""|""|""|""|""|""|""|""|""|
+			|""|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
+			|"Nombre"|""|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
+			|"Nombre"|"Apellidos"|""|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
+			|"Nombre"|"Apellidos"|"user@domain.com"|""|""|""|""|"pass"|"pass"|
+			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|""|"pass"|
+			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|""|
+			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"wrong_pass"|
+			|"Nombre"|"Apellidos"|"wrong_email.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
+			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"5"|"pass"|"pass"|
+			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
+			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"123456789AB"|"654321987"|"pass"|"pass"|

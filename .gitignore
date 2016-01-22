@@ -24,6 +24,6 @@ out/
 # Mac 
 .DS_Store
 
-# Temporary files
+# Debug files
 *~
 *.log
