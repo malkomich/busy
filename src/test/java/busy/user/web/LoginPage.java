@@ -27,6 +27,8 @@ public class LoginPage extends BusyPage {
 	private static final String ERROR_SELECTOR = "label.error";
 	
 	private static final String SIGNUP_SELECTOR = "#signupButton";
+	private static final String SUCCESS_MESSAGE_SELECTOR = "#signupConfirmation";
+	private static final String VALIDATION_MESSAGE_SELECTOR = "#validationMessage";
 
 	@Override
 	public String relativePath() {
@@ -73,6 +75,20 @@ public class LoginPage extends BusyPage {
 	public LoginPage clickSignUp() {
 		submit(SIGNUP_SELECTOR);
 		return this;
+	}
+	
+	public boolean signupSuccessMessageIsShown() {
+
+		waitForJSandJQueryToLoad();
+		
+		return findFirst(SUCCESS_MESSAGE_SELECTOR).isDisplayed();
+	}
+
+	public boolean validationMessageIsShown() {
+		
+		waitForJSandJQueryToLoad();
+		
+		return findFirst(VALIDATION_MESSAGE_SELECTOR).isDisplayed();
 	}
 
 }

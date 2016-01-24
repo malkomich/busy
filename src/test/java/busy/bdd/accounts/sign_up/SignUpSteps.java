@@ -14,8 +14,6 @@ import busy.AbstractFunctionalTest;
 import busy.user.web.ConfirmPage;
 import busy.user.web.LoginPage;
 import busy.user.web.SignupPage;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -117,27 +115,25 @@ public class SignUpSteps extends AbstractFunctionalTest {
 		signupPage.submit();
 	}
 
-	@Then("^a success message is shown$")
-	public void a_success_message_is_shown() throws Throwable {
-		assertTrue(signupPage.errorIsShown());
-		FluentLeniumAssertions.assertThat(signupPage).isAt();
-	}
-
 	@Then("^an email to confirm account is sent$")
 	public void an_email_to_confirm_is_sent() throws Throwable {
 		assertTrue(signupPage.emailIsSent());
 	}
+	
+	@Then("^a success message is shown$")
+	public void a_success_message_is_shown() throws Throwable {
+		loginPage.await().untilPage();
+		assertTrue(loginPage.signupSuccessMessageIsShown());
+	}
 
 	@When("^the user click on \"Validate\" in the email$")
 	public void user_click_on_validate() throws Throwable {
-		goTo(confirmPage).await().untilPage();
-
+		goTo(confirmPage).await().atMost(1, TimeUnit.SECONDS).untilPage();
 	}
 
-	@Then("^a confirm page is shown$")
+	@Then("^a confirm message is shown$")
 	public void a_confirm_page_is_shown() throws Throwable {
-		FluentLeniumAssertions.assertThat(confirmPage).isAt();
-		confirmPage.await().atMost(5, TimeUnit.SECONDS);
+		assertTrue(loginPage.validationMessageIsShown());
 	}
 
 	@Then("^the Login page is shown automatically$")

@@ -114,3 +114,7 @@ form em {
 label.error {
 	position: fixed;
 }
+
+span.error {
+	color: #a94442;
+}

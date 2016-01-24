@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -26,18 +25,12 @@ import busy.location.Country;
 import busy.util.SecureSetter;
 
 @Repository
-public class UserDaoImpl implements UserDao {
+public class RegistryDaoImpl implements RegistryDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_USER + "." + ID + " AS " + ALIAS_USERID + ","
-			+ FIRSTNAME + "," + LASTNAME + "," + EMAIL + "," + PASSWORD + "," + NIF + "," + PHONE + "," + ACTIVE + ","
-			+ ADMIN + ", addressJoin.* FROM " + TABLE_USER + " LEFT JOIN (" + ADDRESS_SELECT_QUERY + ") AS addressJoin ON " + TABLE_USER
-			+ "." + ADDRID + "= addressJoin." + ALIAS_ADDRID;
+	private static final String SQL_SELECT_BY_TOKEN = "SELECT * FROM " + TABLE_REGISTRY + " LEFT JOIN (" + USER_SELECT_QUERY
+			+ ") AS userJoin ON " + TABLE_REGISTRY + "." + USERID + "= userJoin." + ALIAS_USERID + " WHERE " + TOKEN + "= ?";
 
-	private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT_ALL + " WHERE " + EMAIL + "= ?";
-
-	private static final String SQL_UPDATE = "UPDATE " + TABLE_USER + " SET " + FIRSTNAME + "= ?," + LASTNAME + "= ?,"
-			+ EMAIL + "= ?, " + PASSWORD + "= ?," + NIF + "= ?," + PHONE + "= ?," + ACTIVE + "= ?," + ADMIN + "= ?,"
-			+ ADDRID + "= ? " + "WHERE " + ID + "= ?";
+	private static final String SQL_DELETE_REGISTRY = "DELETE FROM " + TABLE_REGISTRY + " WHERE " + USERID + "= ?";
 
 	private JdbcTemplate jdbcTemplate;
 
@@ -49,66 +42,54 @@ public class UserDaoImpl implements UserDao {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 
 		jdbcInsert = new SimpleJdbcInsert(dataSource);
-		jdbcInsert.withTableName(TABLE_USER);
-		jdbcInsert.setGeneratedKeyName(ID);
-		jdbcInsert
-				.setColumnNames(Arrays.asList(FIRSTNAME, LASTNAME, EMAIL, PASSWORD, NIF, PHONE, ACTIVE, ADMIN, ADDRID));
+		jdbcInsert.withTableName(TABLE_REGISTRY);
+		jdbcInsert.setColumnNames(Arrays.asList(USERID, TOKEN));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see busy.user.RegistryDao#save(int)
+	 */
+	@Override
+	public void save(int userId, String token) {
+
+		Map<String, Object> parameters = new HashMap<String, Object>();
+		parameters.put(USERID, userId);
+		parameters.put(TOKEN, token);
+
+		jdbcInsert.execute(new MapSqlParameterSource(parameters));
+
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see busy.user.RegistryDao#delete(int)
+	 */
+	@Override
+	public void delete(int userId) {
+
+		jdbcTemplate.update(SQL_DELETE_REGISTRY, userId);
 	}
 
 	@Override
-	public List<User> findAll() {
-
-		return jdbcTemplate.query(SQL_SELECT_ALL, new UserRowMapper());
-
-	}
-
-	@Override
-	public User findByEmail(String email) {
+	public Verification findByToken(String token) {
 
 		try {
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_BY_EMAIL, new UserRowMapper(), email);
+			return jdbcTemplate.queryForObject(SQL_SELECT_BY_TOKEN, new VerificationRowMapper(), token);
 
 		} catch (EmptyResultDataAccessException e) {
 
 			return null;
 		}
-
 	}
-
-	@Override
-	public void save(User user) {
-
-		if (user.getId() > 0) {
-
-			jdbcTemplate.update(SQL_UPDATE, user.getFirstName(), user.getLastName(), user.getEmail(),
-					user.getPassword(), user.getNif(), user.getPhone(), user.isActive(), user.isAdmin(),
-					user.getAddressId(), user.getId());
-		} else {
-
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put(FIRSTNAME, user.getFirstName());
-			parameters.put(LASTNAME, user.getLastName());
-			parameters.put(EMAIL, user.getEmail());
-			parameters.put(PASSWORD, user.getPassword());
-			parameters.put(NIF, user.getNif());
-			parameters.put(PHONE, user.getPhone());
-			parameters.put(ACTIVE, DEFAULT);
-			parameters.put(ADMIN, DEFAULT);
-			parameters.put(ADDRID, user.getAddressId());
-
-			Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-			if (key != null) {
-				SecureSetter.setId(user, key.intValue());
-			}
-		}
-
-	}
-
-	private class UserRowMapper implements RowMapper<User> {
+	
+	private class VerificationRowMapper implements RowMapper<Verification> {
 
 		@Override
-		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+		public Verification mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			User user = new User();
 			SecureSetter.setId(user, rs.getInt(ALIAS_USERID));
@@ -147,7 +128,11 @@ public class UserDaoImpl implements UserDao {
 				user.setAddress(address);
 			}
 
-			return user;
+			Verification verification = new Verification();
+			verification.setUser(user);
+			verification.setToken(rs.getString(TOKEN));
+
+			return verification;
 		}
 
 	}

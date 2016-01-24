@@ -14,6 +14,9 @@ public class LocationServiceImpl implements LocationService {
 	@Autowired
 	private CityDao cityDao;
 	
+	@Autowired
+	private AddressDao addressDao;
+	
 	/* (non-Javadoc)
 	 * @see busy.location.LocationService#findCountries()
 	 */
@@ -32,6 +35,18 @@ public class LocationServiceImpl implements LocationService {
 		
 		return cityDao.findByCountryCode(countryCode);
 		
+	}
+
+	@Override
+	public City findCityById(int parseInt) {
+		
+		return cityDao.findById(parseInt);
+	}
+
+	@Override
+	public void saveAddress(Address address) {
+
+		addressDao.save(address);
 	}
 
 }

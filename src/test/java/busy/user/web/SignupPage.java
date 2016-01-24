@@ -26,8 +26,7 @@ public class SignupPage extends BusyPage {
 	private static final String PASSCONFIRM_SELECTOR = "#confirmedPassword";
 
 	private static final String SUBMIT_SELECTOR = "#submit";
-	private static final String ERROR_SELECTOR = "label.error";
-	private static final String EMAIL_SENT_SELECTOR = "#email-sent";
+	private static final String ERROR_SELECTOR = "span.error";
 
 	@Override
 	public String relativePath() {
@@ -67,18 +66,22 @@ public class SignupPage extends BusyPage {
 
 	public SignupPage selectCountry(String country) {
 
-		Select select = new Select(getDriver().findElement(By.cssSelector(COUNTRY_SELECTOR)));
-		select.selectByVisibleText(country);
+		if (!country.isEmpty()) {
+			Select select = new Select(getDriver().findElement(By.cssSelector(COUNTRY_SELECTOR)));
+			select.selectByVisibleText(country);
+		}
 
 		waitForJSandJQueryToLoad();
-		
+
 		return this;
 	}
 
 	public SignupPage selectCity(String city) {
 
-		Select select = new Select(getDriver().findElement(By.cssSelector(CITY_SELECTOR)));
-		select.selectByVisibleText(city);
+		if (!city.isEmpty()) {
+			Select select = new Select(getDriver().findElement(By.cssSelector(CITY_SELECTOR)));
+			select.selectByVisibleText(city);
+		}
 
 		return this;
 	}
@@ -119,7 +122,9 @@ public class SignupPage extends BusyPage {
 	}
 
 	public boolean emailIsSent() {
-		return !find(EMAIL_SENT_SELECTOR).isEmpty();
+		
+		// Nothing to check, the operation is done in back end.
+		return true;
 	}
-	
+
 }

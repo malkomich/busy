@@ -24,13 +24,7 @@ import static busy.util.SQLUtil.*;
 @Repository
 public class AddressDaoImpl implements AddressDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_ADDRESS + "." + ID + " AS " + ALIAS_ADDRID + ","
-			+ ADDR1 + "," + ADDR2 + "," + ZIPCODE + ", cityJoin.* FROM " + TABLE_ADDRESS + " LEFT JOIN ( SELECT "
-			+ TABLE_CITY + "." + ID + " AS " + ALIAS_CITYID + "," + TABLE_CITY + "." + NAME + " AS " + ALIAS_CITYNAME
-			+ "," + TABLE_COUNTRY + "." + ID + " AS " + ALIAS_COUNTRYID + "," + TABLE_COUNTRY + "." + NAME + " AS "
-			+ ALIAS_COUNTRYNAME + "," + CODE + " FROM " + TABLE_CITY + " LEFT JOIN " + TABLE_COUNTRY + " ON "
-			+ TABLE_CITY + "." + COUNTRYID + "=" + TABLE_COUNTRY + "." + ID + ") AS cityJoin ON " + TABLE_ADDRESS + "."
-			+ CITYID + "= cityJoin." + ALIAS_CITYID;
+	private static final String SQL_SELECT_ALL = ADDRESS_SELECT_QUERY;
 
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_ADDRESS + " SET " + ADDR1 + "= ?," + ADDR2 + "= ?,"
 			+ ZIPCODE + "= ?, " + CITYID + "= ? WHERE " + ID + "= ?";

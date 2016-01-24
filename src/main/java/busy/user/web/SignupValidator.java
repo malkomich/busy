@@ -1,10 +1,9 @@
 package busy.user.web;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import busy.user.User;
 import busy.user.UserService;
 
 /**
@@ -14,11 +13,13 @@ import busy.user.UserService;
  * @author malkomich
  *
  */
-@Component
 public class SignupValidator implements Validator {
 
-	@Autowired
 	private UserService userService;
+	
+	public SignupValidator(UserService userService) {
+		this.userService = userService;
+	}
 
 	@Override
 	public boolean supports(Class<?> clazz) {
@@ -29,6 +30,15 @@ public class SignupValidator implements Validator {
 	public void validate(Object target, Errors errors) {
 
 		SignupForm registerForm = (SignupForm) target;
+		
+		User user = userService.findUserByEmail(registerForm.getEmail());
+		
+		if(user != null)
+			errors.rejectValue("email", "email.exists");
+		
+		if(!registerForm.getPassword().equals(registerForm.getConfirmedPassword())) {
+			errors.rejectValue("confirmedPassword", "confirmed_password.not_match");
+		}
 
 	}
 

@@ -62,5 +62,5 @@ CREATE TABLE person (
 CREATE TABLE registry (
 	person_id			integer			NOT NULL PRIMARY KEY REFERENCES person(id)
 		ON DELETE CASCADE ON UPDATE CASCADE,
-	confirmation_id		text			NOT NULL
+	confirmation_key		text			NOT NULL
 );

@@ -11,7 +11,7 @@ interface CityDao {
 	 * @return List of existing Citys
 	 */
 	List<City> findAll();
-	
+
 	/**
 	 * Finds the collection of all registries of City in the database which
 	 * belong to the country given. It will return an empty List when no Cities
@@ -28,5 +28,13 @@ interface CityDao {
 	 * @param city
 	 */
 	void save(City city);
+
+	/**
+	 * Retrieves the City with the given ID
+	 * 
+	 * @param parseInt
+	 * @return
+	 */
+	City findById(int parseInt);
 
 }

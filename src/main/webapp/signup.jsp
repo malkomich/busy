@@ -72,6 +72,7 @@ THE SOFTWARE.
 									<form:input path="firstName" autofocus="autofocus"
 										id="firstname" size="20" tabindex="1" class="form-control"
 										placeholder="${firstnamePlaceHolder}" />
+									<form:errors path="firstName" cssClass="error" />
 								</div>
 								<div class="col-sm-6 form-group">
 									<spring:message code="lastname.placeholder"
@@ -79,6 +80,7 @@ THE SOFTWARE.
 									<form:input path="lastName" id="lastname" size="30"
 										tabindex="2" class="form-control"
 										placeholder="${lastnamePlaceHolder}" />
+									<form:errors path="lastName" cssClass="error" />
 								</div>
 							</div>
 
@@ -86,6 +88,7 @@ THE SOFTWARE.
 								<spring:message code="email.placeholder" var="emailPlaceHolder" />
 								<form:input path="email" id="email" size="30" tabindex="3"
 									class="form-control" placeholder="${emailPlaceHolder}" />
+								<form:errors path="email" cssClass="error" />
 							</div>
 
 
@@ -94,19 +97,20 @@ THE SOFTWARE.
 									<spring:message code="country.label" var="countryLabel" />
 									<label for="country">${countryLabel}</label><em>*</em>
 
-									<form:select path="country" id="country" tabindex="5"
-										class="form-control" onchange="updateCities()">
+									<form:select path="countryCode" id="country" tabindex="4"
+										class="form-control">
 										<spring:message code="country.select.header"
 											var="countrySelect" />
 										<form:option value="" label="${countrySelect}" />
 										<form:options items="${countryItems}" />
 									</form:select>
+									<form:errors path="countryCode" cssClass="error" />
 								</div>
 								<div class="col-sm-6 form-group">
 									<spring:message code="city.label" var="cityLabel" />
 									<label for="city">${cityLabel}</label><em>*</em>
 
-									<form:select path="city" id="city" tabindex="6"
+									<form:select path="cityId" id="city" tabindex="5"
 										class="form-control">
 										<c:if test="${cityItems == null}">
 											<spring:message code="city.options.empty"
@@ -119,6 +123,7 @@ THE SOFTWARE.
 											<form:options items="${cityItems}" />
 										</c:if>
 									</form:select>
+									<form:errors path="cityId" cssClass="error" />
 								</div>
 							</div>
 
@@ -126,32 +131,36 @@ THE SOFTWARE.
 								<div class="col-sm-6 form-group">
 									<spring:message code="zipcode.placeholder"
 										var="zipcodePlaceHolder" />
-									<form:input path="zipCode" id="zipcode" size="7" tabindex="5"
+									<form:input path="zipCode" id="zipcode" size="6" tabindex="5"
 										type="tel" value="" class="form-control"
 										placeholder="${zipcodePlaceHolder}" />
+									<form:errors path="zipCode" cssClass="error" />
 								</div>
 								<div class="col-sm-6 form-group">
 									<spring:message code="phone.placeholder" var="phonePlaceHolder" />
-									<form:input path="phone" id="phone" size="8" tabindex="5"
+									<form:input path="phone" id="phone" size="7" tabindex="5"
 										type="tel" value="" class="form-control"
 										placeholder="${phonePlaceHolder}" />
+									<form:errors path="phone" cssClass="error" />
 								</div>
 							</div>
 
 							<div class="form-group">
 								<spring:message code="password.placeholder"
 									var="passwordPlaceHolder" />
-								<form:input path="password" id="password" size="30"
-									tabindex="9" type="password" class="form-control"
+								<form:input path="password" id="password" size="30" tabindex="8"
+									type="password" class="form-control"
 									placeholder="${passwordPlaceHolder}" />
+								<form:errors path="password" cssClass="error" />
 							</div>
 
 							<div class="form-group">
 								<spring:message code="passwordConfirm.placeholder"
 									var="passConfirmPlaceHolder" />
 								<form:input path="confirmedPassword" id="confirmedPassword"
-									size="30" tabindex="10" type="password" class="form-control"
+									size="30" tabindex="9" type="password" class="form-control"
 									placeholder="${passConfirmPlaceHolder}" />
+								<form:errors path="confirmedPassword" cssClass="error" />
 							</div>
 
 							<div class="row">
@@ -163,7 +172,7 @@ THE SOFTWARE.
 									<div class="col-sm-3" style="float: right">
 										<spring:message code="signup.button" var="signupButton" />
 										<button id="submit" type="submit" class="btn btn-primary"
-											tabindex="7">${signupButton}</button>
+											tabindex="10">${signupButton}</button>
 									</div>
 								</div>
 							</div>
@@ -171,8 +180,10 @@ THE SOFTWARE.
 
 					</div>
 				</div>
+				<spring:message code="signup.logintip.label" var="loginLabel" />
+				<spring:message code="signup.logintip.link" var="loginLink" />
 				<div class="login-tip" style="border-top: 1px solid #888;">
-					¿Ya tienes una cuenta? <a href="/"><b>Iniciar sesión aquí</b></a>
+					${loginLabel}<a href="/"><b>${loginLink}</b></a>
 				</div>
 
 				<jsp:include page="include/footer.jsp" />

@@ -19,10 +19,10 @@ Feature: A new user will be able to sign up in the system
 		And the user introduces the password <password>
 		And the user introduces the password confirmation <passwordconfirm>
 		And the user press Sign Up button
-		Then a success message is shown
-		And an email to confirm account is sent
+		Then an email to confirm account is sent
+		And a success message is shown
 		When the user click on "Validate" in the email
-		Then a confirm page is shown
+		Then a confirm message is shown
 		And the Login page is shown automatically
 		
 		Examples:
@@ -36,7 +36,7 @@ Feature: A new user will be able to sign up in the system
 		And the user selects the country <country>
 		And the user selects the city <city>
 		And the user introduces the zip code <zipcode>
-		And the user introduces the phone <phone>
+		And the user introduces the phone number <phone>
 		And the user introduces the password <password>
 		And the user introduces the password confirmation <passwordconfirm>
 		And the user press Sign Up button
@@ -53,6 +53,6 @@ Feature: A new user will be able to sign up in the system
 			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|""|
 			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"wrong_pass"|
 			|"Nombre"|"Apellidos"|"wrong_email.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
+			|"Nombre"|"Apellidos"|"prueba@prueba.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
 			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"5"|"pass"|"pass"|
-			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"47007"|"654321987"|"pass"|"pass"|
 			|"Nombre"|"Apellidos"|"user@domain.com"|"España"|"Valladolid"|"123456789AB"|"654321987"|"pass"|"pass"|

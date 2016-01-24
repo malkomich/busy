@@ -13,13 +13,15 @@ import busy.BusyPage;
  */
 public class ConfirmPage extends BusyPage {
 
-	private static final String PATH = "confirm";
+	private static final String PATH = "/signup/validate_email";
 	private static final String DESCRIPTION = "Confirm Page";
+	
+	private static final String CONFIRMATION_ID = "IDPRUEBA";
 
 	@Override
 	public String relativePath() {
 
-		return PATH;
+		return PATH + "?token=" + CONFIRMATION_ID;
 	}
 	
 	/*

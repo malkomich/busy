@@ -30,6 +30,8 @@ public class CityDaoImpl implements CityDao {
 			+ "." + ID;
 	
 	private static final String SQL_SELECT_BY_COUNTRY = SQL_SELECT_ALL + " WHERE " + CODE + "= ?";
+	
+	private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE " + TABLE_CITY + "." + ID + "= ?";
 
 	private static final String SQL_INSERT = "INSERT INTO " + TABLE_CITY + "(" + NAME + "," + COUNTRYID
 			+ ") VALUES (?, ?)";
@@ -74,6 +76,15 @@ public class CityDaoImpl implements CityDao {
 
 			return new ArrayList<>();
 		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see busy.location.CityDao#findById(int)
+	 */
+	@Override
+	public City findById(int cityId) {
+		
+		return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CityRowMapper(), cityId);
 	}
 
 	/* (non-Javadoc)

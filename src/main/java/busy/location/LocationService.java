@@ -19,4 +19,19 @@ public interface LocationService {
 	 */
 	List<City> findCitiesByCountryCode(String countryCode);
 
+	/**
+	 * Retrieves the City with the given ID, or null if not exists in database.
+	 * 
+	 * @param parseInt
+	 * @return
+	 */
+	City findCityById(int parseInt);
+
+	/**
+	 * Saves the address into the database.
+	 * 
+	 * @param address
+	 */
+	void saveAddress(Address address);
+
 }

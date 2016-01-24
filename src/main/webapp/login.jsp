@@ -140,6 +140,35 @@ THE SOFTWARE.
 
 	</div>
 
+	<spring:message code="signup_success.modal.title" var="modalTitle" />
+	<spring:message code="signup_success.modal.content" var="modalContent" />
+	<!-- SignUp Modal -->
+	<div class="modal fade bs-example-modal-lg" id="signedUpModal"
+		tabindex="-1" role="dialog" aria-labelledby="signedUpModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" id="signupConfirmation">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="signedUpModalLabel">${modalTitle}</h4>
+				</div>
+				<div class="modal-body">${modalContent}</div>
+			</div>
+		</div>
+	</div>
+	
+	<spring:message code="auth.message.validToken" var="validationModalTitle" />
+	<!-- Validation Modal -->
+	<div class="modal fade bs-example-modal-lg" id="validationModal"
+		tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" id="validationMessage">
+				<div class="modal-body">${validationModalTitle}</div>
+			</div>
+		</div>
+	</div>
 
 
 	<!-- Placed at the end of the document so the pages load faster -->
@@ -147,5 +176,18 @@ THE SOFTWARE.
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var signedUp = '${signedUp}';
+			if (signedUp) {
+				$("#signedUpModal").modal();
+			}
+			
+			var tokenValid = '${tokenValid}';
+			if(tokenValid) {
+				$("#validationModal").modal();
+			}
+		});
+	</script>
 </body>
 </html>
