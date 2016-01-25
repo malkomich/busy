@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -55,7 +56,7 @@ public class UserController {
 	private static final String PATH_ROOT = "/";
 	private static final String PATH_SIGNUP = "signup";
 	private static final String PATH_SIGNUP_CITIES_UPDATE = "get_city_list";
-	private static final String PATH_EMAIL_CONFIRM = "signup/validate_email";
+	private static final String PATH_EMAIL_CONFIRM = "verificate_email";
 
 	/**
 	 * JSP's
@@ -69,6 +70,9 @@ public class UserController {
 
 	@Autowired
 	private LocationService locationService;
+
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
 
 	/**
 	 * Shows the login page in case the user is not identified yet, otherwise
@@ -163,7 +167,8 @@ public class UserController {
 		user.setAddress(address);
 		userService.saveUser(user);
 
-		// Generate email confirmation. (PENDING)
+		eventPublisher
+				.publishEvent(new OnRegistrationCompleteEvent(user, request.getLocale(), request.getContextPath()));
 
 		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + SIGNED_UP_REQUEST,
 				result);

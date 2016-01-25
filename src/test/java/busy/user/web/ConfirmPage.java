@@ -13,7 +13,7 @@ import busy.BusyPage;
  */
 public class ConfirmPage extends BusyPage {
 
-	private static final String PATH = "/signup/validate_email";
+	private static final String PATH = "/verificate_email";
 	private static final String DESCRIPTION = "Confirm Page";
 	
 	private static final String CONFIRMATION_ID = "IDPRUEBA";
