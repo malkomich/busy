@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-	<country id="1" name="España" code="ES" />
-	<city id="1" name="Valladolid" country_id="1" />
 	<address id="1" address1="Calle Mayor 2, 1ºB" zip_code="45002" city_id="1" />
 </dataset>

@@ -10,7 +10,7 @@ public class SQLUtil {
 	public static final String TABLE_ADDRESS = "address";
 	public static final String TABLE_CITY = "city";
 	public static final String TABLE_COUNTRY = "country";
-	public static final String TABLE_REGISTRY = "registry";
+	public static final String TABLE_REGISTRY = "verification";
 	
 	// Table fields names
 	public static final String ID = "id";

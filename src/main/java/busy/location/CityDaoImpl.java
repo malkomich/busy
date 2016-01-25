@@ -28,9 +28,9 @@ public class CityDaoImpl implements CityDao {
 			+ ALIAS_COUNTRYID + "," + TABLE_COUNTRY + "." + NAME + " AS " + ALIAS_COUNTRYNAME + "," + CODE + " FROM "
 			+ TABLE_CITY + " LEFT JOIN " + TABLE_COUNTRY + " ON " + TABLE_CITY + "." + COUNTRYID + "=" + TABLE_COUNTRY
 			+ "." + ID;
-	
+
 	private static final String SQL_SELECT_BY_COUNTRY = SQL_SELECT_ALL + " WHERE " + CODE + "= ?";
-	
+
 	private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE " + TABLE_CITY + "." + ID + "= ?";
 
 	private static final String SQL_INSERT = "INSERT INTO " + TABLE_CITY + "(" + NAME + "," + COUNTRYID
@@ -55,7 +55,9 @@ public class CityDaoImpl implements CityDao {
 
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.location.CityDao#findAll()
 	 */
 	@Override
@@ -63,13 +65,15 @@ public class CityDaoImpl implements CityDao {
 
 		return jdbcTemplate.query(SQL_SELECT_ALL, new CityRowMapper());
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.location.CityDao#findByCountry(busy.location.Country)
 	 */
 	@Override
 	public List<City> findByCountryCode(String countryCode) {
-		
+
 		try {
 			return jdbcTemplate.query(SQL_SELECT_BY_COUNTRY, new CityRowMapper(), countryCode);
 		} catch (EmptyResultDataAccessException e) {
@@ -77,17 +81,25 @@ public class CityDaoImpl implements CityDao {
 			return new ArrayList<>();
 		}
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.location.CityDao#findById(int)
 	 */
 	@Override
 	public City findById(int cityId) {
-		
-		return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CityRowMapper(), cityId);
+
+		try {
+			return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CityRowMapper(), cityId);
+		} catch (EmptyResultDataAccessException e) {
+			return null;
+		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.location.CityDao#save(busy.location.City)
 	 */
 	@Override

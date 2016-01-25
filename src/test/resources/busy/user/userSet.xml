@@ -3,4 +3,7 @@
 	<person id="1" first_name="Nombre" last_name="Apellidos"
 		email="user@domain.com" password="pass" active="true"
 		admin_role="false" />
+	<person id="2" first_name="Nombre" last_name="Apellidos"
+		email="user2@domain.com" password="pass" active="true"
+		admin_role="false" />
 </dataset>

@@ -25,7 +25,7 @@ import busy.location.Country;
 import busy.util.SecureSetter;
 
 @Repository
-public class RegistryDaoImpl implements RegistryDao {
+public class VerificationDaoImpl implements VerificationDao {
 
 	private static final String SQL_SELECT_BY_TOKEN = "SELECT * FROM " + TABLE_REGISTRY + " LEFT JOIN (" + USER_SELECT_QUERY
 			+ ") AS userJoin ON " + TABLE_REGISTRY + "." + USERID + "= userJoin." + ALIAS_USERID + " WHERE " + TOKEN + "= ?";
@@ -68,7 +68,7 @@ public class RegistryDaoImpl implements RegistryDao {
 	 * @see busy.user.RegistryDao#delete(int)
 	 */
 	@Override
-	public void delete(int userId) {
+	public void deleteByUserId(int userId) {
 
 		jdbcTemplate.update(SQL_DELETE_REGISTRY, userId);
 	}

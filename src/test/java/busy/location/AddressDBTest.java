@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -21,6 +22,7 @@ import busy.util.SecureSetter;
  * @author malkomich
  *
  */
+@DatabaseSetup("countrySet.xml")
 @DatabaseSetup("citySet.xml")
 public class AddressDBTest extends AbstractDBTest {
 
@@ -78,7 +80,7 @@ public class AddressDBTest extends AbstractDBTest {
 	}
 
 	@Test
-	public void insertAddressSuccesfully() {
+	public void insertAddressSuccessfully() {
 
 		Address address = new Address("Calle Ejemplo", "1, 1ºA", "47005", city);
 		repository.save(address);
@@ -89,5 +91,12 @@ public class AddressDBTest extends AbstractDBTest {
 		assertEquals("1, 1ºA", resultAddress.getAddress2());
 		assertEquals("47005", resultAddress.getZipCode());
 		assertEquals(new Integer(city.getId()), resultAddress.getCityId());
+	}
+
+	@Test
+	public void findAllAddressesWhenEmpty() {
+
+		List<Address> addressList = repository.findAll();
+		assertTrue(addressList.isEmpty());
 	}
 }

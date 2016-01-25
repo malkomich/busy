@@ -5,7 +5,7 @@
  * Database tables' creation
  */
 
-DROP TABLE IF EXISTS registry;
+DROP TABLE IF EXISTS verification;
 DROP TABLE IF EXISTS person;
 DROP SEQUENCE IF EXISTS person_seq;
 DROP TABLE IF EXISTS address;
@@ -59,8 +59,8 @@ CREATE TABLE person (
 		ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE registry (
+CREATE TABLE verification (
 	person_id			integer			NOT NULL PRIMARY KEY REFERENCES person(id)
 		ON DELETE CASCADE ON UPDATE CASCADE,
-	confirmation_key		text			NOT NULL
+	confirmation_key		text			NOT NULL UNIQUE
 );

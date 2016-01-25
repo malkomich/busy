@@ -7,6 +7,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UserDBTest extends AbstractDBTest {
 	protected UserDaoImpl repository;
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void nameNull() {
+	public void insertWithNameNull() {
 
 		User user = new User();
 		user.setLastName("González Cabrero");
@@ -40,7 +41,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void surnameNull() {
+	public void insertWithSurnameNull() {
 
 		User user = new User();
 		user.setFirstName("Juan Carlos");
@@ -50,7 +51,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void emailNull() {
+	public void insertWithEmailNull() {
 
 		User user = new User();
 		user.setFirstName("Juan Carlos");
@@ -60,7 +61,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void passwordNull() {
+	public void insertWithPasswordNull() {
 
 		User user = new User();
 		user.setFirstName("Juan Carlos");
@@ -70,7 +71,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void nameTooLong() {
+	public void insertWithNameTooLong() {
 
 		User user = new User("aaaaabbbbbcccccdddddeeeeefffffgggggh", "González Cabrero",
 				"malkomich@gmail.com", "123456", null, null, null, null, null);
@@ -78,7 +79,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void surnameTooLong() {
+	public void insertWithSurnameTooLong() {
 
 		User user = new User("Juan Carlos", "aaaaabbbbbcccccdddddeeeeefffffgggggh",
 				"malkomich@gmail.com", "123456", null, null, null, null, null);
@@ -86,7 +87,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void emailTooLong() {
+	public void insertWithEmailTooLong() {
 
 		User user = new User("Juan Carlos", "González Cabrero",
 				"aaaaabbbbbcccccdddddeeeeefffffggggghhhhhi@gmail.com", "123456", null, null, null,
@@ -95,7 +96,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void nifTooLong() {
+	public void insertWithNifTooLong() {
 
 		User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
 				"711526341B", null, null, null, null);
@@ -103,7 +104,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void phoneTooLong() {
+	public void insertWithPhoneTooLong() {
 
 		User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
 				"71152634B", "1231231231231", null, null, null);
@@ -111,7 +112,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void emailDuplicated() {
+	public void insertWithEmailDuplicated() {
 
 		User user1 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
 				"71152639B", null, null, null, null);
@@ -122,7 +123,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void nifDuplicated() {
+	public void insertWithNifDuplicated() {
 
 		User user1 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
 				"71152634B", null, null, null, null);
@@ -133,7 +134,7 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	public void addressNotExists() {
+	public void insertWithAddressNotExists() {
 
 		Address address = new Address();
 		User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
@@ -165,6 +166,8 @@ public class UserDBTest extends AbstractDBTest {
 	}
 
 	@Test
+	@DatabaseSetup("../location/countrySet.xml")
+	@DatabaseSetup("../location/citySet.xml")
 	@DatabaseSetup("../location/addressSet.xml")
 	public void insertUserWithAddressSuccesfully() {
 
@@ -210,6 +213,13 @@ public class UserDBTest extends AbstractDBTest {
 		assertNotNull(user);
 		assertEquals("Apellidos", user.getLastName());
 		assertFalse(user.isAdmin());
+	}
+	
+	@Test
+	public void findAllUsersWhenEmpty() {
+		
+		List<User> userList = repository.findAll();
+		assertTrue(userList.isEmpty());
 	}
 	
 }

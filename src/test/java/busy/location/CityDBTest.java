@@ -1,15 +1,18 @@
 package busy.location;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Rollback;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
@@ -37,7 +40,6 @@ public class CityDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void nameNull() {
 
 		City city = new City();
@@ -46,7 +48,6 @@ public class CityDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void nameTooLong() {
 
 		City city = new City("aaaaabbbbbcccccdddddeeeeefffffgggggh", country);
@@ -54,7 +55,6 @@ public class CityDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void nameDuplicated() {
 
 		City city1 = new City("Valladolid", country);
@@ -64,7 +64,6 @@ public class CityDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void countryNull() {
 
 		City city = new City();
@@ -73,7 +72,6 @@ public class CityDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void countryNotExists() {
 
 		Country newCountry = new Country("Francia", "FR");
@@ -82,8 +80,7 @@ public class CityDBTest extends AbstractDBTest {
 	}
 
 	@Test
-	@Rollback(true)
-	public void addCitySuccesful() {
+	public void addCitySuccessfully() {
 
 		City city = new City("Valladolid", country);
 		repository.save(city);
@@ -92,6 +89,47 @@ public class CityDBTest extends AbstractDBTest {
 		City resultCity = it.next();
 		assertEquals("Valladolid", resultCity.getName());
 		assertEquals(new Integer(country.getId()), resultCity.getCountryId());
+	}
+	
+	@Test
+	public void findCitiesByCountryWrong() {
+		
+		String code = "asdf";
+		List<City> cityList = repository.findByCountryCode(code);
+		assertTrue(cityList.isEmpty());
+	}
+	
+	@Test
+	@DatabaseSetup("citySet.xml")
+	public void findCitiesByCountrySuccessfully() {
+		
+		String code = "ES";
+		List<City> cityList = repository.findByCountryCode(code);
+		assertFalse(cityList.isEmpty());
+	}
+	
+	@Test
+	public void findCityByIdWrong() {
+		
+		int cityId = 0;
+		City city = repository.findById(cityId);
+		assertNull(city);
+	}
+	
+	@Test
+	@DatabaseSetup("citySet.xml")
+	public void findCityByIdSuccessfully() {
+		
+		int cityId = 1;
+		City city = repository.findById(cityId);
+		assertNotNull(city);
+	}
+	
+	@Test
+	public void findAllCitiesWhenEmpty() {
+		
+		List<City> cityList = repository.findAll();
+		assertTrue(cityList.isEmpty());
 	}
 
 }

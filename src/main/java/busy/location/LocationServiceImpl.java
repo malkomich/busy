@@ -17,6 +17,18 @@ public class LocationServiceImpl implements LocationService {
 	@Autowired
 	private AddressDao addressDao;
 	
+	public void setCountryDao(CountryDao countryDao) {
+		this.countryDao = countryDao;
+	}
+	
+	public void setCityDao(CityDao cityDao) {
+		this.cityDao = cityDao;
+	}
+	
+	public void setAddressDao(AddressDao addressDao) {
+		this.addressDao = addressDao;
+	}
+	
 	/* (non-Javadoc)
 	 * @see busy.location.LocationService#findCountries()
 	 */

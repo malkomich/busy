@@ -190,7 +190,6 @@ public class UserController {
 
 			User user = verificationToken.getUser();
 
-			user.setActive(true);
 			userService.confirmUser(user);
 
 			tokenValid = true;

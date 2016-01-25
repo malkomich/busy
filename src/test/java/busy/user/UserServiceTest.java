@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -30,11 +31,15 @@ public class UserServiceTest {
 	private UserServiceImpl service;
 
 	private UserDao userDao;
+	private VerificationDao validationDao;
 
 	@Before
 	public void setUp() {
 		userDao = mock(UserDao.class);
 		service.setUserDao(userDao);
+		
+		validationDao = mock(VerificationDao.class);
+		service.setValidationDao(validationDao);
 	}
 
 	/**
@@ -42,10 +47,10 @@ public class UserServiceTest {
 	 */
 	@Test
 	public void findUserWrong() {
-		String email = "asdf@busy.com";
-		when(userDao.findByEmail(email)).thenReturn(null);
+		String wrongEmail = "asdf@busy.com";
+		when(userDao.findByEmail(wrongEmail)).thenReturn(null);
 
-		User user = service.findUserByEmail(email);
+		User user = service.findUserByEmail(wrongEmail);
 		assertNull(user);
 	}
 
@@ -62,5 +67,55 @@ public class UserServiceTest {
 		assertNotNull(user);
 		assertEquals("Apellidos", user.getLastName());
 		assertFalse(user.isAdmin());
+	}
+	
+	/**
+	 * Try to confirm a User wich does not exist.
+	 */
+	@Test(expected=IllegalArgumentException.class)
+	public void confirmUserNotCreated() {
+		String email = "user@domain.com";
+		User newUser = new User("Nombre", "Apellidos", email, "pass", null, null, null, null, null);
+		when(userDao.findByEmail(email)).thenReturn(null);
+		
+		service.confirmUser(newUser);
+	}
+	
+	/**
+	 * Confirm an already created User account.
+	 */
+	@Test
+	public void confirmUserSuccessfully() {
+		String email = "user@domain.com";
+		User user = new User("Nombre", "Apellidos", email, "pass", null, null, null, null, null);
+		when(userDao.findByEmail(email)).thenReturn(user);
+		
+		service.confirmUser(user);
+		assertTrue(user.isActive());
+	}
+	
+	/**
+	 * Try to find a Verification instance wich not exist.
+	 */
+	@Test
+	public void findVerificationWrong() {
+		String wrongToken = "asdf";
+		when(validationDao.findByToken(wrongToken)).thenReturn(null);
+		
+		Verification verification = service.getVerification(wrongToken);
+		assertNull(verification);
+	}
+	
+	/**
+	 * Find The verification instance by the token String successfully.
+	 */
+	@Test
+	public void findVerificationSuccessfully() {
+		String token = "tokenvalid123";
+		when(validationDao.findByToken(token)).thenReturn(new Verification(token, new User()));
+		
+		Verification verification = service.getVerification(token);
+		assertNotNull(verification);
+		assertEquals(token, verification.getToken());
 	}
 }

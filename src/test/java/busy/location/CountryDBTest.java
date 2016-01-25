@@ -4,11 +4,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.Rollback;
 
 import busy.AbstractDBTest;
 
@@ -24,7 +24,6 @@ public class CountryDBTest extends AbstractDBTest {
 	private CountryDaoImpl repository;
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void nameNull() {
 
 		Country country = new Country();
@@ -33,7 +32,6 @@ public class CountryDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void nameTooLong() {
 
 		Country country = new Country();
@@ -43,7 +41,6 @@ public class CountryDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void nameDuplicated() {
 
 		Country country1 = new Country("España", "ES");
@@ -53,7 +50,6 @@ public class CountryDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void codeNull() {
 
 		Country country = new Country();
@@ -62,7 +58,6 @@ public class CountryDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void codeTooLong() {
 
 		Country country = new Country("España", "ESS");
@@ -70,7 +65,6 @@ public class CountryDBTest extends AbstractDBTest {
 	}
 
 	@Test(expected = DataIntegrityViolationException.class)
-	@Rollback(true)
 	public void codeDuplicated() {
 
 		Country country1 = new Country("España", "ES");
@@ -80,8 +74,7 @@ public class CountryDBTest extends AbstractDBTest {
 	}
 
 	@Test
-	@Rollback(true)
-	public void insertSuccesfully() {
+	public void insertSuccessfully() {
 
 		Country country = new Country("España", "ES");
 		repository.save(country);
@@ -90,6 +83,13 @@ public class CountryDBTest extends AbstractDBTest {
 		Country resultCountry = it.next();
 		assertEquals("España", resultCountry.getName());
 		assertEquals("ES", resultCountry.getCode());
+	}
+	
+	@Test
+	public void findAllCountriesWhenEmpty() {
+		
+		List<Country> countryList = repository.findAll();
+		assertTrue(countryList.isEmpty());
 	}
 
 }
