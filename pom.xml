@@ -9,7 +9,7 @@
 
 	<name>Busy WebApp</name>
 	<description>PyMes Schedule's Management Application</description>
-	<url>https://github.com/malkomich/climet</url>
+	<url>busy-app.herokuapp.com</url>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
