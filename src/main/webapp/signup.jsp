@@ -72,6 +72,7 @@ THE SOFTWARE.
 									<form:input path="firstName" autofocus="autofocus"
 										id="firstname" size="20" tabindex="1" class="form-control"
 										placeholder="${firstnamePlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="firstName" cssClass="error" />
 								</div>
 								<div class="col-sm-6 form-group">
@@ -80,22 +81,25 @@ THE SOFTWARE.
 									<form:input path="lastName" id="lastname" size="30"
 										tabindex="2" class="form-control"
 										placeholder="${lastnamePlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="lastName" cssClass="error" />
 								</div>
 							</div>
 
-							<div class="form-group">
-								<spring:message code="email.placeholder" var="emailPlaceHolder" />
-								<form:input path="email" id="email" size="30" tabindex="3"
-									class="form-control" placeholder="${emailPlaceHolder}" />
-								<form:errors path="email" cssClass="error" />
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<spring:message code="email.placeholder" var="emailPlaceHolder" />
+									<form:input path="email" id="email" size="30" tabindex="3"
+										class="form-control" placeholder="${emailPlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+									<form:errors path="email" cssClass="error" />
+								</div>
 							</div>
-
 
 							<div class="row">
 								<div class="col-sm-6 form-group">
 									<spring:message code="country.label" var="countryLabel" />
-									<label for="country">${countryLabel}</label><em>*</em>
+									<label for="country">${countryLabel}:</label>
 
 									<form:select path="countryCode" id="country" tabindex="4"
 										class="form-control">
@@ -108,20 +112,20 @@ THE SOFTWARE.
 								</div>
 								<div class="col-sm-6 form-group">
 									<spring:message code="city.label" var="cityLabel" />
-									<label for="city">${cityLabel}</label><em>*</em>
+									<label for="city">${cityLabel}:</label>
 
 									<form:select path="cityId" id="city" tabindex="5"
 										class="form-control">
-										<c:if test="${cityItems == null}">
-											<spring:message code="city.options.empty"
-												var="cityOptionsEmptyTag" />
-											<form:option value="" label="${cityOptionsEmptyTag}" />
-										</c:if>
-										<c:if test="${cityItems != null}">
-											<spring:message code="city.select.header" var="citySelect" />
-											<form:option value="" label="${citySelect}" />
-											<form:options items="${cityItems}" />
-										</c:if>
+
+										<spring:message code="city.options.empty"
+											var="cityOptionsEmptyTag" />
+										<form:option id="cityEmptyHeader" style="display: none;"
+											value="" label="${cityOptionsEmptyTag}" />
+
+										<spring:message code="city.select.header" var="citySelect" />
+										<form:option id="cityNotEmptyHeader" style="display: none;"
+											value="" label="${citySelect}" />
+
 									</form:select>
 									<form:errors path="cityId" cssClass="error" />
 								</div>
@@ -134,6 +138,7 @@ THE SOFTWARE.
 									<form:input path="zipCode" id="zipcode" size="6" tabindex="5"
 										type="tel" value="" class="form-control"
 										placeholder="${zipcodePlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="zipCode" cssClass="error" />
 								</div>
 								<div class="col-sm-6 form-group">
@@ -141,26 +146,33 @@ THE SOFTWARE.
 									<form:input path="phone" id="phone" size="7" tabindex="5"
 										type="tel" value="" class="form-control"
 										placeholder="${phonePlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="phone" cssClass="error" />
 								</div>
 							</div>
 
-							<div class="form-group">
-								<spring:message code="password.placeholder"
-									var="passwordPlaceHolder" />
-								<form:input path="password" id="password" size="30" tabindex="8"
-									type="password" class="form-control"
-									placeholder="${passwordPlaceHolder}" />
-								<form:errors path="password" cssClass="error" />
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<spring:message code="password.placeholder"
+										var="passwordPlaceHolder" />
+									<form:input path="password" id="password" size="30"
+										tabindex="8" type="password" class="form-control"
+										placeholder="${passwordPlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+									<form:errors path="password" cssClass="error" />
+								</div>
 							</div>
 
-							<div class="form-group">
-								<spring:message code="passwordConfirm.placeholder"
-									var="passConfirmPlaceHolder" />
-								<form:input path="confirmedPassword" id="confirmedPassword"
-									size="30" tabindex="9" type="password" class="form-control"
-									placeholder="${passConfirmPlaceHolder}" />
-								<form:errors path="confirmedPassword" cssClass="error" />
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<spring:message code="passwordConfirm.placeholder"
+										var="passConfirmPlaceHolder" />
+									<form:input path="confirmedPassword" id="confirmedPassword"
+										size="30" tabindex="9" type="password" class="form-control"
+										placeholder="${passConfirmPlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+									<form:errors path="confirmedPassword" cssClass="error" />
+								</div>
 							</div>
 
 							<div class="row">
@@ -179,6 +191,11 @@ THE SOFTWARE.
 						</form:form>
 
 					</div>
+					<div class="footnote">
+						<span class="glyphicon glyphicon-asterisk error" ></span>
+						<span class="error">Campo obligatorio</span>
+					</div>
+					
 				</div>
 				<spring:message code="signup.logintip.label" var="loginLabel" />
 				<spring:message code="signup.logintip.link" var="loginLink" />
