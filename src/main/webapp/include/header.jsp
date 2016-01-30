@@ -7,7 +7,7 @@
 		<div class="navbar-header">
 
 			<!-- Toggle navigation button for small devices -->
-			<button type="button" class="navbar-toggle collapsed"
+			<button type="button" id="toggle-menu-button" class="navbar-toggle collapsed"
 				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
 				aria-controls="navbar">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
@@ -38,7 +38,7 @@
 						<spring:message code="navbar.profile" var="profile" />
 						<li><a href="#">${profile}</a></li>
 						<spring:message code="navbar.logout" var="logout" />
-						<li><a href="/logout">${logout}</a></li>
+						<li><a id="logout-link" href="/logout">${logout}</a></li>
 					</ul></li>
 
 				<!-- Notifications section -->

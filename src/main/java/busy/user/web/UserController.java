@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -57,6 +58,7 @@ public class UserController {
 	private static final String PATH_SIGNUP = "signup";
 	private static final String PATH_SIGNUP_CITIES_UPDATE = "get_city_list";
 	private static final String PATH_EMAIL_CONFIRM = "verificate_email";
+	private static final String PATH_LOGOUT = "logout";
 
 	/**
 	 * JSP's
@@ -204,6 +206,14 @@ public class UserController {
 				null);
 		redirectAttributes.addFlashAttribute(VALIDATION_MSG_REQUEST, tokenValid);
 
+		return "redirect:" + PATH_ROOT;
+	}
+	
+	@RequestMapping(value = PATH_LOGOUT, method = RequestMethod.GET)
+	public String logout(Model model, SessionStatus status) {
+		
+		status.setComplete();
+		
 		return "redirect:" + PATH_ROOT;
 	}
 
