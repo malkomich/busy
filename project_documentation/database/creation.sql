@@ -5,6 +5,10 @@
  * Database tables' creation
  */
 
+DROP TABLE IF EXISTS role;
+DROP SEQUENCE IF EXISTS role_seq;
+DROP TABLE IF EXISTS company;
+DROP SEQUENCE IF EXISTS company_seq;
 DROP TABLE IF EXISTS verification;
 DROP TABLE IF EXISTS person;
 DROP SEQUENCE IF EXISTS person_seq;
@@ -65,18 +69,30 @@ CREATE TABLE verification (
 	confirmation_key		text			NOT NULL UNIQUE
 );
 
-CREATE SEQUENCE person_seq;
+CREATE SEQUENCE company_seq;
 
-CREATE TABLE person (
-    id					integer DEFAULT nextval('person_seq') NOT NULL		PRIMARY KEY,
-    first_name			varchar(35) 	NOT NULL,
-    last_name			varchar(35)		NOT NULL,
+CREATE TABLE company (
+    id					integer DEFAULT nextval('company_seq') NOT NULL		PRIMARY KEY,
+    name				varchar(50) 	NOT NULL,
 	email				varchar(50)		NOT NULL UNIQUE,
-	password			varchar(50)		NOT NULL,
-	nif					varchar(9)		NULL UNIQUE,
+	cif					varchar(9)		NULL UNIQUE,
 	phone				varchar(12)		NULL,
-	active				boolean			NOT NULL DEFAULT true,
-	admin_role			boolean			NOT NULL DEFAULT false,
-	address_id			integer			NULL REFERENCES address(id)
+	active				boolean			NOT NULL DEFAULT false,
+	address_id			integer			NOT NULL REFERENCES address(id)
 		ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE SEQUENCE role_seq;
+
+CREATE TABLE role (
+	id					integer DEFAULT nextval('role_seq') NOT NULL		PRIMARY KEY,
+    person_id			integer			NULL REFERENCES person(id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	company_id			integer			NOT NULL REFERENCES company(id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	worker_name			varchar(35)		NULL,
+	is_manager			boolean			NOT NULL DEFAULT false,
+	UNIQUE (person_id, company_id),
+	UNIQUE (company_id, worker_name),
+	CHECK (person_id IS NOT NULL OR worker_name IS NOT NULL)
 );
