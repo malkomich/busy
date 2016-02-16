@@ -26,7 +26,6 @@ THE SOFTWARE.
 
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <html>
 <head>
@@ -34,65 +33,68 @@ THE SOFTWARE.
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="malkomich">
-<link rel="icon" href="favicon.ico">
-<meta name="description" content="Signup Page">
+<meta name="description" content="New company Page">
 
-<title><spring:message code="signup.page.title" /></title>
+<title><spring:message code="new-company.page.title" /></title>
+
+<link rel="icon" href="favicon.ico">
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<link href="css/cover.css" rel="stylesheet" type="text/css">
-<link href="css/signin.css" rel="stylesheet" type="text/css">
+
+<link href="css/cover-logged.css" rel="stylesheet">
+<link href="css/main.css" rel="stylesheet">
+
 </head>
 
 <body>
-
+	<jsp:include page="include/header.jsp" />
+	
 	<div class="site-wrapper">
 
 		<div class="site-wrapper-inner">
 
 			<div class="cover-container">
 
-				<spring:message code="signup.form.title" var="formTitle" />
+				<spring:message code="new_company.form.title" var="formTitle" />
 				<h2 class="text-center">${formTitle}</h2>
 
 				<div class="inner cover">
 
 					<div class="form-box">
-						<form:form class="form-signin" action="signup"
-							modelAttribute="signupForm" commandName="signupForm"
+						<form:form class="form-company" action="new_company"
+							modelAttribute="companyForm" commandName="companyForm"
 							method="POST">
 
 							<div class="row">
-								<div class="col-sm-6 form-group">
-									<spring:message code="firstname.placeholder"
-										var="firstnamePlaceHolder" />
-									<form:input path="firstName" autofocus="autofocus"
-										id="firstname" tabindex="1" class="form-control"
-										placeholder="${firstnamePlaceHolder}" />
+								<div class="form-group col-sm-12">
+									<spring:message code="companyName.placeholder"
+										var="companyNamePlaceHolder" />
+									<form:input path=companyName autofocus="autofocus"
+										id="companyName" tabindex="1" class="form-control"
+										placeholder="${companyNamePlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="firstName" cssClass="error" />
-								</div>
-								<div class="col-sm-6 form-group">
-									<spring:message code="lastname.placeholder"
-										var="lastnamePlaceHolder" />
-									<form:input path="lastName" id="lastname"
-										tabindex="2" class="form-control"
-										placeholder="${lastnamePlaceHolder}" />
-									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="lastName" cssClass="error" />
+									<form:errors path="companyName" cssClass="error" />
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="form-group col-sm-12">
-									<spring:message code="email.placeholder" var="emailPlaceHolder" />
-									<form:input path="email" id="email" tabindex="3"
-										class="form-control" placeholder="${emailPlaceHolder}" />
+									<spring:message code="companyEmail.placeholder" var="companyEmailPlaceHolder" />
+									<form:input path="companyEmail" id="companyEmail" tabindex="2"
+										class="form-control" placeholder="${companyEmailPlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="email" cssClass="error" />
+									<form:errors path="companyEmail" cssClass="error" />
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<spring:message code="companyCif.placeholder" var="companyCifPlaceHolder" />
+									<form:input path="companyCif" id="companyCif" tabindex="3"
+										class="form-control" placeholder="${companyCifPlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+									<form:errors path="companyCif" cssClass="error" />
 								</div>
 							</div>
 
@@ -153,38 +155,22 @@ THE SOFTWARE.
 
 							<div class="row">
 								<div class="form-group col-sm-12">
-									<spring:message code="password.placeholder"
-										var="passwordPlaceHolder" />
-									<form:input path="password" id="password"
-										tabindex="8" type="password" class="form-control"
-										placeholder="${passwordPlaceHolder}" />
+									<spring:message code="companyAddress.placeholder"
+										var="companyAddressPlaceHolder" />
+									<form:input path="companyAddress" id="companyAddress"
+										tabindex="8" class="form-control"
+										placeholder="${companyAddressPlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="password" cssClass="error" />
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="form-group col-sm-12">
-									<spring:message code="passwordConfirm.placeholder"
-										var="passConfirmPlaceHolder" />
-									<form:input path="confirmedPassword" id="confirmedPassword"
-										tabindex="9" type="password" class="form-control"
-										placeholder="${passConfirmPlaceHolder}" />
-									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="confirmedPassword" cssClass="error" />
+									<form:errors path="companyAddress" cssClass="error" />
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="col-sm-12">
-									<div class="col-sm-8">
-										<spring:message code="signup.info" var="signupInfo" />
-										<p>${signupInfo}</p>
-									</div>
 									<div class="col-sm-3" style="float: right">
-										<spring:message code="signup.submit" var="signupSubmit" />
+										<spring:message code="new_company.submit" var="newCompanySubmit" />
 										<button id="submit" type="submit" class="btn btn-primary"
-											tabindex="10">${signupSubmit}</button>
+											tabindex="9">${newCompanySubmit}</button>
 									</div>
 								</div>
 							</div>
@@ -197,13 +183,9 @@ THE SOFTWARE.
 					</div>
 					
 				</div>
-				<spring:message code="signup.logintip.label" var="loginLabel" />
-				<spring:message code="signup.logintip.link" var="loginLink" />
-				<div class="login-tip" style="border-top: 1px solid #888;">
-					${loginLabel}<a href="/"><b>${loginLink}</b></a>
-				</div>
-
+				
 				<jsp:include page="include/footer.jsp" />
+				
 			</div>
 
 		</div>

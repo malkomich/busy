@@ -42,35 +42,25 @@ THE SOFTWARE.
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-<link href="css/cover.css" rel="stylesheet">
+<link href="css/cover-logged.css" rel="stylesheet">
 <link href="css/main.css" rel="stylesheet">
 
 </head>
 <body>
 	<jsp:include page="include/header.jsp" />
 	<div class="container">
-
-		<div class="cover-container"></div>
-		<!-- cover-container -->
-
-		<div class="modal fade" id="events-modal">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">&times;</button>
-						<h3>Event</h3>
-					</div>
-					<div class="modal-body" style="height: 400px"></div>
-					<div class="modal-footer">
-						<a href="#" data-dismiss="modal" class="btn">Close</a>
-					</div>
+		<div class="row">
+			<a href="#">
+				<div class="col-sm-3 col-xs-3 block-button">
+					<spring:message code="new_company.block-button" var="newCompanyBlockButton" />
+					<i class="glyphicon glyphicon-plus"></i>${newCompanyBlockButton}
 				</div>
-			</div>
+			</a>
 		</div>
-
+		<!-- row -->
+		
 		<jsp:include page="include/footer.jsp" />
-
+		
 	</div>
 	<!-- container -->
 

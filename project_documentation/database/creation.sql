@@ -64,3 +64,19 @@ CREATE TABLE verification (
 		ON DELETE CASCADE ON UPDATE CASCADE,
 	confirmation_key		text			NOT NULL UNIQUE
 );
+
+CREATE SEQUENCE person_seq;
+
+CREATE TABLE person (
+    id					integer DEFAULT nextval('person_seq') NOT NULL		PRIMARY KEY,
+    first_name			varchar(35) 	NOT NULL,
+    last_name			varchar(35)		NOT NULL,
+	email				varchar(50)		NOT NULL UNIQUE,
+	password			varchar(50)		NOT NULL,
+	nif					varchar(9)		NULL UNIQUE,
+	phone				varchar(12)		NULL,
+	active				boolean			NOT NULL DEFAULT true,
+	admin_role			boolean			NOT NULL DEFAULT false,
+	address_id			integer			NULL REFERENCES address(id)
+		ON DELETE CASCADE ON UPDATE CASCADE
+);
