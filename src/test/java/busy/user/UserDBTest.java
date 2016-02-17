@@ -20,7 +20,7 @@ import busy.location.Address;
 import busy.util.SecureSetter;
 
 /**
- * Test Case for the UserDao interface.
+ * Test Case for the UserDao implementation class.
  * 
  * @author malkomich
  *
