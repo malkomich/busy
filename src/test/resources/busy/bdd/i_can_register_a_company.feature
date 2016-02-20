@@ -10,7 +10,8 @@ Feature: A user will be able to register a new company
 		Then the page for register a new company is shown
 	
 	Scenario Outline: Register a new company successfully
-		When the user introduces the name <company_name>
+		When the user introduces the trade name <trade_name>
+		And the user introduces the business name <business_name>
 		And the user introduces the email <email>
 		And the user introduces the cif <cif>
 		And the user selects the country <country>
@@ -18,6 +19,7 @@ Feature: A user will be able to register a new company
 		And the user introduces the zip code <zipcode>
 		And the user introduces the phone number <phone>
 		And the user introduces the address <address>
+		And the user selects the category <category>
 		And the user press the Create button
 		Then the main page is shown
 		And a message informing that the company is pending to approve is shown
@@ -26,11 +28,12 @@ Feature: A user will be able to register a new company
 		And a business section is shown in my main page
 		
 		Examples:
-			|company_name|email|cif|country|city|zipcode|phone|address|
-			|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|
+			|trade_name|business_name|email|cif|country|city|zipcode|phone|address|category|
+			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 		
 	Scenario Outline: Register of a new company with wrong data
-		When the user introduces the name <company_name>
+		When the user introduces the name <trade_name>
+		And the user introduces the business name <business_name>
 		And the user introduces the email <email>
 		And the user introduces the cif <cif>
 		And the user selects the country <country>
@@ -38,22 +41,24 @@ Feature: A user will be able to register a new company
 		And the user introduces the zip code <zipcode>
 		And the user introduces the phone number <phone>
 		And the user introduces the address <address>
+		And the user selects the category <category>
 		And the user press the Create button
 		Then an error message in the page for register a new company is shown
 		
 		Examples:
-			|company_name|email|cif|country|city|zipcode|phone|address|
-			|""|""|""|""|""|""|""|""|""|
-			|""|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|
-			|"Boom S.A."|""|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|
-			|"Boom S.A."|"jefe@boom.com"|"B12345678"|""|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|
-			|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|""|"47007"|"654321987"|"Calle Los Almendros, 2"|
-			|"Boom S.A."|"wrong_email.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|
-			|"Boom S.A."|"jefe@boom.com"|"123456789A"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|
-			|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"5"|"Calle Los Almendros, 2"|
+			|trade_name|business_name|email|cif|country|city|zipcode|phone|address|category|
+			|""|""|""|""|""|""|""|""|""|""|
+			|"Boom"|""|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"Boom"|"Boom S.A."|""|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|""|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|""|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"Boom"|"Boom S.A."|"wrong_email.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"Boom"|"Boom S.A."|"jefe@boom.com"|"123456789A"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"5"|"Calle Los Almendros, 2"|"Mobiliario"|
 
 	Scenario Outline: Register a new company rejected by an admin
-		When the user introduces the name <company_name>
+		When the user introduces the name <trade_name>
+		And the user introduces the business name <business_name>
 		And the user introduces the email <email>
 		And the user introduces the cif <cif>
 		And the user selects the country <country>
@@ -61,6 +66,7 @@ Feature: A user will be able to register a new company
 		And the user introduces the zip code <zipcode>
 		And the user introduces the phone number <phone>
 		And the user introduces the address <address>
+		And the user selects the category <category>
 		And the user press the Create button
 		Then the main page is shown
 		And a message informing that the company is pending to approve is shown
@@ -68,5 +74,5 @@ Feature: A user will be able to register a new company
 		Then a notification with the problem is shown in my account
 		
 		Examples:
-			|company_name|email|cif|country|city|zipcode|phone|address|
-			|"X"|"user@gmail.com"|"wrongCIF"|"España"|"Valladolid"|"47007"|"5"|"Calle Los Almendros, 2"|
+			|trade_name|business_name|email|cif|country|city|zipcode|phone|address|category|
+			|""|"X"|"user@gmail.com"|"wrongCIF"|"España"|"Valladolid"|"47007"|"5"|"Calle Los Almendros, 2"|"Mobiliario"|

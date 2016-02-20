@@ -78,10 +78,16 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 		FluentLeniumAssertions.assertThat(registerCompanyPage).isAt();
 	}
 	
-	@When("^the user introduces the name \"([^\"]*)\"$")
-	public void user_introduces_name(String name) throws Throwable {
+	@When("^the user introduces the trade name \"([^\"]*)\"$")
+	public void user_introduces_trade_name(String tradeName) throws Throwable {
 		
-		registerCompanyPage.setName(name);
+		registerCompanyPage.setTradeName(tradeName);
+	}
+	
+	@When("^the user introduces the business name \"([^\"]*)\"$")
+	public void user_introduces_business_name(String businessName) throws Throwable {
+		
+		registerCompanyPage.setBusinessName(businessName);
 	}
 	
 	@When("^the user introduces the email \"([^\"]*)\"$")
@@ -124,6 +130,12 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 	public void user_introduces_address(String address) throws Throwable {
 		
 		registerCompanyPage.setAddress(address);
+	}
+	
+	@When("^the user selects the category \"([^\"]*)\"$")
+	public void user_selects_category(String category) throws Throwable {
+		
+		registerCompanyPage.selectCategory(category);
 	}
 	
 	@When("^the user press the Create button$")

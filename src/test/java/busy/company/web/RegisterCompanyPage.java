@@ -16,7 +16,12 @@ public class RegisterCompanyPage extends BusyPage {
 		return null;
 	}
 
-	public void setName(String name) {
+	public void setTradeName(String tradeName) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void setBusinessName(String businessName) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -52,6 +57,11 @@ public class RegisterCompanyPage extends BusyPage {
 	}
 
 	public void setAddress(String address) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void selectCategory(String category) {
 		// TODO Auto-generated method stub
 		
 	}
