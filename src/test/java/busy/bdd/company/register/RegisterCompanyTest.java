@@ -1,4 +1,4 @@
-package busy.bdd.accounts.log_out;
+package busy.bdd.company.register;
 
 import org.junit.runner.RunWith;
 
@@ -7,7 +7,7 @@ import cucumber.api.SnippetType;
 import cucumber.api.junit.Cucumber;
 
 /**
- * Execute the Log Out feature, which gherkin definition is in the path specified
+ * Execute the Register Company feature, which gherkin definition is in the path specified
  * by features parameter in @CucumberOptions annotation.
  * 
  * The "plugin" parameter of @CucumberOptions specifies the format of the result
@@ -17,8 +17,8 @@ import cucumber.api.junit.Cucumber;
  *
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "classpath:busy/bdd/i_can_log_out.feature", plugin = {
-		"html:target/cucumber" }, glue = "classpath:busy/bdd/accounts/log_out", snippets = SnippetType.UNDERSCORE)
-public class LogOutTest {
+@CucumberOptions(features = "classpath:busy/bdd/i_can_register_a_company.feature", plugin = {
+		"html:target/cucumber" }, glue = "classpath:busy/bdd/company/register", snippets = SnippetType.UNDERSCORE)
+public class RegisterCompanyTest {
 
 }

@@ -57,4 +57,24 @@ public class MainPage extends BusyPage {
 		return this;
 	}
 
+	public void clickOnCreateCompany() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public boolean companyPendingMessageIsShown() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean companyApprovedNotificationIsShown() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean businessSectionIsShown() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

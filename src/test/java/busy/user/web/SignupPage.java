@@ -7,6 +7,12 @@ import org.openqa.selenium.support.ui.Select;
 
 import busy.BusyPage;
 
+/**
+ * Page for the user signup form.
+ * 
+ * @author malkomich
+ *
+ */
 public class SignupPage extends BusyPage {
 
 	private static final String PATH = "/signup";

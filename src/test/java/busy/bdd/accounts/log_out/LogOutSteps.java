@@ -66,13 +66,13 @@ public class LogOutSteps extends AbstractFunctionalTest {
 		FluentLeniumAssertions.assertThat(mainPage).isAt();
 	}
 
-	@When("^the user clicks on \"Log out\" in the top bar")
+	@When("^the user clicks on \"Log out\" in the top bar$")
 	public void user_clicks_log_out() throws Throwable {
 		
 		mainPage.clickOnLogOut();
 	}
 
-	@Then("^the user should see the login page")
+	@Then("^the user should see the login page$")
 	public void loginPageIsShown() throws Throwable {
 		
 		FluentLeniumAssertions.assertThat(loginPage).isAt();

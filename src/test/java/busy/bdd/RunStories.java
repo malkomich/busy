@@ -5,20 +5,18 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 import busy.bdd.accounts.log_in.LogInTest;
+import busy.bdd.accounts.log_out.LogOutTest;
 import busy.bdd.accounts.sign_up.SignUpTest;
+import busy.bdd.company.register.RegisterCompanyTest;
 
 /**
- * Execute all BDD Features in the path given to the "glue" parameter
- * in @CucumberOptions annotation.
- * 
- * The "plugin" parameter of @CucumberOptions specifies the format of the result
- * tests, and the destination path of them.
+ * Execute all BDD Tests covering all the User Stories
  * 
  * @author malkomich
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({ LogInTest.class, SignUpTest.class })
+@SuiteClasses({ LogInTest.class, SignUpTest.class, LogOutTest.class, RegisterCompanyTest.class })
 public class RunStories {
 
 }
