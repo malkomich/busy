@@ -7,8 +7,12 @@
 
 DROP TABLE IF EXISTS role;
 DROP SEQUENCE IF EXISTS role_seq;
+DROP TABLE IF EXISTS branch;
+DROP SEQUENCE IF EXISTS branch_seq;
 DROP TABLE IF EXISTS company;
 DROP SEQUENCE IF EXISTS company_seq;
+DROP TABLE IF EXISTS category;
+DROP SEQUENCE IF EXISTS category_seq;
 DROP TABLE IF EXISTS verification;
 DROP TABLE IF EXISTS person;
 DROP SEQUENCE IF EXISTS person_seq;
@@ -86,19 +90,20 @@ CREATE TABLE company (
 	cif				varchar(9)		NOT NULL UNIQUE,
 	active			boolean			NOT NULL DEFAULT false,
 	category_id		integer			NULL REFERENCES category(id)
-		ON DELETE SET NULL ON UPDATE CASCADE,
+		ON DELETE SET NULL ON UPDATE CASCADE
 );
 
 CREATE SEQUENCE branch_seq;
 
 CREATE TABLE branch (
+	id				integer DEFAULT nextval('branch_seq') NOT NULL PRIMARY KEY,
 	company_id		integer			NOT NULL REFERENCES company(id)
 		ON DELETE CASCADE ON UPDATE CASCADE,
 	address_id		integer			NOT NULL REFERENCES address(id)
-		ON DELETE NO ACTION ON UPDATE CASCADE
+		ON DELETE NO ACTION ON UPDATE CASCADE,
 	main			boolean			NOT NULL DEFAULT false,
 	phone			varchar(12)		NULL,
-	PRIMARY KEY (company_id, address_id),
+	UNIQUE (company_id, address_id),
 	UNIQUE (company_id, main)
 );
 
@@ -111,6 +116,6 @@ CREATE TABLE role (
 	branch_id		integer			NOT NULL REFERENCES branch(id)
 		ON DELETE CASCADE ON UPDATE CASCADE,
 	is_manager		boolean			NOT NULL DEFAULT false,
-	function		varchar(20)		NULL,
+	activity		varchar(20)		NULL,
 	UNIQUE (person_id, branch_id)
 );
