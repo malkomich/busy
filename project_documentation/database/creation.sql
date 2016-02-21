@@ -131,6 +131,5 @@ CREATE TABLE notification (
 	notif_type		varchar(20)					NOT NULL,
 	message			text						NOT NULL,
 	read			boolean						NOT NULL DEFAULT false,
-	create_date		timestamp with time zone	NOT NULL DEFAULT NOW()
-	CHECK(EXTRACT(TIMEZONE FROM create_date) = '0')
+	create_date		timestamp with time zone	NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

@@ -15,6 +15,7 @@ public class SQLUtil {
 	public static final String TABLE_COMPANY = "company";
 	public static final String TABLE_BRANCH = "branch";
 	public static final String TABLE_ROLE = "role";
+	public static final String TABLE_NOTIFICATION = "notification";
 	
 	// Table fields names
 	public static final String ID = "id";
@@ -53,6 +54,11 @@ public class SQLUtil {
 	public static final String BRANCHID = "branch_id";
 	public static final String IS_MANAGER = "is_manager";
 	public static final String ACTIVITY = "activity";
+	
+	public static final String NOTIFICATION_TYPE = "notif_type";
+	public static final String MESSAGE = "message";
+	public static final String IS_READ = "read";
+	public static final String CREATE_DATE = "create_date";
 	
 	// Table field alias
 	public static final String ALIAS_COUNTRYID = "countryId";

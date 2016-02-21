@@ -52,7 +52,7 @@ public class RoleDaoImpl implements RoleDao {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put(USERID, role.getUserId());
 			parameters.put(BRANCHID, role.getBranchId());
-			parameters.put(IS_MANAGER, role.isManager());
+			parameters.put(IS_MANAGER, (role.isManager() != null) ? role.isManager() : DEFAULT);
 			parameters.put(ACTIVITY, role.getActivity());
 
 			Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));

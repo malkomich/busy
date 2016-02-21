@@ -12,7 +12,7 @@ public class Role implements Serializable {
 	private int id;
 	private User user;
 	private Branch branch;
-	private boolean manager;
+	private Boolean manager;
 	private String activity;
 	
 	public Role() {
@@ -47,7 +47,7 @@ public class Role implements Serializable {
 		this.manager = manager;
 	}
 	
-	public boolean isManager() {
+	public Boolean isManager() {
 		return manager;
 	}
 

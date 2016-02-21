@@ -55,7 +55,7 @@ public class BranchDaoImpl implements BranchDao {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put(COMPANYID, branch.getCompanyId());
 			parameters.put(ADDRID, branch.getAddressId());
-			parameters.put(HEADQUARTER, branch.isHeadquarter());
+			parameters.put(HEADQUARTER, (branch.isHeadquarter() != null) ? branch.isHeadquarter() : DEFAULT);
 			parameters.put(PHONE, branch.getPhone());
 
 			Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));

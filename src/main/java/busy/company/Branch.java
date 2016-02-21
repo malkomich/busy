@@ -11,7 +11,7 @@ public class Branch implements Serializable {
 	private int id;
 	private Company company;
 	private Address address;
-	private boolean headquarter;
+	private Boolean headquarter;
 	private String phone;
 	
 	public Branch() {
@@ -46,7 +46,7 @@ public class Branch implements Serializable {
 		this.headquarter = headquarter;
 	}
 	
-	public boolean isHeadquarter() {
+	public Boolean isHeadquarter() {
 		return headquarter;
 	}
 	

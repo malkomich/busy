@@ -6,6 +6,7 @@ import static busy.util.SQLUtil.ALIAS_COMPANYID;
 import static busy.util.SQLUtil.BUSINESS_NAME;
 import static busy.util.SQLUtil.CATEGORYID;
 import static busy.util.SQLUtil.CIF;
+import static busy.util.SQLUtil.DEFAULT;
 import static busy.util.SQLUtil.EMAIL;
 import static busy.util.SQLUtil.ID;
 import static busy.util.SQLUtil.NAME;
@@ -83,7 +84,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			parameters.put(BUSINESS_NAME, company.getBusinessName());
 			parameters.put(EMAIL, company.getEmail());
 			parameters.put(CIF, company.getCif());
-			parameters.put(ACTIVE, company.isActive());
+			parameters.put(ACTIVE, DEFAULT);
 			parameters.put(CATEGORYID, company.getCategoryId());
 
 			Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
