@@ -6,18 +6,33 @@ public class Category implements Serializable{
 
 	private static final long serialVersionUID = -2844610433599629096L;
 
-	public Category() {
-		// TODO Auto-generated constructor stub
-	}
+	private int id;
+	private String name;
 	
-	public Category(String name) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public void setName(String string) {
-		// TODO Auto-generated method stub
+	public Category() {
 		
 	}
 	
+	public Category(String name) {
+		
+		this.name = name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	@SuppressWarnings("unused")
+	private void setId(Integer id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
 
 }

@@ -16,7 +16,7 @@ import busy.util.SecureSetter;
  * @author malkomich
  *
  */
-@DatabaseSetup("../location/categorySet.xml")
+@DatabaseSetup("../company/categorySet.xml")
 public class CompanyDBTest extends AbstractDBTest {
 
 	@Autowired

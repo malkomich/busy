@@ -112,13 +112,13 @@ public class BranchDBTest extends AbstractDBTest {
 	public void insertWithHeadquarterDuplicated() {
 	
 		Branch branch1 = new Branch(company, address, "654321987");
-		branch1.setMain(true);
+		SecureSetter.setAttribute(branch1, "setHeadquarter", Boolean.class, true);
 		repository.save(branch1);
 		
 		Address address2 = new Address();
 		SecureSetter.setId(address2, 2);
 		Branch branch2 = new Branch(company, address2, "654987123");
-		branch2.setMain(true);
+		SecureSetter.setAttribute(branch2, "setHeadquarter", Boolean.class, true);
 		repository.save(branch2);
 		
 	}

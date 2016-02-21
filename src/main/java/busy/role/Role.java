@@ -9,27 +9,71 @@ public class Role implements Serializable {
 
 	private static final long serialVersionUID = 6259212594249963055L;
 
+	private int id;
+	private User user;
+	private Branch branch;
+	private boolean manager;
+	private String activity;
+	
 	public Role() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public Role(User user, Branch branch, String activity) {
-		// TODO Auto-generated constructor stub
+		
+		this.user = user;
+		this.branch = branch;
+		this.activity = activity;
 	}
 
 	public void setUser(User user) {
-		// TODO Auto-generated method stub
-		
+		this.user = user;
+	}
+	
+	public User getUser() {
+		return user;
 	}
 
 	public void setBranch(Branch branch) {
-		// TODO Auto-generated method stub
-		
+		this.branch = branch;
+	}
+	
+	public Branch getBranch() {
+		return branch;
+	}
+	
+	@SuppressWarnings("unused")
+	private void setManager(Boolean manager) {
+		this.manager = manager;
+	}
+	
+	public boolean isManager() {
+		return manager;
 	}
 
 	public void setActivity(String activity) {
-		// TODO Auto-generated method stub
-		
+		this.activity = activity;
+	}
+	
+	public String getActivity() {
+		return activity;
+	}
+
+	@SuppressWarnings("unused")
+	private void setId(Integer id) {
+		this.id = id;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public Integer getUserId() {
+		return (user != null) ? user.getId() : null;
+	}
+
+	public Integer getBranchId() {
+		return (branch != null) ? branch.getId() : null;
 	}
 
 }

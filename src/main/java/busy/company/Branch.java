@@ -8,32 +8,71 @@ public class Branch implements Serializable {
 
 	private static final long serialVersionUID = -4918502964124607207L;
 
+	private int id;
+	private Company company;
+	private Address address;
+	private boolean headquarter;
+	private String phone;
+	
 	public Branch() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public Branch(Company company, Address address, String phone) {
-		// TODO Auto-generated constructor stub
+		
+		this.company = company;
+		this.address = address;
+		this.phone = phone;
 	}
 
-	public void setCompany(Company invalidCompany) {
-		// TODO Auto-generated method stub
-		
+	public void setCompany(Company company) {
+		this.company = company;
+	}
+	
+	public Company getCompany() {
+		return company;
 	}
 	
 	public void setAddress(Address address) {
-		// TODO Auto-generated method stub
-		
+		this.address = address;
+	}
+	
+	public Address getAddress() {
+		return address;
 	}
 
-	public void setMain(boolean b) {
-		// TODO Auto-generated method stub
-		
+	@SuppressWarnings("unused")
+	private void setHeadquarter(Boolean headquarter) {
+		this.headquarter = headquarter;
+	}
+	
+	public boolean isHeadquarter() {
+		return headquarter;
 	}
 	
 	public void setPhone(String phone) {
-		// TODO Auto-generated method stub
-		
+		this.phone = phone;
+	}
+	
+	public String getPhone() {
+		return phone;
+	}
+
+	@SuppressWarnings("unused")
+	private void setId(Integer id) {
+		this.id = id;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public Integer getCompanyId() {
+		return (company != null) ? company.getId() : null;
+	}
+
+	public Integer getAddressId() {
+		return (address != null) ? address.getId() : null;
 	}
 
 }
