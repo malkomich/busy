@@ -1,7 +1,8 @@
-package busy.company;
+package busy.role;
 
 import java.io.Serializable;
 
+import busy.company.Branch;
 import busy.user.User;
 
 public class Role implements Serializable {
@@ -12,7 +13,7 @@ public class Role implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Role(User user, Company company, String workerName) {
+	public Role(User user, Branch branch, String activity) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,12 +22,12 @@ public class Role implements Serializable {
 		
 	}
 
-	public void setCompany(Company company) {
+	public void setBranch(Branch branch) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void setWorkerName(String workerName) {
+	public void setActivity(String activity) {
 		// TODO Auto-generated method stub
 		
 	}

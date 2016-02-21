@@ -3,10 +3,10 @@ package busy.company;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class CompanyDaoImpl implements CompanyDao {
+public class CategoryDaoImpl implements CategoryDao {
 
 	@Override
-	public void save(Company company) {
+	public void save(Category category) {
 		// TODO Auto-generated method stub
 		
 	}

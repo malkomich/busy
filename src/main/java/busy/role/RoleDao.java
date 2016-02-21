@@ -1,4 +1,4 @@
-package busy.company;
+package busy.role;
 
 public interface RoleDao {
 

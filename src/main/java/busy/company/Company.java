@@ -2,8 +2,6 @@ package busy.company;
 
 import java.io.Serializable;
 
-import busy.location.Address;
-
 public class Company implements Serializable {
 
 	private static final long serialVersionUID = 7609051478409569105L;
@@ -12,11 +10,16 @@ public class Company implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Company(String name, String email, String cif, String phone, Address address) {
+	public Company(String tradeName, String businessName, String email, String cif, Category category) {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void setName(String name) {
+	public void setTradeName(String tradeName) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void setBusinessName(String businessName) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -31,12 +34,7 @@ public class Company implements Serializable {
 		
 	}
 
-	public void setPhone(String phone) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void setAddress(Address address) {
+	public void setCategory(Category category) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,4 +1,4 @@
-package busy.company;
+package busy.role;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
+import busy.company.Branch;
 import busy.user.User;
 import busy.util.SecureSetter;
 
@@ -17,6 +18,12 @@ import busy.util.SecureSetter;
  * @author malkomich
  *
  */
+@DatabaseSetup("../company/categorySet.xml")
+@DatabaseSetup("../company/companySet.xml")
+@DatabaseSetup("../location/countrySet.xml")
+@DatabaseSetup("../location/citySet.xml")
+@DatabaseSetup("../location/addressSet.xml")
+@DatabaseSetup("../company/branchSet.xml")
 @DatabaseSetup("../user/userSet.xml")
 public class RoleDBTest extends AbstractDBTest {
 
@@ -24,87 +31,72 @@ public class RoleDBTest extends AbstractDBTest {
 	protected RoleDaoImpl repository;
 	
 	private User user;
-	private Company company;
+	private Branch branch;
 	
 	@Before
 	public void setUp() {
+		
 		user = new User();
 		SecureSetter.setId(user, 1);
+		
+		branch = new Branch();
+		SecureSetter.setId(branch, 1);
 	}
 	
 	@Test(expected=DataIntegrityViolationException.class)
 	public void insertWithPersonInvalid() {
 		
 		Role role = new Role();
+		
 		User userInvalid = new User();
-		SecureSetter.setId(userInvalid, 2);
+		SecureSetter.setId(userInvalid, INVALID_ID);
 		role.setUser(userInvalid);
-		role.setCompany(company);
-		role.setWorkerName("Nombre");
+		
+		role.setBranch(branch);
 		
 		repository.save(role);
 	}
 	
 	@Test(expected=DataIntegrityViolationException.class)
-	public void insertWithCompanyNull() {
+	public void insertWithBranchNull() {
 		
 		Role role = new Role();
 		role.setUser(user);
-		role.setWorkerName("Nombre");
 		
 		repository.save(role);
 	}
 	
 	@Test(expected=DataIntegrityViolationException.class)
-	public void insertWithCompanyInvalid() {
+	public void insertWithBranchInvalid() {
 		
 		Role role = new Role();
 		role.setUser(user);
-		Company companyInvalid = new Company();
-		SecureSetter.setId(companyInvalid, 2);
-		role.setCompany(companyInvalid);
-		role.setWorkerName("Nombre");
+		Branch branchInvalid = new Branch();
+		SecureSetter.setId(branchInvalid, INVALID_ID);
+		role.setBranch(branchInvalid);
 		
 		repository.save(role);
 	}
 	
 	@Test(expected=DataIntegrityViolationException.class)
-	public void insertWithWorkerNameTooLong() {
+	public void insertWithActivityTooLong() {
 		
 		Role role = new Role();
-		role.setCompany(company);
-		role.setWorkerName("NombreLargoNombreLargoNombreLargoooO");
+		role.setUser(user);
+		role.setBranch(branch);
+		role.setActivity("Abcdefghijklmnñopqrstuvwxyz Abc");
 		
 		repository.save(role);
 	}
 	
 	@Test(expected=DataIntegrityViolationException.class)
-	public void insertWithPersonAndCompanyDuplicated() {
+	public void insertWithPersonAndBranchDuplicated() {
 		
-		Role role1 = new Role(user, company, "Nombre");
-		Role role2 = new Role(user, company, "NombreDiferente");
+		Role role1 = new Role(user, branch, "Profesor de guitarra");
+		Role role2 = new Role(user, branch, "Limpiabotas");
 		
 		repository.save(role1);
 		repository.save(role2);
-	}
-	
-	@Test(expected=DataIntegrityViolationException.class)
-	public void insertWithCompanyAndWorkerNameDuplicated() {
-		
-		Role role1 = new Role(user, company, "Nombre");
-		Role role2 = new Role(null, company, "Nombre");
-		
-		repository.save(role1);
-		repository.save(role2);
-	}
-	
-	@Test(expected=DataIntegrityViolationException.class)
-	public void insertWithPersonAndWorkerNameNull() {
-		
-		Role role = new Role();
-		role.setCompany(company);
-		
-		repository.save(role);
 	}
 	
 	@Test
@@ -112,28 +104,16 @@ public class RoleDBTest extends AbstractDBTest {
 		
 		Role role = new Role();
 		role.setUser(user);
-		role.setCompany(company);
+		role.setBranch(branch);
 		
 		repository.save(role);
 	}
 	
 	@Test
-	public void insertWithWorkerNameSuccessfully() {
+	public void insertWithoutPersonSuccessfully() {
 		
 		Role role = new Role();
-		role.setCompany(company);
-		role.setWorkerName("Nombre");
-		
-		repository.save(role);
-	}
-	
-	@Test
-	public void insertWithPersonAndWorkerNameSuccessfully() {
-		
-		Role role = new Role();
-		role.setUser(user);
-		role.setCompany(company);
-		role.setWorkerName("Nombre");
+		role.setBranch(branch);
 		
 		repository.save(role);
 	}

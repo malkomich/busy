@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<branch id="1" company_id="1" address_id="1" main="true" phone="666543210" />
+	<branch id="2" company_id="1" address_id="2" main="false" phone="666543219" />
+</dataset>

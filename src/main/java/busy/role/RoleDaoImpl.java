@@ -1,4 +1,4 @@
-package busy.company;
+package busy.role;
 
 public class RoleDaoImpl implements RoleDao {
 

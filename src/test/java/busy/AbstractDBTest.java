@@ -22,5 +22,7 @@ import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
 		TransactionDbUnitTestExecutionListener.class})
 public class AbstractDBTest {
+	
+	protected static final Integer INVALID_ID = 999; 
 
 }

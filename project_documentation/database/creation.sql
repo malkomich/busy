@@ -85,7 +85,7 @@ CREATE SEQUENCE company_seq;
 CREATE TABLE company (
     id				integer DEFAULT nextval('company_seq') NOT NULL PRIMARY KEY,
     trade_name		varchar(30)		NULL,
-    business_name	varchar(50) 	NOT NULL,
+    business_name	varchar(50) 	NOT NULL UNIQUE,
 	email			varchar(50)		NOT NULL UNIQUE,
 	cif				varchar(9)		NOT NULL UNIQUE,
 	active			boolean			NOT NULL DEFAULT false,
@@ -116,6 +116,6 @@ CREATE TABLE role (
 	branch_id		integer			NOT NULL REFERENCES branch(id)
 		ON DELETE CASCADE ON UPDATE CASCADE,
 	is_manager		boolean			NOT NULL DEFAULT false,
-	activity		varchar(20)		NULL,
+	activity		varchar(30)		NULL,
 	UNIQUE (person_id, branch_id)
 );
