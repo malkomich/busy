@@ -27,7 +27,11 @@ body {
 	color: #403427;
 	text-shadow: 0 1px 2px rgba(0, 0, 0, .2);
 	padding-top: 91px;
-	height:2000px;
+}
+
+.cover-container {
+	margin-right: auto;
+	margin-left: auto;
 }
 
 /*
@@ -54,4 +58,35 @@ body {
 	padding-top: 10px;
 	padding-bottom: 10px;
 	background: rgba(245, 250, 252, 1);
+}
+
+
+/*
+ * Media display fixes
+ */
+@media ( min-width : 768px) {
+	/* Pull out the header and footer */
+	.masthead {
+		position: fixed;
+		top: 0;
+	}
+	.botfoot {
+		position: relative;
+		bottom: 0;
+	}
+	/* Start the vertical centering */
+	.site-wrapper-inner {
+		vertical-align: middle;
+	}
+	/* Handle the widths */
+	.masthead, .mastfoot, .botfoot, .cover-container {
+		width: 100%;
+		/* Must be percentage or pixels for horizontal alignment */
+	}
+}
+
+@media ( min-width : 992px) {
+	.masthead, .mastfoot, .botfoot, .cover-container {
+		width: 700px;
+	}
 }

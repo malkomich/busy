@@ -8,14 +8,14 @@ interface CityDao {
 	 * Finds the collection of all registries of City in the database. It will
 	 * return an empty List when no Cities exist.
 	 * 
-	 * @return List of existing Citys
+	 * @return List of existing Cities
 	 */
 	List<City> findAll();
 
 	/**
 	 * Finds the collection of all registries of City in the database which
 	 * belong to the country given. It will return an empty List when no Cities
-	 * fullfill the restriction.
+	 * fulfill the restriction.
 	 * 
 	 * @param country
 	 * @return

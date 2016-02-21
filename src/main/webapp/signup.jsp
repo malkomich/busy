@@ -70,7 +70,7 @@ THE SOFTWARE.
 									<spring:message code="firstname.placeholder"
 										var="firstnamePlaceHolder" />
 									<form:input path="firstName" autofocus="autofocus"
-										id="firstname" tabindex="1" class="form-control"
+										id="firstname" tabindex="1" class="form-control mandatory"
 										placeholder="${firstnamePlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="firstName" cssClass="error" />
@@ -78,8 +78,8 @@ THE SOFTWARE.
 								<div class="col-sm-6 form-group">
 									<spring:message code="lastname.placeholder"
 										var="lastnamePlaceHolder" />
-									<form:input path="lastName" id="lastname"
-										tabindex="2" class="form-control"
+									<form:input path="lastName" id="lastname" tabindex="2"
+										class="form-control mandatory"
 										placeholder="${lastnamePlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="lastName" cssClass="error" />
@@ -90,7 +90,8 @@ THE SOFTWARE.
 								<div class="form-group col-sm-12">
 									<spring:message code="email.placeholder" var="emailPlaceHolder" />
 									<form:input path="email" id="email" tabindex="3"
-										class="form-control" placeholder="${emailPlaceHolder}" />
+										class="form-control mandatory"
+										placeholder="${emailPlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="email" cssClass="error" />
 								</div>
@@ -135,18 +136,16 @@ THE SOFTWARE.
 								<div class="col-sm-6 form-group">
 									<spring:message code="zipcode.placeholder"
 										var="zipcodePlaceHolder" />
-									<form:input path="zipCode" id="zipcode" tabindex="6"
-										type="tel" value="" class="form-control"
+									<form:input path="zipCode" id="zipcode" tabindex="6" type="tel"
+										value="" class="form-control"
 										placeholder="${zipcodePlaceHolder}" />
-									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="zipCode" cssClass="error" />
 								</div>
 								<div class="col-sm-6 form-group">
 									<spring:message code="phone.placeholder" var="phonePlaceHolder" />
-									<form:input path="phone" id="phone" tabindex="7"
-										type="tel" value="" class="form-control"
+									<form:input path="phone" id="phone" tabindex="7" type="tel"
+										value="" class="form-control"
 										placeholder="${phonePlaceHolder}" />
-									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="phone" cssClass="error" />
 								</div>
 							</div>
@@ -155,8 +154,8 @@ THE SOFTWARE.
 								<div class="form-group col-sm-12">
 									<spring:message code="password.placeholder"
 										var="passwordPlaceHolder" />
-									<form:input path="password" id="password"
-										tabindex="8" type="password" class="form-control"
+									<form:input path="password" id="password" tabindex="8"
+										type="password" class="form-control mandatory"
 										placeholder="${passwordPlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="password" cssClass="error" />
@@ -168,7 +167,7 @@ THE SOFTWARE.
 									<spring:message code="passwordConfirm.placeholder"
 										var="passConfirmPlaceHolder" />
 									<form:input path="confirmedPassword" id="confirmedPassword"
-										tabindex="9" type="password" class="form-control"
+										tabindex="9" type="password" class="form-control mandatory"
 										placeholder="${passConfirmPlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="confirmedPassword" cssClass="error" />
@@ -192,10 +191,11 @@ THE SOFTWARE.
 
 					</div>
 					<div class="footnote">
-						<span class="glyphicon glyphicon-asterisk error" ></span>
-						<span class="error">Campo obligatorio</span>
+						<span class="glyphicon glyphicon-asterisk error"></span>
+						<spring:message code="mandatory.info" var="mandatoryInfo" />
+						<span class="error">${mandatoryInfo}</span>
 					</div>
-					
+
 				</div>
 				<spring:message code="signup.logintip.label" var="loginLabel" />
 				<spring:message code="signup.logintip.link" var="loginLink" />

@@ -33,6 +33,9 @@ public abstract class BusyPage extends FluentPage {
 	public String getUrl() {
 		return url;
 	}
+	
+	@Override
+	public abstract void isAt();
 
 	public abstract String relativePath();
 

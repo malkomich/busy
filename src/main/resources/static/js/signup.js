@@ -13,20 +13,24 @@ $(function() {
 
 	// Hide Mandatory Mark when input has text, and show otherwise.
 	$('input').blur(function() {
-		if (this.value != "") {
-			$(this).removeClass('has-error');			
-			$(this).next('span').hide();
-		} else {
-			$(this).addClass('has-error');
-			$(this).next('span').show();
+		if ($(this).hasClass("mandatory")) {
+			if (this.value != "") {
+				$(this).removeClass('has-error');
+				var error = $(this).next('span').hide();
+			} else {
+				$(this).addClass('has-error');
+				$(this).next('span').show();
+			}
 		}
 	});
-	
+
 	$('select').blur(function() {
-		if (this.value != "") {
-			$(this).removeClass('has-error');			
-		} else {
-			$(this).addClass('has-error');
+		if ($(this).hasClass("mandatory")) {
+			if (this.value != "") {
+				$(this).removeClass('has-error');
+			} else {
+				$(this).addClass('has-error');
+			}
 		}
 	});
 });
@@ -42,14 +46,14 @@ function updateCities() {
 		var options = '';
 		var len = data.length;
 
-		if(data.length > 0) {
+		if (data.length > 0) {
 			$('#cityNotEmptyHeader').show().prop('selected', true);
 			$('#cityEmptyHeader').hide();
 		} else {
 			$('#cityEmptyHeader').show().prop('selected', true);
 			$('#cityNotEmptyHeader').hide();
 		}
-		
+
 		for (var i = 0; i < data.length; i++) {
 			options += '<option value="' + data[i].id + '">' + data[i].name
 					+ '</option>';

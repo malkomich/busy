@@ -24,8 +24,8 @@ public class MainPage extends BusyPage {
 	private static final String TOOGLE_MENU_SELECTOR = "#toggle-menu-button";
 	private static final String USER_MENU_SELECTOR = "#userMenu";
 	private static final String LOGOUT_SELECTOR = "#logout-link";
-	
-	
+	private static final String CREATE_COMPANY_SELECTOR = "#create-company";
+	private static final String MESSAGE_SELECTOR = "#infoMessage";
 
 	@Override
 	public String relativePath() {
@@ -58,13 +58,13 @@ public class MainPage extends BusyPage {
 	}
 
 	public void clickOnCreateCompany() {
-		// TODO Auto-generated method stub
 		
+		click(CREATE_COMPANY_SELECTOR);
 	}
 
 	public boolean companyPendingMessageIsShown() {
-		// TODO Auto-generated method stub
-		return false;
+		
+		return !find(MESSAGE_SELECTOR).isEmpty();
 	}
 
 	public boolean companyApprovedNotificationIsShown() {
@@ -73,6 +73,11 @@ public class MainPage extends BusyPage {
 	}
 
 	public boolean businessSectionIsShown() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean companyRejectedNotificationIsShown() {
 		// TODO Auto-generated method stub
 		return false;
 	}

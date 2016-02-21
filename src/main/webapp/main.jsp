@@ -50,7 +50,7 @@ THE SOFTWARE.
 	<jsp:include page="include/header.jsp" />
 	<div class="container">
 		<div class="row">
-			<a href="#">
+			<a href="new_company" id="create-company">
 				<div class="col-sm-3 col-xs-3 block-button">
 					<spring:message code="new_company.block-button" var="newCompanyBlockButton" />
 					<i class="glyphicon glyphicon-plus"></i>${newCompanyBlockButton}
@@ -64,11 +64,30 @@ THE SOFTWARE.
 	</div>
 	<!-- container -->
 
+	<!-- Message Modal -->
+	<div class="modal fade bs-example-modal-lg" id="messageModal"
+		tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" id="infoMessage">
+				<div class="modal-body"></div>
+			</div>
+		</div>
+	</div>
+
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
+	<script type="text/javascript">
+		$(function() {
+			var message = '${messageFromController}';
+			if (message) {
+				$("#messageModal").find(".modal-body").text(message);
+				$("#messageModal").modal();
+			}
+		});
+	</script>
+	
 </body>
 </html>

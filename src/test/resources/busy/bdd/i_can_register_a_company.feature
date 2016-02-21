@@ -50,6 +50,7 @@ Feature: A user will be able to register a new company
 			|""|""|""|""|""|""|""|""|""|""|
 			|"Boom"|""|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|""|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"Boom"|"Boom S.A."|"jefe@boom.com"|""|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|""|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|""|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|"wrong_email.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|

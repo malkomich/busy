@@ -39,6 +39,9 @@ public class BranchDaoImpl implements BranchDao {
 				.setColumnNames(Arrays.asList(COMPANYID, ADDRID, HEADQUARTER, PHONE));
 	}
 	
+	/* (non-Javadoc)
+	 * @see busy.company.BranchDao#save(busy.company.Branch)
+	 */
 	@Override
 	public void save(Branch branch) {
 

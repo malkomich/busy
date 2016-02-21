@@ -59,6 +59,8 @@ public class SQLUtil {
 	public static final String ALIAS_CITYID = "cityId";
 	public static final String ALIAS_ADDRID = "addrId";
 	public static final String ALIAS_USERID = "userId";
+	public static final String ALIAS_CATEGORYID = "categoryId";
+	public static final String ALIAS_COMPANYID = "companyId";
 	
 	public static final String ALIAS_COUNTRYNAME = "countryName";
 	public static final String ALIAS_CITYNAME = "cityName";

@@ -45,11 +45,13 @@ THE SOFTWARE.
 <link href="css/cover-logged.css" rel="stylesheet">
 <link href="css/main.css" rel="stylesheet">
 
+<link href="css/signin.css" rel="stylesheet" type="text/css">
+
 </head>
 
 <body>
 	<jsp:include page="include/header.jsp" />
-	
+
 	<div class="site-wrapper">
 
 		<div class="site-wrapper-inner">
@@ -62,39 +64,53 @@ THE SOFTWARE.
 				<div class="inner cover">
 
 					<div class="form-box">
-						<form:form class="form-company" action="new_company"
+						<form:form class="form-signin" action="new_company"
 							modelAttribute="companyForm" commandName="companyForm"
 							method="POST">
 
 							<div class="row">
 								<div class="form-group col-sm-12">
-									<spring:message code="companyName.placeholder"
-										var="companyNamePlaceHolder" />
-									<form:input path=companyName autofocus="autofocus"
-										id="companyName" tabindex="1" class="form-control"
-										placeholder="${companyNamePlaceHolder}" />
-									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="companyName" cssClass="error" />
+									<spring:message code="companyTradeName.placeholder"
+										var="tradeNamePlaceHolder" />
+									<form:input path="tradeName" autofocus="autofocus"
+										id="tradeName" tabindex="1" class="form-control"
+										placeholder="${tradeNamePlaceHolder}" />
+									<form:errors path="tradeName" cssClass="error" />
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="form-group col-sm-12">
-									<spring:message code="companyEmail.placeholder" var="companyEmailPlaceHolder" />
-									<form:input path="companyEmail" id="companyEmail" tabindex="2"
-										class="form-control" placeholder="${companyEmailPlaceHolder}" />
+									<spring:message code="companyBusinessName.placeholder"
+										var="businessNamePlaceHolder" />
+									<form:input path="businessName" autofocus="autofocus"
+										id="businessName" tabindex="2" class="form-control mandatory"
+										placeholder="${businessNamePlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="companyEmail" cssClass="error" />
+									<form:errors path="businessName" cssClass="error" />
 								</div>
 							</div>
-							
+
 							<div class="row">
 								<div class="form-group col-sm-12">
-									<spring:message code="companyCif.placeholder" var="companyCifPlaceHolder" />
-									<form:input path="companyCif" id="companyCif" tabindex="3"
-										class="form-control" placeholder="${companyCifPlaceHolder}" />
+									<spring:message code="companyEmail.placeholder"
+										var="emailPlaceHolder" />
+									<form:input path="email" id="email" tabindex="3"
+										class="form-control mandatory"
+										placeholder="${emailPlaceHolder}" />
 									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="companyCif" cssClass="error" />
+									<form:errors path="email" cssClass="error" />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<spring:message code="companyCif.placeholder"
+										var="cifPlaceHolder" />
+									<form:input path="cif" id="cif" tabindex="4"
+										class="form-control mandatory" placeholder="${cifPlaceHolder}" />
+									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+									<form:errors path="cif" cssClass="error" />
 								</div>
 							</div>
 
@@ -103,8 +119,8 @@ THE SOFTWARE.
 									<spring:message code="country.label" var="countryLabel" />
 									<label for="country">${countryLabel}:</label>
 
-									<form:select path="countryCode" id="country" tabindex="4"
-										class="form-control">
+									<form:select path="countryCode" id="country" tabindex="5"
+										class="form-control mandatory">
 										<spring:message code="country.select.header"
 											var="countrySelect" />
 										<form:option value="" label="${countrySelect}" />
@@ -116,8 +132,8 @@ THE SOFTWARE.
 									<spring:message code="city.label" var="cityLabel" />
 									<label for="city">${cityLabel}:</label>
 
-									<form:select path="cityId" id="city" tabindex="5"
-										class="form-control">
+									<form:select path="cityId" id="city" tabindex="6"
+										class="form-control mandatory">
 
 										<spring:message code="city.options.empty"
 											var="cityOptionsEmptyTag" />
@@ -137,40 +153,63 @@ THE SOFTWARE.
 								<div class="col-sm-6 form-group">
 									<spring:message code="zipcode.placeholder"
 										var="zipcodePlaceHolder" />
-									<form:input path="zipCode" id="zipcode" tabindex="6"
-										type="tel" value="" class="form-control"
+									<form:input path="zipCode" id="zipcode" tabindex="7" type="tel"
+										value="" class="form-control"
 										placeholder="${zipcodePlaceHolder}" />
-									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="zipCode" cssClass="error" />
 								</div>
 								<div class="col-sm-6 form-group">
 									<spring:message code="phone.placeholder" var="phonePlaceHolder" />
-									<form:input path="phone" id="phone" tabindex="7"
-										type="tel" value="" class="form-control"
+									<form:input path="phone" id="phone" tabindex="8" type="tel"
+										value="" class="form-control"
 										placeholder="${phonePlaceHolder}" />
-									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
 									<form:errors path="phone" cssClass="error" />
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="form-group col-sm-12">
-									<spring:message code="companyAddress.placeholder"
-										var="companyAddressPlaceHolder" />
-									<form:input path="companyAddress" id="companyAddress"
-										tabindex="8" class="form-control"
-										placeholder="${companyAddressPlaceHolder}" />
-									<span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-									<form:errors path="companyAddress" cssClass="error" />
+									<spring:message code="companyAddress1.placeholder"
+										var="address1PlaceHolder" />
+									<form:input path="address1" id="address1" tabindex="9"
+										class="form-control" placeholder="${address1PlaceHolder}" />
+									<form:errors path="address1" cssClass="error" />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<spring:message code="companyAddress2.placeholder"
+										var="address2PlaceHolder" />
+									<form:input path="address2" id="address2" tabindex="10"
+										class="form-control" placeholder="${address2PlaceHolder}" />
+									<form:errors path="address2" cssClass="error" />
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="form-group col-sm-12">
+									<spring:message code="category.label" var="categoryLabel" />
+									<label for="category">${categoryLabel}:</label>
+
+									<form:select path="categoryId" id="category" tabindex="5"
+										class="form-control">
+										<spring:message code="category.select.header"
+											var="categorySelect" />
+										<form:option value="" label="${categorySelect}" />
+										<form:options items="${categoryItems}" />
+									</form:select>
+									<form:errors path="categoryId" cssClass="error" />
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="col-sm-12">
 									<div class="col-sm-3" style="float: right">
-										<spring:message code="new_company.submit" var="newCompanySubmit" />
+										<spring:message code="new_company.submit"
+											var="newCompanySubmit" />
 										<button id="submit" type="submit" class="btn btn-primary"
-											tabindex="9">${newCompanySubmit}</button>
+											tabindex="11">${newCompanySubmit}</button>
 									</div>
 								</div>
 							</div>
@@ -178,14 +217,15 @@ THE SOFTWARE.
 
 					</div>
 					<div class="footnote">
-						<span class="glyphicon glyphicon-asterisk error" ></span>
-						<span class="error">Campo obligatorio</span>
+						<span class="glyphicon glyphicon-asterisk error"></span>
+						<spring:message code="mandatory.info" var="mandatoryInfo" />
+						<span class="error">${mandatoryInfo}</span>
 					</div>
-					
+
 				</div>
-				
+
 				<jsp:include page="include/footer.jsp" />
-				
+
 			</div>
 
 		</div>
@@ -198,5 +238,6 @@ THE SOFTWARE.
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 	<script type="text/javascript" src="js/signup.js"></script>
+
 </body>
 </html>

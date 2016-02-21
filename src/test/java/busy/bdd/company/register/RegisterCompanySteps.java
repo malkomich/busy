@@ -193,7 +193,7 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 	@Then("^a notification with the problem is shown in my account$")
 	public void problem_notification_is_shown() throws Throwable {
 		
-		assertTrue(registerCompanyPage.companyRejectedNotificationIsShown());
+		assertTrue(mainPage.companyRejectedNotificationIsShown());
 	}
 	
 }

@@ -130,10 +130,6 @@ body {
 		position: fixed;
 		top: 0;
 	}
-	.mastfoot {
-		position: fixed;
-		bottom: 0;
-	}
 	.botfoot {
 		position: relative;
 		bottom: 0;
