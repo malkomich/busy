@@ -126,10 +126,11 @@ CREATE SEQUENCE notification_seq;
 
 CREATE TABLE notification (
 	id				integer DEFAULT nextval('notification_seq') NOT NULL PRIMARY KEY,
-    person_id		integer						NULL REFERENCES person(id)
+    person_id		integer						NOT NULL REFERENCES person(id)
 		ON DELETE CASCADE ON UPDATE CASCADE,
-	type			varchar(20)					NOT NULL,
+	notif_type		varchar(20)					NOT NULL,
 	message			text						NOT NULL,
 	read			boolean						NOT NULL DEFAULT false,
-	date			timestamp with time zone	NOT NULL DEFAULT NOW()
+	create_date		timestamp with time zone	NOT NULL DEFAULT NOW()
+	CHECK(EXTRACT(TIMEZONE FROM create_date) = '0')
 );
