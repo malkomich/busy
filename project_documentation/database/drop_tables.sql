@@ -5,6 +5,9 @@
  * Database tables' dropping
  */
 
+DROP TABLE IF EXISTS notification;
+DROP SEQUENCE IF EXISTS notification_seq;
+
 DROP TABLE IF EXISTS role;
 DROP SEQUENCE IF EXISTS role_seq;
 

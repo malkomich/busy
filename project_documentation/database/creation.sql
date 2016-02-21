@@ -5,6 +5,8 @@
  * Database tables' creation
  */
 
+DROP TABLE IF EXISTS notification;
+DROP SEQUENCE IF EXISTS notification_seq;
 DROP TABLE IF EXISTS role;
 DROP SEQUENCE IF EXISTS role_seq;
 DROP TABLE IF EXISTS branch;
@@ -118,4 +120,16 @@ CREATE TABLE role (
 	is_manager		boolean			NOT NULL DEFAULT false,
 	activity		varchar(30)		NULL,
 	UNIQUE (person_id, branch_id)
+);
+
+CREATE SEQUENCE notification_seq;
+
+CREATE TABLE notification (
+	id				integer DEFAULT nextval('notification_seq') NOT NULL PRIMARY KEY,
+    person_id		integer						NULL REFERENCES person(id)
+		ON DELETE CASCADE ON UPDATE CASCADE,
+	type			varchar(20)					NOT NULL,
+	message			text						NOT NULL,
+	read			boolean						NOT NULL DEFAULT false,
+	date			timestamp with time zone	NOT NULL DEFAULT NOW()
 );
