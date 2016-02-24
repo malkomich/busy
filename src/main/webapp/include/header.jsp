@@ -1,4 +1,8 @@
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+<link href="css/menu.css" rel="stylesheet">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
 
@@ -7,9 +11,9 @@
 		<div class="navbar-header">
 
 			<!-- Toggle navigation button for small devices -->
-			<button type="button" id="toggle-menu-button" class="navbar-toggle collapsed"
-				data-toggle="collapse" data-target="#navbar" aria-expanded="false"
-				aria-controls="navbar">
+			<button type="button" id="toggle-menu-button"
+				class="navbar-toggle collapsed" data-toggle="collapse"
+				data-target="#navbar" aria-expanded="false" aria-controls="navbar">
 				<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 					class="icon-bar"></span>
 			</button>
@@ -26,14 +30,33 @@
 			<!-- Navigation bar sections -->
 			<ul class="nav navbar-nav navbar-right">
 
+				<!-- Notifications section -->
+				<li role="presentation" class="bar-li"><a
+					id="notifications-switch" href="#" data-toggle="collapse"
+					data-target=".notifications-content"> <span
+						class="glyphicon glyphicon-bell"> </span><span class="badge">${fn:length(notifications)}</span>
+				</a>
+					<c:if test="${fn:length(notifications) > 0}">
+						<div class="notifications-content">
+							<div class="notifications-title">
+								<h4>Notifications</h4>
+							</div>
+							<c:forEach items="${notifications}" var="item">
+								<div class="item-notification-content">
+									<h5>${item.type}</h5>
+									<div class="item-notification-message">${item.message}</div>
+								</div>
+							</c:forEach>
+						</div>
+					</c:if></li>
+
 				<!-- User sections -->
 				<li class="bar-li"><a href="#" data-toggle="dropdown"
 					class="dropdown-toggle" id="userMenu" aria-haspopup="true"
 					aria-expanded="true"><span><img class="img-circle"
-							height="30" width="30"
-							src="img/user.png"
-							alt="${user.firstName}" title="${user.firstName}"></span> <span id="span-username">
-							${user.firstName}</span> <b class="caret"></b> </a>
+							height="30" width="30" src="img/user.png" alt="${user.firstName}"
+							title="${user.firstName}"></span> <span id="span-username">
+							${username}</span> <b class="caret"></b> </a>
 					<ul class="dropdown-menu" aria-labelledby="userMenu">
 						<spring:message code="navbar.profile" var="profile" />
 						<li><a href="#">${profile}</a></li>
@@ -41,12 +64,9 @@
 						<li><a id="logout-link" href="/logout">${logout}</a></li>
 					</ul></li>
 
-				<!-- Notifications section -->
-				<li role="presentation" class="bar-li"><a href="#"><span
-						class="glyphicon glyphicon-bell"> </span><span class="badge">3</span></a></li>
-
 			</ul>
 		</div>
 
 	</div>
+
 </nav>

@@ -2,15 +2,21 @@ package busy.notifications;
 
 import static busy.util.SQLUtil.*;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
@@ -19,6 +25,9 @@ import busy.util.SecureSetter;
 
 @Repository
 public class NotificationyDaoImpl implements NotificationDao {
+
+	private static final String SQL_SELECT_BY_USERID = "SELECT * FROM " + TABLE_NOTIFICATION + " WHERE " + USERID
+			+ "=? ORDER BY " + CREATE_DATE + " DESC";
 
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_NOTIFICATION + " SET " + USERID + "= ?,"
 			+ NOTIFICATION_TYPE + "=?," + MESSAGE + "=?," + IS_READ + "=?," + CREATE_DATE + "=? " + " WHERE " + ID
@@ -65,6 +74,37 @@ public class NotificationyDaoImpl implements NotificationDao {
 			if (key != null) {
 				SecureSetter.setId(notification, key.intValue());
 			}
+		}
+	}
+
+	@Override
+	public List<Notification> findByUserId(int userId) {
+
+		try {
+
+			return jdbcTemplate.query(SQL_SELECT_BY_USERID, new NotificationRowMapper(), userId);
+
+		} catch (EmptyResultDataAccessException e) {
+
+			return null;
+		}
+	}
+
+	private class NotificationRowMapper implements RowMapper<Notification> {
+
+		@Override
+		public Notification mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+			Notification notification = new Notification();
+			SecureSetter.setId(notification, rs.getInt(ID));
+			notification.setUserId(rs.getInt(USERID));
+			notification.setType(rs.getString(NOTIFICATION_TYPE));
+			notification.setMessage(rs.getString(MESSAGE));
+			notification.setRead(rs.getBoolean(IS_READ));
+			DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
+			notification.setCreateDate(createDate);
+
+			return notification;
 		}
 	}
 

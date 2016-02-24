@@ -33,14 +33,14 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 	@Before
 	public void runOnce() {
 
-		String scriptPath = "classpath:database/test/login-prepare.sql";
+		String scriptPath = "classpath:database/test/register_company-prepare.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 
 	@After
 	public void rollback() {
 
-		String scriptPath = "classpath:database/test/login-rollback.sql";
+		String scriptPath = "classpath:database/test/register_company-rollback.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 
@@ -193,6 +193,7 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 	@Then("^a notification with the problem is shown in my account$")
 	public void problem_notification_is_shown() throws Throwable {
 		
+		goTo(mainPage).await().untilPage();
 		assertTrue(mainPage.companyRejectedNotificationIsShown());
 	}
 	

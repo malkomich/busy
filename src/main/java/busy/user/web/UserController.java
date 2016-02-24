@@ -1,7 +1,6 @@
 package busy.user.web;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -10,20 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import busy.location.Address;
-import busy.location.City;
 import busy.location.Country;
 import busy.location.LocationService;
 import busy.user.User;
@@ -37,7 +33,7 @@ import busy.user.Verification;
  *
  */
 @Controller
-@SessionAttributes(UserController.USER_SESSION)
+@SessionAttributes(value = { UserController.USER_SESSION })
 public class UserController {
 
 	/**
@@ -56,7 +52,6 @@ public class UserController {
 	 */
 	private static final String PATH_ROOT = "/";
 	private static final String PATH_SIGNUP = "signup";
-	private static final String PATH_SIGNUP_CITIES_UPDATE = "get_city_list";
 	private static final String PATH_EMAIL_CONFIRM = "verificate_email";
 	private static final String PATH_LOGOUT = "logout";
 
@@ -64,7 +59,6 @@ public class UserController {
 	 * JSP's
 	 */
 	private static final String LOGIN_PAGE = "login";
-	private static final String MAIN_PAGE = "main";
 	private static final String SIGNUP_PAGE = "signup";
 
 	@Autowired
@@ -86,8 +80,13 @@ public class UserController {
 	@RequestMapping(value = PATH_ROOT, method = RequestMethod.GET)
 	public String index(Model model) {
 
-		if (model.containsAttribute(USER_SESSION) && ((User) model.asMap().get(USER_SESSION) != null))
-			return MAIN_PAGE;
+		if (model.containsAttribute(USER_SESSION) && ((User) model.asMap().get(USER_SESSION) != null)) {
+
+			User user = (User) model.asMap().get(USER_SESSION);
+			String username = user.getEmail().split("@")[0];
+
+			return "redirect:/" + username;
+		}
 
 		LoginForm loginForm = new LoginForm();
 		model.addAttribute(LOGIN_REQUEST, loginForm);
@@ -117,7 +116,9 @@ public class UserController {
 		User user = userService.findUserByEmail(form.getEmail());
 		model.addAttribute(USER_SESSION, user);
 
-		return MAIN_PAGE;
+		String username = user.getEmail().split("@")[0];
+
+		return "redirect:/" + username;
 	}
 
 	/**
@@ -179,13 +180,6 @@ public class UserController {
 		return "redirect:" + PATH_ROOT;
 	}
 
-	@RequestMapping(value = PATH_SIGNUP_CITIES_UPDATE, method = RequestMethod.GET)
-	public @ResponseBody List<City> updateCities(
-			@RequestParam(value = "countryCode", required = true) String countryCode, ModelMap modelMap) {
-
-		return locationService.findCitiesByCountryCode(countryCode);
-	}
-
 	@RequestMapping(value = PATH_EMAIL_CONFIRM, method = RequestMethod.GET)
 	public String emailConfirm(Model model, @RequestParam("token") String token,
 			RedirectAttributes redirectAttributes) {
@@ -208,12 +202,12 @@ public class UserController {
 
 		return "redirect:" + PATH_ROOT;
 	}
-	
+
 	@RequestMapping(value = PATH_LOGOUT, method = RequestMethod.GET)
 	public String logout(Model model, SessionStatus status) {
-		
+
 		status.setComplete();
-		
+
 		return "redirect:" + PATH_ROOT;
 	}
 

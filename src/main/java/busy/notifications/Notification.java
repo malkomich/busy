@@ -4,14 +4,12 @@ import java.io.Serializable;
 
 import org.joda.time.DateTime;
 
-import busy.user.User;
-
 public class Notification implements Serializable {
 
 	private static final long serialVersionUID = 7315210683741955456L;
 
 	private int id;
-	private User user;
+	private int userId;
 	private String type;
 	private String message;
 	private boolean read;
@@ -21,16 +19,16 @@ public class Notification implements Serializable {
 		
 	}
 	
-	public Notification(User user, String type, String message) {
+	public Notification(int userId, String type, String message) {
 		
 	}
 	
-	public void setUser(User user) {
-		this.user = user;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 	
-	public User getUser() {
-		return user;
+	public int getUserId() {
+		return userId;
 	}
 	
 	public void setType(String type) {
@@ -57,6 +55,10 @@ public class Notification implements Serializable {
 		return read;
 	}
 	
+	public void setCreateDate(DateTime createDate) {
+		this.createDate = createDate;
+	}
+	
 	public DateTime getCreateDate() {
 		return createDate;
 	}
@@ -70,8 +72,4 @@ public class Notification implements Serializable {
 		return id;
 	}
 
-	public Integer getUserId() {
-		return (user != null) ? user.getId() : null;
-	}
-	
 }

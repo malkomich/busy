@@ -32,7 +32,7 @@ Feature: A user will be able to register a new company
 			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 		
 	Scenario Outline: Register of a new company with wrong data
-		When the user introduces the name <trade_name>
+		When the user introduces the trade name <trade_name>
 		And the user introduces the business name <business_name>
 		And the user introduces the email <email>
 		And the user introduces the cif <cif>
@@ -51,14 +51,13 @@ Feature: A user will be able to register a new company
 			|"Boom"|""|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|""|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|"jefe@boom.com"|""|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
-			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|""|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
-			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|""|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|""|""|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|"wrong_email.com"|"B12345678"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|"jefe@boom.com"|"123456789A"|"España"|"Valladolid"|"47007"|"654321987"|"Calle Los Almendros, 2"|"Mobiliario"|
 			|"Boom"|"Boom S.A."|"jefe@boom.com"|"B12345678"|"España"|"Valladolid"|"47007"|"5"|"Calle Los Almendros, 2"|"Mobiliario"|
 
 	Scenario Outline: Register a new company rejected by an admin
-		When the user introduces the name <trade_name>
+		When the user introduces the trade name <trade_name>
 		And the user introduces the business name <business_name>
 		And the user introduces the email <email>
 		And the user introduces the cif <cif>
@@ -76,4 +75,4 @@ Feature: A user will be able to register a new company
 		
 		Examples:
 			|trade_name|business_name|email|cif|country|city|zipcode|phone|address|category|
-			|""|"X"|"user@gmail.com"|"wrongCIF"|"España"|"Valladolid"|"47007"|"5"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|""|"X"|"user@gmail.com"|"B00000000"|"España"|"Valladolid"|"47007"|"00000000"|"Calle Los Almendros, 2"|"Mobiliario"|

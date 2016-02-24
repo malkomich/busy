@@ -28,7 +28,6 @@ public class NotificationDBTest extends AbstractDBTest {
 	
 	@Test(expected=DataIntegrityViolationException.class)
 	public void insertWithUserNull() {
-		
 		Notification notification = new Notification();
 		notification.setType("Empresa");
 		notification.setMessage("Su empresa ha sido verificada");
@@ -39,9 +38,7 @@ public class NotificationDBTest extends AbstractDBTest {
 	public void insertWithUserInvalid() {
 		
 		Notification notification = new Notification();
-		User userInvalid = new User();
-		SecureSetter.setId(userInvalid, INVALID_ID);
-		notification.setUser(userInvalid);
+		notification.setUserId(INVALID_ID);
 		
 		notification.setType("Empresa");
 		notification.setMessage("Su empresa ha sido verificada");
@@ -52,7 +49,7 @@ public class NotificationDBTest extends AbstractDBTest {
 	public void insertWithTypeNull() {
 		
 		Notification notification = new Notification();
-		notification.setUser(user);
+		notification.setUserId(user.getId());
 		notification.setMessage("Su empresa ha sido verificada");
 		repository.save(notification);
 	}
@@ -61,7 +58,7 @@ public class NotificationDBTest extends AbstractDBTest {
 	public void insertWithMessageNull() {
 		
 		Notification notification = new Notification();
-		notification.setUser(user);
+		notification.setUserId(user.getId());
 		notification.setType("Empresa");
 		repository.save(notification);
 	}
@@ -70,7 +67,7 @@ public class NotificationDBTest extends AbstractDBTest {
 	public void insertSuccessfully() {
 		
 		Notification notification = new Notification();
-		notification.setUser(user);
+		notification.setUserId(user.getId());
 		notification.setType("Empresa");
 		notification.setMessage("Su empresa ha sido verificada");
 		repository.save(notification);

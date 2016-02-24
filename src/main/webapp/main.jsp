@@ -45,19 +45,22 @@ THE SOFTWARE.
 <link href="css/cover-logged.css" rel="stylesheet">
 <link href="css/main.css" rel="stylesheet">
 
+
 </head>
 <body>
 	<jsp:include page="include/header.jsp" />
 	<div class="container">
-		<div class="row">
-			<a href="new_company" id="create-company">
-				<div class="col-sm-3 col-xs-3 block-button">
-					<spring:message code="new_company.block-button" var="newCompanyBlockButton" />
-					<i class="glyphicon glyphicon-plus"></i>${newCompanyBlockButton}
-				</div>
-			</a>
+		<div class="content">
+			<div class="row">
+				<a href="new_company" id="create-company">
+					<div class="col-sm-3 col-xs-3 block-button">
+						<spring:message code="new_company.block-button" var="newCompanyBlockButton" />
+						<i class="glyphicon glyphicon-plus"></i>${newCompanyBlockButton}
+					</div>
+				</a>
+			</div>
+			<!-- row -->
 		</div>
-		<!-- row -->
 		
 		<jsp:include page="include/footer.jsp" />
 		

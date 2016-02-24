@@ -1,0 +1,31 @@
+.notifications-content {
+	position: absolute;
+	width: 200px;
+	margin-top: 20px;
+	padding-top: 0;
+	background-color: #f3f3f3;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px rgba(0,0,0,.4);
+    display: none;
+}
+
+.notifications-title {
+	padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    background-color: #908674;
+    color: #fff;
+    text-transform: uppercase;
+    min-height: 40px;
+    font-weight: bold;
+}
+
+.item-notification-content h5 {
+	font-weight: bold;
+}
+
+.item-notification-content {
+	padding: 10px;
+	border-bottom: 1px solid #212121;
+}
