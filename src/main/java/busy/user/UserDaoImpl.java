@@ -28,10 +28,10 @@ import busy.util.SecureSetter;
 @Repository
 public class UserDaoImpl implements UserDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_USER + "." + ID + " AS " + ALIAS_USERID + ","
+	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_USER + "." + ID + " AS " + ALIAS_USER_ID + ","
 			+ FIRSTNAME + "," + LASTNAME + "," + EMAIL + "," + PASSWORD + "," + NIF + "," + PHONE + "," + ACTIVE + ","
 			+ ADMIN + ", addressJoin.* FROM " + TABLE_USER + " LEFT JOIN (" + ADDRESS_SELECT_QUERY + ") AS addressJoin ON " + TABLE_USER
-			+ "." + ADDRID + "= addressJoin." + ALIAS_ADDRID;
+			+ "." + ADDRID + "= addressJoin." + ALIAS_ADDR_ID;
 
 	private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT_ALL + " WHERE " + EMAIL + "= ?";
 
@@ -111,7 +111,7 @@ public class UserDaoImpl implements UserDao {
 		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			User user = new User();
-			SecureSetter.setId(user, rs.getInt(ALIAS_USERID));
+			SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
 			user.setFirstName(rs.getString(FIRSTNAME));
 			user.setLastName(rs.getString(LASTNAME));
 			user.setEmail(rs.getString(EMAIL));
@@ -122,7 +122,7 @@ public class UserDaoImpl implements UserDao {
 			SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
 
 			Integer addressId = 0;
-			if ((addressId = rs.getInt(ALIAS_ADDRID)) > 0) {
+			if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
 
 				Address address = new Address();
 
@@ -132,12 +132,12 @@ public class UserDaoImpl implements UserDao {
 				address.setZipCode(rs.getString(ZIPCODE));
 
 				City city = new City();
-				SecureSetter.setId(city, rs.getInt(ALIAS_CITYID));
-				city.setName(rs.getString(ALIAS_CITYNAME));
+				SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+				city.setName(rs.getString(ALIAS_CITY_NAME));
 
 				Country country = new Country();
-				SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRYID));
-				country.setName(rs.getString(ALIAS_COUNTRYNAME));
+				SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+				country.setName(rs.getString(ALIAS_COUNTRY_NAME));
 				country.setCode(rs.getString(CODE));
 
 				city.setCountry(country);

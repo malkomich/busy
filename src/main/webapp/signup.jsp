@@ -200,7 +200,7 @@ THE SOFTWARE.
 				<spring:message code="signup.logintip.label" var="loginLabel" />
 				<spring:message code="signup.logintip.link" var="loginLink" />
 				<div class="login-tip" style="border-top: 1px solid #888;">
-					${loginLabel}<a href="/"><b>${loginLink}</b></a>
+					${loginLabel}<a href="/login"><b>${loginLink}</b></a>
 				</div>
 
 				<jsp:include page="include/footer.jsp" />

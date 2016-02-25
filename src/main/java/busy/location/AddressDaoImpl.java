@@ -86,18 +86,18 @@ public class AddressDaoImpl implements AddressDao {
 		public Address mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			Address address = new Address();
-			SecureSetter.setId(address, rs.getInt(ALIAS_ADDRID));
+			SecureSetter.setId(address, rs.getInt(ALIAS_ADDR_ID));
 			address.setAddress1(rs.getString(ADDR1));
 			address.setAddress2(rs.getString(ADDR2));
 			address.setZipCode(rs.getString(ZIPCODE));
 
 			City city = new City();
-			SecureSetter.setId(city, rs.getInt(ALIAS_CITYID));
-			city.setName(rs.getString(ALIAS_CITYNAME));
+			SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+			city.setName(rs.getString(ALIAS_CITY_NAME));
 
 			Country country = new Country();
-			SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRYID));
-			country.setName(rs.getString(ALIAS_COUNTRYNAME));
+			SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+			country.setName(rs.getString(ALIAS_COUNTRY_NAME));
 			country.setCode(rs.getString(CODE));
 
 			city.setCountry(country);

@@ -35,7 +35,7 @@ public class RegisterCompanyValidator implements Validator {
 		
 		company = companyService.findCompanyByBusinessName(companyForm.getBusinessName());
 		if (company != null)
-			errors.rejectValue("businessName", "business_name.exists");
+			errors.rejectValue("businessName", "businessname.exists");
 		
 		company = companyService.findCompanyByEmail(companyForm.getEmail());
 		if (company != null)

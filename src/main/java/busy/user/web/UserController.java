@@ -51,9 +51,10 @@ public class UserController {
 	 * URL Paths.
 	 */
 	private static final String PATH_ROOT = "/";
-	private static final String PATH_SIGNUP = "signup";
-	private static final String PATH_EMAIL_CONFIRM = "verificate_email";
-	private static final String PATH_LOGOUT = "logout";
+	private static final String PATH_LOGIN = "/login";
+	private static final String PATH_SIGNUP = "/signup";
+	private static final String PATH_EMAIL_CONFIRM = "/verificate_email";
+	private static final String PATH_LOGOUT = "/logout";
 
 	/**
 	 * JSP's
@@ -71,29 +72,20 @@ public class UserController {
 	private ApplicationEventPublisher eventPublisher;
 
 	/**
-	 * Shows the login page in case the user is not identified yet, otherwise
-	 * the main page for the logged user will be shown.
+	 * Shows the login page.
 	 * 
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = PATH_ROOT, method = RequestMethod.GET)
+	@RequestMapping(value = PATH_LOGIN, method = RequestMethod.GET)
 	public String index(Model model) {
-
-		if (model.containsAttribute(USER_SESSION) && ((User) model.asMap().get(USER_SESSION) != null)) {
-
-			User user = (User) model.asMap().get(USER_SESSION);
-			String username = user.getEmail().split("@")[0];
-
-			return "redirect:/" + username;
-		}
 
 		LoginForm loginForm = new LoginForm();
 		model.addAttribute(LOGIN_REQUEST, loginForm);
 
 		return LOGIN_PAGE;
 	}
-
+	
 	/**
 	 * Process the login form and validates it.
 	 * 
@@ -102,7 +94,7 @@ public class UserController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = PATH_ROOT, method = RequestMethod.POST)
+	@RequestMapping(value = PATH_LOGIN, method = RequestMethod.POST)
 	public String login(@ModelAttribute(LOGIN_REQUEST) @Valid LoginForm form, BindingResult result, Model model) {
 
 		LoginValidator validator = new LoginValidator(userService);
@@ -116,9 +108,7 @@ public class UserController {
 		User user = userService.findUserByEmail(form.getEmail());
 		model.addAttribute(USER_SESSION, user);
 
-		String username = user.getEmail().split("@")[0];
-
-		return "redirect:/" + username;
+		return "redirect:" + PATH_ROOT;
 	}
 
 	/**
@@ -177,7 +167,7 @@ public class UserController {
 				result);
 		redirectAttributes.addFlashAttribute(SIGNED_UP_REQUEST, true);
 
-		return "redirect:" + PATH_ROOT;
+		return "redirect:" + PATH_LOGIN;
 	}
 
 	@RequestMapping(value = PATH_EMAIL_CONFIRM, method = RequestMethod.GET)
@@ -200,7 +190,7 @@ public class UserController {
 				null);
 		redirectAttributes.addFlashAttribute(VALIDATION_MSG_REQUEST, tokenValid);
 
-		return "redirect:" + PATH_ROOT;
+		return "redirect:" + PATH_LOGIN;
 	}
 
 	@RequestMapping(value = PATH_LOGOUT, method = RequestMethod.GET)
@@ -208,7 +198,7 @@ public class UserController {
 
 		status.setComplete();
 
-		return "redirect:" + PATH_ROOT;
+		return "redirect:" + PATH_LOGIN;
 	}
 
 }

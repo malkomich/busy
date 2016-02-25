@@ -23,9 +23,9 @@ import static busy.util.SQLUtil.*;
 @Repository
 public class CityDaoImpl implements CityDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_CITY + "." + ID + " AS " + ALIAS_CITYID + ","
-			+ TABLE_CITY + "." + NAME + " AS " + ALIAS_CITYNAME + "," + TABLE_COUNTRY + "." + ID + " AS "
-			+ ALIAS_COUNTRYID + "," + TABLE_COUNTRY + "." + NAME + " AS " + ALIAS_COUNTRYNAME + "," + CODE + " FROM "
+	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_CITY + "." + ID + " AS " + ALIAS_CITY_ID + ","
+			+ TABLE_CITY + "." + NAME + " AS " + ALIAS_CITY_NAME + "," + TABLE_COUNTRY + "." + ID + " AS "
+			+ ALIAS_COUNTRY_ID + "," + TABLE_COUNTRY + "." + NAME + " AS " + ALIAS_COUNTRY_NAME + "," + CODE + " FROM "
 			+ TABLE_CITY + " LEFT JOIN " + TABLE_COUNTRY + " ON " + TABLE_CITY + "." + COUNTRYID + "=" + TABLE_COUNTRY
 			+ "." + ID;
 
@@ -121,12 +121,12 @@ public class CityDaoImpl implements CityDao {
 		public City mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			City city = new City();
-			SecureSetter.setId(city, rs.getInt(ALIAS_CITYID));
-			city.setName(rs.getString(ALIAS_CITYNAME));
+			SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+			city.setName(rs.getString(ALIAS_CITY_NAME));
 
 			Country country = new Country();
-			SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRYID));
-			country.setName(rs.getString(ALIAS_COUNTRYNAME));
+			SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+			country.setName(rs.getString(ALIAS_COUNTRY_NAME));
 			country.setCode(rs.getString(CODE));
 
 			city.setCountry(country);

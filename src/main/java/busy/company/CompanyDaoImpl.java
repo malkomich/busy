@@ -1,8 +1,8 @@
 package busy.company;
 
 import static busy.util.SQLUtil.ACTIVE;
-import static busy.util.SQLUtil.ALIAS_CATEGORYID;
-import static busy.util.SQLUtil.ALIAS_COMPANYID;
+import static busy.util.SQLUtil.ALIAS_CATEGORY_ID;
+import static busy.util.SQLUtil.ALIAS_COMPANY_ID;
 import static busy.util.SQLUtil.BUSINESS_NAME;
 import static busy.util.SQLUtil.CATEGORYID;
 import static busy.util.SQLUtil.CIF;
@@ -36,9 +36,9 @@ import busy.util.SecureSetter;
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANYID + ","
+	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID + ","
 			+ TRADE_NAME + "," + BUSINESS_NAME + "," + EMAIL + "," + CIF + "," + ACTIVE + "," + TABLE_CATEGORY + "."
-			+ ID + " AS " + ALIAS_CATEGORYID + "," + NAME + " FROM " + TABLE_COMPANY + " LEFT JOIN " + TABLE_CATEGORY
+			+ ID + " AS " + ALIAS_CATEGORY_ID + "," + NAME + " FROM " + TABLE_COMPANY + " LEFT JOIN " + TABLE_CATEGORY
 			+ " ON " + TABLE_COMPANY + "." + CATEGORYID + "=" + TABLE_CATEGORY + "." + ID;
 
 	private static final String SQL_SELECT_BY_BUSINESS_NAME = SQL_SELECT_ALL + " WHERE " + TABLE_COMPANY + "."
@@ -148,14 +148,14 @@ public class CompanyDaoImpl implements CompanyDao {
 		public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			Company company = new Company();
-			SecureSetter.setId(company, rs.getInt(ALIAS_COMPANYID));
+			SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
 			company.setTradeName(rs.getString(TRADE_NAME));
 			company.setBusinessName(rs.getString(BUSINESS_NAME));
 			company.setEmail(rs.getString(EMAIL));
 			company.setCif(rs.getString(CIF));
 
 			Integer categoryId = 0;
-			if ((categoryId = rs.getInt(ALIAS_CATEGORYID)) > 0) {
+			if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
 
 				Category category = new Category();
 				SecureSetter.setId(category, categoryId);

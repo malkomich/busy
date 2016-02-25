@@ -28,7 +28,7 @@ import busy.util.SecureSetter;
 public class VerificationDaoImpl implements VerificationDao {
 
 	private static final String SQL_SELECT_BY_TOKEN = "SELECT * FROM " + TABLE_REGISTRY + " LEFT JOIN (" + USER_SELECT_QUERY
-			+ ") AS userJoin ON " + TABLE_REGISTRY + "." + USERID + "= userJoin." + ALIAS_USERID + " WHERE " + TOKEN + "= ?";
+			+ ") AS userJoin ON " + TABLE_REGISTRY + "." + USERID + "= userJoin." + ALIAS_USER_ID + " WHERE " + TOKEN + "= ?";
 
 	private static final String SQL_DELETE_REGISTRY = "DELETE FROM " + TABLE_REGISTRY + " WHERE " + USERID + "= ?";
 
@@ -92,7 +92,7 @@ public class VerificationDaoImpl implements VerificationDao {
 		public Verification mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			User user = new User();
-			SecureSetter.setId(user, rs.getInt(ALIAS_USERID));
+			SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
 			user.setFirstName(rs.getString(FIRSTNAME));
 			user.setLastName(rs.getString(LASTNAME));
 			user.setEmail(rs.getString(EMAIL));
@@ -103,7 +103,7 @@ public class VerificationDaoImpl implements VerificationDao {
 			SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
 
 			Integer addressId = 0;
-			if ((addressId = rs.getInt(ALIAS_ADDRID)) > 0) {
+			if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
 
 				Address address = new Address();
 
@@ -113,12 +113,12 @@ public class VerificationDaoImpl implements VerificationDao {
 				address.setZipCode(rs.getString(ZIPCODE));
 
 				City city = new City();
-				SecureSetter.setId(city, rs.getInt(ALIAS_CITYID));
-				city.setName(rs.getString(ALIAS_CITYNAME));
+				SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+				city.setName(rs.getString(ALIAS_CITY_NAME));
 
 				Country country = new Country();
-				SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRYID));
-				country.setName(rs.getString(ALIAS_COUNTRYNAME));
+				SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+				country.setName(rs.getString(ALIAS_COUNTRY_NAME));
 				country.setCode(rs.getString(CODE));
 
 				city.setCountry(country);

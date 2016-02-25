@@ -56,7 +56,7 @@ THE SOFTWARE.
 				<jsp:include page="include/header-index.jsp" />
 
 				<div class="inner cover">
-					<form:form class="form-signin reduce" action="/" method="POST"
+					<form:form class="form-signin reduce" action="/login" method="POST"
 						modelAttribute="loginForm" commandName="loginForm">
 
 						<!-- Form title -->
