@@ -27,13 +27,13 @@ public class MainPage extends BusyPage {
 	private static final String USER_MENU_SELECTOR = "#userMenu";
 	private static final String LOGOUT_SELECTOR = "#logout-link";
 	private static final String CREATE_COMPANY_SELECTOR = "#create-company";
-	
+
 	private static final String MESSAGE_SELECTOR = "#infoMessage";
 	private static final String NOTIFICATIONS_SWITCH_SELECTOR = "#notifications-switch";
 	private static final String NOTIFICATIONS_SELECTOR = ".notifications-content";
 	private static final String ITEM_NOTIFICATION_SELECTOR = ".item-notification-content";
 	private static final String ITEM_NOTIFICATION_MESSAGE_SELECTOR = "div.item-notification-message";
-	
+
 	/*
 	 * Others
 	 */
@@ -47,7 +47,7 @@ public class MainPage extends BusyPage {
 
 	@Override
 	public void isAt() {
-		
+
 		String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
 		assertThat(description).contains(DESCRIPTION);
 	}
@@ -58,52 +58,45 @@ public class MainPage extends BusyPage {
 	 * @return
 	 */
 	public MainPage clickOnLogOut() {
-		
-		try{
+
+		try {
 			click(USER_MENU_SELECTOR);
-		} catch(ElementNotVisibleException e) {
+		} catch (ElementNotVisibleException e) {
 			click(TOOGLE_MENU_SELECTOR);
 			click(USER_MENU_SELECTOR);
 		}
-		
+
 		click(LOGOUT_SELECTOR);
 		return this;
 	}
 
 	public void clickOnCreateCompany() {
-		
+
 		click(CREATE_COMPANY_SELECTOR);
 	}
 
 	public boolean companyPendingMessageIsShown() {
-		
+
 		waitForJSandJQueryToLoad();
-		
+
 		return findFirst(MESSAGE_SELECTOR).isDisplayed();
 	}
 
 	public boolean companyApprovedNotificationIsShown() {
-		
-		try{
+
+		try {
 			click(NOTIFICATIONS_SWITCH_SELECTOR);
-		} catch(ElementNotVisibleException e) {
+		} catch (ElementNotVisibleException e) {
 			click(TOOGLE_MENU_SELECTOR);
 			click(NOTIFICATIONS_SWITCH_SELECTOR);
 		}
-		
+
 		waitForJSandJQueryToLoad();
+
+		FluentList<FluentWebElement> items = find(NOTIFICATIONS_SELECTOR).first().find(ITEM_NOTIFICATION_SELECTOR);
+		boolean rightMessage = find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).first().getText().contains(APPROVED);
 		
-		System.out.println("HOLA: " + findFirst(ITEM_NOTIFICATION_MESSAGE_SELECTOR).getText());
-		
-		FluentWebElement notificationContainer =  find(NOTIFICATIONS_SELECTOR).first();
-		FluentList<FluentWebElement> items = notificationContainer.find(ITEM_NOTIFICATION_SELECTOR);
-		System.out.println("SIZE: " + items.size());
-		System.out.println("HTML Parent: " + items.get(0).html());
-		System.out.println("Text: " + notificationContainer.getText());
-		System.out.println("Value: " + find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).getValue());
-		System.out.println("Text 2: " + find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).first().getText());
-		System.out.println("HTML: " + find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).first().html());
-		return items.size() == 1 && items.get(0).getText().contains(APPROVED);
+		return items.size() == 1 && rightMessage;
 	}
 
 	public boolean businessSectionIsShown() {
@@ -113,9 +106,19 @@ public class MainPage extends BusyPage {
 
 	public boolean companyRejectedNotificationIsShown() {
 
-		FluentWebElement notificationContainer =  find(NOTIFICATIONS_SELECTOR).first();
-		FluentList<FluentWebElement> items = notificationContainer.find(ITEM_NOTIFICATION_SELECTOR);
-		return items.size() == 1 && items.get(0).getText().contains(REJECTED);
+		try {
+			click(NOTIFICATIONS_SWITCH_SELECTOR);
+		} catch (ElementNotVisibleException e) {
+			click(TOOGLE_MENU_SELECTOR);
+			click(NOTIFICATIONS_SWITCH_SELECTOR);
+		}
+
+		waitForJSandJQueryToLoad();
+
+		FluentList<FluentWebElement> items = find(NOTIFICATIONS_SELECTOR).first().find(ITEM_NOTIFICATION_SELECTOR);
+		boolean rightMessage = find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).first().getText().contains(REJECTED);
+		
+		return items.size() == 1 && rightMessage;
 	}
 
 }

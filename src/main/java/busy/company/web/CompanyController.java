@@ -24,6 +24,8 @@ import busy.company.CompanyService;
 import busy.location.Address;
 import busy.location.Country;
 import busy.location.LocationService;
+import busy.role.Role;
+import busy.user.User;
 import busy.util.SecureSetter;
 
 /**
@@ -38,6 +40,8 @@ public class CompanyController {
 	/**
 	 * Spring Model Attributes.
 	 */
+	static final String USER_SESSION = "user";
+	
 	static final String REGISTER_COMPANY_REQUEST = "companyForm";
 	
 	static final String COUNTRY_ITEMS_REQUEST = "countryItems";
@@ -132,6 +136,13 @@ public class CompanyController {
 		SecureSetter.setAttribute(branch, "setHeadquarter", Boolean.class, true);
 		
 		companyService.saveBranch(branch);
+		
+		
+		Role role = new Role();
+		role.setUser((User) model.asMap().get(USER_SESSION));
+		role.setBranch(branch);
+		SecureSetter.setAttribute(role, "setManager", Boolean.class, true);
+		role.setActivity("Jefe");
 		
 		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST,
 				result);

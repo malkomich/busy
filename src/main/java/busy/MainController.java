@@ -72,6 +72,8 @@ public class MainController {
 			
 			List<Role> roles = roleService.findRolesByUser(user);
 			model.addAttribute(ROLES_REQUEST, roles);
+			for (Role rol: roles)
+				System.out.println("ROL: " + rol);
 			
 			return MAIN_PAGE;
 		}
