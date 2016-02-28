@@ -24,7 +24,6 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gargoylesoftware.htmlunit.WebClient;
 
-
 /**
  * Basic class configurated to let subclasses easily automate integration
  * testing using a library called 'FluentLenium' to take advantage of Selenium
@@ -104,15 +103,18 @@ class BusyDriver extends HtmlUnitDriver {
 	public BusyDriver() {
 		super();
 	}
-	
-	public BusyDriver( boolean enableJavascript ) {
+
+	public BusyDriver(boolean enableJavascript) {
 		super(enableJavascript);
 	}
-	
+
 	@Override
 	protected WebClient modifyWebClient(WebClient client) {
 		super.modifyWebClient(client);
 		client.getOptions().setThrowExceptionOnScriptError(false);
+		// Needed to disable CSS due to a problem with 'collapse' divs behaviour
+		client.getOptions().setCssEnabled(false);
 		return client;
 	}
+
 }

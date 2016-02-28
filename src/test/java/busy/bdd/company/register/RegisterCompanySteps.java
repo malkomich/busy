@@ -154,6 +154,7 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 	@Then("^a message informing that the company is pending to approve is shown$")
 	public void pending_message_is_shown() throws Throwable {
 		
+		mainPage.await().untilPage();
 		assertTrue(mainPage.companyPendingMessageIsShown());
 	}
 	

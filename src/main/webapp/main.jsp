@@ -24,7 +24,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ***************************************** -->
 
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html>
 <html>
@@ -43,8 +44,7 @@ THE SOFTWARE.
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
 <link href="css/cover-logged.css" rel="stylesheet">
-<link href="css/main.css" rel="stylesheet">
-
+<link href="css/busy-content.css" rel="stylesheet">
 
 </head>
 <body>
@@ -52,18 +52,42 @@ THE SOFTWARE.
 	<div class="container">
 		<div class="content">
 			<div class="row">
-				<a href="new_company" id="create-company">
-					<div class="col-sm-3 col-xs-3 block-button">
-						<spring:message code="new_company.block-button" var="newCompanyBlockButton" />
-						<i class="glyphicon glyphicon-plus"></i>${newCompanyBlockButton}
+				<c:if test="${empty roles}">
+					<a href="new_company" id="create-company">
+						<div class="col-sm-3 col-xs-3 block-button">
+							<spring:message code="new_company.block-button"
+								var="newCompanyBlockButton" />
+							<i class="glyphicon glyphicon-plus"></i>${newCompanyBlockButton}
+						</div>
+					</a>
+				</c:if>
+				<c:if test="${not empty roles}">
+					<div class="col-sm-3 col-xs-3">
+						<button id="select-role" class="btn collapse-switch" type="button"
+							data-toggle="collapse" data-target="#role-menu"
+							aria-expanded="false" aria-controls="#role-menu">
+							<span>${username}</span>
+						</button>
+						<div class="role-select-menu collapse" id="role-menu">
+							<div class="role-select-menu-list">
+								<a href="#" class="role-select-menu-item"> <span
+									class="role-select-menu-item-text">${username}</span>
+								</a>
+								<c:forEach items="${roles}" var="role">
+									<a href="#" class="role-select-menu-item"> <span
+										class="role-select-menu-item-text">${role.branch.company.tradeName}</span>
+									</a>
+								</c:forEach>
+							</div>
+						</div>
 					</div>
-				</a>
+				</c:if>
 			</div>
 			<!-- row -->
 		</div>
-		
+
 		<jsp:include page="include/footer.jsp" />
-		
+
 	</div>
 	<!-- container -->
 
@@ -82,15 +106,12 @@ THE SOFTWARE.
 		src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 	<script type="text/javascript">
-		$(function() {
-			var message = '${messageFromController}';
-			if (message) {
-				$("#messageModal").find(".modal-body").text(message);
-				$("#messageModal").modal();
-			}
-		});
+		var message = '<c:out value="${messageFromController}"/>'
 	</script>
-	
+
+	<script type="text/javascript" src="js/busy-logic.js"></script>
+
 </body>
 </html>

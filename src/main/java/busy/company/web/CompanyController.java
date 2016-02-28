@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import busy.location.Address;
 import busy.location.Country;
 import busy.location.LocationService;
 import busy.role.Role;
+import busy.role.RoleService;
 import busy.user.User;
 import busy.util.SecureSetter;
 
@@ -65,6 +67,9 @@ public class CompanyController {
 	@Autowired
 	private LocationService locationService;
 	
+	@Autowired
+	private RoleService roleService;
+	
 	@Autowired  
     private MessageSource messageSource;
 	
@@ -99,7 +104,7 @@ public class CompanyController {
 
 	@RequestMapping(value = PATH_REGISTER_COMPANY, method = RequestMethod.POST)
 	public String registerCompany(@ModelAttribute(REGISTER_COMPANY_REQUEST) @Valid CompanyForm form, BindingResult result,
-			RedirectAttributes redirectAttributes, WebRequest request, Model model, Locale locale) {
+			RedirectAttributes redirectAttributes, WebRequest request, Model model, Locale locale, HttpSession session) {
 
 		RegisterCompanyValidator validator = new RegisterCompanyValidator(companyService);
 
@@ -139,10 +144,12 @@ public class CompanyController {
 		
 		
 		Role role = new Role();
-		role.setUser((User) model.asMap().get(USER_SESSION));
+		role.setUser((User) session.getAttribute(USER_SESSION));
 		role.setBranch(branch);
 		SecureSetter.setAttribute(role, "setManager", Boolean.class, true);
 		role.setActivity("Jefe");
+		
+		roleService.saveRole(role);
 		
 		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST,
 				result);

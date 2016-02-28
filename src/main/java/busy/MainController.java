@@ -31,6 +31,7 @@ public class MainController {
 	
 	static final String LOGIN_REQUEST = "loginForm";
 	static final String ROLES_REQUEST = "roles";
+	static final String MESSAGE_REQUEST = "messageFromController";
 	
 	/**
 	 * URL Paths.
@@ -72,8 +73,6 @@ public class MainController {
 			
 			List<Role> roles = roleService.findRolesByUser(user);
 			model.addAttribute(ROLES_REQUEST, roles);
-			for (Role rol: roles)
-				System.out.println("ROL: " + rol);
 			
 			return MAIN_PAGE;
 		}

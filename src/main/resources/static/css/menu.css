@@ -1,12 +1,21 @@
-.notifications-content {
-	position: absolute;
-	width: 200px;
+.nav>li {
+	float: left;
+}
+
+.dialog {
+	position: fixed;
+	display: none;
+	z-index: 10;
+}
+
+#notifications-content {
+	width: 300px;
+	min-height: 100px;
 	margin-top: 20px;
 	padding-top: 0;
 	background-color: #f3f3f3;
     border-radius: 2px;
     box-shadow: 0 2px 5px rgba(0,0,0,.4);
-    display: none;
 }
 
 .notifications-title {
@@ -28,4 +37,5 @@
 .item-notification-content {
 	padding: 10px;
 	border-bottom: 1px solid #212121;
+	padding-bottom: 20px;
 }

@@ -51,17 +51,6 @@ body {
 }
 
 /*
- * Custom containers
- */
-.block-button {
-	border: 2px solid #D8D8D8;
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background: rgba(245, 250, 252, 1);
-}
-
-
-/*
  * Media display fixes
  */
 @media ( min-width : 768px) {

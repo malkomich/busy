@@ -29,10 +29,11 @@ public class MainPage extends BusyPage {
 	private static final String CREATE_COMPANY_SELECTOR = "#create-company";
 
 	private static final String MESSAGE_SELECTOR = "#infoMessage";
-	private static final String NOTIFICATIONS_SWITCH_SELECTOR = "#notifications-switch";
-	private static final String NOTIFICATIONS_SELECTOR = ".notifications-content";
+	private static final String NOTIFICATIONS_SELECTOR = "#notifications-content";
 	private static final String ITEM_NOTIFICATION_SELECTOR = ".item-notification-content";
 	private static final String ITEM_NOTIFICATION_MESSAGE_SELECTOR = "div.item-notification-message";
+
+	private static final String BUSINESS_SECTION_SELECTOR = "#select-role";
 
 	/*
 	 * Others
@@ -84,40 +85,24 @@ public class MainPage extends BusyPage {
 
 	public boolean companyApprovedNotificationIsShown() {
 
-		try {
-			click(NOTIFICATIONS_SWITCH_SELECTOR);
-		} catch (ElementNotVisibleException e) {
-			click(TOOGLE_MENU_SELECTOR);
-			click(NOTIFICATIONS_SWITCH_SELECTOR);
-		}
-
-		waitForJSandJQueryToLoad();
-
-		FluentList<FluentWebElement> items = find(NOTIFICATIONS_SELECTOR).first().find(ITEM_NOTIFICATION_SELECTOR);
+		FluentWebElement notifications = find(NOTIFICATIONS_SELECTOR).first();
+		FluentList<FluentWebElement> items = notifications.find(ITEM_NOTIFICATION_SELECTOR);
 		boolean rightMessage = find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).first().getText().contains(APPROVED);
-		
+
 		return items.size() == 1 && rightMessage;
 	}
 
 	public boolean businessSectionIsShown() {
 
-		return false;
+		return findFirst(BUSINESS_SECTION_SELECTOR).isDisplayed();
 	}
 
 	public boolean companyRejectedNotificationIsShown() {
 
-		try {
-			click(NOTIFICATIONS_SWITCH_SELECTOR);
-		} catch (ElementNotVisibleException e) {
-			click(TOOGLE_MENU_SELECTOR);
-			click(NOTIFICATIONS_SWITCH_SELECTOR);
-		}
-
-		waitForJSandJQueryToLoad();
-
-		FluentList<FluentWebElement> items = find(NOTIFICATIONS_SELECTOR).first().find(ITEM_NOTIFICATION_SELECTOR);
+		FluentWebElement notifications = find(NOTIFICATIONS_SELECTOR).first();
+		FluentList<FluentWebElement> items = notifications.find(ITEM_NOTIFICATION_SELECTOR);
 		boolean rightMessage = find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).first().getText().contains(REJECTED);
-		
+
 		return items.size() == 1 && rightMessage;
 	}
 

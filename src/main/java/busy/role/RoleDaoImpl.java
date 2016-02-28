@@ -99,7 +99,7 @@ public class RoleDaoImpl implements RoleDao {
 		public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
 
 			Role role = new Role();
-			SecureSetter.setId(role, rs.getInt(ALIAS_USER_ID));
+			SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
 
 			role.setUser(user);
 
@@ -131,7 +131,7 @@ public class RoleDaoImpl implements RoleDao {
 			Company company = new Company();
 			company.setTradeName(rs.getString(TRADE_NAME));
 			company.setBusinessName(rs.getString(BUSINESS_NAME));
-			company.setEmail(rs.getString(rs.getString(ALIAS_COMPANY_EMAIL)));
+			company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
 			branch.setCompany(company);
 
 			branch.setPhone(rs.getString(PHONE));

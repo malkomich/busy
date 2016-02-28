@@ -1,0 +1,23 @@
+.block-button {
+	border: 2px solid #D8D8D8;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background: rgba(245, 250, 252, 1);
+}
+
+.role-select-menu {
+	position: absolute;
+	z-index: 10;
+	display: none;
+	background-color: #fff;
+	border: 1px solid rgba(200,200,200,0.4);
+	box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+	width: 300px;
+}
+
+.role-select-menu-item {
+	display: block;
+    padding: 8px 8px 8px 30px;
+    overflow: hidden;
+    border-bottom: 1px solid #eee;
+}

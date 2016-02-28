@@ -68,6 +68,7 @@ public class SQLUtil {
 	public static final String ALIAS_CATEGORY_ID = "categoryId";
 	public static final String ALIAS_COMPANY_ID = "companyId";
 	public static final String ALIAS_BRANCH_ID = "branchId";
+	public static final String ALIAS_ROLE_ID = "roleId";
 
 	public static final String ALIAS_COUNTRY_NAME = "countryName";
 	public static final String ALIAS_CITY_NAME = "cityName";
@@ -98,12 +99,12 @@ public class SQLUtil {
 			+ ") AS categoryJoin ON " + TABLE_COMPANY + "." + CATEGORYID + "= categoryJoin." + ALIAS_CATEGORY_ID;
 
 	public static final String BRANCH_SELECT_QUERY = "SELECT " + TABLE_BRANCH + "." + ID + " AS " + ALIAS_BRANCH_ID
-			+ "," + HEADQUARTER + "," + PHONE + ", addressJoin.*, companyJoin.* FROM " + TABLE_BRANCH
-			+ " LEFT JOIN (" + ADDRESS_SELECT_QUERY + ") AS addressJoin ON " + TABLE_BRANCH + "." + ADDRID
-			+ "= addressJoin." + ALIAS_ADDR_ID + " LEFT JOIN (" + COMPANY_SELECT_QUERY + ") AS companyJoin ON "
-			+ TABLE_BRANCH + "." + COMPANYID + "= companyJoin." + ALIAS_COMPANY_ID;
-	
-	public static final String ROLE_SELECT_QUERY = "SELECT " + TABLE_ROLE + "." + ID + "," + IS_MANAGER + ","
-			+ ACTIVITY + ", branchJoin.* FROM " + TABLE_ROLE + " LEFT JOIN (" + BRANCH_SELECT_QUERY
+			+ "," + HEADQUARTER + "," + PHONE + ", addressJoin.*, companyJoin.* FROM " + TABLE_BRANCH + " LEFT JOIN ("
+			+ ADDRESS_SELECT_QUERY + ") AS addressJoin ON " + TABLE_BRANCH + "." + ADDRID + "= addressJoin."
+			+ ALIAS_ADDR_ID + " LEFT JOIN (" + COMPANY_SELECT_QUERY + ") AS companyJoin ON " + TABLE_BRANCH + "."
+			+ COMPANYID + "= companyJoin." + ALIAS_COMPANY_ID;
+
+	public static final String ROLE_SELECT_QUERY = "SELECT " + TABLE_ROLE + "." + ID + " AS " + ALIAS_ROLE_ID + ","
+			+ IS_MANAGER + "," + ACTIVITY + ", branchJoin.* FROM " + TABLE_ROLE + " LEFT JOIN (" + BRANCH_SELECT_QUERY
 			+ ") AS branchJoin ON " + TABLE_ROLE + "." + BRANCHID + "= branchJoin." + ALIAS_BRANCH_ID;
 }

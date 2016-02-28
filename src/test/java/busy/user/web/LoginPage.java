@@ -14,7 +14,7 @@ import busy.BusyPage;
  */
 public class LoginPage extends BusyPage {
 
-	private static final String PATH = "/";
+	private static final String PATH = "/login";
 	private static final String DESCRIPTION = "Login Page";
 
 	/*

@@ -1,6 +1,6 @@
-<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <link href="css/menu.css" rel="stylesheet">
 
@@ -32,23 +32,22 @@
 
 				<!-- Notifications section -->
 				<li role="presentation" class="bar-li"><a
-					id="notifications-switch" href="#" data-toggle="collapse"
-					data-target=".notifications-content"> <span
+					id="notifications-switch" role="button"
+					class="dialog-switch"
+					data-target="#notifications-content"> <span
 						class="glyphicon glyphicon-bell"> </span><span class="badge">${fn:length(notifications)}</span>
 				</a>
-					<c:if test="${fn:length(notifications) > 0}">
-						<div class="notifications-content">
-							<div class="notifications-title">
-								<h4>Notifications</h4>
-							</div>
-							<c:forEach items="${notifications}" var="item">
-								<div class="item-notification-content">
-									<h5>${item.type}</h5>
-									<div class="item-notification-message">${item.message}</div>
-								</div>
-							</c:forEach>
+				<div id="notifications-content" class="dialog">
+						<div class="notifications-title">
+							<h4>Notifications</h4>
 						</div>
-					</c:if></li>
+						<c:forEach items="${notifications}" var="item">
+							<div class="item-notification-content">
+								<h5>${item.type}</h5>
+								<div class="item-notification-message">${item.message}</div>
+							</div>
+						</c:forEach>
+					</div></li>
 
 				<!-- User sections -->
 				<li class="bar-li"><a href="#" data-toggle="dropdown"
