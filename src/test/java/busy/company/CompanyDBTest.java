@@ -1,5 +1,7 @@
 package busy.company;
 
+import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,5 +145,36 @@ public class CompanyDBTest extends AbstractDBTest {
 		company.setCategory(category);
 		
 		repository.save(company);
+	}
+	
+	@Test
+	public void updateCompanyNotExists() {
+		
+		Company company = new Company();
+		SecureSetter.setId(company, INVALID_ID);
+		company.setBusinessName("Boom S.A.");
+		company.setEmail("jefe@boom.com");
+		company.setCif("B12345678");
+		
+		repository.save(company);
+		
+		assertFalse(repository.exists(company));
+	}
+	
+	@Test
+	public void activateCompany() {
+		
+		Company company = new Company();
+		company.setBusinessName("Boom S.A.");
+		company.setEmail("jefe@boom.com");
+		company.setCif("B12345678");
+		
+		repository.save(company);
+		
+		SecureSetter.setAttribute(company, "setActive", Boolean.class, true);
+		
+		repository.save(company);
+		
+		assertTrue(repository.findByCif("B12345678").isActive());
 	}
 }

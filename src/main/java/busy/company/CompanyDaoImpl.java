@@ -141,6 +141,11 @@ public class CompanyDaoImpl implements CompanyDao {
 			return null;
 		}
 	}
+	
+	public boolean exists(Company company) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 	private class CompanyRowMapper implements RowMapper<Company> {
 
