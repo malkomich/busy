@@ -60,7 +60,7 @@ public class Company implements Serializable {
 	}
 	
 	@SuppressWarnings("unused")
-	private void setActive(boolean active) {
+	private void setActive(Boolean active) {
 		this.active = active;
 	}
 	

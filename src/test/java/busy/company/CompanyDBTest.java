@@ -172,9 +172,9 @@ public class CompanyDBTest extends AbstractDBTest {
 		repository.save(company);
 		
 		SecureSetter.setAttribute(company, "setActive", Boolean.class, true);
-		
+
 		repository.save(company);
-		
+
 		assertTrue(repository.findByCif("B12345678").isActive());
 	}
 }

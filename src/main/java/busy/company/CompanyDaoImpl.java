@@ -47,6 +47,8 @@ public class CompanyDaoImpl implements CompanyDao {
 	private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT_ALL + " WHERE " + TABLE_COMPANY + "." + EMAIL + "= ?";
 
 	private static final String SQL_SELECT_BY_CIF = SQL_SELECT_ALL + " WHERE " + TABLE_COMPANY + "." + CIF + "= ?";
+	
+	private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE " + TABLE_COMPANY + "." + ID + "= ?";
 
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_COMPANY + " SET " + TRADE_NAME + "= ?," + BUSINESS_NAME
 			+ "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
@@ -142,9 +144,21 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 	}
 	
+	private Company findById(int id) {
+		
+		try {
+
+			return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CompanyRowMapper(), id);
+
+		} catch (EmptyResultDataAccessException e) {
+
+			return null;
+		}
+	}
+	
 	public boolean exists(Company company) {
-		// TODO Auto-generated method stub
-		return false;
+
+		return findById(company.getId()) != null;
 	}
 
 	private class CompanyRowMapper implements RowMapper<Company> {
@@ -158,6 +172,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			company.setBusinessName(rs.getString(BUSINESS_NAME));
 			company.setEmail(rs.getString(EMAIL));
 			company.setCif(rs.getString(CIF));
+			SecureSetter.setAttribute(company, "setActive", Boolean.class, true);
 
 			Integer categoryId = 0;
 			if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
