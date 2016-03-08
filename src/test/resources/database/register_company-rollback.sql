@@ -4,6 +4,9 @@
  * Database rollback for the feature of registering a new company
  */
 
+DELETE FROM notification;
+
+DELETE FROM role;
 DELETE FROM branch;
 DELETE FROM address;
 DELETE FROM city;
