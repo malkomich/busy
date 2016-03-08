@@ -38,14 +38,14 @@ public class SignUpSteps extends AbstractFunctionalTest {
 	@PostConstruct
 	public void runOnce() {
 
-		String scriptPath = "classpath:database/test/signup-prepare.sql";
+		String scriptPath = "classpath:database/signup-prepare.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 
 	@PreDestroy
 	public void rollback() {
 
-		String scriptPath = "classpath:database/test/signup-rollback.sql";
+		String scriptPath = "classpath:database/signup-rollback.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 

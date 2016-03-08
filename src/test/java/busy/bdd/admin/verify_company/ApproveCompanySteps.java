@@ -27,14 +27,14 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
 	@Before
 	public void runOnce() {
 
-		String scriptPath = "classpath:database/test/verify_company-prepare.sql";
+		String scriptPath = "classpath:database/approve_company-prepare.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 
 	@After
 	public void rollback() {
 
-		String scriptPath = "classpath:database/test/verify_company-rollback.sql";
+		String scriptPath = "classpath:database/approve_company-rollback.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 	

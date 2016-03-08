@@ -33,14 +33,14 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 	@Before
 	public void runOnce() {
 
-		String scriptPath = "classpath:database/test/register_company-prepare.sql";
+		String scriptPath = "classpath:database/register_company-prepare.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 
 	@After
 	public void rollback() {
 
-		String scriptPath = "classpath:database/test/register_company-rollback.sql";
+		String scriptPath = "classpath:database/register_company-rollback.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 
@@ -161,7 +161,7 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 	@When("^the company is approved manually by an admin$")
 	public void company_is_approved() throws Throwable {
 		
-		String scriptPath = "classpath:database/test/company-approve.sql";
+		String scriptPath = "classpath:database/company-approve.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 	
@@ -187,7 +187,7 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
 	@When("^the company is rejected manually by an admin$")
 	public void company_is_rejected() throws Throwable {
 		
-		String scriptPath = "classpath:database/test/company-reject.sql";
+		String scriptPath = "classpath:database/company-reject.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 	

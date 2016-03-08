@@ -33,14 +33,14 @@ public class LogOutSteps extends AbstractFunctionalTest {
 	@Before
 	public void runOnce() {
 
-		String scriptPath = "classpath:database/test/login-prepare.sql";
+		String scriptPath = "classpath:database/login-prepare.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 
 	@After
 	public void rollback() {
 
-		String scriptPath = "classpath:database/test/login-rollback.sql";
+		String scriptPath = "classpath:database/login-rollback.sql";
 		template.execute(getSQLScript(scriptPath));
 	}
 

@@ -9,7 +9,7 @@ Feature: An admin will be able to verify companies
 		When I click on "Verify new companies"
 		And I select one of the pending companies
 	
-	Scenario Outline: Approve a company successfully
+	Scenario: Approve a company successfully
 		When I click on "Approve company"
 		Then a verify notification is sent to the manager of the company
 		And an email is sent to the manager of the company
