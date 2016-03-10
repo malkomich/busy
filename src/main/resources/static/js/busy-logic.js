@@ -1,18 +1,31 @@
 /*
+ * Selectors constants declaration
+ */
+const msgModalSelector = "#messageModal";
+const dialogSwitchSelector = ".dialog-switch";
+const collapseSwitchSelector = ".collapse-switch";
+const dialogDivSelector = ".dialog";
+const collapseDivSelector = ".collapse";
+const adminBoxSelector = ".admin-box";
+const adminContentSelector = ".admin-content";
+
+const contentAttribute = "data-content";
+
+/*
  * JQuery execute this abstract function when page is totally loaded.
  */
 $(function() {
 	if (message) {
-		$("#messageModal").find(".modal-body").text(message);
-		$("#messageModal").modal();
+		$(msgModalSelector).find(".modal-body").text(message);
+		$(msgModalSelector).modal();
 	}
 
 	// Hide 'dialog' and 'collapse' items clicking outside of them
 	$(document).mouseup(
 			function(e) {
 
-				var dialog_switch = $(".dialog-switch");
-				var dialog_div = $(".dialog");
+				var dialog_switch = $(dialogSwitchSelector);
+				var dialog_div = $(dialogDivSelector);
 
 				if (!dialog_switch.is(e.target)
 						&& dialog_switch.has(e.target).length === 0
@@ -21,8 +34,8 @@ $(function() {
 					dialog_div.hide();
 				}
 
-				var collapse_switch = $(".collapse-switch");
-				var collapse_div = $(".collapse");
+				var collapse_switch = $(collapseSwitchSelector);
+				var collapse_div = $(collapseDivSelector);
 
 				if (!collapse_switch.is(e.target)
 						&& collapse_switch.has(e.target).length === 0
@@ -35,7 +48,14 @@ $(function() {
 
 	// Toggle the div with the selector given in 'data-target' attribute of a
 	// 'dialog-switch'
-	$(".dialog-switch").click(function() {
+	$(dialogSwitchSelector).click(function() {
 		$($(this).data("target")).toggle();
+	});
+	
+	// Display admin content on admin-box click
+	$(adminBoxSelector).click(function() {
+		$(adminContentSelector).hide();
+		var targetDiv = $(this).attr(contentAttribute);
+		$(targetDiv).show();
 	});
 });
