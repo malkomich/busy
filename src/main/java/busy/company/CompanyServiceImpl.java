@@ -29,39 +29,76 @@ public class CompanyServiceImpl implements CompanyService {
 		this.branchDao = branchDao;
 	}
 	
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#saveCompany(busy.company.Company)
+	 */
 	@Override
 	public void saveCompany(Company company) {
 		companyDao.save(company);
 	}
 
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#findCategories()
+	 */
 	@Override
 	public List<Category> findCategories() {
 		return categoryDao.findAll();
 	}
 	
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#findCategoryById(int)
+	 */
 	@Override
 	public Category findCategoryById(int categoryId) {
 		return categoryDao.findById(categoryId);
 	}
 
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#saveBranch(busy.company.Branch)
+	 */
 	@Override
 	public void saveBranch(Branch branch) {
 		branchDao.save(branch);
 	}
+	
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#allCompanies()
+	 */
+	@Override
+	public List<Company> findAllCompanies() {
+		return companyDao.findAll();
+	}
 
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#findCompanyByBusinessName(java.lang.String)
+	 */
 	@Override
 	public Company findCompanyByBusinessName(String businessName) {
 		return companyDao.findByBusinessName(businessName);
 	}
 
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#findCompanyByEmail(java.lang.String)
+	 */
 	@Override
 	public Company findCompanyByEmail(String email) {
 		return companyDao.findByEmail(email);
 	}
 
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#findCompanyByCif(java.lang.String)
+	 */
 	@Override
 	public Company findCompanyByCif(String cif) {
 		return companyDao.findByCif(cif);
+	}
+
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#countAllCompanies()
+	 */
+	@Override
+	public int countAllCompanies() {
+		return companyDao.countAll();
 	}
 
 }

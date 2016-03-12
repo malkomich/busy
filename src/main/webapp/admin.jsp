@@ -26,6 +26,7 @@ THE SOFTWARE.
 
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <!DOCTYPE html>
 <html>
@@ -59,8 +60,8 @@ THE SOFTWARE.
 						<span class="admin-box-icon bg-red"><i
 							class="ion ion-ios-people"></i></span>
 						<div class="admin-box-content">
-							<span class="admin-box-text"></span> <span
-								class="admin-box-number"></span>
+							<span class="admin-box-text"><spring:message code="admin.companies.box_text"/></span> 
+							<span class="admin-box-number">${numOfcompanies}</span>
 						</div>
 					</div>
 					<!-- /.admin-box -->
@@ -79,6 +80,14 @@ THE SOFTWARE.
 								<div class="col-sm-12">
 									<table class="table table-bordered" role="grid">
 										<thead>
+											<tr role="row">
+												<th><spring:message code="company.trade_name.label"/></th>
+												<th><spring:message code="company.business_name.label"/></th>
+												<th><spring:message code="company.email.label"/></th>
+												<th><spring:message code="company.cif.label"/></th>
+												<th><spring:message code="company.active.label"/></th>
+												<th><spring:message code="category.name.label"/></th>
+											</tr>
 										</thead>
 										<tbody>
 										</tbody>

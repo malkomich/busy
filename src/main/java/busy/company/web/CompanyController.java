@@ -1,6 +1,7 @@
 package busy.company.web;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -11,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -55,6 +58,7 @@ public class CompanyController {
 	 */
 	private static final String PATH_ROOT = "/";
 	private static final String PATH_REGISTER_COMPANY = "new_company";
+	private static final String PATH_COMPANIES_UPDATE = "get_company_list";
 	
 	/**
 	 * JSP's
@@ -157,6 +161,12 @@ public class CompanyController {
 		redirectAttributes.addFlashAttribute(MESSAGE_REQUEST, message);
 
 		return "redirect:" + PATH_ROOT;
+	}
+	
+	@RequestMapping(value = PATH_COMPANIES_UPDATE, method = RequestMethod.GET)
+	public @ResponseBody List<Company> updateCompanies(ModelMap modelMap) {
+
+		return companyService.findAllCompanies();
 	}
 
 }

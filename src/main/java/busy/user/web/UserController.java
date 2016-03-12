@@ -55,6 +55,7 @@ public class UserController {
 	private static final String PATH_SIGNUP = "/signup";
 	private static final String PATH_EMAIL_CONFIRM = "/verificate_email";
 	private static final String PATH_LOGOUT = "/logout";
+	private static final String PATH_ADMIN = "/admin";
 
 	/**
 	 * JSP's
@@ -85,7 +86,7 @@ public class UserController {
 
 		return LOGIN_PAGE;
 	}
-	
+
 	/**
 	 * Process the login form and validates it.
 	 * 
@@ -95,7 +96,8 @@ public class UserController {
 	 * @return
 	 */
 	@RequestMapping(value = PATH_LOGIN, method = RequestMethod.POST)
-	public String login(@ModelAttribute(LOGIN_REQUEST) @Valid LoginForm form, BindingResult result, Model model) {
+	public String login(@ModelAttribute(LOGIN_REQUEST) @Valid LoginForm form, BindingResult result, Model model,
+			RedirectAttributes redirectAttributes) {
 
 		LoginValidator validator = new LoginValidator(userService);
 
@@ -107,8 +109,8 @@ public class UserController {
 
 		User user = userService.findUserByEmail(form.getEmail());
 		model.addAttribute(USER_SESSION, user);
-
-		return "redirect:" + PATH_ROOT;
+		
+		return (user.isAdmin()) ? "redirect:" + PATH_ADMIN : "redirect:" + PATH_ROOT;
 	}
 
 	/**

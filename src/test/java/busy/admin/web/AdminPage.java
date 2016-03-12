@@ -16,7 +16,7 @@ public class AdminPage extends BusyPage {
 	/*
 	 * CSS Selectors
 	 */
-	private static final String VERIFY_COMPANIES_SELECTOR = "#verify-companies";
+	private static final String SHOW_COMPANIES_SELECTOR = "#admin-companies";
 	private static final String COMPANY_SELECTOR = ".company-item";
 	private static final String APPROVE_SELECTOR = ".approve-company";
 
@@ -34,7 +34,7 @@ public class AdminPage extends BusyPage {
 
 	public AdminPage clickOnVerifyCompanies() {
 
-		click(VERIFY_COMPANIES_SELECTOR);
+		click(SHOW_COMPANIES_SELECTOR);
 		return this;
 	}
 

@@ -54,7 +54,7 @@ function updateCities() {
 			$('#cityNotEmptyHeader').hide();
 		}
 
-		for (var i = 0; i < data.length; i++) {
+		for (var i = 0; i < len; i++) {
 			options += '<option value="' + data[i].id + '">' + data[i].name
 					+ '</option>';
 		}

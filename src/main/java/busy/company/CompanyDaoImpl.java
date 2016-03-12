@@ -18,6 +18,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -53,6 +54,8 @@ public class CompanyDaoImpl implements CompanyDao {
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_COMPANY + " SET " + TRADE_NAME + "= ?," + BUSINESS_NAME
 			+ "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
 
+	private static final String SQL_COUNT_ALL = "SELECT COUNT(*) FROM (" + SQL_SELECT_ALL + ") AS countTable";
+	
 	private JdbcTemplate jdbcTemplate;
 
 	private SimpleJdbcInsert jdbcInsert;
@@ -94,6 +97,15 @@ public class CompanyDaoImpl implements CompanyDao {
 				SecureSetter.setId(company, key.intValue());
 			}
 		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyDao#findAll()
+	 */
+	@Override
+	public List<Company> findAll() {
+		
+		return jdbcTemplate.query(SQL_SELECT_ALL, new CompanyRowMapper());
 	}
 
 	/* (non-Javadoc)
@@ -144,6 +156,19 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 	}
 	
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyDao#countAll()
+	 */
+	@Override
+	public int countAll() {
+		return jdbcTemplate.queryForObject(SQL_COUNT_ALL, Integer.class);
+	}
+	
+	public boolean exists(Company company) {
+
+		return findById(company.getId()) != null;
+	}
+	
 	private Company findById(int id) {
 		
 		try {
@@ -156,11 +181,6 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 	}
 	
-	public boolean exists(Company company) {
-
-		return findById(company.getId()) != null;
-	}
-
 	private class CompanyRowMapper implements RowMapper<Company> {
 
 		@Override

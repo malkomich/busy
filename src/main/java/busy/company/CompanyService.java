@@ -20,6 +20,11 @@ public interface CompanyService {
 	void saveCompany(Company company);
 
 	/**
+	 * Find all Companies stored into the database.
+	 */
+	List<Company> findAllCompanies();
+
+	/**
 	 * Find a Company by his Business Name
 	 * 
 	 * @param businessName
@@ -56,4 +61,12 @@ public interface CompanyService {
 	 * @return
 	 */
 	List<Category> findCategories();
+
+	/**
+	 * Retrieves the number of companies saved into the database.
+	 * 
+	 * @return
+	 */
+	int countAllCompanies();
+
 }

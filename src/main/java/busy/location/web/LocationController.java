@@ -19,12 +19,12 @@ public class LocationController {
 	/**
 	 * URL Paths.
 	 */
-	private static final String PATH_SIGNUP_CITIES_UPDATE = "get_city_list";
+	private static final String PATH_CITIES_UPDATE = "get_city_list";
 	
 	@Autowired
 	private LocationService locationService;
 	
-	@RequestMapping(value = PATH_SIGNUP_CITIES_UPDATE, method = RequestMethod.GET)
+	@RequestMapping(value = PATH_CITIES_UPDATE, method = RequestMethod.GET)
 	public @ResponseBody List<City> updateCities(
 			@RequestParam(value = "countryCode", required = true) String countryCode, ModelMap modelMap) {
 

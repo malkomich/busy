@@ -1,5 +1,7 @@
 package busy.company;
 
+import java.util.List;
+
 public interface CompanyDao {
 
 	/**
@@ -8,6 +10,14 @@ public interface CompanyDao {
 	 * @param company
 	 */
 	void save(Company company);
+
+	/**
+	 * Finds all the existing Companies, or an empty list when there is not any
+	 * Company.
+	 * 
+	 * @return
+	 */
+	List<Company> findAll();
 
 	/**
 	 * Finds the Company in the database which Business Name match the given
@@ -35,5 +45,12 @@ public interface CompanyDao {
 	 * @return
 	 */
 	Company findByCif(String cif);
+
+	/**
+	 * Counts the number of all the Companies.
+	 * 
+	 * @return
+	 */
+	int countAll();
 
 }
