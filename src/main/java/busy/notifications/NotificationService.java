@@ -7,6 +7,13 @@ import busy.user.User;
 public interface NotificationService {
 
 	/**
+	 * Save a Notification item to the database.
+	 * 
+	 * @param notification
+	 */
+	void saveNotification(Notification notification);
+	
+	/**
 	 * Obtains all the notifications related to the given User.
 	 * 
 	 * @param user

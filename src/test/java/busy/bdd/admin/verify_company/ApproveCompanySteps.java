@@ -24,7 +24,7 @@ import cucumber.api.java.en.When;
 
 public class ApproveCompanySteps extends AbstractFunctionalTest {
 
-	private static final String NOTIFICATION_CODE = "company_approved.message";
+	private static final String NOTIFICATION_CODE = "notification.message.company_approved";
 
 	@Page
 	private LoginPage loginPage;
@@ -93,6 +93,8 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
 	public void click_approve() throws Throwable {
 		
 		adminPage.clickApprove();
+		// Waiting for event to be executed 
+		Thread.sleep(500);
 	}
 	
 	@Then("^a verify notification is sent to the manager of the company$")
@@ -109,7 +111,8 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
 				return rs.getString(SQLUtil.MESSAGE);
 			}
 		});
-		
+		System.out.println(message);
+		System.out.println(msgResource);
 		assertTrue(message.contains(msgResource));
 	}
 	

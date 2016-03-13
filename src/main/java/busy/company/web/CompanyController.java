@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,6 +79,9 @@ public class CompanyController {
 
 	@Autowired
 	private MessageSource messageSource;
+	
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
 
 	/**
 	 * Shows the form for create a new Company.
@@ -172,11 +176,14 @@ public class CompanyController {
 
 	@RequestMapping(value = PATH_COMPANY_CHANGE_STATE, method = RequestMethod.POST)
 	public void updateState(@RequestParam(value = "id", required = true) String companyId,
-			@RequestParam(value = "active", required = true) boolean active, ModelMap modelMap) {
+			@RequestParam(value = "active", required = true) boolean active, ModelMap modelMap, WebRequest request) {
 
 		Company company = companyService.findCompanyById(Integer.parseInt(companyId));
 		SecureSetter.setAttribute(company, "setActive", Boolean.class, active);
 		companyService.saveCompany(company);
+		
+		Role manager = roleService.findCompanyManager(company);
+		eventPublisher.publishEvent(new OnUpdateCompanyState(company, manager.getUser(), request.getLocale(), request.getContextPath()));
 	}
 
 }

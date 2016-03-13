@@ -105,6 +105,7 @@ public class SQLUtil {
 			+ COMPANYID + "= companyJoin." + ALIAS_COMPANY_ID;
 
 	public static final String ROLE_SELECT_QUERY = "SELECT " + TABLE_ROLE + "." + ID + " AS " + ALIAS_ROLE_ID + ","
-			+ IS_MANAGER + "," + ACTIVITY + ", branchJoin.* FROM " + TABLE_ROLE + " LEFT JOIN (" + BRANCH_SELECT_QUERY
-			+ ") AS branchJoin ON " + TABLE_ROLE + "." + BRANCHID + "= branchJoin." + ALIAS_BRANCH_ID;
+			+ IS_MANAGER + "," + ACTIVITY + ", branchJoin.*, userJoin.* FROM " + TABLE_ROLE + " LEFT JOIN (" + BRANCH_SELECT_QUERY
+			+ ") AS branchJoin ON " + TABLE_ROLE + "." + BRANCHID + "= branchJoin." + ALIAS_BRANCH_ID + " LEFT JOIN ("
+			+ USER_SELECT_QUERY + ") AS userJoin ON " + TABLE_ROLE + "." + USERID + "=userJoin." + ALIAS_USER_ID;
 }

@@ -1,6 +1,36 @@
 package busy.role;
 
-import static busy.util.SQLUtil.*;
+import static busy.util.SQLUtil.ACTIVE;
+import static busy.util.SQLUtil.ACTIVITY;
+import static busy.util.SQLUtil.ADDR1;
+import static busy.util.SQLUtil.ADDR2;
+import static busy.util.SQLUtil.ADMIN;
+import static busy.util.SQLUtil.ALIAS_ADDR_ID;
+import static busy.util.SQLUtil.ALIAS_CITY_ID;
+import static busy.util.SQLUtil.ALIAS_CITY_NAME;
+import static busy.util.SQLUtil.ALIAS_COMPANY_EMAIL;
+import static busy.util.SQLUtil.ALIAS_COMPANY_ID;
+import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
+import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
+import static busy.util.SQLUtil.ALIAS_ROLE_ID;
+import static busy.util.SQLUtil.ALIAS_USER_ID;
+import static busy.util.SQLUtil.BRANCHID;
+import static busy.util.SQLUtil.BUSINESS_NAME;
+import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.DEFAULT;
+import static busy.util.SQLUtil.EMAIL;
+import static busy.util.SQLUtil.FIRSTNAME;
+import static busy.util.SQLUtil.ID;
+import static busy.util.SQLUtil.IS_MANAGER;
+import static busy.util.SQLUtil.LASTNAME;
+import static busy.util.SQLUtil.NIF;
+import static busy.util.SQLUtil.PASSWORD;
+import static busy.util.SQLUtil.PHONE;
+import static busy.util.SQLUtil.ROLE_SELECT_QUERY;
+import static busy.util.SQLUtil.TABLE_ROLE;
+import static busy.util.SQLUtil.TRADE_NAME;
+import static busy.util.SQLUtil.USERID;
+import static busy.util.SQLUtil.ZIPCODE;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,9 +61,10 @@ import busy.util.SecureSetter;
 @Repository
 public class RoleDaoImpl implements RoleDao {
 
-	private static final String SQL_SELECT_BY_USERID = ROLE_SELECT_QUERY + " LEFT JOIN (" + USER_SELECT_QUERY
-			+ ") AS userJoin ON " + TABLE_ROLE + "." + USERID + "=userJoin." + ALIAS_USER_ID + " WHERE " + TABLE_ROLE
-			+ "." + USERID + "=?";
+	private static final String SQL_SELECT_BY_USERID = ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + USERID + "=?";
+
+	private static final String SQL_SELECT_MANAGER_BY_COMPANY_ID = ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER
+			+ "=true AND " + ALIAS_COMPANY_ID + "=?";
 
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_ROLE + " SET " + USERID + "= ?," + BRANCHID + "= ?,"
 			+ IS_MANAGER + "= ?, " + ACTIVITY + "= ? " + "WHERE " + ID + "= ?";
@@ -83,7 +114,20 @@ public class RoleDaoImpl implements RoleDao {
 
 			RoleRowMapper rowMapper = new RoleRowMapper();
 			rowMapper.setUser(user);
-			return jdbcTemplate.query(SQL_SELECT_BY_USERID, new RoleRowMapper(), user.getId());
+			return jdbcTemplate.query(SQL_SELECT_BY_USERID, rowMapper, user.getId());
+
+		} catch (EmptyResultDataAccessException e) {
+
+			return null;
+		}
+	}
+
+	@Override
+	public Role findManagerByCompany(Company company) {
+
+		try {
+
+			return jdbcTemplate.queryForObject(SQL_SELECT_MANAGER_BY_COMPANY_ID, new RoleRowMapper(), company.getId());
 
 		} catch (EmptyResultDataAccessException e) {
 
@@ -101,6 +145,46 @@ public class RoleDaoImpl implements RoleDao {
 			Role role = new Role();
 			SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
 
+			// Set User
+			if (user == null) {
+				user = new User();
+				SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
+				user.setFirstName(rs.getString(FIRSTNAME));
+				user.setLastName(rs.getString(LASTNAME));
+				user.setEmail(rs.getString(EMAIL));
+				user.setPassword(rs.getString(PASSWORD));
+				user.setNif(rs.getString(NIF));
+				user.setPhone(rs.getString(PHONE));
+				user.setActive(rs.getBoolean(ACTIVE));
+				SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
+
+				Integer addressId = 0;
+				if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
+
+					Address address = new Address();
+
+					SecureSetter.setId(address, addressId);
+					address.setAddress1(rs.getString(ADDR1));
+					address.setAddress2(rs.getString(ADDR2));
+					address.setZipCode(rs.getString(ZIPCODE));
+
+					City city = new City();
+					SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+					city.setName(rs.getString(ALIAS_CITY_NAME));
+
+					Country country = new Country();
+					SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+					country.setName(rs.getString(ALIAS_COUNTRY_NAME));
+					country.setCode(rs.getString(CODE));
+
+					city.setCountry(country);
+
+					address.setCity(city);
+
+					user.setAddress(address);
+				}
+			}
+			
 			role.setUser(user);
 
 			Branch branch = new Branch();

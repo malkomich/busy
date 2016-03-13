@@ -18,7 +18,19 @@ public class NotificationServiceImpl implements NotificationService {
 	public void setNotificationDao(NotificationDao notificationDao) {
 		this.notificationDao = notificationDao;
 	}
+	
+	/* (non-Javadoc)
+	 * @see busy.notifications.NotificationService#saveNotifications(busy.notifications.Notification)
+	 */
+	@Override
+	public void saveNotification(Notification notification) {
+		
+		notificationDao.save(notification);
+	}
 
+	/* (non-Javadoc)
+	 * @see busy.notifications.NotificationService#findNotificationsByUser(busy.user.User)
+	 */
 	@Override
 	public List<Notification> findNotificationsByUser(User user) {
 
