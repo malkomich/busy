@@ -16,9 +16,11 @@ public class AdminPage extends BusyPage {
 	/*
 	 * CSS Selectors
 	 */
-	private static final String SHOW_COMPANIES_SELECTOR = "#admin-companies";
+	private static final String SHOW_COMPANIES_SELECTOR = "#admin-companies-button";
 	private static final String COMPANY_SELECTOR = ".company-item";
-	private static final String APPROVE_SELECTOR = ".approve-company";
+	private static final String SWITCH_SELECTOR = ".onoffswitch-checkbox";
+
+	private FluentWebElement companyItem;
 
 	@Override
 	public void isAt() {
@@ -35,28 +37,39 @@ public class AdminPage extends BusyPage {
 	public AdminPage clickOnVerifyCompanies() {
 
 		click(SHOW_COMPANIES_SELECTOR);
+		waitForJSandJQueryToLoad();
 		return this;
 	}
 
 	public AdminPage selectCompany(String company) {
 
 		if (!company.isEmpty()) {
-			FluentWebElement companyItem = find(COMPANY_SELECTOR, FilterConstructor.withText(company)).first();
-			companyItem.click();
+			FluentWebElement companyItem = find(COMPANY_SELECTOR, FilterConstructor.withText().contains(company)).first();
+			this.companyItem = companyItem;
 		}
 		return this;
 	}
 
 	public AdminPage clickApprove() {
 
-		click(APPROVE_SELECTOR);
+		click(companyItem.find(SWITCH_SELECTOR));
 		return this;
 	}
 
-	public AdminPage companyNotShown(String company) {
+	public AdminPage companyIsActive(String company) {
 
 		if (!company.isEmpty()) {
-			assertThat(find(COMPANY_SELECTOR, FilterConstructor.withText(company)).size() == 0);
+			FluentWebElement companyItem = find(COMPANY_SELECTOR, FilterConstructor.withText().contains(company)).first();
+			assertThat(companyItem.find(SWITCH_SELECTOR).first().isSelected());
+		}
+		return this;
+	}
+
+	public AdminPage companyIsBlocked(String company) {
+
+		if (!company.isEmpty()) {
+			FluentWebElement companyItem = find(COMPANY_SELECTOR, FilterConstructor.withText().contains(company)).first();
+			assertThat(!companyItem.find(SWITCH_SELECTOR).first().isSelected());
 		}
 		return this;
 	}

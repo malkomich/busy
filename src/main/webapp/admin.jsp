@@ -57,7 +57,7 @@ THE SOFTWARE.
 		<div class="content">
 			<div class="row">
 				<div class="col-md-3 col-sm-6 col-xs-12">
-					<div class="admin-box" data-content="#admin-companies">
+					<div id="admin-companies-button" class="admin-box" data-content="#admin-companies-content">
 						<span class="admin-box-icon bg-red"><i
 							class="ion ion-ios-people"></i></span>
 						<div class="admin-box-content">
@@ -73,7 +73,7 @@ THE SOFTWARE.
 			<!-- /.row -->
 			<div class="row">
 				<div class="col-xs-12">
-					<div class="box admin-content" id="admin-companies">
+					<div class="box admin-content" id="admin-companies-content">
 						<div class="box-header">
 							<h3 class="box-title"><spring:message
 									code="admin.companies.table_title" /></h3>
@@ -81,7 +81,7 @@ THE SOFTWARE.
 						<div class="box-body">
 							<div class="row">
 								<div class="col-sm-12">
-									<table class="table table-bordered" role="grid">
+									<table class="table" role="grid">
 										<thead>
 											<tr role="row">
 												<th><spring:message code="company.trade_name.label" /></th>

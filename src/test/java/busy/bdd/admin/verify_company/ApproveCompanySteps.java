@@ -77,10 +77,16 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
 		adminPage.clickOnVerifyCompanies();
 	}
 	
-	@Given("^I select the pending company '(.+)'$")
+	@When("^I select the pending company '(.+)'$")
 	public void select_company(String company) throws Throwable {
 		
 		adminPage.selectCompany(company);
+	}
+	
+	@Then("^I should see the company '(.+)' as blocked or not active$")
+	public void company_unblocked(String company) throws Throwable {
+		
+		adminPage.companyIsBlocked(company);
 	}
 	
 	@When("^I click on \"Approve company\"$")
@@ -113,10 +119,10 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
 		assertTrue(adminPage.emailIsSent());
 	}
 	
-	@Then("^the company '(.+)' is not shown$")
-	public void company_not_shown(String company) throws Throwable {
+	@Then("^the company '(.+)' is shown as active$")
+	public void company_is_active(String company) throws Throwable {
 		
-		adminPage.companyNotShown(company);
+		adminPage.companyIsActive(company);
 	}
 	
 }

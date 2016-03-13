@@ -20,7 +20,7 @@ contentAttribute = "data-content";
 const
 adminBoxes = {};
 
-adminBoxes.companies = "#admin-companies";
+adminBoxes.companies = "#admin-companies-content";
 
 /*
  * JQuery execute this abstract function when page is totally loaded.
@@ -88,10 +88,10 @@ function updateBox(targetDiv) {
 			for (var i = 0; i < data.length; i++) {
 				var checked;
 				if (data[i].active) {
-					rows += '<tr role="row">';
+					rows += '<tr role="row" class="company-item bg-active">';
 					checked = "checked";
 				} else {
-					rows += '<tr role="row" class="bg-danger">';
+					rows += '<tr role="row" class="company-item bg-inactive">';
 					checked = "";
 				}
 				rows += '<input type="hidden" name="company-id" value="' + data[i].id + '"/>';
@@ -100,9 +100,9 @@ function updateBox(targetDiv) {
 				rows += '<td>' + data[i].email + '</td>';
 				rows += '<td>' + data[i].cif + '</td>';
 				rows += '<td>' + data[i].category.name + '</td>';
-				rows += '<td><div class="onoffswitch"><input type="checkbox" name="onoffswitch" '
-					+ 'class="onoffswitch-checkbox" id="myonoffswitch" ' + checked + ' >'
-					+ '<label class="onoffswitch-label" for="myonoffswitch"></label></div></td>';
+				rows += '<td class="borderless bg-none"><div class="onoffswitch"><input type="checkbox" name="onoffswitch" '
+					+ 'class="onoffswitch-checkbox" id="onoffswitch' + i + '" ' + checked + ' ><label class="onoffswitch-label" '
+					+ 'for="onoffswitch' + i + '"></label></div></td>';
 				rows += '</tr>';
 			}
 			
@@ -116,9 +116,11 @@ function updateBox(targetDiv) {
 					var companyId = $('input[name=company-id]', entry).val();
 					$.post('change_company_state', {"id" : companyId, "active" : active});
 					if(active) {
-						$(entry).removeClass("bg-danger");
+						$(entry).removeClass("bg-inactive");
+						$(entry).addClass("bg-active");
 					} else {
-						$(entry).addClass("bg-danger");
+						$(entry).removeClass("bg-active");
+						$(entry).addClass("bg-inactive");
 					}
 				});
 			});

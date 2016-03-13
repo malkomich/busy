@@ -108,3 +108,26 @@
 .admin-content {
 	display: none;
 }
+
+/*
+ * Tables
+ */
+.borderless td, .borderless th , td.borderless, th.borderless {
+    border: none !important;
+}
+
+/*
+ * Other
+ */
+.bg-none, .bg-white {
+	background: #FFF;
+}
+
+.bg-active {
+	background: #F5FAF3;
+}
+
+.bg-inactive {
+	background: #FAF2F2;
+}
+ 
