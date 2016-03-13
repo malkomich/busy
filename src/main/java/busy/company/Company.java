@@ -2,6 +2,8 @@ package busy.company;
 
 import java.io.Serializable;
 
+import org.joda.time.DateTime;
+
 public class Company implements Serializable {
 
 	private static final long serialVersionUID = 7609051478409569105L;
@@ -12,6 +14,7 @@ public class Company implements Serializable {
 	private String email;
 	private String cif;
 	private boolean active;
+	private DateTime createDate;
 	private Category category;
 	
 	public Company() {
@@ -66,6 +69,14 @@ public class Company implements Serializable {
 	
 	public boolean isActive() {
 		return active;
+	}
+	
+	public void setCreateDate(DateTime createDate) {
+		this.createDate = createDate;
+	}
+	
+	public DateTime getCreateDate() {
+		return createDate;
 	}
 
 	public void setCategory(Category category) {

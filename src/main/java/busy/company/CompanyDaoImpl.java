@@ -6,6 +6,7 @@ import static busy.util.SQLUtil.ALIAS_COMPANY_ID;
 import static busy.util.SQLUtil.BUSINESS_NAME;
 import static busy.util.SQLUtil.CATEGORYID;
 import static busy.util.SQLUtil.CIF;
+import static busy.util.SQLUtil.CREATE_DATE;
 import static busy.util.SQLUtil.DEFAULT;
 import static busy.util.SQLUtil.EMAIL;
 import static busy.util.SQLUtil.ID;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -37,24 +39,26 @@ import busy.util.SecureSetter;
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID + ","
-			+ TRADE_NAME + "," + BUSINESS_NAME + "," + EMAIL + "," + CIF + "," + ACTIVE + "," + TABLE_CATEGORY + "."
+	private static final String SQL_SELECT = "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID + ","
+			+ TRADE_NAME + "," + BUSINESS_NAME + "," + EMAIL + "," + CIF + "," + CREATE_DATE + "," + ACTIVE + "," + TABLE_CATEGORY + "."
 			+ ID + " AS " + ALIAS_CATEGORY_ID + "," + NAME + " FROM " + TABLE_COMPANY + " LEFT JOIN " + TABLE_CATEGORY
 			+ " ON " + TABLE_COMPANY + "." + CATEGORYID + "=" + TABLE_CATEGORY + "." + ID;
+	
+	private static final String SQL_SELECT_ALL = SQL_SELECT + " ORDER BY " + CREATE_DATE;
 
-	private static final String SQL_SELECT_BY_BUSINESS_NAME = SQL_SELECT_ALL + " WHERE " + TABLE_COMPANY + "."
+	private static final String SQL_SELECT_BY_BUSINESS_NAME = SQL_SELECT + " WHERE " + TABLE_COMPANY + "."
 			+ BUSINESS_NAME + "= ?";
 
-	private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT_ALL + " WHERE " + TABLE_COMPANY + "." + EMAIL + "= ?";
+	private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + EMAIL + "= ?";
 
-	private static final String SQL_SELECT_BY_CIF = SQL_SELECT_ALL + " WHERE " + TABLE_COMPANY + "." + CIF + "= ?";
+	private static final String SQL_SELECT_BY_CIF = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + CIF + "= ?";
 	
-	private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE " + TABLE_COMPANY + "." + ID + "= ?";
+	private static final String SQL_SELECT_BY_ID = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + ID + "= ?";
 
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_COMPANY + " SET " + TRADE_NAME + "= ?," + BUSINESS_NAME
 			+ "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
 
-	private static final String SQL_COUNT_ALL = "SELECT COUNT(*) FROM (" + SQL_SELECT_ALL + ") AS countTable";
+	private static final String SQL_COUNT_ALL = "SELECT COUNT(*) FROM (" + SQL_SELECT + ") AS countTable";
 	
 	private JdbcTemplate jdbcTemplate;
 
@@ -194,6 +198,8 @@ public class CompanyDaoImpl implements CompanyDao {
 			company.setEmail(rs.getString(EMAIL));
 			company.setCif(rs.getString(CIF));
 			SecureSetter.setAttribute(company, "setActive", Boolean.class, rs.getBoolean(ACTIVE));
+			DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
+			company.setCreateDate(createDate);
 
 			Integer categoryId = 0;
 			if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {

@@ -30,8 +30,7 @@ public class NotificationyDaoImpl implements NotificationDao {
 			+ "=? ORDER BY " + CREATE_DATE + " DESC";
 
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_NOTIFICATION + " SET " + USERID + "= ?,"
-			+ NOTIFICATION_TYPE + "=?," + MESSAGE + "=?," + IS_READ + "=?," + CREATE_DATE + "=? " + " WHERE " + ID
-			+ "= ?";
+			+ NOTIFICATION_TYPE + "=?," + MESSAGE + "=?," + IS_READ + "=?," + " WHERE " + ID + "= ?";
 
 	private JdbcTemplate jdbcTemplate;
 

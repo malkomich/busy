@@ -94,7 +94,7 @@ public class SQLUtil {
 			+ ALIAS_CATEGORY_ID + "," + NAME + " AS " + ALIAS_CATEGORY_NAME + " FROM " + TABLE_CATEGORY;
 
 	public static final String COMPANY_SELECT_QUERY = "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID
-			+ "," + TRADE_NAME + "," + BUSINESS_NAME + "," + CIF + "," + ACTIVE + "," + EMAIL + " AS "
+			+ "," + TRADE_NAME + "," + BUSINESS_NAME + "," + CIF + "," + CREATE_DATE + "," + ACTIVE + "," + EMAIL + " AS "
 			+ ALIAS_COMPANY_EMAIL + ", categoryJoin.* FROM " + TABLE_COMPANY + " LEFT JOIN (" + CATEGORY_SELECT_QUERY
 			+ ") AS categoryJoin ON " + TABLE_COMPANY + "." + CATEGORYID + "= categoryJoin." + ALIAS_CATEGORY_ID;
 

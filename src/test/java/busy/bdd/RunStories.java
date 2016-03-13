@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import busy.bdd.accounts.log_in.LogInTest;
 import busy.bdd.accounts.log_out.LogOutTest;
 import busy.bdd.accounts.sign_up.SignUpTest;
+import busy.bdd.admin.verify_company.ApproveCompanyTest;
 import busy.bdd.company.register.RegisterCompanyTest;
 
 /**
@@ -16,7 +17,7 @@ import busy.bdd.company.register.RegisterCompanyTest;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({ LogInTest.class, SignUpTest.class, LogOutTest.class, RegisterCompanyTest.class })
+@SuiteClasses({ LogInTest.class, SignUpTest.class, LogOutTest.class, RegisterCompanyTest.class, ApproveCompanyTest.class })
 public class RunStories {
 
 }

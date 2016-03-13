@@ -91,6 +91,7 @@ CREATE TABLE company (
 	email			varchar(50)		NOT NULL UNIQUE,
 	cif				varchar(9)		NOT NULL UNIQUE,
 	active			boolean			NOT NULL DEFAULT false,
+	create_date		timestamp with time zone	NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	category_id		integer			NULL REFERENCES category(id)
 		ON DELETE SET NULL ON UPDATE CASCADE
 );
