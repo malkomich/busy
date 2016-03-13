@@ -68,6 +68,14 @@ public class CompanyServiceImpl implements CompanyService {
 	public List<Company> findAllCompanies() {
 		return companyDao.findAll();
 	}
+	
+	/* (non-Javadoc)
+	 * @see busy.company.CompanyService#findCompanyById(int)
+	 */
+	@Override
+	public Company findCompanyById(int id) {
+		return companyDao.findById(id);
+	}
 
 	/* (non-Javadoc)
 	 * @see busy.company.CompanyService#findCompanyByBusinessName(java.lang.String)

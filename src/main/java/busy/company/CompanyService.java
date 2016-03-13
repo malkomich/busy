@@ -25,6 +25,14 @@ public interface CompanyService {
 	List<Company> findAllCompanies();
 
 	/**
+	 * Find a Company by his id
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Company findCompanyById(int id);
+
+	/**
 	 * Find a Company by his Business Name
 	 * 
 	 * @param businessName

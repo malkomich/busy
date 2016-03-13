@@ -17,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -46,37 +47,38 @@ public class CompanyController {
 	 * Spring Model Attributes.
 	 */
 	static final String USER_SESSION = "user";
-	
+
 	static final String REGISTER_COMPANY_REQUEST = "companyForm";
-	
+
 	static final String COUNTRY_ITEMS_REQUEST = "countryItems";
 	static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
 	static final String MESSAGE_REQUEST = "messageFromController";
-	
+
 	/**
 	 * URL Paths.
 	 */
 	private static final String PATH_ROOT = "/";
 	private static final String PATH_REGISTER_COMPANY = "new_company";
 	private static final String PATH_COMPANIES_UPDATE = "get_company_list";
-	
+	private static final String PATH_COMPANY_CHANGE_STATE = "change_company_state";
+
 	/**
 	 * JSP's
 	 */
 	private static final String REGISTER_COMPANY_PAGE = "new-company";
-	
+
 	@Autowired
 	private CompanyService companyService;
-	
+
 	@Autowired
 	private LocationService locationService;
-	
+
 	@Autowired
 	private RoleService roleService;
-	
-	@Autowired  
-    private MessageSource messageSource;
-	
+
+	@Autowired
+	private MessageSource messageSource;
+
 	/**
 	 * Shows the form for create a new Company.
 	 * 
@@ -95,7 +97,7 @@ public class CompanyController {
 			countryItems.put(country.getCode(), country.getName());
 		}
 		model.addAttribute(COUNTRY_ITEMS_REQUEST, countryItems);
-		
+
 		// Add input selection items to the model.
 		Map<Integer, String> categoryItems = new LinkedHashMap<Integer, String>();
 		for (Category category : companyService.findCategories()) {
@@ -107,8 +109,9 @@ public class CompanyController {
 	}
 
 	@RequestMapping(value = PATH_REGISTER_COMPANY, method = RequestMethod.POST)
-	public String registerCompany(@ModelAttribute(REGISTER_COMPANY_REQUEST) @Valid CompanyForm form, BindingResult result,
-			RedirectAttributes redirectAttributes, WebRequest request, Model model, Locale locale, HttpSession session) {
+	public String registerCompany(@ModelAttribute(REGISTER_COMPANY_REQUEST) @Valid CompanyForm form,
+			BindingResult result, RedirectAttributes redirectAttributes, WebRequest request, Model model, Locale locale,
+			HttpSession session) {
 
 		RegisterCompanyValidator validator = new RegisterCompanyValidator(companyService);
 
@@ -124,7 +127,7 @@ public class CompanyController {
 		address.setCity(locationService.findCityById(Integer.parseInt(form.getCityId())));
 		address.setAddress1(form.getAddress1());
 		address.setAddress2(form.getAddress2());
-		
+
 		locationService.saveAddress(address);
 
 		Company company = new Company();
@@ -132,41 +135,48 @@ public class CompanyController {
 		company.setBusinessName(form.getBusinessName());
 		company.setEmail(form.getEmail());
 		company.setCif(form.getCif());
-		
-		if(form.getCategoryId() != null)
+
+		if (form.getCategoryId() != null)
 			company.setCategory(companyService.findCategoryById(Integer.parseInt(form.getCategoryId())));
-		
+
 		companyService.saveCompany(company);
-		
+
 		Branch branch = new Branch();
 		branch.setCompany(company);
 		branch.setAddress(address);
 		branch.setPhone(form.getPhone());
 		SecureSetter.setAttribute(branch, "setHeadquarter", Boolean.class, true);
-		
+
 		companyService.saveBranch(branch);
-		
-		
+
 		Role role = new Role();
 		role.setUser((User) session.getAttribute(USER_SESSION));
 		role.setBranch(branch);
 		SecureSetter.setAttribute(role, "setManager", Boolean.class, true);
 		role.setActivity("Jefe");
-		
+
 		roleService.saveRole(role);
-		
-		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST,
-				result);
+
+		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST, result);
 		String message = messageSource.getMessage("company_pending.message", null, locale);
 		redirectAttributes.addFlashAttribute(MESSAGE_REQUEST, message);
 
 		return "redirect:" + PATH_ROOT;
 	}
-	
+
 	@RequestMapping(value = PATH_COMPANIES_UPDATE, method = RequestMethod.GET)
 	public @ResponseBody List<Company> updateCompanies(ModelMap modelMap) {
 
 		return companyService.findAllCompanies();
+	}
+
+	@RequestMapping(value = PATH_COMPANY_CHANGE_STATE, method = RequestMethod.POST)
+	public void updateState(@RequestParam(value = "id", required = true) String companyId,
+			@RequestParam(value = "active", required = true) boolean active, ModelMap modelMap) {
+
+		Company company = companyService.findCompanyById(Integer.parseInt(companyId));
+		SecureSetter.setAttribute(company, "setActive", Boolean.class, active);
+		companyService.saveCompany(company);
 	}
 
 }

@@ -48,6 +48,7 @@ THE SOFTWARE.
 
 <link href="css/cover-logged.css" rel="stylesheet">
 <link href="css/busy-content.css" rel="stylesheet">
+<link href="css/busy-components.css" rel="stylesheet">
 
 </head>
 <body>
@@ -60,8 +61,9 @@ THE SOFTWARE.
 						<span class="admin-box-icon bg-red"><i
 							class="ion ion-ios-people"></i></span>
 						<div class="admin-box-content">
-							<span class="admin-box-text"><spring:message code="admin.companies.box_text"/></span> 
-							<span class="admin-box-number">${numOfcompanies}</span>
+							<span class="admin-box-text"><spring:message
+									code="admin.companies.box_text" /></span> <span
+								class="admin-box-number">${numOfcompanies}</span>
 						</div>
 					</div>
 					<!-- /.admin-box -->
@@ -73,7 +75,8 @@ THE SOFTWARE.
 				<div class="col-xs-12">
 					<div class="box admin-content" id="admin-companies">
 						<div class="box-header">
-							<h3 class="box-title"></h3>
+							<h3 class="box-title"><spring:message
+									code="admin.companies.table_title" /></h3>
 						</div>
 						<div class="box-body">
 							<div class="row">
@@ -81,12 +84,11 @@ THE SOFTWARE.
 									<table class="table table-bordered" role="grid">
 										<thead>
 											<tr role="row">
-												<th><spring:message code="company.trade_name.label"/></th>
-												<th><spring:message code="company.business_name.label"/></th>
-												<th><spring:message code="company.email.label"/></th>
-												<th><spring:message code="company.cif.label"/></th>
-												<th><spring:message code="company.active.label"/></th>
-												<th><spring:message code="category.name.label"/></th>
+												<th><spring:message code="company.trade_name.label" /></th>
+												<th><spring:message code="company.business_name.label" /></th>
+												<th><spring:message code="company.email.label" /></th>
+												<th><spring:message code="company.cif.label" /></th>
+												<th><spring:message code="category.name.label" /></th>
 											</tr>
 										</thead>
 										<tbody>

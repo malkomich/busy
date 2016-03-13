@@ -20,6 +20,15 @@ public interface CompanyDao {
 	List<Company> findAll();
 
 	/**
+	 * Finds the Company in the database which id match the given one. It will
+	 * return null when no Companies fulfill the restriction.
+	 * 
+	 * @param id
+	 * @return
+	 */
+	Company findById(int id);
+
+	/**
 	 * Finds the Company in the database which Business Name match the given
 	 * one. It will return null when no Companies fulfill the restriction.
 	 * 

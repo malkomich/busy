@@ -169,7 +169,8 @@ public class CompanyDaoImpl implements CompanyDao {
 		return findById(company.getId()) != null;
 	}
 	
-	private Company findById(int id) {
+	@Override
+	public Company findById(int id) {
 		
 		try {
 
@@ -192,7 +193,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			company.setBusinessName(rs.getString(BUSINESS_NAME));
 			company.setEmail(rs.getString(EMAIL));
 			company.setCif(rs.getString(CIF));
-			SecureSetter.setAttribute(company, "setActive", Boolean.class, true);
+			SecureSetter.setAttribute(company, "setActive", Boolean.class, rs.getBoolean(ACTIVE));
 
 			Integer categoryId = 0;
 			if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {

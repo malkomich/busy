@@ -2,8 +2,6 @@
  * Selectors constants declaration
  */
 const
-msgModalSelector = "#messageModal";
-const
 dialogSwitchSelector = ".dialog-switch";
 const
 collapseSwitchSelector = ".collapse-switch";
@@ -29,8 +27,7 @@ adminBoxes.companies = "#admin-companies";
  */
 $(function() {
 	if (message) {
-		$(msgModalSelector).find(".modal-body").text(message);
-		$(msgModalSelector).modal();
+		messageModal(message);
 	}
 
 	// Hide 'dialog' and 'collapse' items clicking outside of them
@@ -79,36 +76,64 @@ $(function() {
  */
 function updateBox(targetDiv) {
 
-	var path;
+	var tbody = $("tbody", targetDiv);
+	
 	switch (targetDiv) {
 	case adminBoxes.companies:
-		path = "get_company_list";
-		break;
-	default:
-		path = null;
-	}
-	
-	var tbody = $("tbody",targetDiv);
-	
-	if(path) {
-		$.getJSON(path, function(data) {
-			
+
+		$.getJSON("get_company_list", function(data) {
+
 			var rows = '';
-	
+
 			for (var i = 0; i < data.length; i++) {
-				rows += '<tr role="row">';
+				var checked;
+				if (data[i].active) {
+					rows += '<tr role="row">';
+					checked = "checked";
+				} else {
+					rows += '<tr role="row" class="bg-danger">';
+					checked = "";
+				}
+				rows += '<input type="hidden" name="company-id" value="' + data[i].id + '"/>';
 				rows += '<td>' + data[i].tradeName + '</td>';
 				rows += '<td>' + data[i].businessName + '</td>';
 				rows += '<td>' + data[i].email + '</td>';
 				rows += '<td>' + data[i].cif + '</td>';
-				rows += '<td>' + data[i].active + '</td>';
 				rows += '<td>' + data[i].category.name + '</td>';
-				rows += '</tr>'
+				rows += '<td><div class="onoffswitch"><input type="checkbox" name="onoffswitch" '
+					+ 'class="onoffswitch-checkbox" id="myonoffswitch" ' + checked + ' >'
+					+ '<label class="onoffswitch-label" for="myonoffswitch"></label></div></td>';
+				rows += '</tr>';
 			}
-			tbody.html(rows);
+			
+			tbody.html(rows); // Add table to DOM
+			
+			// Checkbox change listener
+			$('tr', tbody).each(function() {
+				var entry = $(this);
+				$('.onoffswitch > :checkbox', this).change(function() {
+					var active = $(this).is(':checked');
+					var companyId = $('input[name=company-id]', entry).val();
+					$.post('change_company_state', {"id" : companyId, "active" : active});
+					if(active) {
+						$(entry).removeClass("bg-danger");
+					} else {
+						$(entry).addClass("bg-danger");
+					}
+				});
+			});
+			
+			$(targetDiv).fadeIn();
 		});
-		
-		$(targetDiv).show();
+		break;
+	default:
+		break;
 	}
-	
+
+}
+
+function messageModal(message) {
+
+	$("#messageModal").find(".modal-body").text(message);
+	$("#messageModal").modal();
 }
