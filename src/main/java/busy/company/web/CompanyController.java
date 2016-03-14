@@ -160,9 +160,11 @@ public class CompanyController {
 		role.setActivity("Jefe");
 
 		roleService.saveRole(role);
+		
+		eventPublisher.publishEvent(new OnRegisterCompany(role, request.getLocale(), request.getContextPath()));
 
 		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST, result);
-		String message = messageSource.getMessage("company_pending.message", null, locale);
+		String message = messageSource.getMessage("notification.message.company_pending", null, locale);
 		redirectAttributes.addFlashAttribute(MESSAGE_REQUEST, message);
 
 		return "redirect:" + PATH_ROOT;
