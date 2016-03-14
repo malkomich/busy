@@ -109,6 +109,11 @@
 	display: none;
 }
 
+.admin-box-loading {
+	opacity: 0;
+	color: #327CDB;
+}
+
 /*
  * Tables
  */
@@ -130,4 +135,3 @@
 .bg-inactive {
 	background: #FAF2F2;
 }
- 

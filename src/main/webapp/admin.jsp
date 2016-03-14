@@ -57,14 +57,17 @@ THE SOFTWARE.
 		<div class="content">
 			<div class="row">
 				<div class="col-md-3 col-sm-6 col-xs-12">
-					<div id="admin-companies-button" class="admin-box" data-content="#admin-companies-content">
+					<div id="admin-companies-button" class="admin-box"
+						data-content="#admin-companies-content">
 						<span class="admin-box-icon bg-red"><i
 							class="ion ion-ios-people"></i></span>
 						<div class="admin-box-content">
 							<span class="admin-box-text"><spring:message
 									code="admin.companies.box_text" /></span> <span
-								class="admin-box-number">${numOfcompanies}</span>
+								class="admin-box-number">${numOfcompanies}</span> <span
+								class="admin-box-loading glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
 						</div>
+
 					</div>
 					<!-- /.admin-box -->
 				</div>
@@ -75,8 +78,9 @@ THE SOFTWARE.
 				<div class="col-xs-12">
 					<div class="box admin-content" id="admin-companies-content">
 						<div class="box-header">
-							<h3 class="box-title"><spring:message
-									code="admin.companies.table_title" /></h3>
+							<h3 class="box-title">
+								<spring:message code="admin.companies.table_title" />
+							</h3>
 						</div>
 						<div class="box-body">
 							<div class="row">
@@ -97,10 +101,15 @@ THE SOFTWARE.
 								</div>
 							</div>
 						</div>
+						<!-- /.box-body -->
 					</div>
+					<!-- /.box -->
 				</div>
+				<!-- /.col -->
 			</div>
+			<!-- /.row -->
 		</div>
+		<!-- /.content -->
 
 		<jsp:include page="include/footer.jsp" />
 

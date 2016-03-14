@@ -13,6 +13,8 @@ const
 adminBoxSelector = ".admin-box";
 const
 adminContentSelector = ".admin-content";
+const
+adminLoadingSelector = ".admin-box-loading";
 
 const
 contentAttribute = "data-content";
@@ -64,7 +66,8 @@ $(function() {
 
 	// Display admin content on admin-box click
 	$(adminBoxSelector).click(function() {
-		$(adminContentSelector).hide();
+		$(adminContentSelector).fadeOut();
+		$(adminLoadingSelector, this).css('opacity', '1');
 		var targetDiv = $(this).attr(contentAttribute);
 		updateBox(targetDiv);
 	});
@@ -126,6 +129,7 @@ function updateBox(targetDiv) {
 			});
 			
 			$(targetDiv).fadeIn();
+			$(adminLoadingSelector).css('opacity', '0');
 		});
 		break;
 	default:
