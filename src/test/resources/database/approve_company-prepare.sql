@@ -16,4 +16,4 @@ INSERT INTO company(trade_name, business_name, email, cif, active, category_id) 
 INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM company WHERE cif='B12345678'), (SELECT id FROM address WHERE address1='Calle Mayor'), true, '902202122');
 INSERT INTO role(person_id, branch_id, is_manager, activity) VALUES((SELECT id FROM person WHERE email='user@domain.com'), (SELECT id FROM branch WHERE phone='902202122'), true, 'Jefe');
 
-INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user@domain.com'), 'New company', 'Your company is pending to be approved', DEFAULT, DEFAULT);
+INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user@domain.com'), 'Company management', 'Your company is pending to be approved', DEFAULT, DEFAULT);
