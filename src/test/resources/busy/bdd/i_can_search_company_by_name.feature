@@ -10,7 +10,7 @@ Feature: The user will be able search companies by name
 	Scenario: Search company by name successfully
 		When I click on the search bar
 		And I write the name of company 'Boom S.A.'
-		Then I should see a list when 'Boom S.A.' is shown
+		Then I should see a list where 'Boom S.A.' is shown
 		When I click on the company 'Boom S.A.'
 		Then I should see the company information page
 		
