@@ -73,23 +73,27 @@ $(function() {
 		updateBox(targetDiv);
 	});
 	
-	$('.search-bar-text').keyup(function() {
-		var value = $(this).val();
-		updateSearchList(value);
+	/*
+	 * Autocomplete of the search bar sending AJAX requests to update the list of companies matching the input 
+	 * value.
+	 */
+	$('.search-bar-text').autocomplete({
+	    serviceUrl: 'get_company_searches',
+	    paramName: 'partialName',
+	    transformResult: function(response) {
+	        
+	        return {
+	            // Convert the json list to javascript object
+	            suggestions: $.map($.parseJSON(response), function(dataItem) {
+	                return { value: dataItem.tradeName, data: dataItem.id };
+	            })
+	        };
+	    },
+	    onSelect: function (suggestion) {
+	        
+	    }
 	});
 });
-
-/*
- * Send an AJAX request to update the list of companies matching with the search 
- * value.
- */
-function updateSearchList(searchVal) {
-	$.getJSON("get_company_searches", {
-		partialName : searchVal
-	}, function(data) {
-		
-	});
-}
 
 /*
  * Send an AJAX request to the controller, with the id of the target div to

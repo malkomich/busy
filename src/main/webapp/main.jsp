@@ -110,7 +110,7 @@ THE SOFTWARE.
 	<script type="text/javascript">
 		var message = '<c:out value="${messageFromController}"/>'
 	</script>
-<script type="text/javascript" src="js/jquery.autocomplete.min.js"></script>
+    <script type="text/javascript" src="js/jquery.autocomplete.min.js"></script>
 	<script type="text/javascript" src="js/busy-logic.js"></script>
 
 </body>
