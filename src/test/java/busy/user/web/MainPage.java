@@ -29,9 +29,9 @@ public class MainPage extends BusyPage {
 	private static final String LOGOUT_SELECTOR = "#logout-link";
 	private static final String CREATE_COMPANY_SELECTOR = "#create-company";
 	private static final String BUSINESS_SECTION_SELECTOR = "#select-role";
-	private static final String SEARCHBAR_SELECTOR = "#search-bar";
-	private static final String SEARCHBAR_TEXT_SELECTOR = "#search-bar-text";
-	private static final String SEARCH_LIST_SELECTOR = "#search-bar-list";
+	private static final String SEARCHBAR_SELECTOR = ".search-bar";
+	private static final String SEARCHBAR_TEXT_SELECTOR = ".search-bar-text";
+	private static final String SEARCH_LIST_SELECTOR = ".search-bar-list";
 
 	private static final String MESSAGE_SELECTOR = "#infoMessage";
 	private static final String NOTIFICATIONS_SELECTOR = "#notifications-content";

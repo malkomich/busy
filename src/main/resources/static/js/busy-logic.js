@@ -28,6 +28,7 @@ adminBoxes.companies = "#admin-companies-content";
  * JQuery execute this abstract function when page is totally loaded.
  */
 $(function() {
+	
 	if (message) {
 		messageModal(message);
 	}
@@ -71,7 +72,24 @@ $(function() {
 		var targetDiv = $(this).attr(contentAttribute);
 		updateBox(targetDiv);
 	});
+	
+	$('.search-bar-text').keyup(function() {
+		var value = $(this).val();
+		updateSearchList(value);
+	});
 });
+
+/*
+ * Send an AJAX request to update the list of companies matching with the search 
+ * value.
+ */
+function updateSearchList(searchVal) {
+	$.getJSON("get_company_searches", {
+		partialName : searchVal
+	}, function(data) {
+		
+	});
+}
 
 /*
  * Send an AJAX request to the controller, with the id of the target div to

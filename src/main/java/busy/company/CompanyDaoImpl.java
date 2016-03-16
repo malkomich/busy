@@ -40,11 +40,14 @@ import busy.util.SecureSetter;
 public class CompanyDaoImpl implements CompanyDao {
 
 	private static final String SQL_SELECT = "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID + ","
-			+ TRADE_NAME + "," + BUSINESS_NAME + "," + EMAIL + "," + CIF + "," + CREATE_DATE + "," + ACTIVE + "," + TABLE_CATEGORY + "."
-			+ ID + " AS " + ALIAS_CATEGORY_ID + "," + NAME + " FROM " + TABLE_COMPANY + " LEFT JOIN " + TABLE_CATEGORY
-			+ " ON " + TABLE_COMPANY + "." + CATEGORYID + "=" + TABLE_CATEGORY + "." + ID;
-	
+			+ TRADE_NAME + "," + BUSINESS_NAME + "," + EMAIL + "," + CIF + "," + CREATE_DATE + "," + ACTIVE + ","
+			+ TABLE_CATEGORY + "." + ID + " AS " + ALIAS_CATEGORY_ID + "," + NAME + " FROM " + TABLE_COMPANY
+			+ " LEFT JOIN " + TABLE_CATEGORY + " ON " + TABLE_COMPANY + "." + CATEGORYID + "=" + TABLE_CATEGORY + "."
+			+ ID;
+
 	private static final String SQL_SELECT_ALL = SQL_SELECT + " ORDER BY " + CREATE_DATE;
+
+	private static final String SQL_SELECT_BY_ID = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + ID + "= ?";
 
 	private static final String SQL_SELECT_BY_BUSINESS_NAME = SQL_SELECT + " WHERE " + TABLE_COMPANY + "."
 			+ BUSINESS_NAME + "= ?";
@@ -52,14 +55,15 @@ public class CompanyDaoImpl implements CompanyDao {
 	private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + EMAIL + "= ?";
 
 	private static final String SQL_SELECT_BY_CIF = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + CIF + "= ?";
-	
-	private static final String SQL_SELECT_BY_ID = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + ID + "= ?";
+
+	private static final String SQL_SELECT_BY_PARTIAL_NAME = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + TRADE_NAME
+			+ " LIKE ? OR " + TABLE_COMPANY + "." + BUSINESS_NAME + " LIKE ?";
 
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_COMPANY + " SET " + TRADE_NAME + "= ?," + BUSINESS_NAME
 			+ "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
 
 	private static final String SQL_COUNT_ALL = "SELECT COUNT(*) FROM (" + SQL_SELECT + ") AS countTable";
-	
+
 	private JdbcTemplate jdbcTemplate;
 
 	private SimpleJdbcInsert jdbcInsert;
@@ -75,7 +79,9 @@ public class CompanyDaoImpl implements CompanyDao {
 		jdbcInsert.setColumnNames(Arrays.asList(TRADE_NAME, BUSINESS_NAME, EMAIL, CIF, ACTIVE, CATEGORYID));
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyDao#save(busy.company.Company)
 	 */
 	@Override
@@ -102,17 +108,39 @@ public class CompanyDaoImpl implements CompanyDao {
 			}
 		}
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyDao#findAll()
 	 */
 	@Override
 	public List<Company> findAll() {
-		
+
 		return jdbcTemplate.query(SQL_SELECT_ALL, new CompanyRowMapper());
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see busy.company.CompanyDao#findById(int)
+	 */
+	@Override
+	public Company findById(int id) {
+
+		try {
+
+			return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CompanyRowMapper(), id);
+
+		} catch (EmptyResultDataAccessException e) {
+
+			return null;
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyDao#findByBusinessName(java.lang.String)
 	 */
 	@Override
@@ -128,7 +156,9 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyDao#findByEmail(java.lang.String)
 	 */
 	@Override
@@ -144,7 +174,9 @@ public class CompanyDaoImpl implements CompanyDao {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyDao#findByCif(java.lang.String)
 	 */
 	@Override
@@ -159,33 +191,34 @@ public class CompanyDaoImpl implements CompanyDao {
 			return null;
 		}
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see busy.company.CompanyDao#findByPartialName(java.lang.String)
+	 */
+	@Override
+	public List<Company> findByPartialName(String partialName) {
+
+		return jdbcTemplate.query(SQL_SELECT_BY_PARTIAL_NAME, new CompanyRowMapper(), partialName + "%",
+				partialName + "%");
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyDao#countAll()
 	 */
 	@Override
 	public int countAll() {
 		return jdbcTemplate.queryForObject(SQL_COUNT_ALL, Integer.class);
 	}
-	
+
 	public boolean exists(Company company) {
 
 		return findById(company.getId()) != null;
 	}
-	
-	@Override
-	public Company findById(int id) {
-		
-		try {
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CompanyRowMapper(), id);
-
-		} catch (EmptyResultDataAccessException e) {
-
-			return null;
-		}
-	}
-	
 	private class CompanyRowMapper implements RowMapper<Company> {
 
 		@Override

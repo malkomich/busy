@@ -62,6 +62,7 @@ public class CompanyController {
 	private static final String PATH_REGISTER_COMPANY = "new_company";
 	private static final String PATH_COMPANIES_UPDATE = "get_company_list";
 	private static final String PATH_COMPANY_CHANGE_STATE = "change_company_state";
+	private static final String PATH_COMPANY_SEARCHES = "get_company_searches";
 
 	/**
 	 * JSP's
@@ -79,7 +80,7 @@ public class CompanyController {
 
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
 
@@ -160,7 +161,7 @@ public class CompanyController {
 		role.setActivity("Jefe");
 
 		roleService.saveRole(role);
-		
+
 		eventPublisher.publishEvent(new OnRegisterCompany(role, request.getLocale(), request.getContextPath()));
 
 		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST, result);
@@ -183,9 +184,17 @@ public class CompanyController {
 		Company company = companyService.findCompanyById(Integer.parseInt(companyId));
 		SecureSetter.setAttribute(company, "setActive", Boolean.class, active);
 		companyService.saveCompany(company);
-		
+
 		Role manager = roleService.findCompanyManager(company);
-		eventPublisher.publishEvent(new OnUpdateCompanyState(company, manager.getUser(), request.getLocale(), request.getContextPath()));
+		eventPublisher.publishEvent(
+				new OnUpdateCompanyState(company, manager.getUser(), request.getLocale(), request.getContextPath()));
+	}
+
+	@RequestMapping(value = PATH_COMPANY_SEARCHES, method = RequestMethod.GET)
+	public @ResponseBody List<Company> getCompanySearches(
+			@RequestParam(value = "partialName", required = true) String partialName, ModelMap modelMap) {
+
+		return companyService.findCompaniesByPartialName(partialName);
 	}
 
 }

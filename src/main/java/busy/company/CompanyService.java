@@ -57,6 +57,13 @@ public interface CompanyService {
 	Company findCompanyByCif(String cif);
 
 	/**
+	 * Find all the Companies which name contains the given partial name
+	 * 
+	 * @return
+	 */
+	List<Company> findCompaniesByPartialName(String partialName);
+
+	/**
 	 * Saves the Branch into the database.
 	 * 
 	 * @param branch

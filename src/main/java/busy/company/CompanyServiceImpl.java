@@ -10,26 +10,28 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Autowired
 	private CompanyDao companyDao;
-	
+
 	@Autowired
 	private CategoryDao categoryDao;
-	
+
 	@Autowired
 	private BranchDao branchDao;
-	
+
 	public void setCompanyDao(CompanyDao companyDao) {
 		this.companyDao = companyDao;
 	}
-	
+
 	public void setCategoryDao(CategoryDao categoryDao) {
 		this.categoryDao = categoryDao;
 	}
-	
+
 	public void setBranchDao(BranchDao branchDao) {
 		this.branchDao = branchDao;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#saveCompany(busy.company.Company)
 	 */
 	@Override
@@ -37,15 +39,19 @@ public class CompanyServiceImpl implements CompanyService {
 		companyDao.save(company);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#findCategories()
 	 */
 	@Override
 	public List<Category> findCategories() {
 		return categoryDao.findAll();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#findCategoryById(int)
 	 */
 	@Override
@@ -53,23 +59,29 @@ public class CompanyServiceImpl implements CompanyService {
 		return categoryDao.findById(categoryId);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#saveBranch(busy.company.Branch)
 	 */
 	@Override
 	public void saveBranch(Branch branch) {
 		branchDao.save(branch);
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#allCompanies()
 	 */
 	@Override
 	public List<Company> findAllCompanies() {
 		return companyDao.findAll();
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#findCompanyById(int)
 	 */
 	@Override
@@ -77,15 +89,20 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyDao.findById(id);
 	}
 
-	/* (non-Javadoc)
-	 * @see busy.company.CompanyService#findCompanyByBusinessName(java.lang.String)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * busy.company.CompanyService#findCompanyByBusinessName(java.lang.String)
 	 */
 	@Override
 	public Company findCompanyByBusinessName(String businessName) {
 		return companyDao.findByBusinessName(businessName);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#findCompanyByEmail(java.lang.String)
 	 */
 	@Override
@@ -93,7 +110,9 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyDao.findByEmail(email);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#findCompanyByCif(java.lang.String)
 	 */
 	@Override
@@ -101,7 +120,20 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyDao.findByCif(cif);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * busy.company.CompanyService#findCompaniesByPartialName(java.lang.String)
+	 */
+	@Override
+	public List<Company> findCompaniesByPartialName(String partialName) {
+		return companyDao.findByPartialName(partialName);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see busy.company.CompanyService#countAllCompanies()
 	 */
 	@Override

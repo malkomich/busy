@@ -24,6 +24,20 @@
 
 		</div>
 
+		<form class="navbar-form navbar-left" role="search">
+			<div class="input-group search-bar">
+				<spring:message code="navbar.search_bar.placeholder"
+					var="searchPlaceholder" />
+				<input type="text" class="form-control search-bar-text"
+					placeholder="${searchPlaceholder}">
+				<span class="input-group-addon">
+                        <button type="submit">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </button>  
+                    </span>
+			</div>
+		</form>
+
 		<!-- Navigation bar for big screens -->
 		<div id="navbar" class="collapse navbar-collapse">
 
@@ -32,12 +46,11 @@
 
 				<!-- Notifications section -->
 				<li role="presentation" class="bar-li"><a
-					id="notifications-switch" role="button"
-					class="dialog-switch"
+					id="notifications-switch" role="button" class="dialog-switch"
 					data-target="#notifications-content"> <span
 						class="glyphicon glyphicon-bell"> </span><span class="badge">${fn:length(notifications)}</span>
 				</a>
-				<div id="notifications-content" class="dialog">
+					<div id="notifications-content" class="dialog">
 						<div class="notifications-title">
 							<h4>Notifications</h4>
 						</div>

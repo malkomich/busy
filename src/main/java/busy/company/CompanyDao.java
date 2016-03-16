@@ -56,6 +56,16 @@ public interface CompanyDao {
 	Company findByCif(String cif);
 
 	/**
+	 * Finds the Companies in the database which tradeName or businessName
+	 * contains the given partialName. It will return an empty list when no
+	 * Companies fulfill the restriction.
+	 * 
+	 * @param partialName
+	 * @return
+	 */
+	List<Company> findByPartialName(String partialName);
+
+	/**
 	 * Counts the number of all the Companies.
 	 * 
 	 * @return
