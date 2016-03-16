@@ -27,19 +27,17 @@
 		<!-- Navigation bar for big screens -->
 		<div id="navbar" class="collapse navbar-collapse">
 
-            <form class="navbar-form navbar-left " role="search">
+            <div class="navbar-form navbar-left ">
                 <div class="input-group search-bar">
                     <spring:message code="navbar.search_bar.placeholder"
                         var="searchPlaceholder" />
                     <input type="text" class="form-control search-bar-text"
                         placeholder="${searchPlaceholder}">
-                    <span class="input-group-addon">
-                            <button type="submit">
-                                <span class="glyphicon glyphicon-search"></span>
-                            </button>  
-                        </span>
+                    <div class="input-group-addon">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </div>
                 </div>
-            </form>
+            </div>
 
 			<!-- Navigation bar sections -->
 			<ul class="nav navbar-nav navbar-right">
