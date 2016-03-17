@@ -52,7 +52,7 @@ THE SOFTWARE.
 
 </head>
 <body>
-	<jsp:include page="include/header.jsp" />
+	<jsp:include page="include/header-admin.jsp" />
 	<div class="container">
 		<div class="content">
 			<div class="row">
@@ -136,7 +136,7 @@ THE SOFTWARE.
 		var message = '<c:out value="${messageFromController}"/>'
 	</script>
 
-	<script type="text/javascript" src="js/busy-logic.js"></script>
+	<script type="text/javascript" src="js/busy-admin.js"></script>
 
 </body>
 </html>

@@ -9,20 +9,9 @@ const
 dialogDivSelector = ".dialog";
 const
 collapseDivSelector = ".collapse";
-const
-adminBoxSelector = ".admin-box";
-const
-adminContentSelector = ".admin-content";
-const
-adminLoadingSelector = ".admin-box-loading";
 
 const
 contentAttribute = "data-content";
-
-const
-adminBoxes = {};
-
-adminBoxes.companies = "#admin-companies-content";
 
 /*
  * JQuery execute this abstract function when page is totally loaded.
@@ -64,14 +53,6 @@ $(function() {
 	$(dialogSwitchSelector).click(function() {
 		$($(this).data("target")).toggle();
 	});
-
-	// Display admin content on admin-box click
-	$(adminBoxSelector).click(function() {
-		$(adminContentSelector).fadeOut();
-		$(adminLoadingSelector, this).css('opacity', '1');
-		var targetDiv = $(this).attr(contentAttribute);
-		updateBox(targetDiv);
-	});
 	
 	/*
 	 * Autocomplete of the search bar sending AJAX requests to update the list of companies matching the input 
@@ -94,71 +75,6 @@ $(function() {
 	    }
 	});
 });
-
-/*
- * Send an AJAX request to the controller, with the id of the target div to
- * update.
- */
-function updateBox(targetDiv) {
-
-	var tbody = $("tbody", targetDiv);
-	
-	switch (targetDiv) {
-	case adminBoxes.companies:
-
-		$.getJSON("get_company_list", function(data) {
-
-			var rows = '';
-
-			for (var i = 0; i < data.length; i++) {
-				var checked;
-				if (data[i].active) {
-					rows += '<tr role="row" class="company-item bg-active">';
-					checked = "checked";
-				} else {
-					rows += '<tr role="row" class="company-item bg-inactive">';
-					checked = "";
-				}
-				rows += '<input type="hidden" name="company-id" value="' + data[i].id + '"/>';
-				rows += '<td>' + data[i].tradeName + '</td>';
-				rows += '<td>' + data[i].businessName + '</td>';
-				rows += '<td>' + data[i].email + '</td>';
-				rows += '<td>' + data[i].cif + '</td>';
-				rows += '<td>' + data[i].category.name + '</td>';
-				rows += '<td class="borderless bg-none"><div class="onoffswitch"><input type="checkbox" name="onoffswitch" '
-					+ 'class="onoffswitch-checkbox" id="onoffswitch' + i + '" ' + checked + ' ><label class="onoffswitch-label" '
-					+ 'for="onoffswitch' + i + '"></label></div></td>';
-				rows += '</tr>';
-			}
-			
-			tbody.html(rows); // Add table to DOM
-			
-			// Checkbox change listener
-			$('tr', tbody).each(function() {
-				var entry = $(this);
-				$('.onoffswitch > :checkbox', this).change(function() {
-					var active = $(this).is(':checked');
-					var companyId = $('input[name=company-id]', entry).val();
-					$.post('change_company_state', {"id" : companyId, "active" : active});
-					if(active) {
-						$(entry).removeClass("bg-inactive");
-						$(entry).addClass("bg-active");
-					} else {
-						$(entry).removeClass("bg-active");
-						$(entry).addClass("bg-inactive");
-					}
-				});
-			});
-			
-			$(targetDiv).fadeIn();
-			$(adminLoadingSelector).css('opacity', '0');
-		});
-		break;
-	default:
-		break;
-	}
-
-}
 
 function messageModal(message) {
 
