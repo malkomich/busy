@@ -34,7 +34,7 @@ THE SOFTWARE.
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="malkomich">
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="/favicon.ico">
 <meta name="description" content="Login Page">
 
 <title><spring:message code="login.page.title" /></title>
@@ -43,8 +43,8 @@ THE SOFTWARE.
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<link href="css/cover.css" rel="stylesheet" type="text/css">
-<link href="css/signin.css" rel="stylesheet" type="text/css">
+<link href="/css/cover.css" rel="stylesheet" type="text/css">
+<link href="/css/signin.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>

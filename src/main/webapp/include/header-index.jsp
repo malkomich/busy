@@ -2,7 +2,7 @@
 
 <div class="clearfix">
 	<div class="inner">
-		<a href="/"><img src="img/busy-logo_2.png" align="left"></a>
+		<a href="/"><img src="/img/busy-logo_2.png" align="left"></a>
 		<nav>
 			<ul class="nav masthead-nav">
 				<li>

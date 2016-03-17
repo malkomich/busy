@@ -37,15 +37,15 @@ THE SOFTWARE.
 
 <title><spring:message code="new-company.page.title" /></title>
 
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="/favicon.ico">
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-<link href="css/cover-logged.css" rel="stylesheet">
-<link href="css/main.css" rel="stylesheet">
+<link href="/css/cover-logged.css" rel="stylesheet">
+<link href="/css/main.css" rel="stylesheet">
 
-<link href="css/signin.css" rel="stylesheet" type="text/css">
+<link href="/css/signin.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -237,8 +237,8 @@ THE SOFTWARE.
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-	<script type="text/javascript" src="js/signup.js"></script>
-	<script type="text/javascript" src="js/busy-logic.js"></script>
+	<script type="text/javascript" src="/js/signup.js"></script>
+	<script type="text/javascript" src="/js/busy-logic.js"></script>
 
 </body>
 </html>

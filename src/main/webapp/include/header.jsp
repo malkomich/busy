@@ -2,7 +2,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-<link href="css/menu.css" rel="stylesheet">
+<link href="/css/menu.css" rel="stylesheet">
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
 
@@ -19,7 +19,7 @@
 			</button>
 
 			<!-- Application icon -->
-			<a class="navbar-brand" href="/"><img src="img/busy-logo_2.png"
+			<a class="navbar-brand" href="/"><img src="/img/busy-logo_2.png"
 				height="150%"></a>
 
 		</div>
@@ -64,7 +64,7 @@
 				<li class="bar-li"><a href="#" data-toggle="dropdown"
 					class="dropdown-toggle" id="userMenu" aria-haspopup="true"
 					aria-expanded="true"><span><img class="img-circle"
-							height="30" width="30" src="img/user.png" alt="${user.firstName}"
+							height="30" width="30" src="/img/user.png" alt="${user.firstName}"
 							title="${user.firstName}"></span> <span id="span-username">
 							${username}</span> <b class="caret"></b> </a>
 					<ul class="dropdown-menu" aria-labelledby="userMenu">

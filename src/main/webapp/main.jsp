@@ -36,15 +36,15 @@ THE SOFTWARE.
 <meta name="author" content="malkomich">
 <meta name="description" content="Main Page">
 
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="/favicon.ico">
 
 <title><spring:message code="main.page.title" /></title>
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
-<link href="css/cover-logged.css" rel="stylesheet">
-<link href="css/busy-content.css" rel="stylesheet">
+<link href="/css/cover-logged.css" rel="stylesheet">
+<link href="/css/busy-content.css" rel="stylesheet">
 
 </head>
 <body>
@@ -110,8 +110,8 @@ THE SOFTWARE.
 	<script type="text/javascript">
 		var message = '<c:out value="${messageFromController}"/>'
 	</script>
-    <script type="text/javascript" src="js/jquery.autocomplete.min.js"></script>
-	<script type="text/javascript" src="js/busy-logic.js"></script>
+    <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
+	<script type="text/javascript" src="/js/busy-logic.js"></script>
 
 </body>
 </html>

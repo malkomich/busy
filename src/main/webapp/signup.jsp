@@ -34,7 +34,7 @@ THE SOFTWARE.
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="malkomich">
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="/favicon.ico">
 <meta name="description" content="Signup Page">
 
 <title><spring:message code="signup.page.title" /></title>
@@ -43,8 +43,8 @@ THE SOFTWARE.
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-<link href="css/cover.css" rel="stylesheet" type="text/css">
-<link href="css/signin.css" rel="stylesheet" type="text/css">
+<link href="/css/cover.css" rel="stylesheet" type="text/css">
+<link href="/css/signin.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -215,6 +215,6 @@ THE SOFTWARE.
 	<script
 		src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-	<script type="text/javascript" src="js/signup.js"></script>
+	<script type="text/javascript" src="/js/signup.js"></script>
 </body>
 </html>

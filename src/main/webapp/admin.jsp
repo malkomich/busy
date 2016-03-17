@@ -37,7 +37,7 @@ THE SOFTWARE.
 <meta name="author" content="malkomich">
 <meta name="description" content="Admin Page">
 
-<link rel="icon" href="favicon.ico">
+<link rel="icon" href="/favicon.ico">
 
 <title><spring:message code="admin.page.title" /></title>
 
@@ -46,9 +46,9 @@ THE SOFTWARE.
 <link rel="stylesheet"
 	href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
-<link href="css/cover-logged.css" rel="stylesheet">
-<link href="css/busy-content.css" rel="stylesheet">
-<link href="css/busy-components.css" rel="stylesheet">
+<link href="/css/cover-logged.css" rel="stylesheet">
+<link href="/css/busy-content.css" rel="stylesheet">
+<link href="/css/busy-components.css" rel="stylesheet">
 
 </head>
 <body>
@@ -136,7 +136,7 @@ THE SOFTWARE.
 		var message = '<c:out value="${messageFromController}"/>'
 	</script>
 
-	<script type="text/javascript" src="js/busy-admin.js"></script>
+	<script type="text/javascript" src="/js/busy-admin.js"></script>
 
 </body>
 </html>
