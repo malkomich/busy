@@ -71,7 +71,7 @@ $(function() {
 	        };
 	    },
 	    onSelect: function (suggestion) {
-	        
+	        window.location.href = "/company/" + suggestion.data;
 	    }
 	});
 });

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -50,24 +51,26 @@ public class CompanyController {
 	static final String USER_SESSION = "user";
 
 	static final String REGISTER_COMPANY_REQUEST = "companyForm";
-
 	static final String COUNTRY_ITEMS_REQUEST = "countryItems";
 	static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
 	static final String MESSAGE_REQUEST = "messageFromController";
+	static final String COMPANY_REQUEST = "company";
 
 	/**
 	 * URL Paths.
 	 */
 	private static final String PATH_ROOT = "/";
-	private static final String PATH_REGISTER_COMPANY = "new_company";
+	private static final String PATH_REGISTER_COMPANY = "/new_company";
 	private static final String PATH_COMPANIES_UPDATE = "get_company_list";
 	private static final String PATH_COMPANY_CHANGE_STATE = "change_company_state";
 	private static final String PATH_COMPANY_SEARCHES = "get_company_searches";
+	private static final String PATH_COMPANY_INFO = "/company/{id}";
 
 	/**
 	 * JSP's
 	 */
 	private static final String REGISTER_COMPANY_PAGE = "new-company";
+	private static final String COMPANY_INFO_PAGE = "company-info";
 
 	@Autowired
 	private CompanyService companyService;
@@ -111,6 +114,15 @@ public class CompanyController {
 		model.addAttribute(CATEGORY_ITEMS_REQUEST, categoryItems);
 
 		return REGISTER_COMPANY_PAGE;
+	}
+	
+	@RequestMapping(value = PATH_COMPANY_INFO, method = RequestMethod.GET)
+	public String showCompanyInfo(@PathVariable("id") String id, Model model) {
+		
+		Company company = companyService.findCompanyById(Integer.parseInt(id));
+		model.addAttribute(COMPANY_REQUEST, company);
+		
+		return COMPANY_INFO_PAGE;
 	}
 
 	@RequestMapping(value = PATH_REGISTER_COMPANY, method = RequestMethod.POST)
@@ -196,5 +208,5 @@ public class CompanyController {
 
 		return companyService.findCompaniesByPartialName(partialName);
 	}
-
+	
 }

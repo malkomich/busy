@@ -1,5 +1,5 @@
-.nav>li {
-	float: left;
+.nav>li.bar-li {
+    display: inline-block;
 }
 
 .dialog {
