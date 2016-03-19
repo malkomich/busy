@@ -73,7 +73,7 @@ public class SearchCompanyByNameSteps extends AbstractFunctionalTest {
 		mainPage.clickOnSearchBar();
 	}
 
-	@When("^I write the name of company  '(.+)'$")
+	@When("^I write the name of company '(.+)'$")
 	public void write_company_name(String companyName) throws Throwable {
 		
 		mainPage.fillSearchBar(companyName);

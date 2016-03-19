@@ -7,6 +7,7 @@ import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.filter.FilterConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
+import org.openqa.selenium.NoSuchElementException;
 
 import busy.BusyPage;
 
@@ -31,7 +32,7 @@ public class MainPage extends BusyPage {
 	private static final String BUSINESS_SECTION_SELECTOR = "#select-role";
 	private static final String SEARCHBAR_SELECTOR = ".search-bar";
 	private static final String SEARCHBAR_TEXT_SELECTOR = ".search-bar-text";
-	private static final String SEARCH_LIST_SELECTOR = ".search-bar-list";
+	private static final String SEARCH_LIST_ITEM_SELECTOR = ".autocomplete-suggestion";
 
 	private static final String MESSAGE_SELECTOR = "#infoMessage";
 	private static final String NOTIFICATIONS_SELECTOR = "#notifications-content";
@@ -125,7 +126,7 @@ public class MainPage extends BusyPage {
 
 	public boolean isCompanyInSearchList(String companyName) {
 
-		FluentList<FluentWebElement> list = find(SEARCH_LIST_SELECTOR).find("li");
+		FluentList<FluentWebElement> list = find(SEARCH_LIST_ITEM_SELECTOR);
 		for (FluentWebElement item : list) {
 			if (item.getText().contains(companyName)) {
 				return true;
@@ -136,7 +137,7 @@ public class MainPage extends BusyPage {
 
 	public MainPage selectCompanyInSearchList(String companyName) {
 
-		FluentWebElement item = find("li", FilterConstructor.withText(companyName)).first();
+		FluentWebElement item = find(SEARCH_LIST_ITEM_SELECTOR, FilterConstructor.withText(companyName)).first();
 		click(item);
 		return this;
 	}
@@ -144,11 +145,11 @@ public class MainPage extends BusyPage {
 	public boolean isSearchListShown() {
 		
 		try {
-			if(find(SEARCH_LIST_SELECTOR).first().isDisplayed()) {
+			if(find(SEARCH_LIST_ITEM_SELECTOR).first().isDisplayed()) {
 				return true;
 			}
-		} catch (ElementNotVisibleException e) {
-			// Nothing to do
+		} catch (NoSuchElementException e) {
+			// Nothing to do, element just do not exists
 		}
 		
 		return false;

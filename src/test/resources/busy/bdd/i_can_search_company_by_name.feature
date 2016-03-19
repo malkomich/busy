@@ -9,13 +9,13 @@ Feature: The user will be able search companies by name
 	
 	Scenario: Search company by name successfully
 		When I click on the search bar
-		And I write the name of company 'Boom S.A.'
-		Then I should see a list where 'Boom S.A.' is shown
-		When I click on the company 'Boom S.A.'
+		And I write the name of company 'Boom'
+		Then I should see a list where 'Boom' is shown
+		When I click on the company 'Boom'
 		Then I should see the company information page
 		
 	Scenario: Search company by name unsuccessfully
-		When I click in the search bar
+		When I click on the search bar
 		And I write the name of company 'asdf'
 		Then I should not see any list, or an empty list of companies
 		
