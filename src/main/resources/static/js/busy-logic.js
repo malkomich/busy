@@ -18,7 +18,7 @@ contentAttribute = "data-content";
  */
 $(function() {
 	
-	if (message) {
+	if (typeof message != 'undefined' && message) {
 		messageModal(message);
 	}
 

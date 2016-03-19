@@ -75,4 +75,4 @@ Feature: A user will be able to register a new company
 		
 		Examples:
 			|trade_name|business_name|email|cif|country|city|zipcode|phone|address|category|
-			|""|"X"|"user@gmail.com"|"B00000000"|"España"|"Valladolid"|"47007"|"00000000"|"Calle Los Almendros, 2"|"Mobiliario"|
+			|"X"|"X"|"user@gmail.com"|"B00000000"|"España"|"Valladolid"|"47007"|"00000000"|"Calle Los Almendros, 2"|"Mobiliario"|
