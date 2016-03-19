@@ -60,7 +60,10 @@ $(function() {
 	 */
 	$('.search-bar-text').autocomplete({
 	    serviceUrl: '/get_company_searches',
+	    minChars: 2,
+	    lookupLimit: 10,
 	    paramName: 'partialName',
+	    triggerSelectOnValidInput: false,
 	    transformResult: function(response) {
 	        
 	        return {
