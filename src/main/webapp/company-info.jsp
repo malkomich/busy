@@ -97,45 +97,42 @@ THE SOFTWARE.
                 <!-- .col -->
                 <div class="col-md-9 col-xs-12">
                     <div class="profile-content">
-                        <div class=" col-md-9 col-lg-9 "> 
-                          <table class="table table-user-information">
-                            <tbody>
-                              <tr>
-                                <td><spring:message code="company.info.trade_name" />:</td>
-                                <td>${company.tradeName}</td>
-                              </tr>
-                              <tr>
-                                <td><spring:message code="company.info.business_name" />:</td>
-                                <td>${company.businessName}</td>
-                              </tr>
-                              <tr>
-                                <td><spring:message code="company.info.email" />:</td>
-                                <td><a href="mailto:${company.email}">${company.email}</a></td>
-                              </tr>
-                              <tr>
-                                <td><spring:message code="company.info.cif" />:</td>
-                                <td>${company.cif}</td>
-                              </tr>
-                                <tr>
-                                <td><spring:message code="company.info.create_date" />:</td>
-                                <td><fmt:formatDate type="date" dateStyle="long" value="${company.createDate.toDate()}" /></td>
-                              </tr>
-                              <tr>
-                                <td><spring:message code="company.info.category" />:</td>
-                                <td>${company.category.name}</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                        <!-- .col -->
-                      </div>
-                      <!-- profile-content -->
-                    </div>
-                    <!-- .col -->
-                    </div>
-                    <!-- .row-profile -->
+                      <table class="table table-user-information">
+                        <tbody>
+                          <tr>
+                            <td><spring:message code="company.info.trade_name" />:</td>
+                            <td>${company.tradeName}</td>
+                          </tr>
+                          <tr>
+                            <td><spring:message code="company.info.business_name" />:</td>
+                            <td>${company.businessName}</td>
+                          </tr>
+                          <tr>
+                            <td><spring:message code="company.info.email" />:</td>
+                            <td><a href="mailto:${company.email}">${company.email}</a></td>
+                          </tr>
+                          <tr>
+                            <td><spring:message code="company.info.cif" />:</td>
+                            <td>${company.cif}</td>
+                          </tr>
+                            <tr>
+                            <td><spring:message code="company.info.create_date" />:</td>
+                            <td><fmt:formatDate type="date" dateStyle="long" value="${company.createDate.toDate()}" /></td>
+                          </tr>
+                          <tr>
+                            <td><spring:message code="company.info.category" />:</td>
+                            <td>${company.category.name}</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                  </div>
+                  <!-- profile-content -->
                 </div>
-                <!-- .content -->
+                <!-- .col -->
+            </div>
+            <!-- .row-profile -->
+        </div>
+        <!-- .content -->
 
         <jsp:include page="include/footer.jsp" />
 
