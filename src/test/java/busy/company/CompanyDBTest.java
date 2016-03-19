@@ -73,7 +73,7 @@ public class CompanyDBTest extends AbstractDBTest {
 	public void insertWithBusinessNameDuplicated() {
 		
 		Company company1 = new Company("Boom", "Boom S.A.", "jefe@boom.com", "B12345678", category);
-		Company company2 = new Company("Boom", "Boom S.A.", "jefe2@boom.com", "B12345679", category);
+		Company company2 = new Company("Boom 2", "Boom S.A.", "jefe2@boom.com", "B12345679", category);
 		
 		repository.save(company1);
 		repository.save(company2);
@@ -106,7 +106,7 @@ public class CompanyDBTest extends AbstractDBTest {
 	public void insertWithEmailDuplicated() {
 		
 		Company company1 = new Company("Boom", "Boom S.A.", "jefe@boom.com", "B12345678", category);
-		Company company2 = new Company("Boom", "Boom S.L.", "jefe@boom.com", "B12345679", category);
+		Company company2 = new Company("Boom 2", "Boom S.L.", "jefe@boom.com", "B12345679", category);
 		
 		repository.save(company1);
 		repository.save(company2);
@@ -128,7 +128,17 @@ public class CompanyDBTest extends AbstractDBTest {
 	public void insertWithCifDuplicated() {
 		
 		Company company1 = new Company("Boom", "Boom S.A.", "jefe@boom.com", "B12345678", category);
-		Company company2 = new Company("Boom", "Boom S.L.", "jefe2@boom.com", "B12345678", category);
+		Company company2 = new Company("Boom 2", "Boom S.L.", "jefe2@boom.com", "B12345678", category);
+		
+		repository.save(company1);
+		repository.save(company2);
+	}
+	
+	@Test(expected=DataIntegrityViolationException.class)
+	public void insertWithTradeNameAndCategoryDuplicated() {
+		
+		Company company1 = new Company("Boom", "Boom S.A.", "jefe@boom.com", "B12345678", category);
+		Company company2 = new Company("Boom", "Busy S.A.", "jefe2@boom.com", "B12345679", category);
 		
 		repository.save(company1);
 		repository.save(company2);
@@ -165,6 +175,7 @@ public class CompanyDBTest extends AbstractDBTest {
 	public void activateCompany() {
 		
 		Company company = new Company();
+		company.setTradeName("Boom");
 		company.setBusinessName("Boom S.A.");
 		company.setEmail("jefe@boom.com");
 		company.setCif("B12345678");

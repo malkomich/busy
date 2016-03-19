@@ -86,14 +86,15 @@ CREATE SEQUENCE company_seq;
 
 CREATE TABLE company (
     id				integer DEFAULT nextval('company_seq') NOT NULL PRIMARY KEY,
-    trade_name		varchar(30)		NULL,
+    trade_name		varchar(30)		NOT NULL,
     business_name	varchar(50) 	NOT NULL UNIQUE,
 	email			varchar(50)		NOT NULL UNIQUE,
 	cif				varchar(9)		NOT NULL UNIQUE,
 	active			boolean			NOT NULL DEFAULT false,
 	create_date		timestamp with time zone	NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	category_id		integer			NULL REFERENCES category(id)
-		ON DELETE SET NULL ON UPDATE CASCADE
+		ON DELETE SET NULL ON UPDATE CASCADE,
+	UNIQUE (trade_name, category_id)
 );
 
 CREATE SEQUENCE branch_seq;
