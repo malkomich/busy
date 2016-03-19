@@ -61,9 +61,9 @@ public class CompanyController {
 	 */
 	private static final String PATH_ROOT = "/";
 	private static final String PATH_REGISTER_COMPANY = "/new_company";
-	private static final String PATH_COMPANIES_UPDATE = "get_company_list";
-	private static final String PATH_COMPANY_CHANGE_STATE = "change_company_state";
-	private static final String PATH_COMPANY_SEARCHES = "get_company_searches";
+	private static final String PATH_COMPANIES_UPDATE = "/get_company_list";
+	private static final String PATH_COMPANY_CHANGE_STATE = "/change_company_state";
+	private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
 	private static final String PATH_COMPANY_INFO = "/company/{id}";
 
 	/**

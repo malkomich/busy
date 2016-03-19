@@ -59,7 +59,7 @@ $(function() {
 	 * value.
 	 */
 	$('.search-bar-text').autocomplete({
-	    serviceUrl: 'get_company_searches',
+	    serviceUrl: '/get_company_searches',
 	    paramName: 'partialName',
 	    transformResult: function(response) {
 	        

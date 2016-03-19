@@ -86,7 +86,7 @@ function updateBox(targetDiv) {
 	switch (targetDiv) {
 	case adminBoxes.companies:
 
-		$.getJSON("get_company_list", function(data) {
+		$.getJSON("/get_company_list", function(data) {
 
 			var rows = '';
 
@@ -119,7 +119,7 @@ function updateBox(targetDiv) {
 				$('.onoffswitch > :checkbox', this).change(function() {
 					var active = $(this).is(':checked');
 					var companyId = $('input[name=company-id]', entry).val();
-					$.post('change_company_state', {"id" : companyId, "active" : active});
+					$.post('/change_company_state', {"id" : companyId, "active" : active});
 					if(active) {
 						$(entry).removeClass("bg-inactive");
 						$(entry).addClass("bg-active");

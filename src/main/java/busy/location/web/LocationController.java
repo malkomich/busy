@@ -19,7 +19,7 @@ public class LocationController {
 	/**
 	 * URL Paths.
 	 */
-	private static final String PATH_CITIES_UPDATE = "get_city_list";
+	private static final String PATH_CITIES_UPDATE = "/get_city_list";
 	
 	@Autowired
 	private LocationService locationService;

@@ -40,7 +40,7 @@ $(function() {
  * parameter. Retrieves the cities from this country.
  */
 function updateCities() {
-	$.getJSON("get_city_list", {
+	$.getJSON("/get_city_list", {
 		countryCode : $('select#country').val()
 	}, function(data) {
 		var options = '';
