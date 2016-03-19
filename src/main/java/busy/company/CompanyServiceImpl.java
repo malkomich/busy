@@ -127,8 +127,8 @@ public class CompanyServiceImpl implements CompanyService {
 	 * busy.company.CompanyService#findCompaniesByPartialName(java.lang.String)
 	 */
 	@Override
-	public List<Company> findCompaniesByPartialName(String partialName) {
-		return companyDao.findByPartialName(partialName);
+	public List<Company> findActiveCompaniesByPartialName(String partialName) {
+		return companyDao.findActivesByPartialName(partialName);
 	}
 
 	/*

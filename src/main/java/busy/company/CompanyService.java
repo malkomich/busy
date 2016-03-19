@@ -61,7 +61,7 @@ public interface CompanyService {
 	 * 
 	 * @return
 	 */
-	List<Company> findCompaniesByPartialName(String partialName);
+	List<Company> findActiveCompaniesByPartialName(String partialName);
 
 	/**
 	 * Saves the Branch into the database.

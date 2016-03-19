@@ -56,8 +56,8 @@ public class CompanyDaoImpl implements CompanyDao {
 
 	private static final String SQL_SELECT_BY_CIF = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + CIF + "= ?";
 
-	private static final String SQL_SELECT_BY_PARTIAL_NAME = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + TRADE_NAME
-			+ " LIKE ? OR " + TABLE_COMPANY + "." + BUSINESS_NAME + " LIKE ?";
+	private static final String SQL_SELECT_ACTIVE_BY_PARTIAL_NAME = SQL_SELECT + " WHERE " + ACTIVE + "=true AND "
+			+ TABLE_COMPANY + "." + TRADE_NAME + " LIKE ? OR " + TABLE_COMPANY + "." + BUSINESS_NAME + " LIKE ?";
 
 	private static final String SQL_UPDATE = "UPDATE " + TABLE_COMPANY + " SET " + TRADE_NAME + "= ?," + BUSINESS_NAME
 			+ "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
@@ -198,9 +198,9 @@ public class CompanyDaoImpl implements CompanyDao {
 	 * @see busy.company.CompanyDao#findByPartialName(java.lang.String)
 	 */
 	@Override
-	public List<Company> findByPartialName(String partialName) {
+	public List<Company> findActivesByPartialName(String partialName) {
 
-		return jdbcTemplate.query(SQL_SELECT_BY_PARTIAL_NAME, new CompanyRowMapper(), partialName + "%",
+		return jdbcTemplate.query(SQL_SELECT_ACTIVE_BY_PARTIAL_NAME, new CompanyRowMapper(), partialName + "%",
 				partialName + "%");
 	}
 

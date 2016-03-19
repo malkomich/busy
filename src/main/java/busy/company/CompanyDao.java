@@ -63,7 +63,7 @@ public interface CompanyDao {
 	 * @param partialName
 	 * @return
 	 */
-	List<Company> findByPartialName(String partialName);
+	List<Company> findActivesByPartialName(String partialName);
 
 	/**
 	 * Counts the number of all the Companies.

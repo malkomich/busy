@@ -206,7 +206,7 @@ public class CompanyController {
 	public @ResponseBody List<Company> getCompanySearches(
 			@RequestParam(value = "partialName", required = true) String partialName, ModelMap modelMap) {
 
-		return companyService.findCompaniesByPartialName(partialName);
+		return companyService.findActiveCompaniesByPartialName(partialName);
 	}
 	
 }
