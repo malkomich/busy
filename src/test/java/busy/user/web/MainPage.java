@@ -35,8 +35,6 @@ public class MainPage extends BusyPage {
 	private static final String SEARCH_LIST_ITEM_SELECTOR = ".autocomplete-suggestion";
 
 	private static final String MESSAGE_SELECTOR = "#infoMessage";
-	private static final String NOTIFICATIONS_SELECTOR = "#notifications-content";
-	private static final String ITEM_NOTIFICATION_SELECTOR = ".item-notification-content";
 	private static final String ITEM_NOTIFICATION_MESSAGE_SELECTOR = "div.item-notification-message";
 
 	/*
@@ -90,11 +88,12 @@ public class MainPage extends BusyPage {
 
 	public boolean companyApprovedNotificationIsShown() {
 
-		FluentWebElement notifications = find(NOTIFICATIONS_SELECTOR).first();
-		FluentList<FluentWebElement> items = notifications.find(ITEM_NOTIFICATION_SELECTOR);
-		boolean rightMessage = find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).first().getText().contains(APPROVED);
-
-		return items.size() == 1 && rightMessage;
+		for(FluentWebElement notification: find(ITEM_NOTIFICATION_MESSAGE_SELECTOR)) {
+			if (notification.getText().contains(APPROVED)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean businessSectionIsShown() {
@@ -104,11 +103,12 @@ public class MainPage extends BusyPage {
 
 	public boolean companyRejectedNotificationIsShown() {
 
-		FluentWebElement notifications = find(NOTIFICATIONS_SELECTOR).first();
-		FluentList<FluentWebElement> items = notifications.find(ITEM_NOTIFICATION_SELECTOR);
-		boolean rightMessage = find(ITEM_NOTIFICATION_MESSAGE_SELECTOR).first().getText().contains(REJECTED);
-
-		return items.size() == 1 && rightMessage;
+		for(FluentWebElement notification: find(ITEM_NOTIFICATION_MESSAGE_SELECTOR)) {
+			if (notification.getText().contains(REJECTED)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public MainPage clickOnSearchBar() {
