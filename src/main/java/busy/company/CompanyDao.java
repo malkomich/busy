@@ -2,74 +2,79 @@ package busy.company;
 
 import java.util.List;
 
+/**
+ * Company persistence interface.
+ * 
+ * @author malkomich
+ */
 public interface CompanyDao {
 
-	/**
-	 * Create or update a Company registry in the database.
-	 * 
-	 * @param company
-	 */
-	void save(Company company);
+    /**
+     * Persists a new company object or updates an existing one.
+     * 
+     * @param company
+     *            The company object to be persisted
+     */
+    void save(Company company);
 
-	/**
-	 * Finds all the existing Companies, or an empty list when there is not any
-	 * Company.
-	 * 
-	 * @return
-	 */
-	List<Company> findAll();
+    /**
+     * Gets the list of all current company objects.
+     * 
+     * @return The list of current companies
+     */
+    List<Company> findAll();
 
-	/**
-	 * Finds the Company in the database which id match the given one. It will
-	 * return null when no Companies fulfill the restriction.
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Company findById(int id);
+    /**
+     * Gets the company object which ID matches the given one.
+     * 
+     * @param companyId
+     *            unique ID of the company
+     * @return The resultant company object
+     */
+    Company findById(int companyId);
 
-	/**
-	 * Finds the Company in the database which Business Name match the given
-	 * one. It will return null when no Companies fulfill the restriction.
-	 * 
-	 * @param businessName
-	 * @return
-	 */
-	Company findByBusinessName(String businessName);
+    /**
+     * Gets the company object which business name matches the given one.
+     * 
+     * @param businessName
+     *            business name of the company
+     * @return The resultant company object
+     */
+    Company findByBusinessName(String businessName);
 
-	/**
-	 * Finds the Company in the database which email match the given one. It
-	 * will return null when no Companies fulfill the restriction.
-	 * 
-	 * @param email
-	 * @return
-	 */
-	Company findByEmail(String email);
+    /**
+     * Gets the company object which email matches the given one.
+     * 
+     * @param email
+     *            email of the company
+     * @return The resultant company object
+     */
+    Company findByEmail(String email);
 
-	/**
-	 * Finds the Company in the database which CIF match the given one. It will
-	 * return null when no Companies fulfill the restriction.
-	 * 
-	 * @param cif
-	 * @return
-	 */
-	Company findByCif(String cif);
+    /**
+     * Gets the company object which CIF matches the given one.
+     * 
+     * @param cif
+     *            CIF of the company
+     * @return The resultant company object
+     */
+    Company findByCif(String cif);
 
-	/**
-	 * Finds the Companies in the database which tradeName or businessName
-	 * contains the given partialName. It will return an empty list when no
-	 * Companies fulfill the restriction.
-	 * 
-	 * @param partialName
-	 * @return
-	 */
-	List<Company> findActivesByPartialName(String partialName);
+    /**
+     * Gets the list of company object which trade name or business name contains the given partial
+     * name.
+     * 
+     * @param partialName
+     *            pattern to find the complete name of a company
+     * @return The list of resultant companies
+     */
+    List<Company> findActivesByPartialName(String partialName);
 
-	/**
-	 * Counts the number of all the Companies.
-	 * 
-	 * @return
-	 */
-	int countAll();
+    /**
+     * Counts the number of all current company objects.
+     * 
+     * @return The number of occurrences
+     */
+    int countAll();
 
 }

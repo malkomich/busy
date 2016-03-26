@@ -1,5 +1,5 @@
 /**
- * 
+ * Location environment package (addresses, cities and countries).
  */
 /**
  * @author malkomich

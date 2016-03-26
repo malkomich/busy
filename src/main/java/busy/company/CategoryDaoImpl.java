@@ -24,86 +24,98 @@ import org.springframework.stereotype.Repository;
 
 import busy.util.SecureSetter;
 
+/**
+ * Category persistence implementation for Database storing.
+ * 
+ * @author malkomich
+ *
+ */
 @Repository
 public class CategoryDaoImpl implements CategoryDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT " + ID + "," + NAME + " FROM " + TABLE_CATEGORY;
-	
-	private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE " + TABLE_CATEGORY + "." + ID + "= ?";
-	
-	private static final String SQL_UPDATE = "UPDATE " + TABLE_CATEGORY + " SET " + NAME + "= ? WHERE " + ID + "= ?";
+    private static final String SQL_SELECT_ALL = "SELECT " + ID + "," + NAME + " FROM " + TABLE_CATEGORY;
 
-	private JdbcTemplate jdbcTemplate;
+    private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE " + TABLE_CATEGORY + "." + ID + "= ?";
 
-	private SimpleJdbcInsert jdbcInsert;
+    private static final String SQL_UPDATE = "UPDATE " + TABLE_CATEGORY + " SET " + NAME + "= ? WHERE " + ID + "= ?";
 
-	@Autowired
-	public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
+    private JdbcTemplate jdbcTemplate;
 
-		jdbcTemplate = new JdbcTemplate(dataSource);
+    private SimpleJdbcInsert jdbcInsert;
 
-		jdbcInsert = new SimpleJdbcInsert(dataSource);
-		jdbcInsert.withTableName(TABLE_CATEGORY);
-		jdbcInsert.setGeneratedKeyName(ID);
-		jdbcInsert.setColumnNames(Arrays.asList(NAME));
-	}
+    @Autowired
+    public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
-	/* (non-Javadoc)
-	 * @see busy.company.CategoryDao#save(busy.company.Category)
-	 */
-	@Override
-	public void save(Category category) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
 
-		if (category.getId() > 0) {
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert.withTableName(TABLE_CATEGORY);
+        jdbcInsert.setGeneratedKeyName(ID);
+        jdbcInsert.setColumnNames(Arrays.asList(NAME));
+    }
 
-			jdbcTemplate.update(SQL_UPDATE, category.getName(), category.getId());
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CategoryDao#save(busy.company.Category)
+     */
+    @Override
+    public void save(Category category) {
 
-		} else {
+        if (category.getId() > 0) {
 
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put(NAME, category.getName());
+            jdbcTemplate.update(SQL_UPDATE, category.getName(), category.getId());
 
-			Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-			if (key != null) {
-				SecureSetter.setId(category, key.intValue());
-			}
-		}
-	}
-	
-	@Override
-	public List<Category> findAll() {
-		
-		return jdbcTemplate.query(SQL_SELECT_ALL, new CategoryRowMapper());
-	}
+        } else {
 
-	/* (non-Javadoc)
-	 * @see busy.company.CategoryDao#findById(int)
-	 */
-	@Override
-	public Category findById(int categoryId) {
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put(NAME, category.getName());
 
-		try {
+            Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+            if (key != null) {
+                SecureSetter.setId(category, key.intValue());
+            }
+        }
+    }
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CategoryRowMapper(), categoryId);
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CategoryDao#findAll()
+     */
+    @Override
+    public List<Category> findAll() {
 
-		} catch (EmptyResultDataAccessException e) {
+        return jdbcTemplate.query(SQL_SELECT_ALL, new CategoryRowMapper());
+    }
 
-			return null;
-		}
-	}
-	
-	private class CategoryRowMapper implements RowMapper<Category> {
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CategoryDao#findById(int)
+     */
+    @Override
+    public Category findById(int categoryId) {
 
-		@Override
-		public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
+        try {
 
-			Category category = new Category();
-			SecureSetter.setId(category, rs.getInt(ID));
-			category.setName(rs.getString(NAME));
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CategoryRowMapper(), categoryId);
 
-			return category;
-		}
+        } catch (EmptyResultDataAccessException e) {
 
-	}
+            return null;
+        }
+    }
+
+    private class CategoryRowMapper implements RowMapper<Category> {
+
+        @Override
+        public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+            Category category = new Category();
+            SecureSetter.setId(category, rs.getInt(ID));
+            category.setName(rs.getString(NAME));
+
+            return category;
+        }
+
+    }
 
 }

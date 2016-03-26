@@ -11,7 +11,7 @@ import busy.role.RoleTests;
 import busy.user.UserTests;
 
 @RunWith(Suite.class)
-@SuiteClasses({LocationTests.class, UserTests.class, CompanyTests.class, RoleTests.class, NotificationTests.class})
+@SuiteClasses({ LocationTests.class, UserTests.class, CompanyTests.class, RoleTests.class, NotificationTests.class })
 public class AllUnitTests {
 
 }

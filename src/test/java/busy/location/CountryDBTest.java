@@ -20,76 +20,76 @@ import busy.AbstractDBTest;
  */
 public class CountryDBTest extends AbstractDBTest {
 
-	@Autowired
-	private CountryDaoImpl repository;
+    @Autowired
+    private CountryDaoImpl repository;
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void nameNull() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void nameNull() {
 
-		Country country = new Country();
-		country.setCode("ES");
-		repository.save(country);
-	}
+        Country country = new Country();
+        country.setCode("ES");
+        repository.save(country);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void nameTooLong() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void nameTooLong() {
 
-		Country country = new Country();
-		country.setName("aaaaabbbbbcccccdddddeeeeefffffgggggh");
-		country.setCode("ES");
-		repository.save(country);
-	}
+        Country country = new Country();
+        country.setName("aaaaabbbbbcccccdddddeeeeefffffgggggh");
+        country.setCode("ES");
+        repository.save(country);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void nameDuplicated() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void nameDuplicated() {
 
-		Country country1 = new Country("España", "ES");
-		Country country2 = new Country("España", "US");
-		repository.save(country1);
-		repository.save(country2);
-	}
+        Country country1 = new Country("España", "ES");
+        Country country2 = new Country("España", "US");
+        repository.save(country1);
+        repository.save(country2);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void codeNull() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void codeNull() {
 
-		Country country = new Country();
-		country.setName("España");
-		repository.save(country);
-	}
+        Country country = new Country();
+        country.setName("España");
+        repository.save(country);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void codeTooLong() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void codeTooLong() {
 
-		Country country = new Country("España", "ESS");
-		repository.save(country);
-	}
+        Country country = new Country("España", "ESS");
+        repository.save(country);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void codeDuplicated() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void codeDuplicated() {
 
-		Country country1 = new Country("España", "ES");
-		Country country2 = new Country("EEUU", "ES");
-		repository.save(country1);
-		repository.save(country2);
-	}
+        Country country1 = new Country("España", "ES");
+        Country country2 = new Country("EEUU", "ES");
+        repository.save(country1);
+        repository.save(country2);
+    }
 
-	@Test
-	public void insertSuccessfully() {
+    @Test
+    public void insertSuccessfully() {
 
-		Country country = new Country("España", "ES");
-		repository.save(country);
-		Iterator<Country> it = repository.findAll().iterator();
-		assertTrue(it.hasNext());
-		Country resultCountry = it.next();
-		assertEquals("España", resultCountry.getName());
-		assertEquals("ES", resultCountry.getCode());
-	}
-	
-	@Test
-	public void findAllCountriesWhenEmpty() {
-		
-		List<Country> countryList = repository.findAll();
-		assertTrue(countryList.isEmpty());
-	}
+        Country country = new Country("España", "ES");
+        repository.save(country);
+        Iterator<Country> it = repository.findAll().iterator();
+        assertTrue(it.hasNext());
+        Country resultCountry = it.next();
+        assertEquals("España", resultCountry.getName());
+        assertEquals("ES", resultCountry.getCode());
+    }
+
+    @Test
+    public void findAllCountriesWhenEmpty() {
+
+        List<Country> countryList = repository.findAll();
+        assertTrue(countryList.isEmpty());
+    }
 
 }

@@ -14,28 +14,28 @@ import busy.AbstractDBTest;
  */
 public class CategoryDBTest extends AbstractDBTest {
 
-	@Autowired
-	private CategoryDaoImpl repository;
-	
-	@Test(expected=DataIntegrityViolationException.class)
-	public void insertWithNameNull() {
-		
-		Category category = new Category();
-		repository.save(category);
-	}
-	
-	@Test(expected=DataIntegrityViolationException.class)
-	public void insertWithNameTooLong() {
-		
-		Category category = new Category();
-		category.setName("Abcdefghijklmnñopqrstuvwxyz Abc");
-		repository.save(category);
-	}
-	
-	@Test
-	public void insertSuccessfully() {
-		
-		Category category = new Category("Mobiliario");
-		repository.save(category);
-	}
+    @Autowired
+    private CategoryDaoImpl repository;
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithNameNull() {
+
+        Category category = new Category();
+        repository.save(category);
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithNameTooLong() {
+
+        Category category = new Category();
+        category.setName("Abcdefghijklmnñopqrstuvwxyz Abc");
+        repository.save(category);
+    }
+
+    @Test
+    public void insertSuccessfully() {
+
+        Category category = new Category("Mobiliario");
+        repository.save(category);
+    }
 }

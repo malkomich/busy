@@ -36,217 +36,223 @@ import org.springframework.stereotype.Repository;
 
 import busy.util.SecureSetter;
 
+/**
+ * Company persistence implementation for Database storing.
+ * 
+ * @author malkomich
+ *
+ */
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 
-	private static final String SQL_SELECT = "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID + ","
-			+ TRADE_NAME + "," + BUSINESS_NAME + "," + EMAIL + "," + CIF + "," + CREATE_DATE + "," + ACTIVE + ","
-			+ TABLE_CATEGORY + "." + ID + " AS " + ALIAS_CATEGORY_ID + "," + NAME + " FROM " + TABLE_COMPANY
-			+ " LEFT JOIN " + TABLE_CATEGORY + " ON " + TABLE_COMPANY + "." + CATEGORYID + "=" + TABLE_CATEGORY + "."
-			+ ID;
+    private static final String SQL_SELECT =
+            "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID + "," + TRADE_NAME + "," + BUSINESS_NAME
+                    + "," + EMAIL + "," + CIF + "," + CREATE_DATE + "," + ACTIVE + "," + TABLE_CATEGORY + "." + ID
+                    + " AS " + ALIAS_CATEGORY_ID + "," + NAME + " FROM " + TABLE_COMPANY + " LEFT JOIN "
+                    + TABLE_CATEGORY + " ON " + TABLE_COMPANY + "." + CATEGORYID + "=" + TABLE_CATEGORY + "." + ID;
 
-	private static final String SQL_SELECT_ALL = SQL_SELECT + " ORDER BY " + CREATE_DATE;
+    private static final String SQL_SELECT_ALL = SQL_SELECT + " ORDER BY " + CREATE_DATE;
 
-	private static final String SQL_SELECT_BY_ID = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + ID + "= ?";
+    private static final String SQL_SELECT_BY_ID = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + ID + "= ?";
 
-	private static final String SQL_SELECT_BY_BUSINESS_NAME = SQL_SELECT + " WHERE " + TABLE_COMPANY + "."
-			+ BUSINESS_NAME + "= ?";
+    private static final String SQL_SELECT_BY_BUSINESS_NAME =
+            SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + BUSINESS_NAME + "= ?";
 
-	private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + EMAIL + "= ?";
+    private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + EMAIL + "= ?";
 
-	private static final String SQL_SELECT_BY_CIF = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + CIF + "= ?";
+    private static final String SQL_SELECT_BY_CIF = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + CIF + "= ?";
 
-	private static final String SQL_SELECT_ACTIVE_BY_PARTIAL_NAME = SQL_SELECT + " WHERE " + ACTIVE + "=true AND "
-			+ TABLE_COMPANY + "." + TRADE_NAME + " LIKE ? OR " + TABLE_COMPANY + "." + BUSINESS_NAME + " LIKE ?";
+    private static final String SQL_SELECT_ACTIVE_BY_PARTIAL_NAME = SQL_SELECT + " WHERE " + ACTIVE + "=true AND "
+            + TABLE_COMPANY + "." + TRADE_NAME + " LIKE ? OR " + TABLE_COMPANY + "." + BUSINESS_NAME + " LIKE ?";
 
-	private static final String SQL_UPDATE = "UPDATE " + TABLE_COMPANY + " SET " + TRADE_NAME + "= ?," + BUSINESS_NAME
-			+ "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
+    private static final String SQL_UPDATE = "UPDATE " + TABLE_COMPANY + " SET " + TRADE_NAME + "= ?," + BUSINESS_NAME
+            + "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
 
-	private static final String SQL_COUNT_ALL = "SELECT COUNT(*) FROM (" + SQL_SELECT + ") AS countTable";
+    private static final String SQL_COUNT_ALL = "SELECT COUNT(*) FROM (" + SQL_SELECT + ") AS countTable";
 
-	private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
-	private SimpleJdbcInsert jdbcInsert;
+    private SimpleJdbcInsert jdbcInsert;
 
-	@Autowired
-	public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
+    @Autowired
+    public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
-		jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = new JdbcTemplate(dataSource);
 
-		jdbcInsert = new SimpleJdbcInsert(dataSource);
-		jdbcInsert.withTableName(TABLE_COMPANY);
-		jdbcInsert.setGeneratedKeyName(ID);
-		jdbcInsert.setColumnNames(Arrays.asList(TRADE_NAME, BUSINESS_NAME, EMAIL, CIF, ACTIVE, CATEGORYID));
-	}
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert.withTableName(TABLE_COMPANY);
+        jdbcInsert.setGeneratedKeyName(ID);
+        jdbcInsert.setColumnNames(Arrays.asList(TRADE_NAME, BUSINESS_NAME, EMAIL, CIF, ACTIVE, CATEGORYID));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.company.CompanyDao#save(busy.company.Company)
-	 */
-	@Override
-	public void save(Company company) {
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CompanyDao#save(busy.company.Company)
+     */
+    @Override
+    public void save(Company company) {
 
-		if (company.getId() > 0) {
+        if (company.getId() > 0) {
 
-			jdbcTemplate.update(SQL_UPDATE, company.getTradeName(), company.getBusinessName(), company.getEmail(),
-					company.getCif(), company.isActive(), company.getCategoryId(), company.getId());
+            jdbcTemplate.update(SQL_UPDATE, company.getTradeName(), company.getBusinessName(), company.getEmail(),
+                    company.getCif(), company.isActive(), company.getCategoryId(), company.getId());
 
-		} else {
+        } else {
 
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put(TRADE_NAME, company.getTradeName());
-			parameters.put(BUSINESS_NAME, company.getBusinessName());
-			parameters.put(EMAIL, company.getEmail());
-			parameters.put(CIF, company.getCif());
-			parameters.put(ACTIVE, DEFAULT);
-			parameters.put(CATEGORYID, company.getCategoryId());
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put(TRADE_NAME, company.getTradeName());
+            parameters.put(BUSINESS_NAME, company.getBusinessName());
+            parameters.put(EMAIL, company.getEmail());
+            parameters.put(CIF, company.getCif());
+            parameters.put(ACTIVE, DEFAULT);
+            parameters.put(CATEGORYID, company.getCategoryId());
 
-			Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-			if (key != null) {
-				SecureSetter.setId(company, key.intValue());
-			}
-		}
-	}
+            Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+            if (key != null) {
+                SecureSetter.setId(company, key.intValue());
+            }
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.company.CompanyDao#findAll()
-	 */
-	@Override
-	public List<Company> findAll() {
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CompanyDao#findAll()
+     */
+    @Override
+    public List<Company> findAll() {
 
-		return jdbcTemplate.query(SQL_SELECT_ALL, new CompanyRowMapper());
-	}
+        return jdbcTemplate.query(SQL_SELECT_ALL, new CompanyRowMapper());
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.company.CompanyDao#findById(int)
-	 */
-	@Override
-	public Company findById(int id) {
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CompanyDao#findById(int)
+     */
+    @Override
+    public Company findById(int id) {
 
-		try {
+        try {
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CompanyRowMapper(), id);
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new CompanyRowMapper(), id);
 
-		} catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.company.CompanyDao#findByBusinessName(java.lang.String)
-	 */
-	@Override
-	public Company findByBusinessName(String businessName) {
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CompanyDao#findByBusinessName(java.lang.String)
+     */
+    @Override
+    public Company findByBusinessName(String businessName) {
 
-		try {
+        try {
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_BY_BUSINESS_NAME, new CompanyRowMapper(), businessName);
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_BUSINESS_NAME, new CompanyRowMapper(), businessName);
 
-		} catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.company.CompanyDao#findByEmail(java.lang.String)
-	 */
-	@Override
-	public Company findByEmail(String email) {
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CompanyDao#findByEmail(java.lang.String)
+     */
+    @Override
+    public Company findByEmail(String email) {
 
-		try {
+        try {
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_BY_EMAIL, new CompanyRowMapper(), email);
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_EMAIL, new CompanyRowMapper(), email);
 
-		} catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.company.CompanyDao#findByCif(java.lang.String)
-	 */
-	@Override
-	public Company findByCif(String cif) {
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CompanyDao#findByCif(java.lang.String)
+     */
+    @Override
+    public Company findByCif(String cif) {
 
-		try {
+        try {
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_BY_CIF, new CompanyRowMapper(), cif);
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_CIF, new CompanyRowMapper(), cif);
 
-		} catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.company.CompanyDao#findByPartialName(java.lang.String)
-	 */
-	@Override
-	public List<Company> findActivesByPartialName(String partialName) {
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CompanyDao#findByPartialName(java.lang.String)
+     */
+    @Override
+    public List<Company> findActivesByPartialName(String partialName) {
 
-		return jdbcTemplate.query(SQL_SELECT_ACTIVE_BY_PARTIAL_NAME, new CompanyRowMapper(), partialName + "%",
-				partialName + "%");
-	}
+        return jdbcTemplate.query(SQL_SELECT_ACTIVE_BY_PARTIAL_NAME, new CompanyRowMapper(), partialName + "%",
+                partialName + "%");
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.company.CompanyDao#countAll()
-	 */
-	@Override
-	public int countAll() {
-		return jdbcTemplate.queryForObject(SQL_COUNT_ALL, Integer.class);
-	}
+    /*
+     * (non-Javadoc)
+     * @see busy.company.CompanyDao#countAll()
+     */
+    @Override
+    public int countAll() {
 
-	public boolean exists(Company company) {
+        return jdbcTemplate.queryForObject(SQL_COUNT_ALL, Integer.class);
+    }
 
-		return findById(company.getId()) != null;
-	}
+    /**
+     * Checks if a Company object exists in the database.
+     * 
+     * @param company
+     *            the Company object to check
+     * @return True when the company exists, False when it does not.
+     */
+    public boolean exists(Company company) {
 
-	private class CompanyRowMapper implements RowMapper<Company> {
+        return findById(company.getId()) != null;
+    }
 
-		@Override
-		public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
+    private class CompanyRowMapper implements RowMapper<Company> {
 
-			Company company = new Company();
-			SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
-			company.setTradeName(rs.getString(TRADE_NAME));
-			company.setBusinessName(rs.getString(BUSINESS_NAME));
-			company.setEmail(rs.getString(EMAIL));
-			company.setCif(rs.getString(CIF));
-			SecureSetter.setAttribute(company, "setActive", Boolean.class, rs.getBoolean(ACTIVE));
-			DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
-			company.setCreateDate(createDate);
+        @Override
+        public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-			Integer categoryId = 0;
-			if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
+            Company company = new Company();
+            SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
+            company.setTradeName(rs.getString(TRADE_NAME));
+            company.setBusinessName(rs.getString(BUSINESS_NAME));
+            company.setEmail(rs.getString(EMAIL));
+            company.setCif(rs.getString(CIF));
+            SecureSetter.setAttribute(company, "setActive", Boolean.class, rs.getBoolean(ACTIVE));
+            DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
+            company.setCreateDate(createDate);
 
-				Category category = new Category();
-				SecureSetter.setId(category, categoryId);
-				category.setName(rs.getString(NAME));
+            Integer categoryId = 0;
+            if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
 
-				company.setCategory(category);
-			}
+                Category category = new Category();
+                SecureSetter.setId(category, categoryId);
+                category.setName(rs.getString(NAME));
 
-			return company;
-		}
+                company.setCategory(category);
+            }
 
-	}
+            return company;
+        }
+
+    }
 
 }

@@ -19,7 +19,7 @@ import busy.bdd.company.search_by_name.SearchCompanyByNameTest;
  */
 @RunWith(Suite.class)
 @SuiteClasses({ LogInTest.class, SignUpTest.class, LogOutTest.class, RegisterCompanyTest.class,
-        ApproveCompanyTest.class, SearchCompanyByNameTest.class })
+    ApproveCompanyTest.class, SearchCompanyByNameTest.class })
 public class RunStories {
 
 }

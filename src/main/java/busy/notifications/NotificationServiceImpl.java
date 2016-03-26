@@ -9,32 +9,41 @@ import busy.notifications.Notification;
 import busy.notifications.NotificationDao;
 import busy.user.User;
 
+/**
+ * Notification service logic implementation.
+ * 
+ * @author malkomich
+ *
+ */
 @Service
 public class NotificationServiceImpl implements NotificationService {
 
-	@Autowired
-	private NotificationDao notificationDao;
+    @Autowired
+    private NotificationDao notificationDao;
 
-	public void setNotificationDao(NotificationDao notificationDao) {
-		this.notificationDao = notificationDao;
-	}
-	
-	/* (non-Javadoc)
-	 * @see busy.notifications.NotificationService#saveNotifications(busy.notifications.Notification)
-	 */
-	@Override
-	public void saveNotification(Notification notification) {
-		
-		notificationDao.save(notification);
-	}
+    public void setNotificationDao(NotificationDao notificationDao) {
+        this.notificationDao = notificationDao;
+    }
 
-	/* (non-Javadoc)
-	 * @see busy.notifications.NotificationService#findNotificationsByUser(busy.user.User)
-	 */
-	@Override
-	public List<Notification> findNotificationsByUser(User user) {
+    /*
+     * (non-Javadoc)
+     * @see busy.notifications.NotificationService#saveNotifications(busy.
+     * notifications.Notification)
+     */
+    @Override
+    public void saveNotification(Notification notification) {
 
-		return notificationDao.findByUserId(user.getId());
-	}
+        notificationDao.save(notification);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.notifications.NotificationService#findNotificationsByUser(busy.user. User)
+     */
+    @Override
+    public List<Notification> findNotificationsByUser(User user) {
+
+        return notificationDao.findByUserId(user.getId());
+    }
 
 }

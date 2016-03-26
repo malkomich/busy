@@ -4,20 +4,29 @@ import java.util.List;
 
 import busy.user.User;
 
+/**
+ * Notification service logic interface. Connects the UI Application layer with the Persistence one,
+ * according to the business's processes and workflows.
+ * 
+ * @author malkomich
+ *
+ */
 public interface NotificationService {
 
-	/**
-	 * Save a Notification item to the database.
-	 * 
-	 * @param notification
-	 */
-	void saveNotification(Notification notification);
-	
-	/**
-	 * Obtains all the notifications related to the given User.
-	 * 
-	 * @param user
-	 * @return
-	 */
-	List<Notification> findNotificationsByUser(User user);
+    /**
+     * Saves or updates a notification.
+     * 
+     * @param notification
+     *            The notification to be saved
+     */
+    void saveNotification(Notification notification);
+
+    /**
+     * Gets all the notifications related to the given user.
+     * 
+     * @param user
+     *            the user attached to the resultant notifications
+     * @return The list of resultant notifications
+     */
+    List<Notification> findNotificationsByUser(User user);
 }

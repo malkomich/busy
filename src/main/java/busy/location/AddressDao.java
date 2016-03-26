@@ -2,21 +2,26 @@ package busy.location;
 
 import java.util.List;
 
+/**
+ * Address persistence interface.
+ * 
+ * @author malkomich
+ */
 interface AddressDao {
 
-	/**
-	 * Finds the collection of all registries of Address in the database. It
-	 * will return an empty List when no Address exist.
-	 * 
-	 * @return List of existing Addresss
-	 */
-	List<Address> findAll();
+    /**
+     * Gets the list of all current address objects.
+     * 
+     * @return The list of current addresses
+     */
+    List<Address> findAll();
 
-	/**
-	 * Create or update a Address registry in the database.
-	 * 
-	 * @param address
-	 */
-	void save(Address address);
+    /**
+     * Persists a new address object or updates an existing one.
+     * 
+     * @param address
+     *            The address object to be persisted
+     */
+    void save(Address address);
 
 }

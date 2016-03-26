@@ -1,5 +1,5 @@
 /**
- * 
+ * Company environment package (companies, branches and categories).
  */
 /**
  * @author malkomich

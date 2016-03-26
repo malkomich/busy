@@ -14,81 +14,82 @@ import busy.BusyPage;
  */
 public class LoginPage extends BusyPage {
 
-	private static final String PATH = "/login";
-	private static final String DESCRIPTION = "Login Page";
+    private static final String PATH = "/login";
+    private static final String DESCRIPTION = "Login Page";
 
-	/*
-	 * CSS Selectors
-	 */
-	private static final String EMAIL_SELECTOR = "#email";
-	private static final String PASSWORD_SELECTOR = "#password";
-	
-	private static final String SUBMIT_SELECTOR = "#submit";
-	private static final String ERROR_SELECTOR = "label.error";
-	
-	private static final String SIGNUP_SELECTOR = "#signupButton";
-	private static final String SUCCESS_MESSAGE_SELECTOR = "#signupConfirmation";
-	private static final String VALIDATION_MESSAGE_SELECTOR = "#validationMessage";
+    /*
+     * CSS Selectors
+     */
+    private static final String EMAIL_SELECTOR = "#email";
+    private static final String PASSWORD_SELECTOR = "#password";
 
-	@Override
-	public String relativePath() {
+    private static final String SUBMIT_SELECTOR = "#submit";
+    private static final String ERROR_SELECTOR = "label.error";
 
-		return PATH;
-	}
+    private static final String SIGNUP_SELECTOR = "#signupButton";
+    private static final String SUCCESS_MESSAGE_SELECTOR = "#signupConfirmation";
+    private static final String VALIDATION_MESSAGE_SELECTOR = "#validationMessage";
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.fluentlenium.core.FluentPage#isAt()
-	 */
-	@Override
-	public void isAt() {
+    /* (non-Javadoc)
+     * @see busy.BusyPage#relativePath()
+     */
+    @Override
+    public String relativePath() {
 
-		String description = getDriver().findElement(By.xpath("//meta[@name='description']"))
-				.getAttribute("content");
-		assertThat(description).contains(DESCRIPTION);
-	}
+        return PATH;
+    }
 
-	public LoginPage setEmail(String email) {
+    /*
+     * (non-Javadoc)
+     * @see org.fluentlenium.core.FluentPage#isAt()
+     */
+    @Override
+    public void isAt() {
 
-		fill(EMAIL_SELECTOR).with(email);
-		return this;
-	}
+        String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
+        assertThat(description).contains(DESCRIPTION);
+    }
 
-	public LoginPage setPassword(String password) {
+    public LoginPage setEmail(String email) {
 
-		fill(PASSWORD_SELECTOR).with(password);
-		return this;
-	}
+        fill(EMAIL_SELECTOR).with(email);
+        return this;
+    }
 
-	public LoginPage submit() {
+    public LoginPage setPassword(String password) {
 
-		submit(SUBMIT_SELECTOR);
-		return this;
-	}
+        fill(PASSWORD_SELECTOR).with(password);
+        return this;
+    }
 
-	public boolean errorIsShown() {
+    public LoginPage submit() {
 
-		return !find(ERROR_SELECTOR).isEmpty();
-	}
-	
-	public LoginPage clickSignUp() {
-		submit(SIGNUP_SELECTOR);
-		return this;
-	}
-	
-	public boolean signupSuccessMessageIsShown() {
+        submit(SUBMIT_SELECTOR);
+        return this;
+    }
 
-		waitForJSandJQueryToLoad();
-		
-		return findFirst(SUCCESS_MESSAGE_SELECTOR).isDisplayed();
-	}
+    public boolean errorIsShown() {
 
-	public boolean validationMessageIsShown() {
-		
-		waitForJSandJQueryToLoad();
-		
-		return findFirst(VALIDATION_MESSAGE_SELECTOR).isDisplayed();
-	}
+        return !find(ERROR_SELECTOR).isEmpty();
+    }
+
+    public LoginPage clickSignUp() {
+        submit(SIGNUP_SELECTOR);
+        return this;
+    }
+
+    public boolean signupSuccessMessageIsShown() {
+
+        waitForJSandJQueryToLoad();
+
+        return findFirst(SUCCESS_MESSAGE_SELECTOR).isDisplayed();
+    }
+
+    public boolean validationMessageIsShown() {
+
+        waitForJSandJQueryToLoad();
+
+        return findFirst(VALIDATION_MESSAGE_SELECTOR).isDisplayed();
+    }
 
 }

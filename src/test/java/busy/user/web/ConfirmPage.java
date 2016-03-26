@@ -8,33 +8,35 @@ import busy.BusyPage;
 
 /**
  * Page for the Email Confirmation
+ * 
  * @author malkomich
  *
  */
 public class ConfirmPage extends BusyPage {
 
-	private static final String PATH = "/verificate_email";
-	private static final String DESCRIPTION = "Confirm Page";
-	
-	private static final String CONFIRMATION_ID = "IDPRUEBA";
+    private static final String PATH = "/verificate_email";
+    private static final String DESCRIPTION = "Confirm Page";
 
-	@Override
-	public String relativePath() {
+    private static final String CONFIRMATION_ID = "IDPRUEBA";
 
-		return PATH + "?token=" + CONFIRMATION_ID;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.fluentlenium.core.FluentPage#isAt()
-	 */
-	@Override
-	public void isAt() {
+    /* (non-Javadoc)
+     * @see busy.BusyPage#relativePath()
+     */
+    @Override
+    public String relativePath() {
 
-		String description = getDriver().findElement(By.xpath("//meta[@name='description']"))
-				.getAttribute("content");
-		assertThat(description).contains(DESCRIPTION);
-	}
-	
+        return PATH + "?token=" + CONFIRMATION_ID;
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see org.fluentlenium.core.FluentPage#isAt()
+     */
+    @Override
+    public void isAt() {
+
+        String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
+        assertThat(description).contains(DESCRIPTION);
+    }
+
 }

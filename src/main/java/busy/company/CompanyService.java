@@ -2,86 +2,104 @@ package busy.company;
 
 import java.util.List;
 
+/**
+ * Company service logic interface. Connects the UI Application layer with the Persistence one,
+ * according to the business's processes and workflows.
+ * 
+ * @author malkomich
+ *
+ */
 public interface CompanyService {
 
-	/**
-	 * Find a Category by his ID
-	 * 
-	 * @param categoryId
-	 * @return
-	 */
-	Category findCategoryById(int categoryId);
+    /**
+     * Gets a category by his ID.
+     * 
+     * @param categoryId
+     *            unique ID of the category
+     * @return The resultant category
+     */
+    Category findCategoryById(int categoryId);
 
-	/**
-	 * Saves the Company into the database.
-	 * 
-	 * @param company
-	 */
-	void saveCompany(Company company);
+    /**
+     * Saves or updates a company.
+     * 
+     * @param company
+     *            the company to be saved
+     */
+    void saveCompany(Company company);
 
-	/**
-	 * Find all Companies stored into the database.
-	 */
-	List<Company> findAllCompanies();
+    /**
+     * Gets all the companies currently available.
+     * 
+     * @return The list of current companies
+     */
+    List<Company> findAllCompanies();
 
-	/**
-	 * Find a Company by his id
-	 * 
-	 * @param id
-	 * @return
-	 */
-	Company findCompanyById(int id);
+    /**
+     * Gets a company by his ID
+     * 
+     * @param id
+     *            unique ID of the company
+     * @return The resultant company
+     */
+    Company findCompanyById(int id);
 
-	/**
-	 * Find a Company by his Business Name
-	 * 
-	 * @param businessName
-	 * @return
-	 */
-	Company findCompanyByBusinessName(String businessName);
+    /**
+     * Gets a company by his business name
+     * 
+     * @param businessName
+     *            the business name of the company
+     * @return The resultant company
+     */
+    Company findCompanyByBusinessName(String businessName);
 
-	/**
-	 * Find a Company by his Email Address
-	 * 
-	 * @param email
-	 * @return
-	 */
-	Company findCompanyByEmail(String email);
+    /**
+     * Gets a company by his email address
+     * 
+     * @param email
+     *            email address of the company
+     * @return The resultant company
+     */
+    Company findCompanyByEmail(String email);
 
-	/**
-	 * Find a Company by his CIF
-	 * 
-	 * @param cif
-	 * @return
-	 */
-	Company findCompanyByCif(String cif);
+    /**
+     * Gets a company by his CIF
+     * 
+     * @param cif
+     *            CIF of the company
+     * @return The resultant company
+     */
+    Company findCompanyByCif(String cif);
 
-	/**
-	 * Find all the Companies which name contains the given partial name
-	 * 
-	 * @return
-	 */
-	List<Company> findActiveCompaniesByPartialName(String partialName);
+    /**
+     * Gets all the companies which name contains the given partial name
+     * 
+     * @param partialName
+     *            the pattern to find company names which contains it
+     * @return The list of resultant companies
+     */
+    List<Company> findActiveCompaniesByPartialName(String partialName);
 
-	/**
-	 * Saves the Branch into the database.
-	 * 
-	 * @param branch
-	 */
-	void saveBranch(Branch branch);
+    /**
+     * Saves or updates a branch.
+     * 
+     * @param branch
+     *            the branch to be saved
+     */
+    void saveBranch(Branch branch);
 
-	/**
-	 * Retrieves the list of all the categories stored in the database.
-	 * 
-	 * @return
-	 */
-	List<Category> findCategories();
+    /**
+     * Gets the list of all the categories currently available.
+     * 
+     * @return The list of current categories
+     */
+    List<Category> findCategories();
 
-	/**
-	 * Retrieves the number of companies saved into the database.
-	 * 
-	 * @return
-	 */
-	int countAllCompanies();
+    /**
+     * Gets the number of companies currently available.
+     * 
+     * @return The number of occurrences
+     */
+    int countAllCompanies();
 
 }
