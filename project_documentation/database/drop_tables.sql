@@ -5,6 +5,20 @@
  * Database tables' dropping
  */
 
+DROP TABLE IF EXISTS booking;
+
+DROP TABLE IF EXISTS hour_schedule;
+DROP SEQUENCE IF EXISTS hour_schedule_seq;
+
+DROP TABLE IF EXISTS day_schedule;
+DROP SEQUENCE IF EXISTS day_schedule_seq;
+
+DROP TABLE IF EXISTS week_schedule;
+DROP SEQUENCE IF EXISTS week_schedule_seq;
+
+DROP TABLE IF EXISTS year_schedule;
+DROP SEQUENCE IF EXISTS year_schedule_seq;
+
 DROP TABLE IF EXISTS notification;
 DROP SEQUENCE IF EXISTS notification_seq;
 

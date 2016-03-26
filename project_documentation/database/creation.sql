@@ -5,6 +5,15 @@
  * Database tables' creation
  */
 
+DROP TABLE IF EXISTS booking;
+DROP TABLE IF EXISTS hour_schedule;
+DROP SEQUENCE IF EXISTS hour_schedule_seq;
+DROP TABLE IF EXISTS day_schedule;
+DROP SEQUENCE IF EXISTS day_schedule_seq;
+DROP TABLE IF EXISTS week_schedule;
+DROP SEQUENCE IF EXISTS week_schedule_seq;
+DROP TABLE IF EXISTS year_schedule;
+DROP SEQUENCE IF EXISTS year_schedule_seq;
 DROP TABLE IF EXISTS notification;
 DROP SEQUENCE IF EXISTS notification_seq;
 DROP TABLE IF EXISTS role;
@@ -134,4 +143,49 @@ CREATE TABLE notification (
 	message			text						NOT NULL,
 	read			boolean						NOT NULL DEFAULT false,
 	create_date		timestamp with time zone	NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE SEQUENCE year_schedule_seq;
+
+CREATE TABLE year_schedule (
+    id                  integer             DEFAULT nextval('year_schedule_seq') NOT NULL PRIMARY KEY,
+    branch_id           integer             NOT NULL REFERENCES branch(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    year                integer             NOT NULL
+);
+
+CREATE SEQUENCE week_schedule_seq;
+
+CREATE TABLE week_schedule (
+    id                  integer             DEFAULT nextval('week_schedule_seq') NOT NULL PRIMARY KEY,
+    year_schedule_id    integer             NOT NULL REFERENCES year_schedule(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    week_of_year        integer             NOT NULL,
+    is_default             boolean             NOT NULL DEFAULT false
+);
+
+CREATE SEQUENCE day_schedule_seq;
+
+CREATE TABLE day_schedule (
+    id                  integer             DEFAULT nextval('day_schedule_seq') NOT NULL PRIMARY KEY,
+    week_schedule_id    integer             NOT NULL REFERENCES week_schedule(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    day_of_week         integer             NOT NULL
+);
+
+CREATE SEQUENCE hour_schedule_seq;
+
+CREATE TABLE hour_schedule (
+    id                  integer             DEFAULT nextval('hour_schedule_seq') NOT NULL PRIMARY KEY,
+    day_schedule_id     integer             NOT NULL REFERENCES day_schedule(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    start_time          integer             NOT NULL,
+    end_time            integer             NOT NULL
+);
+
+CREATE TABLE booking(
+    person_id           integer             NOT NULL REFERENCES person(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    hour_schedule_id    integer             NOT NULL REFERENCES hour_schedule(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
 );
