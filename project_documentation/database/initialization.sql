@@ -5,6 +5,8 @@
  * Database initialization with the basic data to check the finished user stories
  */
 
+SET CLIENT_ENCODING TO 'UTF-8';
+
 INSERT INTO person(first_name, last_name, email, password, active, admin_role) VALUES('Usuario 1', 'Apellidos ', 'user1@domain.x', 'pass', true, false);
 INSERT INTO person(first_name, last_name, email, password, active, admin_role) VALUES('Usuario 2', 'Apellidos 2', 'user2@domain.x', 'pass', true, false);
 INSERT INTO person(first_name, last_name, email, password, active, admin_role) VALUES('Juan Carlos', 'González', 'malkomich@gmail.com', 'pass', true, false);
