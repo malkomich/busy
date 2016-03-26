@@ -199,7 +199,6 @@
                     <reportOutputDirectory>${project.basedir}</reportOutputDirectory>
                     <destDir>../../busydoc</destDir>
                 </configuration>
-
             </plugin>
         </plugins>
     </reporting>
