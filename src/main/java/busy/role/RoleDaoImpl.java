@@ -58,179 +58,197 @@ import busy.location.Country;
 import busy.user.User;
 import busy.util.SecureSetter;
 
+/**
+ * Role persistence implementation for Database storing.
+ * 
+ * @author malkomich
+ *
+ */
 @Repository
 public class RoleDaoImpl implements RoleDao {
 
-	private static final String SQL_SELECT_BY_USERID = ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + USERID + "=?";
+    private static final String SQL_SELECT_BY_USERID = ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + USERID + "=?";
 
-	private static final String SQL_SELECT_MANAGER_BY_COMPANY_ID = ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER
-			+ "=true AND " + ALIAS_COMPANY_ID + "=?";
+    private static final String SQL_SELECT_MANAGER_BY_COMPANY_ID =
+            ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_COMPANY_ID + "=?";
 
-	private static final String SQL_UPDATE = "UPDATE " + TABLE_ROLE + " SET " + USERID + "= ?," + BRANCHID + "= ?,"
-			+ IS_MANAGER + "= ?, " + ACTIVITY + "= ? " + "WHERE " + ID + "= ?";
+    private static final String SQL_UPDATE = "UPDATE " + TABLE_ROLE + " SET " + USERID + "= ?," + BRANCHID + "= ?,"
+            + IS_MANAGER + "= ?, " + ACTIVITY + "= ? " + "WHERE " + ID + "= ?";
 
-	private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
-	private SimpleJdbcInsert jdbcInsert;
+    private SimpleJdbcInsert jdbcInsert;
 
-	@Autowired
-	public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
+    @Autowired
+    public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
-		jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = new JdbcTemplate(dataSource);
 
-		jdbcInsert = new SimpleJdbcInsert(dataSource);
-		jdbcInsert.withTableName(TABLE_ROLE);
-		jdbcInsert.setGeneratedKeyName(ID);
-		jdbcInsert.setColumnNames(Arrays.asList(USERID, BRANCHID, IS_MANAGER, ACTIVITY));
-	}
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert.withTableName(TABLE_ROLE);
+        jdbcInsert.setGeneratedKeyName(ID);
+        jdbcInsert.setColumnNames(Arrays.asList(USERID, BRANCHID, IS_MANAGER, ACTIVITY));
+    }
 
-	@Override
-	public void save(Role role) {
+    /*
+     * (non-Javadoc)
+     * @see busy.role.RoleDao#save(busy.role.Role)
+     */
+    @Override
+    public void save(Role role) {
 
-		if (role.getId() > 0) {
+        if (role.getId() > 0) {
 
-			jdbcTemplate.update(SQL_UPDATE, role.getUserId(), role.getBranchId(), role.isManager(), role.getActivity(),
-					role.getId());
+            jdbcTemplate.update(SQL_UPDATE, role.getUserId(), role.getBranchId(), role.isManager(), role.getActivity(),
+                    role.getId());
 
-		} else {
+        } else {
 
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put(USERID, role.getUserId());
-			parameters.put(BRANCHID, role.getBranchId());
-			parameters.put(IS_MANAGER, (role.isManager() != null) ? role.isManager() : DEFAULT);
-			parameters.put(ACTIVITY, role.getActivity());
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put(USERID, role.getUserId());
+            parameters.put(BRANCHID, role.getBranchId());
+            parameters.put(IS_MANAGER, (role.isManager() != null) ? role.isManager() : DEFAULT);
+            parameters.put(ACTIVITY, role.getActivity());
 
-			Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-			if (key != null) {
-				SecureSetter.setId(role, key.intValue());
-			}
-		}
-	}
+            Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+            if (key != null) {
+                SecureSetter.setId(role, key.intValue());
+            }
+        }
+    }
 
-	@Override
-	public List<Role> findByUser(User user) {
+    /*
+     * (non-Javadoc)
+     * @see busy.role.RoleDao#findByUser(busy.user.User)
+     */
+    @Override
+    public List<Role> findByUser(User user) {
 
-		try {
+        try {
 
-			RoleRowMapper rowMapper = new RoleRowMapper();
-			rowMapper.setUser(user);
-			return jdbcTemplate.query(SQL_SELECT_BY_USERID, rowMapper, user.getId());
+            RoleRowMapper rowMapper = new RoleRowMapper();
+            rowMapper.setUser(user);
+            return jdbcTemplate.query(SQL_SELECT_BY_USERID, rowMapper, user.getId());
 
-		} catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	@Override
-	public Role findManagerByCompany(Company company) {
+    /*
+     * (non-Javadoc)
+     * @see busy.role.RoleDao#findManagerByCompany(busy.company.Company)
+     */
+    @Override
+    public Role findManagerByCompany(Company company) {
 
-		try {
+        try {
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_MANAGER_BY_COMPANY_ID, new RoleRowMapper(), company.getId());
+            return jdbcTemplate.queryForObject(SQL_SELECT_MANAGER_BY_COMPANY_ID, new RoleRowMapper(), company.getId());
 
-		} catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
 
-			return null;
-		}
-	}
+            return null;
+        }
+    }
 
-	private class RoleRowMapper implements RowMapper<Role> {
+    private class RoleRowMapper implements RowMapper<Role> {
 
-		private User user;
+        private User user;
 
-		@Override
-		public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
+        @Override
+        public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-			Role role = new Role();
-			SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
+            Role role = new Role();
+            SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
 
-			// Set User
-			if (user == null) {
-				user = new User();
-				SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
-				user.setFirstName(rs.getString(FIRSTNAME));
-				user.setLastName(rs.getString(LASTNAME));
-				user.setEmail(rs.getString(EMAIL));
-				user.setPassword(rs.getString(PASSWORD));
-				user.setNif(rs.getString(NIF));
-				user.setPhone(rs.getString(PHONE));
-				user.setActive(rs.getBoolean(ACTIVE));
-				SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
+            // Set User
+            if (user == null) {
+                user = new User();
+                SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
+                user.setFirstName(rs.getString(FIRSTNAME));
+                user.setLastName(rs.getString(LASTNAME));
+                user.setEmail(rs.getString(EMAIL));
+                user.setPassword(rs.getString(PASSWORD));
+                user.setNif(rs.getString(NIF));
+                user.setPhone(rs.getString(PHONE));
+                user.setActive(rs.getBoolean(ACTIVE));
+                SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
 
-				Integer addressId = 0;
-				if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
+                Integer addressId = 0;
+                if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
 
-					Address address = new Address();
+                    Address address = new Address();
 
-					SecureSetter.setId(address, addressId);
-					address.setAddress1(rs.getString(ADDR1));
-					address.setAddress2(rs.getString(ADDR2));
-					address.setZipCode(rs.getString(ZIPCODE));
+                    SecureSetter.setId(address, addressId);
+                    address.setAddress1(rs.getString(ADDR1));
+                    address.setAddress2(rs.getString(ADDR2));
+                    address.setZipCode(rs.getString(ZIPCODE));
 
-					City city = new City();
-					SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
-					city.setName(rs.getString(ALIAS_CITY_NAME));
+                    City city = new City();
+                    SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+                    city.setName(rs.getString(ALIAS_CITY_NAME));
 
-					Country country = new Country();
-					SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
-					country.setName(rs.getString(ALIAS_COUNTRY_NAME));
-					country.setCode(rs.getString(CODE));
+                    Country country = new Country();
+                    SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+                    country.setName(rs.getString(ALIAS_COUNTRY_NAME));
+                    country.setCode(rs.getString(CODE));
 
-					city.setCountry(country);
+                    city.setCountry(country);
 
-					address.setCity(city);
+                    address.setCity(city);
 
-					user.setAddress(address);
-				}
-			}
-			
-			role.setUser(user);
+                    user.setAddress(address);
+                }
+            }
 
-			Branch branch = new Branch();
+            role.setUser(user);
 
-			// Set Address
-			Address address = new Address();
-			int addressId = rs.getInt(ALIAS_ADDR_ID);
-			SecureSetter.setId(address, addressId);
-			address.setAddress1(rs.getString(ADDR1));
-			address.setAddress2(rs.getString(ADDR2));
-			address.setZipCode(rs.getString(ZIPCODE));
+            Branch branch = new Branch();
 
-			City city = new City();
-			SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
-			city.setName(rs.getString(ALIAS_CITY_NAME));
+            // Set Address
+            Address address = new Address();
+            int addressId = rs.getInt(ALIAS_ADDR_ID);
+            SecureSetter.setId(address, addressId);
+            address.setAddress1(rs.getString(ADDR1));
+            address.setAddress2(rs.getString(ADDR2));
+            address.setZipCode(rs.getString(ZIPCODE));
 
-			Country country = new Country();
-			SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
-			country.setName(rs.getString(ALIAS_COUNTRY_NAME));
-			country.setCode(rs.getString(CODE));
+            City city = new City();
+            SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+            city.setName(rs.getString(ALIAS_CITY_NAME));
 
-			city.setCountry(country);
+            Country country = new Country();
+            SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+            country.setName(rs.getString(ALIAS_COUNTRY_NAME));
+            country.setCode(rs.getString(CODE));
 
-			address.setCity(city);
-			branch.setAddress(address);
+            city.setCountry(country);
 
-			// Set Company
-			Company company = new Company();
-			company.setTradeName(rs.getString(TRADE_NAME));
-			company.setBusinessName(rs.getString(BUSINESS_NAME));
-			company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
-			branch.setCompany(company);
+            address.setCity(city);
+            branch.setAddress(address);
 
-			branch.setPhone(rs.getString(PHONE));
+            // Set Company
+            Company company = new Company();
+            company.setTradeName(rs.getString(TRADE_NAME));
+            company.setBusinessName(rs.getString(BUSINESS_NAME));
+            company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
+            branch.setCompany(company);
 
-			role.setBranch(branch);
+            branch.setPhone(rs.getString(PHONE));
 
-			SecureSetter.setAttribute(role, "setManager", Boolean.class, rs.getBoolean(IS_MANAGER));
-			role.setActivity(rs.getString(ACTIVITY));
+            role.setBranch(branch);
 
-			return role;
-		}
+            SecureSetter.setAttribute(role, "setManager", Boolean.class, rs.getBoolean(IS_MANAGER));
+            role.setActivity(rs.getString(ACTIVITY));
 
-		public void setUser(User user) {
-			this.user = user;
-		}
-	}
+            return role;
+        }
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+    }
 
 }

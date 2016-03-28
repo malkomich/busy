@@ -17,52 +17,58 @@ import org.springframework.stereotype.Repository;
 
 import busy.util.SecureSetter;
 
+/**
+ * Branch persistence implementation for Database storing.
+ * 
+ * @author malkomich
+ *
+ */
 @Repository
 public class BranchDaoImpl implements BranchDao {
 
-	private static final String SQL_UPDATE = "UPDATE " + TABLE_BRANCH + " SET " + COMPANYID + "= ?," + ADDRID + "= ?,"
-			+ HEADQUARTER + "= ?, " + PHONE + "= ? " + "WHERE " + ID + "= ?";
-	
-	private JdbcTemplate jdbcTemplate;
+    private static final String SQL_UPDATE = "UPDATE " + TABLE_BRANCH + " SET " + COMPANYID + "= ?," + ADDRID + "= ?,"
+            + HEADQUARTERS + "= ?, " + PHONE + "= ? " + "WHERE " + ID + "= ?";
 
-	private SimpleJdbcInsert jdbcInsert;
+    private JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
+    private SimpleJdbcInsert jdbcInsert;
 
-		jdbcTemplate = new JdbcTemplate(dataSource);
+    @Autowired
+    public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
-		jdbcInsert = new SimpleJdbcInsert(dataSource);
-		jdbcInsert.withTableName(TABLE_BRANCH);
-		jdbcInsert.setGeneratedKeyName(ID);
-		jdbcInsert
-				.setColumnNames(Arrays.asList(COMPANYID, ADDRID, HEADQUARTER, PHONE));
-	}
-	
-	/* (non-Javadoc)
-	 * @see busy.company.BranchDao#save(busy.company.Branch)
-	 */
-	@Override
-	public void save(Branch branch) {
+        jdbcTemplate = new JdbcTemplate(dataSource);
 
-		if (branch.getId() > 0) {
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert.withTableName(TABLE_BRANCH);
+        jdbcInsert.setGeneratedKeyName(ID);
+        jdbcInsert.setColumnNames(Arrays.asList(COMPANYID, ADDRID, HEADQUARTERS, PHONE));
+    }
 
-			jdbcTemplate.update(SQL_UPDATE, branch.getCompanyId(), branch.getAddressId(), branch.isHeadquarter(),
-					branch.getPhone(), branch.getId());
+    /*
+     * (non-Javadoc)
+     * @see busy.company.BranchDao#save(busy.company.Branch)
+     */
+    @Override
+    public void save(Branch branch) {
 
-		} else {
+        if (branch.getId() > 0) {
 
-			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put(COMPANYID, branch.getCompanyId());
-			parameters.put(ADDRID, branch.getAddressId());
-			parameters.put(HEADQUARTER, (branch.isHeadquarter() != null) ? branch.isHeadquarter() : DEFAULT);
-			parameters.put(PHONE, branch.getPhone());
+            jdbcTemplate.update(SQL_UPDATE, branch.getCompanyId(), branch.getAddressId(), branch.isHeadquarters(),
+                    branch.getPhone(), branch.getId());
 
-			Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-			if (key != null) {
-				SecureSetter.setId(branch, key.intValue());
-			}
-		}
-	}
+        } else {
+
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put(COMPANYID, branch.getCompanyId());
+            parameters.put(ADDRID, branch.getAddressId());
+            parameters.put(HEADQUARTERS, (branch.isHeadquarters() != null) ? branch.isHeadquarters() : DEFAULT);
+            parameters.put(PHONE, branch.getPhone());
+
+            Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+            if (key != null) {
+                SecureSetter.setId(branch, key.intValue());
+            }
+        }
+    }
 
 }

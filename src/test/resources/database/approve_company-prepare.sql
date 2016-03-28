@@ -3,7 +3,7 @@
  *
  * Database prepare for the feature of verifying a new company
  */
-	
+
 INSERT INTO person(first_name, last_name, email, password, active, admin_role) VALUES('Nombre', 'Apellidos', 'user@domain.com', 'pass', true, false);
 INSERT INTO person(first_name, last_name, email, password, active, admin_role) VALUES('Admin', 'Admin', 'admin@busy.com', 'pass', true, true);
 

@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({BranchDBTest.class, CategoryDBTest.class, CompanyDBTest.class})
+@SuiteClasses({ BranchDBTest.class, CategoryDBTest.class, CompanyDBTest.class })
 public class CompanyTests {
 
 }

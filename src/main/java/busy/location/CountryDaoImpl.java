@@ -18,70 +18,80 @@ import busy.util.SecureSetter;
 
 import static busy.util.SQLUtil.*;
 
+/**
+ * Country persistence implementation for Database storing.
+ * 
+ * @author malkomich
+ *
+ */
 @Repository
 public class CountryDaoImpl implements CountryDao {
 
-	private static final String SQL_SELECT_ALL = "SELECT " + ID + "," + NAME + "," + CODE + " FROM " + TABLE_COUNTRY;
+    private static final String SQL_SELECT_ALL = "SELECT " + ID + "," + NAME + "," + CODE + " FROM " + TABLE_COUNTRY;
 
-	private static final String SQL_INSERT = "INSERT INTO " + TABLE_COUNTRY + "(" + NAME + "," + CODE + ") VALUES (?, ?)";
+    private static final String SQL_INSERT =
+            "INSERT INTO " + TABLE_COUNTRY + "(" + NAME + "," + CODE + ") VALUES (?, ?)";
 
-	private static final String SQL_UPDATE = "UPDATE " + TABLE_COUNTRY + " SET " + NAME + "= ?," + CODE + "= ? WHERE " + ID + "= ?";
+    private static final String SQL_UPDATE =
+            "UPDATE " + TABLE_COUNTRY + " SET " + NAME + "= ?," + CODE + "= ? WHERE " + ID + "= ?";
 
-	private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
-	private SimpleJdbcInsert jdbcInsert;
+    private SimpleJdbcInsert jdbcInsert;
 
-	@Autowired
-	public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
+    @Autowired
+    public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
-		jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = new JdbcTemplate(dataSource);
 
-		jdbcInsert = new SimpleJdbcInsert(dataSource);
-		jdbcInsert.withTableName(TABLE_COUNTRY);
-		jdbcInsert.setGeneratedKeyName(ID);
-		jdbcInsert.setColumnNames(Arrays.asList(NAME, CODE));
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert.withTableName(TABLE_COUNTRY);
+        jdbcInsert.setGeneratedKeyName(ID);
+        jdbcInsert.setColumnNames(Arrays.asList(NAME, CODE));
 
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see busy.location.CountryDao#findAll()
-	 */
-	@Override
-	public List<Country> findAll() {
+    /*
+     * (non-Javadoc)
+     * @see busy.location.CountryDao#findAll()
+     */
+    @Override
+    public List<Country> findAll() {
 
-		return jdbcTemplate.query(SQL_SELECT_ALL, new CountryRowMapper());
+        return jdbcTemplate.query(SQL_SELECT_ALL, new CountryRowMapper());
 
-	}
+    }
 
-	/* (non-Javadoc)
-	 * @see busy.location.CountryDao#save(busy.location.Country)
-	 */
-	@Override
-	public void save(Country country) {
+    /*
+     * (non-Javadoc)
+     * @see busy.location.CountryDao#save(busy.location.Country)
+     */
+    @Override
+    public void save(Country country) {
 
-		if (country.getId() > 0) {
+        if (country.getId() > 0) {
 
-			jdbcTemplate.update(SQL_UPDATE, country.getName(), country.getCode(), country.getId());
-		} else {
+            jdbcTemplate.update(SQL_UPDATE, country.getName(), country.getCode(), country.getId());
+        } else {
 
-			jdbcTemplate.update(SQL_INSERT, country.getName(), country.getCode());
-		}
+            jdbcTemplate.update(SQL_INSERT, country.getName(), country.getCode());
+        }
 
-	}
+    }
 
-	private class CountryRowMapper implements RowMapper<Country> {
+    private class CountryRowMapper implements RowMapper<Country> {
 
-		@Override
-		public Country mapRow(ResultSet rs, int rowNum) throws SQLException {
+        @Override
+        public Country mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-			Country country = new Country();
-			SecureSetter.setId(country, rs.getInt(ID));
-			country.setName(rs.getString(NAME));
-			country.setCode(rs.getString(CODE));
+            Country country = new Country();
+            SecureSetter.setId(country, rs.getInt(ID));
+            country.setName(rs.getString(NAME));
+            country.setCode(rs.getString(CODE));
 
-			return country;
-		}
+            return country;
+        }
 
-	}
+    }
 
 }

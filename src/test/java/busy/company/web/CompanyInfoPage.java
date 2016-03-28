@@ -6,22 +6,28 @@ import org.openqa.selenium.By;
 
 import busy.BusyPage;
 
+/**
+ * Company Info Page
+ * 
+ * @author malkomich
+ *
+ */
 public class CompanyInfoPage extends BusyPage {
 
-	private static final String PARTIAL_PATH = "/company/";
-	private static final String DESCRIPTION = "Company Page";
-	
-	@Override
-	public String relativePath() {
-		
-		return PARTIAL_PATH;
-	}
-	
-	@Override
-	public void isAt() {
+    private static final String PARTIAL_PATH = "/company/";
+    private static final String DESCRIPTION = "Company Page";
 
-		String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
-		assertThat(description).contains(DESCRIPTION);
-	}
+    @Override
+    public String relativePath() {
+
+        return PARTIAL_PATH;
+    }
+
+    @Override
+    public void isAt() {
+
+        String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
+        assertThat(description).contains(DESCRIPTION);
+    }
 
 }

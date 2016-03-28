@@ -7,65 +7,80 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
- * Extension of FluentPage which enable relative path delegating to Spring the
- * assignment of the root path of the URL based on the deployment Profile.
+ * Extension of FluentPage which enable relative path delegating to Spring the assignment of the
+ * root path of the URL based on the deployment Profile.
  * 
  * @author malkomich
  *
  */
 public abstract class BusyPage extends FluentPage {
 
-	private String url;
+    private String url;
 
-	public void setUrl(String rootUrl) {
-		String path = relativePath();
-		if (path == null)
-			path = "/";
-		url = rootUrl + relativePath();
-	}
+    public void setUrl(String rootUrl) {
+        String path = relativePath();
+        if (path == null)
+            path = "/";
+        url = rootUrl + relativePath();
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.fluentlenium.core.FluentPage#getUrl()
-	 */
-	@Override
-	public String getUrl() {
-		return url;
-	}
-	
-	@Override
-	public abstract void isAt();
+    /*
+     * (non-Javadoc)
+     * @see org.fluentlenium.core.FluentPage#getUrl()
+     */
+    @Override
+    public String getUrl() {
+        return url;
+    }
 
-	public abstract String relativePath();
+    /*
+     * (non-Javadoc)
+     * @see org.fluentlenium.core.FluentPage#isAt()
+     */
+    @Override
+    public abstract void isAt();
 
-	protected boolean waitForJSandJQueryToLoad() {
+    /**
+     * Gets the relative path which appended to the root URL retrieves the Page.
+     * 
+     * @return The URL path for the page
+     */
+    public abstract String relativePath();
 
-		WebDriverWait wait = new WebDriverWait(getDriver(), 30);
+    /**
+     * Wait until all jQuery and plain old JS scripts has finished.
+     * 
+     * @return
+     */
+    protected boolean waitForJSandJQueryToLoad() {
 
-		// wait for jQuery to load
-		ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
-			@Override
-			public Boolean apply(WebDriver driver) {
-				try {
-					return ((Long) ((JavascriptExecutor) getDriver()).executeScript("return jQuery.active") == 0);
-				} catch (Exception e) {
-					// no jQuery present
-					return true;
-				}
-			}
-		};
+        WebDriverWait wait = new WebDriverWait(getDriver(), 30);
 
-		// wait for Javascript to load
-		ExpectedCondition<Boolean> jsLoad = new ExpectedCondition<Boolean>() {
-			@Override
-			public Boolean apply(WebDriver driver) {
-				return ((JavascriptExecutor) getDriver()).executeScript("return document.readyState").toString()
-						.equals("complete");
-			}
-		};
+        // wait for jQuery to load
+        ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
 
-		return wait.until(jQueryLoad) && wait.until(jsLoad);
-	}
+            @Override
+            public Boolean apply(WebDriver driver) {
+                try {
+                    return ((Long) ((JavascriptExecutor) getDriver()).executeScript("return jQuery.active") == 0);
+                } catch (Exception e) {
+                    // no jQuery present
+                    return true;
+                }
+            }
+        };
+
+        // wait for Javascript to load
+        ExpectedCondition<Boolean> jsLoad = new ExpectedCondition<Boolean>() {
+
+            @Override
+            public Boolean apply(WebDriver driver) {
+                return ((JavascriptExecutor) getDriver()).executeScript("return document.readyState").toString()
+                        .equals("complete");
+            }
+        };
+
+        return wait.until(jQueryLoad) && wait.until(jsLoad);
+    }
 
 }

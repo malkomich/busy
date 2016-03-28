@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({NotificationDBTest.class})
+@SuiteClasses({ NotificationDBTest.class })
 public class NotificationTests {
 
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ * User web interaction logic.
  */
 /**
  * @author malkomich

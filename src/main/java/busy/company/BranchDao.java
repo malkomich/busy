@@ -1,12 +1,18 @@
 package busy.company;
 
+/**
+ * Branch persistence interface.
+ * 
+ * @author malkomich
+ */
 public interface BranchDao {
 
-	/**
-	 * Create or update a Branch registry in the database.
-	 * 
-	 * @param branch
-	 */
-	void save(Branch branch);
+    /**
+     * Persists a new branch object or updates an existing one.
+     * 
+     * @param branch
+     *            the branch object to be persisted
+     */
+    void save(Branch branch);
 
 }

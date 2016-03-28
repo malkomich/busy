@@ -10,8 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 
 /**
- * Basic class configurated to let subclasses easily implement database unit
- * testing.
+ * Basic class configurated to let subclasses easily implement database unit testing.
  * 
  * @author malkomich
  *
@@ -19,10 +18,10 @@ import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @Transactional
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
-		TransactionDbUnitTestExecutionListener.class})
+@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+    TransactionDbUnitTestExecutionListener.class })
 public class AbstractDBTest {
-	
-	protected static final Integer INVALID_ID = 999; 
+
+    protected static final Integer INVALID_ID = 999;
 
 }

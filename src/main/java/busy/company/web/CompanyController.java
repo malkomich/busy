@@ -13,7 +13,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,168 +44,219 @@ import busy.util.SecureSetter;
 @Controller
 public class CompanyController {
 
-	/**
-	 * Spring Model Attributes.
-	 */
-	static final String USER_SESSION = "user";
+    /**
+     * Spring Model Attributes.
+     */
+    static final String USER_SESSION = "user";
 
-	static final String REGISTER_COMPANY_REQUEST = "companyForm";
-	static final String COUNTRY_ITEMS_REQUEST = "countryItems";
-	static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
-	static final String MESSAGE_REQUEST = "messageFromController";
-	static final String COMPANY_REQUEST = "company";
+    static final String REGISTER_COMPANY_REQUEST = "companyForm";
+    static final String COUNTRY_ITEMS_REQUEST = "countryItems";
+    static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
+    static final String MESSAGE_REQUEST = "messageFromController";
+    static final String COMPANY_REQUEST = "company";
 
-	/**
-	 * URL Paths.
-	 */
-	private static final String PATH_ROOT = "/";
-	private static final String PATH_REGISTER_COMPANY = "/new_company";
-	private static final String PATH_COMPANIES_UPDATE = "/get_company_list";
-	private static final String PATH_COMPANY_CHANGE_STATE = "/change_company_state";
-	private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
-	private static final String PATH_COMPANY_INFO = "/company/{id}";
+    /**
+     * URL Paths.
+     */
+    private static final String PATH_ROOT = "/";
+    private static final String PATH_REGISTER_COMPANY = "/new_company";
+    private static final String PATH_COMPANIES_UPDATE = "/get_company_list";
+    private static final String PATH_COMPANY_CHANGE_STATE = "/change_company_state";
+    private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
+    private static final String PATH_COMPANY_INFO = "/company/{id}";
 
-	/**
-	 * JSP's
-	 */
-	private static final String REGISTER_COMPANY_PAGE = "new-company";
-	private static final String COMPANY_INFO_PAGE = "company-info";
+    /**
+     * JSP's
+     */
+    private static final String REGISTER_COMPANY_PAGE = "new-company";
+    private static final String COMPANY_INFO_PAGE = "company-info";
 
-	@Autowired
-	private CompanyService companyService;
+    @Autowired
+    private CompanyService companyService;
 
-	@Autowired
-	private LocationService locationService;
+    @Autowired
+    private LocationService locationService;
 
-	@Autowired
-	private RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
-	@Autowired
-	private MessageSource messageSource;
+    @Autowired
+    private MessageSource messageSource;
 
-	@Autowired
-	private ApplicationEventPublisher eventPublisher;
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
-	/**
-	 * Shows the form for create a new Company.
-	 * 
-	 * @param model
-	 * @return
-	 */
-	@RequestMapping(value = PATH_REGISTER_COMPANY, method = RequestMethod.GET)
-	public String showRegisterCompany(Model model) {
+    /**
+     * Shows the form for create a new Company.
+     * 
+     * @param model
+     *            Spring model instance
+     * @return The page to register companies
+     */
+    @RequestMapping(value = PATH_REGISTER_COMPANY, method = RequestMethod.GET)
+    public String showRegisterCompany(Model model) {
 
-		if (!model.containsAttribute(REGISTER_COMPANY_REQUEST))
-			model.addAttribute(REGISTER_COMPANY_REQUEST, new CompanyForm());
+        if (!model.containsAttribute(REGISTER_COMPANY_REQUEST))
+            model.addAttribute(REGISTER_COMPANY_REQUEST, new CompanyForm());
 
-		// Add input selection items to the model.
-		Map<String, String> countryItems = new LinkedHashMap<String, String>();
-		for (Country country : locationService.findCountries()) {
-			countryItems.put(country.getCode(), country.getName());
-		}
-		model.addAttribute(COUNTRY_ITEMS_REQUEST, countryItems);
+        // Add input selection items to the model.
+        Map<String, String> countryItems = new LinkedHashMap<String, String>();
+        for (Country country : locationService.findCountries()) {
+            countryItems.put(country.getCode(), country.getName());
+        }
+        model.addAttribute(COUNTRY_ITEMS_REQUEST, countryItems);
 
-		// Add input selection items to the model.
-		Map<Integer, String> categoryItems = new LinkedHashMap<Integer, String>();
-		for (Category category : companyService.findCategories()) {
-			categoryItems.put(category.getId(), category.getName());
-		}
-		model.addAttribute(CATEGORY_ITEMS_REQUEST, categoryItems);
+        // Add input selection items to the model.
+        Map<Integer, String> categoryItems = new LinkedHashMap<Integer, String>();
+        for (Category category : companyService.findCategories()) {
+            categoryItems.put(category.getId(), category.getName());
+        }
+        model.addAttribute(CATEGORY_ITEMS_REQUEST, categoryItems);
 
-		return REGISTER_COMPANY_PAGE;
-	}
-	
-	@RequestMapping(value = PATH_COMPANY_INFO, method = RequestMethod.GET)
-	public String showCompanyInfo(@PathVariable("id") String id, Model model) {
-		
-		Company company = companyService.findCompanyById(Integer.parseInt(id));
-		model.addAttribute(COMPANY_REQUEST, company);
-		
-		return COMPANY_INFO_PAGE;
-	}
+        return REGISTER_COMPANY_PAGE;
+    }
 
-	@RequestMapping(value = PATH_REGISTER_COMPANY, method = RequestMethod.POST)
-	public String registerCompany(@ModelAttribute(REGISTER_COMPANY_REQUEST) @Valid CompanyForm form,
-			BindingResult result, RedirectAttributes redirectAttributes, WebRequest request, Model model, Locale locale,
-			HttpSession session) {
+    /**
+     * Shows the info page of a company requested by the user.
+     * 
+     * @param id
+     *            unique ID of the company requested
+     * @param model
+     *            Spring model instance
+     * @return The company info page
+     */
+    @RequestMapping(value = PATH_COMPANY_INFO, method = RequestMethod.GET)
+    public String showCompanyInfo(@PathVariable("id") String id, Model model) {
 
-		RegisterCompanyValidator validator = new RegisterCompanyValidator(companyService);
+        Company company = companyService.findCompanyById(Integer.parseInt(id));
+        model.addAttribute(COMPANY_REQUEST, company);
 
-		validator.validate(form, result);
+        return COMPANY_INFO_PAGE;
+    }
 
-		if (result.hasErrors()) {
-			return showRegisterCompany(model);
-		}
+    /**
+     * New register company request, which will try to create a new company.
+     * 
+     * @param form
+     *            form HTTP input request
+     * @param result
+     *            result form result status
+     * @param redirectAttributes
+     *            model attributes storage to be propagated in a redirection
+     * @param request
+     *            Web request interface
+     * @param model
+     *            Spring model instance
+     * @param locale
+     *            current locale of the browser
+     * @param session
+     *            HTTP plain old session instance
+     * @return The redirect to root path
+     */
+    @RequestMapping(value = PATH_REGISTER_COMPANY, method = RequestMethod.POST)
+    public String registerCompany(@ModelAttribute(REGISTER_COMPANY_REQUEST) @Valid CompanyForm form,
+            BindingResult result, RedirectAttributes redirectAttributes, WebRequest request, Model model, Locale locale,
+            HttpSession session) {
 
-		// Save the new Company data.
-		Address address = new Address();
-		address.setZipCode(form.getZipCode());
-		address.setCity(locationService.findCityById(Integer.parseInt(form.getCityId())));
-		address.setAddress1(form.getAddress1());
-		address.setAddress2(form.getAddress2());
+        RegisterCompanyValidator validator = new RegisterCompanyValidator(companyService);
 
-		locationService.saveAddress(address);
+        validator.validate(form, result);
 
-		Company company = new Company();
-		company.setTradeName(form.getTradeName());
-		company.setBusinessName(form.getBusinessName());
-		company.setEmail(form.getEmail());
-		company.setCif(form.getCif());
+        if (result.hasErrors()) {
+            return showRegisterCompany(model);
+        }
 
-		if (form.getCategoryId() != null)
-			company.setCategory(companyService.findCategoryById(Integer.parseInt(form.getCategoryId())));
+        // Save the new Company data.
+        Address address = new Address();
+        address.setZipCode(form.getZipCode());
+        address.setCity(locationService.findCityById(Integer.parseInt(form.getCityId())));
+        address.setAddress1(form.getAddress1());
+        address.setAddress2(form.getAddress2());
 
-		companyService.saveCompany(company);
+        locationService.saveAddress(address);
 
-		Branch branch = new Branch();
-		branch.setCompany(company);
-		branch.setAddress(address);
-		branch.setPhone(form.getPhone());
-		SecureSetter.setAttribute(branch, "setHeadquarter", Boolean.class, true);
+        Company company = new Company();
+        company.setTradeName(form.getTradeName());
+        company.setBusinessName(form.getBusinessName());
+        company.setEmail(form.getEmail());
+        company.setCif(form.getCif());
 
-		companyService.saveBranch(branch);
+        if (form.getCategoryId() != null)
+            company.setCategory(companyService.findCategoryById(Integer.parseInt(form.getCategoryId())));
 
-		Role role = new Role();
-		role.setUser((User) session.getAttribute(USER_SESSION));
-		role.setBranch(branch);
-		SecureSetter.setAttribute(role, "setManager", Boolean.class, true);
-		role.setActivity("Jefe");
+        companyService.saveCompany(company);
 
-		roleService.saveRole(role);
+        Branch branch = new Branch();
+        branch.setCompany(company);
+        branch.setAddress(address);
+        branch.setPhone(form.getPhone());
+        SecureSetter.setAttribute(branch, "setHeadquarter", Boolean.class, true);
 
-		eventPublisher.publishEvent(new OnRegisterCompany(role, request.getLocale(), request.getContextPath()));
+        companyService.saveBranch(branch);
 
-		redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST, result);
-		String message = messageSource.getMessage("notification.message.company_pending", null, locale);
-		redirectAttributes.addFlashAttribute(MESSAGE_REQUEST, message);
+        Role role = new Role();
+        role.setUser((User) session.getAttribute(USER_SESSION));
+        role.setBranch(branch);
+        SecureSetter.setAttribute(role, "setManager", Boolean.class, true);
+        role.setActivity("Jefe");
 
-		return "redirect:" + PATH_ROOT;
-	}
+        roleService.saveRole(role);
 
-	@RequestMapping(value = PATH_COMPANIES_UPDATE, method = RequestMethod.GET)
-	public @ResponseBody List<Company> updateCompanies(ModelMap modelMap) {
+        eventPublisher.publishEvent(new OnRegisterCompany(role, request.getLocale(), request.getContextPath()));
 
-		return companyService.findAllCompanies();
-	}
+        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST, result);
+        String message = messageSource.getMessage("notification.message.company_pending", null, locale);
+        redirectAttributes.addFlashAttribute(MESSAGE_REQUEST, message);
 
-	@RequestMapping(value = PATH_COMPANY_CHANGE_STATE, method = RequestMethod.POST)
-	public void updateState(@RequestParam(value = "id", required = true) String companyId,
-			@RequestParam(value = "active", required = true) boolean active, ModelMap modelMap, WebRequest request) {
+        return "redirect:" + PATH_ROOT;
+    }
 
-		Company company = companyService.findCompanyById(Integer.parseInt(companyId));
-		SecureSetter.setAttribute(company, "setActive", Boolean.class, active);
-		companyService.saveCompany(company);
+    /**
+     * Request to find all the current companies available.
+     * 
+     * @return The list of resultant companies
+     */
+    @RequestMapping(value = PATH_COMPANIES_UPDATE, method = RequestMethod.GET)
+    public @ResponseBody List<Company> updateCompanies() {
 
-		Role manager = roleService.findCompanyManager(company);
-		eventPublisher.publishEvent(
-				new OnUpdateCompanyState(company, manager.getUser(), request.getLocale(), request.getContextPath()));
-	}
+        return companyService.findAllCompanies();
+    }
 
-	@RequestMapping(value = PATH_COMPANY_SEARCHES, method = RequestMethod.GET)
-	public @ResponseBody List<Company> getCompanySearches(
-			@RequestParam(value = "partialName", required = true) String partialName, ModelMap modelMap) {
+    /**
+     * Request to change the active status of a company.
+     * 
+     * @param companyId
+     *            unique ID of the company
+     * @param active
+     *            active status
+     * @param request
+     *            Web request interface
+     */
+    @RequestMapping(value = PATH_COMPANY_CHANGE_STATE, method = RequestMethod.POST)
+    public void updateState(@RequestParam(value = "id", required = true) String companyId,
+            @RequestParam(value = "active", required = true) boolean active, WebRequest request) {
 
-		return companyService.findActiveCompaniesByPartialName(partialName);
-	}
-	
+        Company company = companyService.findCompanyById(Integer.parseInt(companyId));
+        SecureSetter.setAttribute(company, "setActive", Boolean.class, active);
+        companyService.saveCompany(company);
+
+        Role manager = roleService.findCompanyManager(company);
+        eventPublisher.publishEvent(
+                new OnUpdateCompanyStatus(company, manager.getUser(), request.getLocale(), request.getContextPath()));
+    }
+
+    /**
+     * Request to find the list of companies which contains a given portion of his name.
+     * 
+     * @param partialName
+     *            pattern of company name to find
+     * @return The list of resultant companies
+     */
+    @RequestMapping(value = PATH_COMPANY_SEARCHES, method = RequestMethod.GET)
+    public @ResponseBody List<Company>
+            getCompanySearches(@RequestParam(value = "partialName", required = true) String partialName) {
+
+        return companyService.findActiveCompaniesByPartialName(partialName);
+    }
+
 }

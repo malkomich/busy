@@ -1,5 +1,5 @@
 /**
- * 
+ * User environment package (users and verifications).
  */
 /**
  * @author malkomich

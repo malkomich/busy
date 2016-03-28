@@ -24,59 +24,59 @@ import cucumber.api.java.en.When;
  */
 public class LogInSteps extends AbstractFunctionalTest {
 
-	final Logger log = LoggerFactory.getLogger(LogInSteps.class);
+    final Logger log = LoggerFactory.getLogger(LogInSteps.class);
 
-	@Page
-	private MainPage mainPage;
+    @Page
+    private MainPage mainPage;
 
-	@Page
-	private LoginPage loginPage;
+    @Page
+    private LoginPage loginPage;
 
-	@Before
-	public void runOnce() {
+    @Before
+    public void runOnce() {
 
-		String scriptPath = "classpath:database/login-prepare.sql";
-		template.execute(getSQLScript(scriptPath));
+        String scriptPath = "classpath:database/login-prepare.sql";
+        template.execute(getSQLScript(scriptPath));
 
-	}
+    }
 
-	@After
-	public void rollback() {
+    @After
+    public void rollback() {
 
-		String scriptPath = "classpath:database/login-rollback.sql";
-		template.execute(getSQLScript(scriptPath));
-	}
+        String scriptPath = "classpath:database/login-rollback.sql";
+        template.execute(getSQLScript(scriptPath));
+    }
 
-	@Given("^the user is on login page$")
-	public void user_is_on_login_page() throws Throwable {
-		goTo(loginPage).await().untilPage();
-		FluentLeniumAssertions.assertThat(loginPage).isAt();
-	}
+    @Given("^the user is on login page$")
+    public void user_is_on_login_page() throws Throwable {
+        goTo(loginPage).await().untilPage();
+        FluentLeniumAssertions.assertThat(loginPage).isAt();
+    }
 
-	@When("^the user introduces email \"([^\"]*)\"$")
-	public void user_introduces_email(String email) throws Throwable {
-		loginPage.setEmail(email);
-	}
+    @When("^the user introduces email \"([^\"]*)\"$")
+    public void user_introduces_email(String email) throws Throwable {
+        loginPage.setEmail(email);
+    }
 
-	@When("^the user introduces password \"([^\"]*)\"$")
-	public void user_introduces_password(String password) throws Throwable {
-		loginPage.setPassword(password);
-	}
+    @When("^the user introduces password \"([^\"]*)\"$")
+    public void user_introduces_password(String password) throws Throwable {
+        loginPage.setPassword(password);
+    }
 
-	@When("^the user press Log In button$")
-	public void user_press_Log_In_button() throws Throwable {
-		loginPage.submit();
-	}
+    @When("^the user press Log In button$")
+    public void user_press_Log_In_button() throws Throwable {
+        loginPage.submit();
+    }
 
-	@Then("^the Main page is shown$")
-	public void mainPageIsShown() throws Throwable {
-		FluentLeniumAssertions.assertThat(mainPage).isAt();
-	}
+    @Then("^the Main page is shown$")
+    public void mainPageIsShown() throws Throwable {
+        FluentLeniumAssertions.assertThat(mainPage).isAt();
+    }
 
-	@Then("^an error message in the Login page is shown$")
-	public void an_error_message_is_shown() throws Throwable {
-		assertTrue(loginPage.errorIsShown());
-		FluentLeniumAssertions.assertThat(loginPage).isAt();
-	}
-	
+    @Then("^an error message in the Login page is shown$")
+    public void an_error_message_is_shown() throws Throwable {
+        assertTrue(loginPage.errorIsShown());
+        FluentLeniumAssertions.assertThat(loginPage).isAt();
+    }
+
 }

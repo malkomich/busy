@@ -5,30 +5,37 @@ import java.util.List;
 import busy.company.Company;
 import busy.user.User;
 
+/**
+ * Role persistence interface.
+ * 
+ * @author malkomich
+ */
 public interface RoleDao {
 
-	/**
-	 * Save the given Role into the database, creating a new one or updating it
-	 * if already exists.
-	 * 
-	 * @param role
-	 */
-	void save(Role role);
+    /**
+     * Persists a new role or update an existing one.
+     * 
+     * @param role
+     *            the role object to be persisted
+     */
+    void save(Role role);
 
-	/**
-	 * Gets the list of Roles attached to the given User.
-	 * 
-	 * @param user
-	 * @return
-	 */
-	List<Role> findByUser(User user);
+    /**
+     * Gets the list of roles attached to the given user.
+     * 
+     * @param user
+     *            user which list of returning roles are attached to
+     * @return The list of role objects
+     */
+    List<Role> findByUser(User user);
 
-	/**
-	 * Gets the main Role of the given Company.
-	 * 
-	 * @param company
-	 * @return
-	 */
-	Role findManagerByCompany(Company company);
+    /**
+     * Gets the main role (manager) of the given company.
+     * 
+     * @param company
+     *            company which role are attached to with manager status
+     * @return The resultant role object
+     */
+    Role findManagerByCompany(Company company);
 
 }

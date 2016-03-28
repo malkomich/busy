@@ -27,199 +27,198 @@ import busy.util.SecureSetter;
  */
 public class UserDBTest extends AbstractDBTest {
 
-	@Autowired
-	protected UserDaoImpl repository;
+    @Autowired
+    protected UserDaoImpl repository;
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithNameNull() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithNameNull() {
 
-		User user = new User();
-		user.setLastName("González Cabrero");
-		user.setEmail("malkomich@gmail.com");
-		user.setPassword("123456");
-		repository.save(user);
-	}
+        User user = new User();
+        user.setLastName("González Cabrero");
+        user.setEmail("malkomich@gmail.com");
+        user.setPassword("123456");
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithSurnameNull() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithSurnameNull() {
 
-		User user = new User();
-		user.setFirstName("Juan Carlos");
-		user.setEmail("malkomich@gmail.com");
-		user.setPassword("123456");
-		repository.save(user);
-	}
+        User user = new User();
+        user.setFirstName("Juan Carlos");
+        user.setEmail("malkomich@gmail.com");
+        user.setPassword("123456");
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithEmailNull() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithEmailNull() {
 
-		User user = new User();
-		user.setFirstName("Juan Carlos");
-		user.setLastName("González Cabrero");
-		user.setPassword("123456");
-		repository.save(user);
-	}
+        User user = new User();
+        user.setFirstName("Juan Carlos");
+        user.setLastName("González Cabrero");
+        user.setPassword("123456");
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithPasswordNull() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithPasswordNull() {
 
-		User user = new User();
-		user.setFirstName("Juan Carlos");
-		user.setLastName("González Cabrero");
-		user.setEmail("malkomich@gmail.com");
-		repository.save(user);
-	}
+        User user = new User();
+        user.setFirstName("Juan Carlos");
+        user.setLastName("González Cabrero");
+        user.setEmail("malkomich@gmail.com");
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithNameTooLong() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithNameTooLong() {
 
-		User user = new User("aaaaabbbbbcccccdddddeeeeefffffgggggh", "González Cabrero",
-				"malkomich@gmail.com", "123456", null, null, null, null, null);
-		repository.save(user);
-	}
+        User user = new User("aaaaabbbbbcccccdddddeeeeefffffgggggh", "González Cabrero", "malkomich@gmail.com",
+                "123456", null, null, null, null, null);
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithSurnameTooLong() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithSurnameTooLong() {
 
-		User user = new User("Juan Carlos", "aaaaabbbbbcccccdddddeeeeefffffgggggh",
-				"malkomich@gmail.com", "123456", null, null, null, null, null);
-		repository.save(user);
-	}
+        User user = new User("Juan Carlos", "aaaaabbbbbcccccdddddeeeeefffffgggggh", "malkomich@gmail.com", "123456",
+                null, null, null, null, null);
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithEmailTooLong() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithEmailTooLong() {
 
-		User user = new User("Juan Carlos", "González Cabrero",
-				"aaaaabbbbbcccccdddddeeeeefffffggggghhhhhi@gmail.com", "123456", null, null, null,
-				null, null);
-		repository.save(user);
-	}
+        User user = new User("Juan Carlos", "González Cabrero", "aaaaabbbbbcccccdddddeeeeefffffggggghhhhhi@gmail.com",
+                "123456", null, null, null, null, null);
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithNifTooLong() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithNifTooLong() {
 
-		User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
-				"711526341B", null, null, null, null);
-		repository.save(user);
-	}
+        User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "711526341B", null,
+                null, null, null);
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithPhoneTooLong() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithPhoneTooLong() {
 
-		User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
-				"71152634B", "1231231231231", null, null, null);
-		repository.save(user);
-	}
+        User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152634B",
+                "1231231231231", null, null, null);
+        repository.save(user);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithEmailDuplicated() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithEmailDuplicated() {
 
-		User user1 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
-				"71152639B", null, null, null, null);
-		User user2 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
-				"71152634B", null, null, null, null);
-		repository.save(user1);
-		repository.save(user2);
-	}
+        User user1 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152639B", null,
+                null, null, null);
+        User user2 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152634B", null,
+                null, null, null);
+        repository.save(user1);
+        repository.save(user2);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithNifDuplicated() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithNifDuplicated() {
 
-		User user1 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
-				"71152634B", null, null, null, null);
-		User user2 = new User("Juan Carlos", "González Cabrero", "diferente@gmail.com", "123456",
-				"71152634B", null, null, null, null);
-		repository.save(user1);
-		repository.save(user2);
-	}
+        User user1 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152634B", null,
+                null, null, null);
+        User user2 = new User("Juan Carlos", "González Cabrero", "diferente@gmail.com", "123456", "71152634B", null,
+                null, null, null);
+        repository.save(user1);
+        repository.save(user2);
+    }
 
-	@Test(expected = DataIntegrityViolationException.class)
-	public void insertWithAddressNotExists() {
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithAddressNotExists() {
 
-		Address address = new Address();
-		User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
-				"71152634B", null, null, null, address);
-		repository.save(user);
-	}
+        Address address = new Address();
+        User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152634B", null,
+                null, null, address);
+        repository.save(user);
+    }
 
-	@Test
-	public void insertUserWithoutAddressSuccesfully() {
+    @Test
+    public void insertUserWithoutAddressSuccesfully() {
 
-		User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
-				"71121212D", "902202122", null, null, null);
-		repository.save(user);
-		assertTrue(user.getId() > 0);
-		
-		Iterator<User> it = repository.findAll().iterator();
-		assertTrue(it.hasNext());
-		User resultuser = it.next();
+        User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71121212D",
+                "902202122", null, null, null);
+        repository.save(user);
+        assertTrue(user.getId() > 0);
 
-		assertEquals("Juan Carlos", resultuser.getFirstName());
-		assertEquals("González Cabrero", resultuser.getLastName());
-		assertEquals("malkomich@gmail.com", resultuser.getEmail());
-		assertEquals("123456", resultuser.getPassword());
-		assertEquals("71121212D", resultuser.getNif());
-		assertNull(resultuser.getAddress());
-		assertEquals("902202122", resultuser.getPhone());
-		assertFalse(resultuser.isActive());
-		assertFalse(resultuser.isAdmin());
-	}
+        Iterator<User> it = repository.findAll().iterator();
+        assertTrue(it.hasNext());
+        User resultuser = it.next();
 
-	@Test
-	@DatabaseSetup("../location/countrySet.xml")
-	@DatabaseSetup("../location/citySet.xml")
-	@DatabaseSetup("../location/addressSet.xml")
-	public void insertUserWithAddressSuccesfully() {
+        assertEquals("Juan Carlos", resultuser.getFirstName());
+        assertEquals("González Cabrero", resultuser.getLastName());
+        assertEquals("malkomich@gmail.com", resultuser.getEmail());
+        assertEquals("123456", resultuser.getPassword());
+        assertEquals("71121212D", resultuser.getNif());
+        assertNull(resultuser.getAddress());
+        assertEquals("902202122", resultuser.getPhone());
+        assertFalse(resultuser.isActive());
+        assertFalse(resultuser.isAdmin());
+    }
 
-		Address address = new Address();
-		SecureSetter.setId(address, 1);
-		
-		User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456",
-				"71121212D", "902202122", null, null, address);
-		repository.save(user);
-		assertTrue(user.getId() > 0);
-		
-		Iterator<User> it = repository.findAll().iterator();
-		assertTrue(it.hasNext());
-		User resultuser = it.next();
+    @Test
+    @DatabaseSetup("../location/countrySet.xml")
+    @DatabaseSetup("../location/citySet.xml")
+    @DatabaseSetup("../location/addressSet.xml")
+    public void insertUserWithAddressSuccesfully() {
 
-		assertEquals("Juan Carlos", resultuser.getFirstName());
-		assertEquals("González Cabrero", resultuser.getLastName());
-		assertEquals("malkomich@gmail.com", resultuser.getEmail());
-		assertEquals("123456", resultuser.getPassword());
-		assertEquals("71121212D", resultuser.getNif());
+        Address address = new Address();
+        SecureSetter.setId(address, 1);
 
-		assertNotNull(resultuser.getAddress());
-		assertTrue(resultuser.getAddress().getAddress1().contains("Calle Mayor"));
+        User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71121212D",
+                "902202122", null, null, address);
+        repository.save(user);
+        assertTrue(user.getId() > 0);
 
-		assertEquals("902202122", resultuser.getPhone());
-		assertFalse(resultuser.isActive());
-		assertFalse(resultuser.isAdmin());
-	}
+        Iterator<User> it = repository.findAll().iterator();
+        assertTrue(it.hasNext());
+        User resultuser = it.next();
 
-	@Test
-	@DatabaseSetup("userSet.xml")
-	public void findUserByEmailWrong() {
+        assertEquals("Juan Carlos", resultuser.getFirstName());
+        assertEquals("González Cabrero", resultuser.getLastName());
+        assertEquals("malkomich@gmail.com", resultuser.getEmail());
+        assertEquals("123456", resultuser.getPassword());
+        assertEquals("71121212D", resultuser.getNif());
 
-		User user = repository.findByEmail("asdf@busy.com");
-		assertNull(user);
-	}
+        assertNotNull(resultuser.getAddress());
+        assertTrue(resultuser.getAddress().getAddress1().contains("Calle Mayor"));
 
-	@Test
-	@DatabaseSetup("userSet.xml")
-	public void findUserByEmailSuccesfully() {
+        assertEquals("902202122", resultuser.getPhone());
+        assertFalse(resultuser.isActive());
+        assertFalse(resultuser.isAdmin());
+    }
 
-		User user = repository.findByEmail("user@domain.com");
-		assertNotNull(user);
-		assertEquals("Apellidos", user.getLastName());
-		assertFalse(user.isAdmin());
-	}
-	
-	@Test
-	public void findAllUsersWhenEmpty() {
-		
-		List<User> userList = repository.findAll();
-		assertTrue(userList.isEmpty());
-	}
-	
+    @Test
+    @DatabaseSetup("userSet.xml")
+    public void findUserByEmailWrong() {
+
+        User user = repository.findByEmail("asdf@busy.com");
+        assertNull(user);
+    }
+
+    @Test
+    @DatabaseSetup("userSet.xml")
+    public void findUserByEmailSuccesfully() {
+
+        User user = repository.findByEmail("user@domain.com");
+        assertNotNull(user);
+        assertEquals("Apellidos", user.getLastName());
+        assertFalse(user.isAdmin());
+    }
+
+    @Test
+    public void findAllUsersWhenEmpty() {
+
+        List<User> userList = repository.findAll();
+        assertTrue(userList.isEmpty());
+    }
+
 }

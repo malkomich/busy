@@ -2,39 +2,44 @@ package busy.location;
 
 import java.util.List;
 
+/**
+ * City persistence interface.
+ * 
+ * @author malkomich
+ */
 interface CityDao {
 
-	/**
-	 * Finds the collection of all registries of City in the database. It will
-	 * return an empty List when no Cities exist.
-	 * 
-	 * @return List of existing Cities
-	 */
-	List<City> findAll();
+    /**
+     * Gets the list of all current city objects.
+     * 
+     * @return The list of existing cities
+     */
+    List<City> findAll();
 
-	/**
-	 * Finds the collection of all registries of City in the database which
-	 * belong to the country given. It will return an empty List when no Cities
-	 * fulfill the restriction.
-	 * 
-	 * @param country
-	 * @return
-	 */
-	List<City> findByCountryCode(String countryCode);
+    /**
+     * Gets the list of city objects which belong to the country with the given code.
+     * 
+     * @param countryCode
+     *            code attached to the country
+     * @return The list of resultant cities
+     */
+    List<City> findByCountryCode(String countryCode);
 
-	/**
-	 * Create or update a City registry in the database.
-	 * 
-	 * @param city
-	 */
-	void save(City city);
+    /**
+     * Persists a new city or updated an existing one.
+     * 
+     * @param city
+     *            The city object to be persisted
+     */
+    void save(City city);
 
-	/**
-	 * Retrieves the City with the given ID
-	 * 
-	 * @param parseInt
-	 * @return
-	 */
-	City findById(int parseInt);
+    /**
+     * Gets the city object with the given ID
+     * 
+     * @param cityId
+     *            unique ID of the city
+     * @return The resultant city object
+     */
+    City findById(int cityId);
 
 }

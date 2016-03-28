@@ -2,29 +2,35 @@ package busy.company;
 
 import java.util.List;
 
+/**
+ * Category persistence interface.
+ * 
+ * @author malkomich
+ */
 public interface CategoryDao {
 
-	/**
-	 * Create or update a Category registry in the database.
-	 * 
-	 * @param category
-	 */
-	void save(Category category);
+    /**
+     * Persists a new category object or updates an existing one.
+     * 
+     * @param category
+     *            The category object to be persisted
+     */
+    void save(Category category);
 
-	/**
-	 * Finds the Category in the database by his primary key. It will return
-	 * null when the Category is not found.
-	 * 
-	 * @param categoryId
-	 * @return
-	 */
-	Category findById(int categoryId);
+    /**
+     * Gets the category object by his ID.
+     * 
+     * @param categoryId
+     *            unique ID of the category
+     * @return The resultant category object
+     */
+    Category findById(int categoryId);
 
-	/**
-	 * Finds all the Categories from the database.
-	 * 
-	 * @return
-	 */
-	List<Category> findAll();
+    /**
+     * Gets the list of all current category objects.
+     * 
+     * @return The list of current categories
+     */
+    List<Category> findAll();
 
 }

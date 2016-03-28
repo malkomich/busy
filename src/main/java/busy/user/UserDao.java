@@ -2,31 +2,35 @@ package busy.user;
 
 import java.util.List;
 
+/**
+ * User persistence interface.
+ * 
+ * @author malkomich
+ */
 interface UserDao {
 
-	/**
-	 * Finds the collection of all registries of User in the database. It will
-	 * return an empty List when no Users exist.
-	 * 
-	 * @return List of existing Users
-	 */
-	List<User> findAll();
+    /**
+     * Gets the collection of all current user objects.
+     * 
+     * @return The list of current users
+     */
+    List<User> findAll();
 
-	/**
-	 * Finds an existing User from the database. It will return null when no
-	 * existing User have this value of email.
-	 * 
-	 * @param email
-	 *            User's email.
-	 * @return Unique User corresponding to this email.
-	 */
-	User findByEmail(String email);
+    /**
+     * Gets an existing user given his email address.
+     * 
+     * @param email
+     *            email address of the user
+     * @return Unique user corresponding to this email
+     */
+    User findByEmail(String email);
 
-	/**
-	 * Create or update a User registry in the database.
-	 * 
-	 * @param user
-	 */
-	void save(User user);
+    /**
+     * Persists a new user or update an existing one.
+     * 
+     * @param user
+     *            the user object to be persisted
+     */
+    void save(User user);
 
 }

@@ -7,40 +7,40 @@ import busy.user.User;
 import busy.user.UserService;
 
 /**
- * Login Form Validator. It validates if email exists, and if the user with
- * this email has the given password.
+ * Login Form Validator. It validates if email exists, and if the user with this email has the given
+ * password.
  * 
  * @author malkomich
  *
  */
 public class LoginValidator implements Validator {
 
-	private UserService userService;
-	
-	public LoginValidator(UserService userService) {
-		this.userService = userService;
-	}
-	
-	@Override
-	public boolean supports(Class<?> clazz) {
+    private UserService userService;
 
-		return LoginForm.class.equals(clazz);
-	}
+    public LoginValidator(UserService userService) {
+        this.userService = userService;
+    }
 
-	@Override
-	public void validate(Object target, Errors errors) {
+    @Override
+    public boolean supports(Class<?> clazz) {
 
-		LoginForm loginForm = (LoginForm) target;
-		User user = userService.findUserByEmail(loginForm.getEmail());
+        return LoginForm.class.equals(clazz);
+    }
 
-		if (user == null) {
+    @Override
+    public void validate(Object target, Errors errors) {
 
-			errors.rejectValue("email", "email.wrong");
+        LoginForm loginForm = (LoginForm) target;
+        User user = userService.findUserByEmail(loginForm.getEmail());
 
-		} else if (!loginForm.getPassword().equals(user.getPassword())) {
+        if (user == null) {
 
-			errors.rejectValue("password", "password.wrong");
-		}
-	}
-	
+            errors.rejectValue("email", "email.wrong");
+
+        } else if (!loginForm.getPassword().equals(user.getPassword())) {
+
+            errors.rejectValue("password", "password.wrong");
+        }
+    }
+
 }

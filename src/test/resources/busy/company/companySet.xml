@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-	<company id="1" trade_name="Boom" business_name="Boom S.A." email="jefe@boom.com" cif="B12345678" active="false" category_id="1" />
+    <company id="1" trade_name="Boom" business_name="Boom S.A." email="jefe@boom.com" cif="B12345678" active="false"
+        category_id="1" />
 </dataset>

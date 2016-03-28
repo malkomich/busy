@@ -24,117 +24,126 @@ import busy.location.City;
 import busy.location.Country;
 import busy.util.SecureSetter;
 
+/**
+ * Verification persistence implementation for Database storing.
+ * 
+ * @author malkomich
+ *
+ */
 @Repository
 public class VerificationDaoImpl implements VerificationDao {
 
-	private static final String SQL_SELECT_BY_TOKEN = "SELECT * FROM " + TABLE_REGISTRY + " LEFT JOIN (" + USER_SELECT_QUERY
-			+ ") AS userJoin ON " + TABLE_REGISTRY + "." + USERID + "= userJoin." + ALIAS_USER_ID + " WHERE " + TOKEN + "= ?";
+    private static final String SQL_SELECT_BY_TOKEN =
+            "SELECT * FROM " + TABLE_REGISTRY + " LEFT JOIN (" + USER_SELECT_QUERY + "asdsadasd" + ") AS userJoin ON "
+                    + TABLE_REGISTRY + "." + USERID + "= userJoin." + ALIAS_USER_ID + " WHERE " + TOKEN + "= ?";
 
-	private static final String SQL_DELETE_REGISTRY = "DELETE FROM " + TABLE_REGISTRY + " WHERE " + USERID + "= ?";
+    private static final String SQL_DELETE_REGISTRY = "DELETE FROM " + TABLE_REGISTRY + " WHERE " + USERID + "= ?";
 
-	private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplate;
 
-	private SimpleJdbcInsert jdbcInsert;
+    private SimpleJdbcInsert jdbcInsert;
 
-	@Autowired
-	public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
+    @Autowired
+    public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
-		jdbcTemplate = new JdbcTemplate(dataSource);
+        jdbcTemplate = new JdbcTemplate(dataSource);
 
-		jdbcInsert = new SimpleJdbcInsert(dataSource);
-		jdbcInsert.withTableName(TABLE_REGISTRY);
-		jdbcInsert.setColumnNames(Arrays.asList(USERID, TOKEN));
-	}
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert.withTableName(TABLE_REGISTRY);
+        jdbcInsert.setColumnNames(Arrays.asList(USERID, TOKEN));
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.user.RegistryDao#save(int)
-	 */
-	@Override
-	public void save(int userId, String token) {
+    /*
+     * (non-Javadoc)
+     * @see busy.user.RegistryDao#save(int)
+     */
+    @Override
+    public void save(int userId, String token) {
 
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put(USERID, userId);
-		parameters.put(TOKEN, token);
+        Map<String, Object> parameters = new HashMap<String, Object>();
+        parameters.put(USERID, userId);
+        parameters.put(TOKEN, token);
 
-		jdbcInsert.execute(new MapSqlParameterSource(parameters));
+        jdbcInsert.execute(new MapSqlParameterSource(parameters));
 
-	}
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see busy.user.RegistryDao#delete(int)
-	 */
-	@Override
-	public void deleteByUserId(int userId) {
+    /*
+     * (non-Javadoc)
+     * @see busy.user.RegistryDao#delete(int)
+     */
+    @Override
+    public void deleteByUserId(int userId) {
 
-		jdbcTemplate.update(SQL_DELETE_REGISTRY, userId);
-	}
+        jdbcTemplate.update(SQL_DELETE_REGISTRY, userId);
+    }
 
-	@Override
-	public Verification findByToken(String token) {
+    /*
+     * (non-Javadoc)
+     * @see busy.user.VerificationDao#findByToken(java.lang.String)
+     */
+    @Override
+    public Verification findByToken(String token) {
 
-		try {
+        try {
 
-			return jdbcTemplate.queryForObject(SQL_SELECT_BY_TOKEN, new VerificationRowMapper(), token);
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_TOKEN, new VerificationRowMapper(), token);
 
-		} catch (EmptyResultDataAccessException e) {
+        } catch (EmptyResultDataAccessException e) {
 
-			return null;
-		}
-	}
-	
-	private class VerificationRowMapper implements RowMapper<Verification> {
+            return null;
+        }
+    }
 
-		@Override
-		public Verification mapRow(ResultSet rs, int rowNum) throws SQLException {
+    private class VerificationRowMapper implements RowMapper<Verification> {
 
-			User user = new User();
-			SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
-			user.setFirstName(rs.getString(FIRSTNAME));
-			user.setLastName(rs.getString(LASTNAME));
-			user.setEmail(rs.getString(EMAIL));
-			user.setPassword(rs.getString(PASSWORD));
-			user.setNif(rs.getString(NIF));
-			user.setPhone(rs.getString(PHONE));
-			user.setActive(rs.getBoolean(ACTIVE));
-			SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
+        @Override
+        public Verification mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-			Integer addressId = 0;
-			if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
+            User user = new User();
+            SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
+            user.setFirstName(rs.getString(FIRSTNAME));
+            user.setLastName(rs.getString(LASTNAME));
+            user.setEmail(rs.getString(EMAIL));
+            user.setPassword(rs.getString(PASSWORD));
+            user.setNif(rs.getString(NIF));
+            user.setPhone(rs.getString(PHONE));
+            user.setActive(rs.getBoolean(ACTIVE));
+            SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
 
-				Address address = new Address();
+            Integer addressId = 0;
+            if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
 
-				SecureSetter.setId(address, addressId);
-				address.setAddress1(rs.getString(ADDR1));
-				address.setAddress2(rs.getString(ADDR2));
-				address.setZipCode(rs.getString(ZIPCODE));
+                Address address = new Address();
 
-				City city = new City();
-				SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
-				city.setName(rs.getString(ALIAS_CITY_NAME));
+                SecureSetter.setId(address, addressId);
+                address.setAddress1(rs.getString(ADDR1));
+                address.setAddress2(rs.getString(ADDR2));
+                address.setZipCode(rs.getString(ZIPCODE));
 
-				Country country = new Country();
-				SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
-				country.setName(rs.getString(ALIAS_COUNTRY_NAME));
-				country.setCode(rs.getString(CODE));
+                City city = new City();
+                SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+                city.setName(rs.getString(ALIAS_CITY_NAME));
 
-				city.setCountry(country);
+                Country country = new Country();
+                SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+                country.setName(rs.getString(ALIAS_COUNTRY_NAME));
+                country.setCode(rs.getString(CODE));
 
-				address.setCity(city);
+                city.setCountry(country);
 
-				user.setAddress(address);
-			}
+                address.setCity(city);
 
-			Verification verification = new Verification();
-			verification.setUser(user);
-			verification.setToken(rs.getString(TOKEN));
+                user.setAddress(address);
+            }
 
-			return verification;
-		}
+            Verification verification = new Verification();
+            verification.setUser(user);
+            verification.setToken(rs.getString(TOKEN));
 
-	}
+            return verification;
+        }
+
+    }
 
 }

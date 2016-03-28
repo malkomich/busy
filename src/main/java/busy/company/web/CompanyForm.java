@@ -6,147 +6,153 @@ import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+/**
+ * Form model to handle the POST request for registering a new company.
+ * 
+ * @author malkomich
+ *
+ */
 public class CompanyForm {
 
-	// FIELDS
-	
-	@Length(max = 30, message = "{tradename.maxlength}")
-	private String tradeName;
-	
-	@NotEmpty(message = "{businessname.required}")
-	@Length(max = 50, message = "{businessname.maxlength}")
-	private String businessName;
-	
-	@NotEmpty(message = "{email.required}")
-	@Email(message = "{email.wrong_format}")
-	@Length(max = 50, message = "{email.maxlength}")
-	private String email;
-	
-	@Length(min = 9, max = 9, message = "{cif.length}")
-	@Pattern(regexp = "[a-zA-Z][0-9]*", message = "{cif.wrong_format}")
-	private String cif;
-	
-	@NotEmpty(message = "{country.required}")
-	private String countryCode;
-	
-	@NotEmpty(message = "{city.required}")
-	private String cityId;
-	
-	@Length(max = 10, message = "{zipcode.maxlength}")
-	private String zipCode;
-	
-	@Length(min = 8, max = 12, message = "{phone.length}")
-	@Pattern(regexp = "[0-9]*", message = "{phone.wrong_format}")
-	private String phone;
-	
-	@Length(max = 35, message = "{address.maxlength}")
-	private String address1;
-	
-	@Length(max = 35, message = "{address.maxlength}")
-	private String address2;
-	
-	private String categoryId;
+    // Fields
 
-	// GETTERS AND SETTERS
-	
-	public String getTradeName() {
-		return tradeName;
-	}
+    @Length(max = 30, message = "{tradename.maxlength}")
+    private String tradeName;
 
-	public void setTradeName(String tradeName) {
+    @NotEmpty(message = "{businessname.required}")
+    @Length(max = 50, message = "{businessname.maxlength}")
+    private String businessName;
 
-		if(tradeName != "")
-			this.tradeName = tradeName;
-	}
+    @NotEmpty(message = "{email.required}")
+    @Email(message = "{email.wrong_format}")
+    @Length(max = 50, message = "{email.maxlength}")
+    private String email;
 
-	public String getBusinessName() {
-		return businessName;
-	}
+    @Length(min = 9, max = 9, message = "{cif.length}")
+    @Pattern(regexp = "[a-zA-Z][0-9]*", message = "{cif.wrong_format}")
+    private String cif;
 
-	public void setBusinessName(String businessName) {
-		this.businessName = businessName;
-	}
+    @NotEmpty(message = "{country.required}")
+    private String countryCode;
 
-	public String getEmail() {
-		return email;
-	}
+    @NotEmpty(message = "{city.required}")
+    private String cityId;
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    @Length(max = 10, message = "{zipcode.maxlength}")
+    private String zipCode;
 
-	public String getCif() {
-		return cif;
-	}
+    @Length(min = 8, max = 12, message = "{phone.length}")
+    @Pattern(regexp = "[0-9]*", message = "{phone.wrong_format}")
+    private String phone;
 
-	public void setCif(String cif) {
-		this.cif = cif;
-	}
+    @Length(max = 35, message = "{address.maxlength}")
+    private String address1;
 
-	public String getCountryCode() {
-		return countryCode;
-	}
+    @Length(max = 35, message = "{address.maxlength}")
+    private String address2;
 
-	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
-	}
+    private String categoryId;
 
-	public String getCityId() {
-		return cityId;
-	}
+    // Getters and Setters
 
-	public void setCityId(String cityId) {
-		this.cityId = cityId;
-	}
+    public String getTradeName() {
+        return tradeName;
+    }
 
-	public String getZipCode() {
-		return zipCode;
-	}
+    public void setTradeName(String tradeName) {
 
-	public void setZipCode(String zipCode) {
-		
-		if(zipCode != "")
-			this.zipCode = zipCode;
-	}
+        if (tradeName != "")
+            this.tradeName = tradeName;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public String getBusinessName() {
+        return businessName;
+    }
 
-	public void setPhone(String phone) {
+    public void setBusinessName(String businessName) {
+        this.businessName = businessName;
+    }
 
-		if(phone != "")
-			this.phone = phone;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getAddress1() {
-		return address1;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setAddress1(String address1) {
+    public String getCif() {
+        return cif;
+    }
 
-		if(address1 != "")
-			this.address1 = address1;
-	}
+    public void setCif(String cif) {
+        this.cif = cif;
+    }
 
-	public String getAddress2() {
-		return address2;
-	}
+    public String getCountryCode() {
+        return countryCode;
+    }
 
-	public void setAddress2(String address2) {
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
 
-		if(address2 != "")
-			this.address2 = address2;
-	}
+    public String getCityId() {
+        return cityId;
+    }
 
-	public String getCategoryId() {
-		return categoryId;
-	}
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
+    }
 
-	public void setCategoryId(String categoryId) {
+    public String getZipCode() {
+        return zipCode;
+    }
 
-		if(categoryId != "" && categoryId != "0")
-			this.categoryId = categoryId;
-	}
-	
+    public void setZipCode(String zipCode) {
+
+        if (zipCode != "")
+            this.zipCode = zipCode;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+
+        if (phone != "")
+            this.phone = phone;
+    }
+
+    public String getAddress1() {
+        return address1;
+    }
+
+    public void setAddress1(String address1) {
+
+        if (address1 != "")
+            this.address1 = address1;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public void setAddress2(String address2) {
+
+        if (address2 != "")
+            this.address2 = address2;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(String categoryId) {
+
+        if (categoryId != "" && categoryId != "0")
+            this.categoryId = categoryId;
+    }
+
 }

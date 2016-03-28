@@ -3,63 +3,63 @@
 }
 
 .dialog {
-	position: fixed;
-	display: none;
-	z-index: 10;
+    position: fixed;
+    display: none;
+    z-index: 10;
 }
 
 #notifications-content {
-	width: 300px;
-	min-height: 100px;
-	margin-top: 20px;
-	padding-top: 0;
-	background-color: #f3f3f3;
-	border-radius: 2px;
-	box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
+    width: 300px;
+    min-height: 100px;
+    margin-top: 20px;
+    padding-top: 0;
+    background-color: #f3f3f3;
+    border-radius: 2px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .4);
 }
 
 .notifications-title {
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 1px;
-	padding-bottom: 1px;
-	background-color: #908674;
-	color: #fff;
-	text-transform: uppercase;
-	min-height: 40px;
-	font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    background-color: #908674;
+    color: #fff;
+    text-transform: uppercase;
+    min-height: 40px;
+    font-weight: bold;
 }
 
 .item-notification-content h5 {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .item-notification-content {
-	padding: 10px;
-	border-bottom: 1px solid #212121;
-	padding-bottom: 20px;
+    padding: 10px;
+    border-bottom: 1px solid #212121;
+    padding-bottom: 20px;
 }
 
 /*
  * Search bar
  */
 .search-bar {
-	margin-top: 5px;
+    margin-top: 5px;
 }
 
 .search-bar .input-group-addon {
-	background: white !important;
+    background: white !important;
 }
 
 .search-bar .form-control {
-	border-right: 0;
-	box-shadow: 0 0 0;
-	border-color: #ccc;
+    border-right: 0;
+    box-shadow: 0 0 0;
+    border-color: #ccc;
 }
 
 .search-bar button {
-	border: 0;
-	background: transparent;
+    border: 0;
+    background: transparent;
 }
 
 .autocomplete-suggestions {
@@ -69,11 +69,9 @@
     border-color: rgba(0, 0, 0, 0.2);
     border-style: outset;
     border-width: 2px;
-    
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    
     -webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     -moz-box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);

@@ -27,95 +27,95 @@ import busy.Application;
 @SpringApplicationConfiguration(classes = Application.class)
 public class UserServiceTest {
 
-	@Autowired
-	private UserServiceImpl service;
+    @Autowired
+    private UserServiceImpl service;
 
-	private UserDao userDao;
-	private VerificationDao validationDao;
+    private UserDao userDao;
+    private VerificationDao validationDao;
 
-	@Before
-	public void setUp() {
-		userDao = mock(UserDao.class);
-		service.setUserDao(userDao);
-		
-		validationDao = mock(VerificationDao.class);
-		service.setValidationDao(validationDao);
-	}
+    @Before
+    public void setUp() {
+        userDao = mock(UserDao.class);
+        service.setUserDao(userDao);
 
-	/**
-	 * Try to find a user whose email does not exists in the database.
-	 */
-	@Test
-	public void findUserWrong() {
-		String wrongEmail = "asdf@busy.com";
-		when(userDao.findByEmail(wrongEmail)).thenReturn(null);
+        validationDao = mock(VerificationDao.class);
+        service.setValidationDao(validationDao);
+    }
 
-		User user = service.findUserByEmail(wrongEmail);
-		assertNull(user);
-	}
+    /**
+     * Try to find a user whose email does not exists in the database.
+     */
+    @Test
+    public void findUserWrong() {
+        String wrongEmail = "asdf@busy.com";
+        when(userDao.findByEmail(wrongEmail)).thenReturn(null);
 
-	/**
-	 * Find a user whose email exists in the database.
-	 */
-	@Test
-	public void findUserSuccess() {
-		String email = "user@domain.com";
-		when(userDao.findByEmail(email)).thenReturn(
-				new User("Nombre", "Apellidos", email, "pass", null, null, true, false, null));
+        User user = service.findUserByEmail(wrongEmail);
+        assertNull(user);
+    }
 
-		User user = service.findUserByEmail(email);
-		assertNotNull(user);
-		assertEquals("Apellidos", user.getLastName());
-		assertFalse(user.isAdmin());
-	}
-	
-	/**
-	 * Try to confirm a User wich does not exist.
-	 */
-	@Test(expected=IllegalArgumentException.class)
-	public void confirmUserNotCreated() {
-		String email = "user@domain.com";
-		User newUser = new User("Nombre", "Apellidos", email, "pass", null, null, null, null, null);
-		when(userDao.findByEmail(email)).thenReturn(null);
-		
-		service.confirmUser(newUser);
-	}
-	
-	/**
-	 * Confirm an already created User account.
-	 */
-	@Test
-	public void confirmUserSuccessfully() {
-		String email = "user@domain.com";
-		User user = new User("Nombre", "Apellidos", email, "pass", null, null, null, null, null);
-		when(userDao.findByEmail(email)).thenReturn(user);
-		
-		service.confirmUser(user);
-		assertTrue(user.isActive());
-	}
-	
-	/**
-	 * Try to find a Verification instance wich not exist.
-	 */
-	@Test
-	public void findVerificationWrong() {
-		String wrongToken = "asdf";
-		when(validationDao.findByToken(wrongToken)).thenReturn(null);
-		
-		Verification verification = service.getVerification(wrongToken);
-		assertNull(verification);
-	}
-	
-	/**
-	 * Find The verification instance by the token String successfully.
-	 */
-	@Test
-	public void findVerificationSuccessfully() {
-		String token = "tokenvalid123";
-		when(validationDao.findByToken(token)).thenReturn(new Verification(token, new User()));
-		
-		Verification verification = service.getVerification(token);
-		assertNotNull(verification);
-		assertEquals(token, verification.getToken());
-	}
+    /**
+     * Find a user whose email exists in the database.
+     */
+    @Test
+    public void findUserSuccess() {
+        String email = "user@domain.com";
+        when(userDao.findByEmail(email))
+                .thenReturn(new User("Nombre", "Apellidos", email, "pass", null, null, true, false, null));
+
+        User user = service.findUserByEmail(email);
+        assertNotNull(user);
+        assertEquals("Apellidos", user.getLastName());
+        assertFalse(user.isAdmin());
+    }
+
+    /**
+     * Try to confirm a User wich does not exist.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void confirmUserNotCreated() {
+        String email = "user@domain.com";
+        User newUser = new User("Nombre", "Apellidos", email, "pass", null, null, null, null, null);
+        when(userDao.findByEmail(email)).thenReturn(null);
+
+        service.confirmUser(newUser);
+    }
+
+    /**
+     * Confirm an already created User account.
+     */
+    @Test
+    public void confirmUserSuccessfully() {
+        String email = "user@domain.com";
+        User user = new User("Nombre", "Apellidos", email, "pass", null, null, null, null, null);
+        when(userDao.findByEmail(email)).thenReturn(user);
+
+        service.confirmUser(user);
+        assertTrue(user.isActive());
+    }
+
+    /**
+     * Try to find a Verification instance wich not exist.
+     */
+    @Test
+    public void findVerificationWrong() {
+        String wrongToken = "asdf";
+        when(validationDao.findByToken(wrongToken)).thenReturn(null);
+
+        Verification verification = service.getVerification(wrongToken);
+        assertNull(verification);
+    }
+
+    /**
+     * Find The verification instance by the token String successfully.
+     */
+    @Test
+    public void findVerificationSuccessfully() {
+        String token = "tokenvalid123";
+        when(validationDao.findByToken(token)).thenReturn(new Verification(token, new User()));
+
+        Verification verification = service.getVerification(token);
+        assertNotNull(verification);
+        assertEquals(token, verification.getToken());
+    }
 }

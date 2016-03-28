@@ -1,31 +1,38 @@
 package busy.user;
 
+/**
+ * Verification persistence interface.
+ * 
+ * @author malkomich
+ */
 public interface VerificationDao {
 
-	/**
-	 * Save a new validation token for the user account to be confirmed by
-	 * email.
-	 * 
-	 * @param userId
-	 * @param token
-	 */
-	void save(int userId, String token);
+    /**
+     * Persists a new verification or updates a new one. The verification instance will be attached
+     * to a user with the given userId, and may be referenced by the given String token.
+     * 
+     * @param userId
+     *            unique ID of the user
+     * @param token
+     *            unique String token
+     */
+    void save(int userId, String token);
 
-	/**
-	 * Delete the validation from the database when user has confirmed his email
-	 * address.
-	 * 
-	 * @param userId
-	 */
-	void deleteByUserId(int userId);
+    /**
+     * Deletes the verification object given the id of the user attached to this validation.
+     * 
+     * @param userId
+     *            unique ID of the user
+     */
+    void deleteByUserId(int userId);
 
-	/**
-	 * Gets the token instance to confirm that it exists to validate the
-	 * account.
-	 * 
-	 * @param token
-	 * @return
-	 */
-	Verification findByToken(String token);
+    /**
+     * Gets the verification instance attached to the given token.
+     * 
+     * @param token
+     *            unique String token
+     * @return the resultant verification object
+     */
+    Verification findByToken(String token);
 
 }

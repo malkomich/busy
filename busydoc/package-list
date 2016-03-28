@@ -1,5 +1,11 @@
 busy
+busy.admin.web
+busy.company
+busy.company.web
 busy.location
+busy.location.web
+busy.notifications
+busy.role
 busy.user
 busy.user.web
 busy.util

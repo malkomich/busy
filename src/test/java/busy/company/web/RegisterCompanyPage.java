@@ -15,121 +15,121 @@ import busy.BusyPage;
  */
 public class RegisterCompanyPage extends BusyPage {
 
-	private static final String PATH = "/new_company";
-	private static final String DESCRIPTION = "New company Page";
-	
-	/*
-	 * CSS Selectors
-	 */
-	private static final String TRADENAME_SELECTOR = "#tradeName";
-	private static final String BUSINESSNAME_SELECTOR = "#businessName";
-	private static final String EMAIL_SELECTOR = "#email";
-	private static final String CIF_SELECTOR = "#cif";
-	private static final String COUNTRY_SELECTOR = "#country";
-	private static final String CITY_SELECTOR = "#city";
-	private static final String ZIPCODE_SELECTOR = "#zipcode";
-	private static final String PHONE_SELECTOR = "#phone";
-	private static final String ADDRESS1_SELECTOR = "#address1";
-	private static final String CATEGORY_SELECTOR = "#category";
+    private static final String PATH = "/new_company";
+    private static final String DESCRIPTION = "New company Page";
 
-	private static final String SUBMIT_SELECTOR = "#submit";
-	private static final String ERROR_SELECTOR = "span.error";
-	
-	@Override
-	public String relativePath() {
-		return PATH;
-	}
-	
-	@Override
-	public void isAt() {
-		
-		String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
-		assertThat(description).contains(DESCRIPTION);
-	}
+    /*
+     * CSS Selectors
+     */
+    private static final String TRADENAME_SELECTOR = "#tradeName";
+    private static final String BUSINESSNAME_SELECTOR = "#businessName";
+    private static final String EMAIL_SELECTOR = "#email";
+    private static final String CIF_SELECTOR = "#cif";
+    private static final String COUNTRY_SELECTOR = "#country";
+    private static final String CITY_SELECTOR = "#city";
+    private static final String ZIPCODE_SELECTOR = "#zipcode";
+    private static final String PHONE_SELECTOR = "#phone";
+    private static final String ADDRESS1_SELECTOR = "#address1";
+    private static final String CATEGORY_SELECTOR = "#category";
 
-	public RegisterCompanyPage setTradeName(String tradeName) {
-		
-		fill(TRADENAME_SELECTOR).with(tradeName);
-		return this;
-	}
-	
-	public RegisterCompanyPage setBusinessName(String businessName) {
-		
-		fill(BUSINESSNAME_SELECTOR).with(businessName);
-		return this;
-	}
+    private static final String SUBMIT_SELECTOR = "#submit";
+    private static final String ERROR_SELECTOR = "span.error";
 
-	public RegisterCompanyPage setEmail(String email) {
+    @Override
+    public String relativePath() {
+        return PATH;
+    }
 
-		fill(EMAIL_SELECTOR).with(email);
-		return this;
-	}
+    @Override
+    public void isAt() {
 
-	public RegisterCompanyPage setCif(String cif) {
+        String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
+        assertThat(description).contains(DESCRIPTION);
+    }
 
-		fill(CIF_SELECTOR).with(cif);
-		return this;
-	}
+    public RegisterCompanyPage setTradeName(String tradeName) {
 
-	public RegisterCompanyPage selectCountry(String country) {
+        fill(TRADENAME_SELECTOR).with(tradeName);
+        return this;
+    }
 
-		if (!country.isEmpty()) {
-			Select select = new Select(getDriver().findElement(By.cssSelector(COUNTRY_SELECTOR)));
-			select.selectByVisibleText(country);
-		}
+    public RegisterCompanyPage setBusinessName(String businessName) {
 
-		waitForJSandJQueryToLoad();
+        fill(BUSINESSNAME_SELECTOR).with(businessName);
+        return this;
+    }
 
-		return this;
-	}
+    public RegisterCompanyPage setEmail(String email) {
 
-	public RegisterCompanyPage selectCity(String city) {
+        fill(EMAIL_SELECTOR).with(email);
+        return this;
+    }
 
-		if (!city.isEmpty()) {
-			Select select = new Select(getDriver().findElement(By.cssSelector(CITY_SELECTOR)));
-			select.selectByVisibleText(city);
-		}
+    public RegisterCompanyPage setCif(String cif) {
 
-		return this;
-	}
+        fill(CIF_SELECTOR).with(cif);
+        return this;
+    }
 
-	public RegisterCompanyPage setZipcode(String zipcode) {
+    public RegisterCompanyPage selectCountry(String country) {
 
-		fill(ZIPCODE_SELECTOR).with(zipcode);
-		return this;
-	}
+        if (!country.isEmpty()) {
+            Select select = new Select(getDriver().findElement(By.cssSelector(COUNTRY_SELECTOR)));
+            select.selectByVisibleText(country);
+        }
 
-	public RegisterCompanyPage setPhone(String phone) {
+        waitForJSandJQueryToLoad();
 
-		fill(PHONE_SELECTOR).with(phone);
-		return this;
-	}
+        return this;
+    }
 
-	public RegisterCompanyPage setAddress(String address) {
+    public RegisterCompanyPage selectCity(String city) {
 
-		fill(ADDRESS1_SELECTOR).with(address);
-		return this;
-	}
-	
-	public RegisterCompanyPage selectCategory(String category) {
+        if (!city.isEmpty()) {
+            Select select = new Select(getDriver().findElement(By.cssSelector(CITY_SELECTOR)));
+            select.selectByVisibleText(city);
+        }
 
-		if (!category.isEmpty()) {
-			Select select = new Select(getDriver().findElement(By.cssSelector(CATEGORY_SELECTOR)));
-			select.selectByVisibleText(category);
-		}
+        return this;
+    }
 
-		return this;
-	}
+    public RegisterCompanyPage setZipcode(String zipcode) {
 
-	public RegisterCompanyPage submit() {
+        fill(ZIPCODE_SELECTOR).with(zipcode);
+        return this;
+    }
 
-		submit(SUBMIT_SELECTOR);
-		return this;
-	}
+    public RegisterCompanyPage setPhone(String phone) {
 
-	public boolean errorIsShown() {
-		
-		return !find(ERROR_SELECTOR).isEmpty();
-	}
+        fill(PHONE_SELECTOR).with(phone);
+        return this;
+    }
+
+    public RegisterCompanyPage setAddress(String address) {
+
+        fill(ADDRESS1_SELECTOR).with(address);
+        return this;
+    }
+
+    public RegisterCompanyPage selectCategory(String category) {
+
+        if (!category.isEmpty()) {
+            Select select = new Select(getDriver().findElement(By.cssSelector(CATEGORY_SELECTOR)));
+            select.selectByVisibleText(category);
+        }
+
+        return this;
+    }
+
+    public RegisterCompanyPage submit() {
+
+        submit(SUBMIT_SELECTOR);
+        return this;
+    }
+
+    public boolean errorIsShown() {
+
+        return !find(ERROR_SELECTOR).isEmpty();
+    }
 
 }

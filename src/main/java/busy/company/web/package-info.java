@@ -1,5 +1,5 @@
 /**
- * 
+ * Company web interaction logic.
  */
 /**
  * @author malkomich
