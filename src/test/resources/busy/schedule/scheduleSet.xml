@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <year_schedule id="1" branch_id="1" year="2016" />
+    <week_schedule id="1" year_schedule_id="1" week_of_year="1" default="false" />
+    <day_schedule id="1" week_schedule_id="1" day_of_week="1" />
+    <hour_schedule id="1" day_schedule_id="1" start_time="12:00" end_time="13:00" />
+</dataset>
