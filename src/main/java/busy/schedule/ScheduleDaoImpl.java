@@ -97,9 +97,13 @@ public class ScheduleDaoImpl implements ScheduleDao {
         for (int i = 0; i < numOfWeeks; i++) {
             params[i + 2] = weeks[i];
         }
+
+        WeekScheduleRowMapper rowMapper = new WeekScheduleRowMapper();
+        rowMapper.setBranch(branch);
+
         try {
 
-            return jdbcTemplate.queryForObject(query, new WeekScheduleRowMapper(), params);
+            return jdbcTemplate.queryForObject(query, rowMapper, params);
 
         } catch (EmptyResultDataAccessException e) {
 
@@ -156,6 +160,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                         SecureSetter.setId(weekSchedule, rs.getInt(ALIAS_WEEK_SCHEDULE_ID));
                         weekSchedule.setWeekOfYear(rs.getInt(WEEK_OF_YEAR));
                         weekSchedule.setDefault(rs.getBoolean(IS_DEFAULT));
+                        weekSchedule.setYearSchedule(yearSchedule);
                     }
 
                     // Parse day schedules
@@ -166,6 +171,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                             daySchedule = new DaySchedule();
                             SecureSetter.setId(daySchedule, rs.getInt(ALIAS_DAY_SCHEDULE_ID));
                             daySchedule.setDayOfWeek(rs.getInt(DAY_OF_WEEK));
+                            daySchedule.setWeekSchedule(weekSchedule);
                         }
 
                         // Parse hour schedules
@@ -173,6 +179,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                         SecureSetter.setId(hourSchedule, rs.getInt(ALIAS_HOUR_SCHEDULE_ID));
                         hourSchedule.setStartTime(rs.getTime(START_TIME));
                         hourSchedule.setEndTime(rs.getTime(END_TIME));
+                        hourSchedule.setDaySchedule(daySchedule);
 
                         daySchedule.addHourSchedule(hourSchedule);
 
@@ -193,10 +200,21 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     private class WeekScheduleRowMapper implements RowMapper<List<WeekSchedule>> {
 
+        private Branch branch;
+
+        public void setBranch(Branch branch) {
+            this.branch = branch;
+        }
+
         @Override
         public List<WeekSchedule> mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             List<WeekSchedule> weekScheduleList = new ArrayList<WeekSchedule>();
+
+            YearSchedule yearSchedule = new YearSchedule();
+            SecureSetter.setId(yearSchedule, rs.getInt(ALIAS_YEAR_SCHEDULE_ID));
+            yearSchedule.setBranch(branch);
+            yearSchedule.setYear(rs.getInt(YEAR));
 
             do {
                 // Parse week schedules
@@ -208,6 +226,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                         SecureSetter.setId(weekSchedule, rs.getInt(ALIAS_WEEK_SCHEDULE_ID));
                         weekSchedule.setWeekOfYear(rs.getInt(WEEK_OF_YEAR));
                         weekSchedule.setDefault(rs.getBoolean(IS_DEFAULT));
+                        weekSchedule.setYearSchedule(yearSchedule);
                     }
 
                     // Parse day schedules
@@ -218,6 +237,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                             daySchedule = new DaySchedule();
                             SecureSetter.setId(daySchedule, rs.getInt(ALIAS_DAY_SCHEDULE_ID));
                             daySchedule.setDayOfWeek(rs.getInt(DAY_OF_WEEK));
+                            daySchedule.setWeekSchedule(weekSchedule);
                         }
 
                         // Parse hour schedules
@@ -225,6 +245,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                         SecureSetter.setId(hourSchedule, rs.getInt(ALIAS_HOUR_SCHEDULE_ID));
                         hourSchedule.setStartTime(rs.getTime(START_TIME));
                         hourSchedule.setEndTime(rs.getTime(END_TIME));
+                        hourSchedule.setDaySchedule(daySchedule);
 
                         daySchedule.addHourSchedule(hourSchedule);
 

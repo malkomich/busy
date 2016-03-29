@@ -1,6 +1,6 @@
 package busy.booking;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -28,6 +28,7 @@ import busy.util.SecureSetter;
 @DatabaseSetup("../location/addressSet.xml")
 @DatabaseSetup("../company/branchSet.xml")
 @DatabaseSetup("../schedule/scheduleSet.xml")
+@DatabaseSetup("../user/userSet.xml")
 @DatabaseSetup("../booking/bookingSet.xml")
 public class BookingDBTest extends AbstractDBTest {
 
@@ -68,14 +69,14 @@ public class BookingDBTest extends AbstractDBTest {
     public void findByPartiallyValidWeeks() {
 
         List<Booking> bookings = repository.findByBranchAndWeeks(branch, PARTIALLY_VALID_WEEKS);
-        assertFalse(bookings.isEmpty());
+        assertEquals(2, bookings.size());
     }
 
     @Test
     public void findByBranchAndWeeksSuccessfully() {
 
         List<Booking> bookings = repository.findByBranchAndWeeks(branch, WEEKS);
-        assertFalse(bookings.isEmpty());
+        assertEquals(3, bookings.size());
     }
 
 }

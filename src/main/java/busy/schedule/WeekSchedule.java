@@ -18,6 +18,7 @@ public class WeekSchedule implements Serializable {
     private int id;
     private int weekOfYear;
     private boolean isDefault;
+    private YearSchedule yearSchedule;
     private List<DaySchedule> dayScheduleList;
 
     public WeekSchedule() {
@@ -30,6 +31,10 @@ public class WeekSchedule implements Serializable {
 
     public void setDefault(boolean isDefault) {
         this.isDefault = isDefault;
+    }
+
+    public void setYearSchedule(YearSchedule yearSchedule) {
+        this.yearSchedule = yearSchedule;
     }
 
     public void addDaySchedule(DaySchedule daySchedule) {

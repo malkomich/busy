@@ -16,10 +16,15 @@ public class DaySchedule implements Serializable {
 
     private int id;
     private int dayOfWeek;
+    private WeekSchedule weekSchedule;
     private List<HourSchedule> hourScheduleList;
 
     public void setDayOfWeek(int dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+
+    public void setWeekSchedule(WeekSchedule weekSchedule) {
+        this.weekSchedule = weekSchedule;
     }
 
     public void addHourSchedule(HourSchedule hourSchedule) {

@@ -13,7 +13,7 @@ import busy.company.Branch;
 public interface BookingDao {
 
     /**
-     * Gets the list of bookings made by a given user in the weeks specified.
+     * Gets the list of bookings made the weeks specified in the given branch.
      * 
      * @param branch
      *            branch attached to the bookings
