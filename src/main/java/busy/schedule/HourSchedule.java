@@ -14,19 +14,19 @@ public class HourSchedule implements Serializable {
     private static final long serialVersionUID = 6866084642788052617L;
 
     private int id;
-
-    public int getId() {
-        return id;
-    }
+    private Time startTime;
+    private Time endTime;
 
     public void setStartTime(Time startTime) {
-        // TODO Auto-generated method stub
-
+        this.startTime = startTime;
     }
 
     public void setEndTime(Time endTime) {
-        // TODO Auto-generated method stub
+        this.endTime = endTime;
+    }
 
+    public int getId() {
+        return id;
     }
 
     @SuppressWarnings("unused")

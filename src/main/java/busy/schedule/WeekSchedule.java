@@ -1,6 +1,8 @@
 package busy.schedule;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Week schedule model. It keeps a reference of all day schedules for a specific week of a year
@@ -14,24 +16,28 @@ public class WeekSchedule implements Serializable {
     private static final long serialVersionUID = 2435465415591273204L;
 
     private int id;
+    private int weekOfYear;
+    private boolean isDefault;
+    private List<DaySchedule> dayScheduleList;
 
-    public int getId() {
-        return id;
+    public WeekSchedule() {
+        dayScheduleList = new ArrayList<DaySchedule>();
     }
 
     public void setWeekOfYear(int weekOfYear) {
-        // TODO Auto-generated method stub
-
+        this.weekOfYear = weekOfYear;
     }
 
     public void setDefault(boolean isDefault) {
-        // TODO Auto-generated method stub
-
+        this.isDefault = isDefault;
     }
 
     public void addDaySchedule(DaySchedule daySchedule) {
-        // TODO Auto-generated method stub
+        dayScheduleList.add(daySchedule);
+    }
 
+    public int getId() {
+        return id;
     }
 
     @SuppressWarnings("unused")

@@ -1,6 +1,7 @@
 package busy.schedule;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import busy.company.Branch;
@@ -16,29 +17,29 @@ public class YearSchedule implements Serializable {
 
     private static final long serialVersionUID = -4521495627905495857L;
 
+    private int id;
+    private Branch branch;
+    private int year;
+    private List<WeekSchedule> weekScheduleList;
+
+    public YearSchedule() {
+        weekScheduleList = new ArrayList<WeekSchedule>();
+    }
+
     public void setBranch(Branch branch) {
-        // TODO Auto-generated method stub
-
+        this.branch = branch;
     }
-
+    
     public void setYear(int year) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setWeekSchedules(List<WeekSchedule> weekSchedules) {
-        // TODO Auto-generated method stub
-
+        this.year = year;
     }
 
     public void addWeekSchedule(WeekSchedule weekSchedule) {
-        // TODO Auto-generated method stub
-
+        weekScheduleList.add(weekSchedule);
     }
 
     @SuppressWarnings("unused")
     private void setId(Integer id) {
-        // TODO Auto-generated method stub
-
+        this.id = id;
     }
 }
