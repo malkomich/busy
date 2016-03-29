@@ -1,5 +1,6 @@
 package busy.schedule;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -34,9 +35,9 @@ public class ScheduleDBTest extends AbstractDBTest {
     private static final int YEAR = 2016;
     private static final int INVALID_YEAR = 0;
 
-    private static final int[] WEEKS = {1};
-    private static final int[] INVALID_WEEKS = {10};
-    private static final int[] PARTIALLY_VALID_WEEKS = {1, 10};
+    private static final int[] WEEKS = {1, 2};
+    private static final int[] INVALID_WEEKS = {50};
+    private static final int[] PARTIALLY_VALID_WEEKS = {1, 50};
 
     @Autowired
     private ScheduleDaoImpl repository;
@@ -102,14 +103,14 @@ public class ScheduleDBTest extends AbstractDBTest {
     public void findWeekSchedulesByPartiallyValidWeeks() {
 
         List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(branch, YEAR, PARTIALLY_VALID_WEEKS);
-        assertTrue(weekSchedules.size() == 1);
+        assertEquals(1, weekSchedules.size());
     }
 
     @Test
     public void findWeekSchedulesByBranchAndYearAndWeeksSuccessfully() {
 
         List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(branch, YEAR, WEEKS);
-        assertTrue(weekSchedules.size() == 1);
+        assertEquals(2, weekSchedules.size());
     }
 
     @Test
@@ -127,7 +128,7 @@ public class ScheduleDBTest extends AbstractDBTest {
         SecureSetter.setId(wrongBranch, INVALID_ID);
 
         WeekSchedule defaultWeek = repository.findDefaultWeek(wrongBranch);
-        assertNotNull(defaultWeek);
+        assertNull(defaultWeek);
     }
 
     @Test

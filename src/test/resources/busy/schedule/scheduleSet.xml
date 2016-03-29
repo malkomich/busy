@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
     <year_schedule id="1" branch_id="1" year="2016" />
-    <week_schedule id="1" year_schedule_id="1" week_of_year="1" default="false" />
+    
+    <week_schedule id="1" year_schedule_id="1" week_of_year="1" is_default="false" />
+    <week_schedule id="2" year_schedule_id="1" week_of_year="2" is_default="false" />
+    
     <day_schedule id="1" week_schedule_id="1" day_of_week="1" />
-    <hour_schedule id="1" day_schedule_id="1" start_time="12:00" end_time="13:00" />
+    <day_schedule id="2" week_schedule_id="1" day_of_week="2" />
+    <day_schedule id="3" week_schedule_id="2" day_of_week="1" />
+    <day_schedule id="4" week_schedule_id="2" day_of_week="2" />
+    
+    <hour_schedule id="1" day_schedule_id="1" start_time="23:00:00" end_time="00:00:00" />
+    <hour_schedule id="2" day_schedule_id="1" start_time="12:00:00" end_time="13:00:00" />
+    <hour_schedule id="3" day_schedule_id="2" start_time="23:00:00" end_time="00:00:00" />
+    <hour_schedule id="4" day_schedule_id="2" start_time="12:00:00" end_time="13:00:00" />
+    <hour_schedule id="5" day_schedule_id="3" start_time="23:00:00" end_time="00:00:00" />
+    <hour_schedule id="6" day_schedule_id="3" start_time="12:00:00" end_time="13:00:00" />
+    <hour_schedule id="7" day_schedule_id="4" start_time="23:00:00" end_time="00:00:00" />
+    <hour_schedule id="8" day_schedule_id="4" start_time="12:00:00" end_time="13:00:00" />
 </dataset>

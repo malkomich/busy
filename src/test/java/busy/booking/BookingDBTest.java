@@ -31,9 +31,9 @@ import busy.util.SecureSetter;
 @DatabaseSetup("../booking/bookingSet.xml")
 public class BookingDBTest extends AbstractDBTest {
 
-    private static final int[] WEEKS = {1};
-    private static final int[] INVALID_WEEKS = {10};
-    private static final int[] PARTIALLY_VALID_WEEKS = {1, 10};
+    private static final int[] WEEKS = {1, 2};
+    private static final int[] INVALID_WEEKS = {50};
+    private static final int[] PARTIALLY_VALID_WEEKS = {1, 50};
 
     @Autowired
     private BookingDaoImpl repository;
