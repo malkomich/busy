@@ -56,64 +56,85 @@ public class ScheduleDBTest extends AbstractDBTest {
         Branch wrongBranch = new Branch();
         SecureSetter.setId(wrongBranch, INVALID_ID);
 
-        YearSchedule yearSchedule = repository.findByBranchAndYear(wrongBranch, YEAR);
+        YearSchedule yearSchedule = repository.findYearFromBranch(wrongBranch, YEAR);
         assertNull(yearSchedule);
     }
 
     @Test
     public void findYearScheduleByInvalidYear() {
 
-        YearSchedule yearSchedule = repository.findByBranchAndYear(branch, INVALID_YEAR);
+        YearSchedule yearSchedule = repository.findYearFromBranch(branch, INVALID_YEAR);
         assertNull(yearSchedule);
     }
 
     @Test
     public void findYearScheduleByBranchAndYearSuccessfully() {
 
-        YearSchedule yearSchedule = repository.findByBranchAndYear(branch, YEAR);
+        YearSchedule yearSchedule = repository.findYearFromBranch(branch, YEAR);
         assertNotNull(yearSchedule);
     }
 
     @Test
-    public void findWeekSchedulesByInvalidYearSchedule() {
+    public void findWeekSchedulesByInvalidBranch() {
 
-        List<WeekSchedule> weekSchedules = repository.findByYearAndWeeks(INVALID_YEAR, WEEKS);
+        Branch wrongBranch = new Branch();
+        SecureSetter.setId(wrongBranch, INVALID_ID);
+
+        List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(wrongBranch, YEAR, WEEKS);
         assertTrue(weekSchedules.isEmpty());
     }
 
     @Test
-    public void findWeekSchedulesByInvalidWeeksSchedule() {
+    public void findWeekSchedulesByInvalidYear() {
 
-        List<WeekSchedule> weekSchedules = repository.findByYearAndWeeks(YEAR, INVALID_WEEKS);
+        List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(branch, INVALID_YEAR, WEEKS);
         assertTrue(weekSchedules.isEmpty());
     }
-    
-    @Test
-    public void findWeekSchedulesByPartiallyValidWeeksSchedule() {
 
-        List<WeekSchedule> weekSchedules = repository.findByYearAndWeeks(YEAR, PARTIALLY_VALID_WEEKS);
+    @Test
+    public void findWeekSchedulesByInvalidWeeks() {
+
+        List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(branch, YEAR, INVALID_WEEKS);
+        assertTrue(weekSchedules.isEmpty());
+    }
+
+    @Test
+    public void findWeekSchedulesByPartiallyValidWeeks() {
+
+        List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(branch, YEAR, PARTIALLY_VALID_WEEKS);
         assertTrue(weekSchedules.size() == 1);
     }
 
     @Test
-    public void findWeekSchedulesByYearAndWeeksSuccessfully() {
+    public void findWeekSchedulesByBranchAndYearAndWeeksSuccessfully() {
 
-        List<WeekSchedule> weekSchedules = repository.findByYearAndWeeks(YEAR, WEEKS);
+        List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(branch, YEAR, WEEKS);
         assertTrue(weekSchedules.size() == 1);
     }
 
     @Test
     public void findDefaultWeekScheduleFail() {
 
-        WeekSchedule defaultWeek = repository.findDefaultWeek();
+        WeekSchedule defaultWeek = repository.findDefaultWeek(branch);
         assertNull(defaultWeek);
+    }
+
+    @Test
+    @DatabaseSetup("../schedule/defaultWeekSet.xml")
+    public void findDefaultWeekScheduleByInvalidBranch() {
+
+        Branch wrongBranch = new Branch();
+        SecureSetter.setId(wrongBranch, INVALID_ID);
+
+        WeekSchedule defaultWeek = repository.findDefaultWeek(wrongBranch);
+        assertNotNull(defaultWeek);
     }
 
     @Test
     @DatabaseSetup("../schedule/defaultWeekSet.xml")
     public void findDefaultWeekScheduleSuccessfully() {
 
-        WeekSchedule defaultWeek = repository.findDefaultWeek();
+        WeekSchedule defaultWeek = repository.findDefaultWeek(branch);
         assertNotNull(defaultWeek);
     }
 

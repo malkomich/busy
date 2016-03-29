@@ -2,7 +2,9 @@ package busy.booking;
 
 import java.util.List;
 
-import busy.user.User;
+import org.springframework.stereotype.Repository;
+
+import busy.company.Branch;
 
 /**
  * Booking persistence implementation for Database storing.
@@ -10,6 +12,7 @@ import busy.user.User;
  * @author malkomich
  *
  */
+@Repository
 public class BookingDaoImpl implements BookingDao {
 
     /*
@@ -17,7 +20,7 @@ public class BookingDaoImpl implements BookingDao {
      * @see busy.booking.BookingDao#findByUserAndWeeks(busy.user.User, int[])
      */
     @Override
-    public List<Booking> findByUserAndWeeks(User user, int... weeks) {
+    public List<Booking> findByBranchAndWeeks(Branch branch, int... weeks) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -162,7 +162,7 @@ CREATE TABLE week_schedule (
     year_schedule_id    integer             NOT NULL REFERENCES year_schedule(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
     week_of_year        integer             NOT NULL,
-    is_default             boolean             NOT NULL DEFAULT false
+    is_default          boolean             NOT NULL DEFAULT false
 );
 
 CREATE SEQUENCE day_schedule_seq;
