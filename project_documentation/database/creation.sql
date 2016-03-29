@@ -180,8 +180,8 @@ CREATE TABLE hour_schedule (
     id                  integer             DEFAULT nextval('hour_schedule_seq') NOT NULL PRIMARY KEY,
     day_schedule_id     integer             NOT NULL REFERENCES day_schedule(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    start_time          integer             NOT NULL,
-    end_time            integer             NOT NULL
+    start_time          time             NOT NULL,
+    end_time            time             NOT NULL
 );
 
 CREATE TABLE booking(
