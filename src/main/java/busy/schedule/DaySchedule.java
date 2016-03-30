@@ -24,12 +24,24 @@ public class DaySchedule implements Serializable {
         hourScheduleList = new ArrayList<HourSchedule>();
     }
 
+    public int getDayOfWeek() {
+        return dayOfWeek;
+    }
+
     public void setDayOfWeek(int dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
     }
 
+    public WeekSchedule getWeekSchedule() {
+        return weekSchedule;
+    }
+
     public void setWeekSchedule(WeekSchedule weekSchedule) {
         this.weekSchedule = weekSchedule;
+    }
+
+    public List<HourSchedule> getHourScheduleList() {
+        return hourScheduleList;
     }
 
     public void addHourSchedule(HourSchedule hourSchedule) {

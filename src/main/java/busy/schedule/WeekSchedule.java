@@ -25,16 +25,32 @@ public class WeekSchedule implements Serializable {
         dayScheduleList = new ArrayList<DaySchedule>();
     }
 
+    public int getWeekOfYear() {
+        return weekOfYear;
+    }
+
     public void setWeekOfYear(int weekOfYear) {
         this.weekOfYear = weekOfYear;
+    }
+
+    public boolean isDefault() {
+        return isDefault;
     }
 
     public void setDefault(boolean isDefault) {
         this.isDefault = isDefault;
     }
 
+    public YearSchedule getYearSchedule() {
+        return yearSchedule;
+    }
+
     public void setYearSchedule(YearSchedule yearSchedule) {
         this.yearSchedule = yearSchedule;
+    }
+
+    public List<DaySchedule> getDayScheduleList() {
+        return dayScheduleList;
     }
 
     public void addDaySchedule(DaySchedule daySchedule) {

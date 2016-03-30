@@ -17,9 +17,17 @@ public class Booking implements Serializable {
 
     private User user;
     private HourSchedule hourSchedule;
-    
+
+    public User getUser() {
+        return user;
+    }
+
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public HourSchedule getHourSchedule() {
+        return hourSchedule;
     }
 
     public void setHourSchedule(HourSchedule hourSchedule) {

@@ -26,16 +26,32 @@ public class YearSchedule implements Serializable {
         weekScheduleList = new ArrayList<WeekSchedule>();
     }
 
+    public Branch getBranch() {
+        return branch;
+    }
+
     public void setBranch(Branch branch) {
         this.branch = branch;
     }
-    
+
+    public int getYear() {
+        return year;
+    }
+
     public void setYear(int year) {
         this.year = year;
     }
 
+    public List<WeekSchedule> getWeekScheduleList() {
+        return weekScheduleList;
+    }
+
     public void addWeekSchedule(WeekSchedule weekSchedule) {
         weekScheduleList.add(weekSchedule);
+    }
+
+    public int getId() {
+        return id;
     }
 
     @SuppressWarnings("unused")

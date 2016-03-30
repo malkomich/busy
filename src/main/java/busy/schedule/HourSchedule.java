@@ -18,8 +18,16 @@ public class HourSchedule implements Serializable {
     private Time endTime;
     private DaySchedule daySchedule;
 
+    public Time getStartTime() {
+        return startTime;
+    }
+
     public void setStartTime(Time startTime) {
         this.startTime = startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
     }
 
     public void setEndTime(Time endTime) {
@@ -33,6 +41,10 @@ public class HourSchedule implements Serializable {
     @SuppressWarnings("unused")
     private void setId(Integer id) {
         this.id = id;
+    }
+
+    public DaySchedule getDaySchedule() {
+        return daySchedule;
     }
 
     public void setDaySchedule(DaySchedule daySchedule) {
