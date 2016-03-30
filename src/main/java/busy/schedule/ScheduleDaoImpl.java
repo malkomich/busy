@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -177,8 +178,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
                         // Parse hour schedules
                         HourSchedule hourSchedule = new HourSchedule();
                         SecureSetter.setId(hourSchedule, rs.getInt(ALIAS_HOUR_SCHEDULE_ID));
-                        hourSchedule.setStartTime(rs.getTime(START_TIME));
-                        hourSchedule.setEndTime(rs.getTime(END_TIME));
+                        hourSchedule.setStartTime(new LocalTime(rs.getTime(START_TIME)));
+                        hourSchedule.setEndTime(new LocalTime(rs.getTime(END_TIME)));
                         hourSchedule.setDaySchedule(daySchedule);
 
                         daySchedule.addHourSchedule(hourSchedule);
@@ -243,8 +244,8 @@ public class ScheduleDaoImpl implements ScheduleDao {
                         // Parse hour schedules
                         HourSchedule hourSchedule = new HourSchedule();
                         SecureSetter.setId(hourSchedule, rs.getInt(ALIAS_HOUR_SCHEDULE_ID));
-                        hourSchedule.setStartTime(rs.getTime(START_TIME));
-                        hourSchedule.setEndTime(rs.getTime(END_TIME));
+                        hourSchedule.setStartTime(new LocalTime(rs.getTime(START_TIME)));
+                        hourSchedule.setEndTime(new LocalTime(rs.getTime(END_TIME)));
                         hourSchedule.setDaySchedule(daySchedule);
 
                         daySchedule.addHourSchedule(hourSchedule);

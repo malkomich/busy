@@ -1,7 +1,8 @@
 package busy.schedule;
 
 import java.io.Serializable;
-import java.sql.Time;
+
+import org.joda.time.LocalTime;
 
 /**
  * Hour schedule model. It defines a time schedule in a specific day.
@@ -14,23 +15,23 @@ public class HourSchedule implements Serializable {
     private static final long serialVersionUID = 6866084642788052617L;
 
     private int id;
-    private Time startTime;
-    private Time endTime;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private DaySchedule daySchedule;
 
-    public Time getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 

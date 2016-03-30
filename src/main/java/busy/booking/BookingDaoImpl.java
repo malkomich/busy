@@ -41,6 +41,7 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -173,8 +174,8 @@ public class BookingDaoImpl implements BookingDao {
             // Parse Schedule
             HourSchedule hourSchedule = new HourSchedule();
             SecureSetter.setId(hourSchedule, rs.getInt(ALIAS_HOUR_SCHEDULE_ID));
-            hourSchedule.setStartTime(rs.getTime(START_TIME));
-            hourSchedule.setEndTime(rs.getTime(END_TIME));
+            hourSchedule.setStartTime(new LocalTime(rs.getTime(START_TIME)));
+            hourSchedule.setEndTime(new LocalTime(rs.getTime(END_TIME)));
 
             DaySchedule daySchedule = new DaySchedule();
             SecureSetter.setId(daySchedule, rs.getInt(ALIAS_DAY_SCHEDULE_ID));
