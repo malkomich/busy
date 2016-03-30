@@ -1,4 +1,4 @@
-Feature: The user will be able search companies by name
+Feature: The user will be able to search companies by name
     In order to view the services offered by a company
     As a registered user
     I want to search a company by his name

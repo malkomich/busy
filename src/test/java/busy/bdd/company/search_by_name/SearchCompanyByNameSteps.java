@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import busy.AbstractFunctionalTest;
-import busy.company.web.CompanyInfoPage;
+import busy.company.web.CompanyPage;
 import busy.user.web.LoginPage;
 import busy.user.web.MainPage;
 import cucumber.api.java.After;
@@ -29,7 +29,7 @@ public class SearchCompanyByNameSteps extends AbstractFunctionalTest {
     private MainPage mainPage;
 
     @Page
-    private CompanyInfoPage companyInfoPage;
+    private CompanyPage companyInfoPage;
 
     @Before
     public void runOnce() {

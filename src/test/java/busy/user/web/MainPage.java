@@ -163,4 +163,9 @@ public class MainPage extends BusyPage {
         return false;
     }
 
+    public void selectCompanySection(String companyName) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

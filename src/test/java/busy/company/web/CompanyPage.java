@@ -12,7 +12,7 @@ import busy.BusyPage;
  * @author malkomich
  *
  */
-public class CompanyInfoPage extends BusyPage {
+public class CompanyPage extends BusyPage {
 
     private static final String PARTIAL_PATH = "/company/";
     private static final String DESCRIPTION = "Company Page";
@@ -28,6 +28,21 @@ public class CompanyInfoPage extends BusyPage {
 
         String description = getDriver().findElement(By.xpath("//meta[@name='description']")).getAttribute("content");
         assertThat(description).contains(DESCRIPTION);
+    }
+
+    public boolean calendarShown() {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public CompanyPage selectDayInCalendar() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean calendarDayShown() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }
