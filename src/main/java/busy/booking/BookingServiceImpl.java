@@ -33,8 +33,8 @@ public class BookingServiceImpl implements BookingService {
     public List<Booking> findBookingsByBranchAndYearAndMonth(Branch branch, int year, int month) {
 
         DateTime dateTime = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(1);
-        int firstWeek = dateTime.getWeekOfWeekyear();
-        int lastWeek = dateTime.plusMonths(1).minusDays(1).getWeekOfWeekyear();
+        int firstWeek = dateTime.getWeekOfWeekyear() + 1;
+        int lastWeek = dateTime.plusMonths(1).minusDays(1).getWeekOfWeekyear() + 1;
 
         int[] weeks = new int[lastWeek - firstWeek + 1];
         for (int i = firstWeek; i <= lastWeek; i++) {
