@@ -25,14 +25,14 @@ INSERT INTO role(person_id, branch_id, is_manager, activity) VALUES((SELECT id F
 INSERT INTO category(name) VALUES('Software');
 INSERT INTO company(trade_name, business_name, email, cif, active, category_id) VALUES('Busy', 'Busy S.A.', 'busy.validation@gmail.com', 'B12345679', false, (SELECT id FROM category WHERE name='Software'));
 INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM company WHERE cif='B12345679'), (SELECT id FROM address WHERE address1='Calle Mayor'), true, '902202123');
-INSERT INTO role(person_id, branch_id, is_manager, activity) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), (SELECT id FROM branch WHERE phone='902202122'), true, 'Jefe');
+INSERT INTO role(person_id, branch_id, is_manager, activity) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), (SELECT id FROM branch WHERE phone='902202123'), true, 'Jefe');
 
 INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), 'Gestión de empresa', 'Su empresa está pendiente de aprobación', true, DEFAULT);
 INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), 'Gestión de empresa', 'Su empresa ha sido aprobada con éxito', DEFAULT, DEFAULT);
 
 INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), 'Gestión de empresa', 'Su empresa está pendiente de aprobación', DEFAULT, DEFAULT);
 
-INSERT INTO year_schedule(branch_id, year) VALUES((SELECT id FROM branch WHERE phone='902202122'), 2016);
+INSERT INTO year_schedule(branch_id, year) VALUES((SELECT id FROM branch WHERE phone='902202123'), 2016);
 INSERT INTO week_schedule(year_schedule_id, week_of_year, is_default) VALUES((SELECT id FROM year_schedule WHERE year=2016), 1, false);
 INSERT INTO week_schedule(year_schedule_id, week_of_year, is_default) VALUES((SELECT id FROM year_schedule WHERE year=2016), 2, true);
 INSERT INTO day_schedule(week_schedule_id, day_of_week) VALUES((SELECT id FROM week_schedule WHERE week_of_year=1), 1);
