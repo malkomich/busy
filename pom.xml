@@ -160,6 +160,12 @@
             <artifactId>joda-time</artifactId>
         </dependency>
 
+        <!-- ============ JSON ============ -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
