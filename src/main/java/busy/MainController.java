@@ -25,7 +25,7 @@ import busy.user.web.LoginForm;
  *
  */
 @Controller
-@SessionAttributes(value = { MainController.NOTIFICATIONS_SESSION })
+@SessionAttributes(value = {MainController.NOTIFICATIONS_SESSION, MainController.ROLES_SESSION, MainController.USERNAME_SESSION})
 public class MainController {
 
     /**
@@ -34,9 +34,9 @@ public class MainController {
     static final String USER_SESSION = "user";
     static final String USERNAME_SESSION = "username";
     static final String NOTIFICATIONS_SESSION = "notifications";
+    static final String ROLES_SESSION = "roles";
 
     static final String LOGIN_REQUEST = "loginForm";
-    static final String ROLES_REQUEST = "roles";
     static final String MESSAGE_REQUEST = "messageFromController";
 
     /**
@@ -87,7 +87,7 @@ public class MainController {
             model.addAttribute(NOTIFICATIONS_SESSION, notifications);
 
             List<Role> roles = roleService.findRolesByUser(user);
-            model.addAttribute(ROLES_REQUEST, roles);
+            model.addAttribute(ROLES_SESSION, roles);
 
             return MAIN_PAGE;
         }

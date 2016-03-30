@@ -1,6 +1,7 @@
 package busy.schedule;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,6 +19,10 @@ public class DaySchedule implements Serializable {
     private int dayOfWeek;
     private WeekSchedule weekSchedule;
     private List<HourSchedule> hourScheduleList;
+
+    public DaySchedule() {
+        hourScheduleList = new ArrayList<HourSchedule>();
+    }
 
     public void setDayOfWeek(int dayOfWeek) {
         this.dayOfWeek = dayOfWeek;

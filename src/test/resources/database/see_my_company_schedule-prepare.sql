@@ -25,5 +25,5 @@ INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT 
 INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT id FROM day_schedule WHERE day_of_week=2), '12:00:00', '13:30:00');
 INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT id FROM day_schedule WHERE day_of_week=2), '15:00:00', '16:00:00');
 
-INSERT INTO booking((SELECT id FROM person WHERE email='user@domain.com'), (SELECT id FROM hour_schedule WHERE start_time='23:00:00'))
-INSERT INTO booking((SELECT id FROM person WHERE email='user@domain.com'), (SELECT id FROM hour_schedule WHERE start_time='12:00:00'))
+INSERT INTO booking(person_id, hour_schedule_id) VALUES((SELECT id FROM person WHERE email='user@domain.com'), (SELECT id FROM hour_schedule WHERE start_time='23:00:00'));
+INSERT INTO booking(person_id, hour_schedule_id) VALUES((SELECT id FROM person WHERE email='user@domain.com'), (SELECT id FROM hour_schedule WHERE start_time='12:00:00'));

@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 import busy.BusyPage;
 
 /**
- * Company Info Page
+ * Branch Page
  * 
  * @author malkomich
  *

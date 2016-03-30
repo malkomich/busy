@@ -17,10 +17,12 @@ public interface BookingDao {
      * 
      * @param branch
      *            branch attached to the bookings
+     * @param year
+     *            the year which the month belong to
      * @param weeks
      *            variable number of weeks to search for
      * @return The list of resultant bookings
      */
-    List<Booking> findByBranchAndWeeks(Branch branch, int... weeks);
+    List<Booking> findByBranchAndYearAndWeeks(Branch branch, int year, int... weeks);
 
 }

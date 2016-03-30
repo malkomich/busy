@@ -6,6 +6,7 @@ import static busy.util.SQLUtil.ADDR1;
 import static busy.util.SQLUtil.ADDR2;
 import static busy.util.SQLUtil.ADMIN;
 import static busy.util.SQLUtil.ALIAS_ADDR_ID;
+import static busy.util.SQLUtil.ALIAS_BRANCH_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_NAME;
 import static busy.util.SQLUtil.ALIAS_COMPANY_EMAIL;
@@ -206,6 +207,7 @@ public class RoleDaoImpl implements RoleDao {
             role.setUser(user);
 
             Branch branch = new Branch();
+            SecureSetter.setId(branch, rs.getInt(ALIAS_BRANCH_ID));
 
             // Set Address
             Address address = new Address();
@@ -231,6 +233,7 @@ public class RoleDaoImpl implements RoleDao {
 
             // Set Company
             Company company = new Company();
+            SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
             company.setTradeName(rs.getString(TRADE_NAME));
             company.setBusinessName(rs.getString(BUSINESS_NAME));
             company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));

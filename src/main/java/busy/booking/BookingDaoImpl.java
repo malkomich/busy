@@ -68,10 +68,11 @@ import busy.util.SecureSetter;
 @Repository
 public class BookingDaoImpl implements BookingDao {
 
-    private static final String SQL_SELECT_BY_BRANCH = "SELECT userJoin.*, yearScheduleJoin.* FROM " + TABLE_BOOKING
-            + " LEFT JOIN (" + USER_SELECT_QUERY + ") as userJoin ON " + TABLE_BOOKING + "." + USERID + "=userJoin."
-            + ALIAS_USER_ID + " LEFT JOIN (" + YEAR_SCHEDULE_QUERY + ") as yearScheduleJoin ON " + TABLE_BOOKING + "."
-            + HOUR_SCHEDULE_ID + "=yearScheduleJoin." + ALIAS_HOUR_SCHEDULE_ID + " WHERE " + BRANCHID + "=?";
+    private static final String SQL_SELECT_BY_BRANCH_AND_YEAR =
+            "SELECT userJoin.*, yearScheduleJoin.* FROM " + TABLE_BOOKING + " LEFT JOIN (" + USER_SELECT_QUERY
+                    + ") as userJoin ON " + TABLE_BOOKING + "." + USERID + "=userJoin." + ALIAS_USER_ID + " LEFT JOIN ("
+                    + YEAR_SCHEDULE_QUERY + ") as yearScheduleJoin ON " + TABLE_BOOKING + "." + HOUR_SCHEDULE_ID
+                    + "=yearScheduleJoin." + ALIAS_HOUR_SCHEDULE_ID + " WHERE " + BRANCHID + "=? AND " + YEAR + "=?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -87,17 +88,18 @@ public class BookingDaoImpl implements BookingDao {
      * @see busy.booking.BookingDao#findByUserAndWeeks(busy.user.User, int[])
      */
     @Override
-    public List<Booking> findByBranchAndWeeks(Branch branch, int... weeks) {
+    public List<Booking> findByBranchAndYearAndWeeks(Branch branch, int year, int... weeks) {
 
         int numOfWeeks = weeks.length;
 
-        String query = (numOfWeeks > 0) ? SQL_SELECT_BY_BRANCH + " AND (" : SQL_SELECT_BY_BRANCH;
+        String query = (numOfWeeks > 0) ? SQL_SELECT_BY_BRANCH_AND_YEAR + " AND (" : SQL_SELECT_BY_BRANCH_AND_YEAR;
         for (int i = 0; i < numOfWeeks; i++) {
             query += WEEK_OF_YEAR + "=?" + ((i < weeks.length - 1) ? " OR " : ")");
         }
 
-        Object[] params = new Object[numOfWeeks + 1];
+        Object[] params = new Object[numOfWeeks + 2];
         params[0] = branch.getId();
+        params[1] = year;
         for (int i = 0; i < numOfWeeks; i++) {
             params[i + 1] = weeks[i];
         }

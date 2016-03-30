@@ -1,5 +1,6 @@
 package busy.company.web;
 
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -32,6 +33,8 @@ import busy.location.Country;
 import busy.location.LocationService;
 import busy.role.Role;
 import busy.role.RoleService;
+import busy.schedule.ScheduleService;
+import busy.schedule.YearSchedule;
 import busy.user.User;
 import busy.util.SecureSetter;
 
@@ -55,6 +58,7 @@ public class CompanyController {
     static final String MESSAGE_REQUEST = "messageFromController";
     static final String COMPANY_REQUEST = "company";
     static final String BRANCH_REQUEST = "branch";
+    static final String SCHEDULE_REQUEST = "schedule";
 
     /**
      * URL Paths.
@@ -65,14 +69,14 @@ public class CompanyController {
     private static final String PATH_COMPANY_CHANGE_STATE = "/change_company_state";
     private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
     private static final String PATH_COMPANY_INFO = "/company/{id}";
-    private static final String PATH_BRANCH = "/company/{cId}/branch{bId}";
+    private static final String PATH_BRANCH = "/company/{cId}/branch/{bId}";
 
     /**
      * JSP's
      */
     private static final String REGISTER_COMPANY_PAGE = "new-company";
     private static final String COMPANY_INFO_PAGE = "company-info";
-    private static final String BRANCH_PAGE = "company";
+    private static final String BRANCH_PAGE = "branch";
 
     @Autowired
     private CompanyService companyService;
@@ -82,6 +86,9 @@ public class CompanyController {
 
     @Autowired
     private RoleService roleService;
+
+    @Autowired
+    private ScheduleService scheduleService;
 
     @Autowired
     private MessageSource messageSource;
@@ -133,6 +140,11 @@ public class CompanyController {
 
         Branch branch = companyService.findBranchById(Integer.parseInt(branchId));
         model.addAttribute(BRANCH_REQUEST, branch);
+
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+
+        YearSchedule schedule = scheduleService.findScheduleByBranch(branch, year);
+        model.addAttribute(SCHEDULE_REQUEST, schedule);
 
         return BRANCH_PAGE;
     }

@@ -7,8 +7,10 @@ import static busy.util.SQLUtil.ADDRID;
 import static busy.util.SQLUtil.ALIAS_ADDR_ID;
 import static busy.util.SQLUtil.ALIAS_BRANCH_ID;
 import static busy.util.SQLUtil.ALIAS_CATEGORY_ID;
+import static busy.util.SQLUtil.ALIAS_CATEGORY_NAME;
 import static busy.util.SQLUtil.ALIAS_CITY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_NAME;
+import static busy.util.SQLUtil.ALIAS_COMPANY_EMAIL;
 import static busy.util.SQLUtil.ALIAS_COMPANY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
@@ -19,10 +21,8 @@ import static busy.util.SQLUtil.CODE;
 import static busy.util.SQLUtil.COMPANYID;
 import static busy.util.SQLUtil.CREATE_DATE;
 import static busy.util.SQLUtil.DEFAULT;
-import static busy.util.SQLUtil.EMAIL;
 import static busy.util.SQLUtil.HEADQUARTERS;
 import static busy.util.SQLUtil.ID;
-import static busy.util.SQLUtil.NAME;
 import static busy.util.SQLUtil.PHONE;
 import static busy.util.SQLUtil.TABLE_BRANCH;
 import static busy.util.SQLUtil.TRADE_NAME;
@@ -60,8 +60,7 @@ import busy.util.SecureSetter;
 @Repository
 public class BranchDaoImpl implements BranchDao {
 
-    private static final String SQL_SELECT_BY_ID =
-            BRANCH_SELECT_QUERY + " WHERE " + TABLE_BRANCH + "." + ALIAS_BRANCH_ID + "=?";
+    private static final String SQL_SELECT_BY_ID = BRANCH_SELECT_QUERY + " WHERE " + TABLE_BRANCH + "." + ID + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_BRANCH + " SET " + COMPANYID + "= ?," + ADDRID + "= ?,"
             + HEADQUARTERS + "= ?, " + PHONE + "= ? " + "WHERE " + ID + "= ?";
@@ -134,7 +133,7 @@ public class BranchDaoImpl implements BranchDao {
             SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
             company.setTradeName(rs.getString(TRADE_NAME));
             company.setBusinessName(rs.getString(BUSINESS_NAME));
-            company.setEmail(rs.getString(EMAIL));
+            company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
             company.setCif(rs.getString(CIF));
             SecureSetter.setAttribute(company, "setActive", Boolean.class, rs.getBoolean(ACTIVE));
             DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
@@ -145,7 +144,7 @@ public class BranchDaoImpl implements BranchDao {
 
                 Category category = new Category();
                 SecureSetter.setId(category, categoryId);
-                category.setName(rs.getString(NAME));
+                category.setName(rs.getString(ALIAS_CATEGORY_NAME));
 
                 company.setCategory(category);
             }
@@ -175,7 +174,7 @@ public class BranchDaoImpl implements BranchDao {
             branch.setAddress(address);
 
             // Parse main attribute and phone
-            SecureSetter.setAttribute(branch, "setMain", Boolean.class, rs.getBoolean(HEADQUARTERS));
+            SecureSetter.setAttribute(branch, "setHeadquarters", Boolean.class, rs.getBoolean(HEADQUARTERS));
             branch.setPhone(rs.getString(PHONE));
 
             return branch;
