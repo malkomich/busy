@@ -17,6 +17,13 @@ public class CompanyPage extends BusyPage {
     private static final String PARTIAL_PATH = "/company/";
     private static final String DESCRIPTION = "Company Page";
 
+    /*
+     * CSS Selectors
+     */
+    private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
+    private static final String CALENDAR_DAY_SELECTOR = ".cal-day-box";
+    private static final String DAY_MODE_SELECTOR = ".cal-month-day";
+
     @Override
     public String relativePath() {
 
@@ -31,18 +38,19 @@ public class CompanyPage extends BusyPage {
     }
 
     public boolean calendarShown() {
-        // TODO Auto-generated method stub
-        return false;
+
+        return find(CALENDAR_MONTH_SELECTOR).first().isDisplayed();
     }
 
     public CompanyPage selectDayInCalendar() {
-        // TODO Auto-generated method stub
-        return null;
+
+        find(DAY_MODE_SELECTOR).click();
+        return this;
     }
 
     public boolean calendarDayShown() {
-        // TODO Auto-generated method stub
-        return false;
+
+        return find(CALENDAR_DAY_SELECTOR).first().isDisplayed();
     }
 
 }

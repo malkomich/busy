@@ -26,7 +26,7 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
 
     @Page
     private MainPage mainPage;
-    
+
     @Page
     private CompanyPage companyPage;
 

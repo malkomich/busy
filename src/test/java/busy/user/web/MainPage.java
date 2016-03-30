@@ -30,6 +30,7 @@ public class MainPage extends BusyPage {
     private static final String LOGOUT_SELECTOR = "#logout-link";
     private static final String CREATE_COMPANY_SELECTOR = "#create-company";
     private static final String BUSINESS_SECTION_SELECTOR = "#select-role";
+    private static final String BUSINESS_SECTION_ITEM_SELECTOR = ".role-select-menu-item";
     private static final String SEARCHBAR_SELECTOR = ".search-bar";
     private static final String SEARCHBAR_TEXT_SELECTOR = ".search-bar-text";
     private static final String SEARCH_LIST_ITEM_SELECTOR = ".autocomplete-suggestion";
@@ -163,9 +164,22 @@ public class MainPage extends BusyPage {
         return false;
     }
 
-    public void selectCompanySection(String companyName) {
-        // TODO Auto-generated method stub
-        
+    public MainPage selectCompanySection(String companyName) {
+
+        FluentWebElement dropdowm = findFirst(BUSINESS_SECTION_SELECTOR);
+        dropdowm.click();
+        FluentWebElement companySelector = null;
+        for (FluentWebElement element : dropdowm.find(BUSINESS_SECTION_ITEM_SELECTOR)) {
+            if (element.getText().contains(companyName)) {
+                companySelector = element;
+            }
+        }
+        if (companySelector == null) {
+            throw new AssertionError("Selector for company " + companyName + " not found.");
+        }
+        companySelector.click();
+
+        return this;
     }
 
 }

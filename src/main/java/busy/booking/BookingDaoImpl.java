@@ -68,9 +68,9 @@ import busy.util.SecureSetter;
 @Repository
 public class BookingDaoImpl implements BookingDao {
 
-    private static final String SQL_SELECT_BY_BRANCH = "SELECT userJoin.*, yearScheduleJoin.* FROM " + TABLE_BOOKING + " LEFT JOIN ("
-            + USER_SELECT_QUERY + ") as userJoin ON " + TABLE_BOOKING + "." + USERID + "=userJoin." + ALIAS_USER_ID
-            + " LEFT JOIN (" + YEAR_SCHEDULE_QUERY + ") as yearScheduleJoin ON " + TABLE_BOOKING + "."
+    private static final String SQL_SELECT_BY_BRANCH = "SELECT userJoin.*, yearScheduleJoin.* FROM " + TABLE_BOOKING
+            + " LEFT JOIN (" + USER_SELECT_QUERY + ") as userJoin ON " + TABLE_BOOKING + "." + USERID + "=userJoin."
+            + ALIAS_USER_ID + " LEFT JOIN (" + YEAR_SCHEDULE_QUERY + ") as yearScheduleJoin ON " + TABLE_BOOKING + "."
             + HOUR_SCHEDULE_ID + "=yearScheduleJoin." + ALIAS_HOUR_SCHEDULE_ID + " WHERE " + BRANCHID + "=?";
 
     private JdbcTemplate jdbcTemplate;
@@ -195,7 +195,7 @@ public class BookingDaoImpl implements BookingDao {
             hourSchedule.setDaySchedule(daySchedule);
 
             booking.setHourSchedule(hourSchedule);
-            
+
             return booking;
         }
 
