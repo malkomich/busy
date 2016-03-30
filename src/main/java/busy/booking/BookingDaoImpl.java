@@ -101,7 +101,7 @@ public class BookingDaoImpl implements BookingDao {
         params[0] = branch.getId();
         params[1] = year;
         for (int i = 0; i < numOfWeeks; i++) {
-            params[i + 1] = weeks[i];
+            params[i + 2] = weeks[i];
         }
 
         BookingRowMapper rowMapper = new BookingRowMapper();

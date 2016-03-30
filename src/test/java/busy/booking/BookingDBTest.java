@@ -32,6 +32,7 @@ import busy.util.SecureSetter;
 @DatabaseSetup("../booking/bookingSet.xml")
 public class BookingDBTest extends AbstractDBTest {
 
+    private static final int YEAR = 2016;
     private static final int[] WEEKS = {1, 2};
     private static final int[] INVALID_WEEKS = {50};
     private static final int[] PARTIALLY_VALID_WEEKS = {1, 50};
@@ -54,28 +55,28 @@ public class BookingDBTest extends AbstractDBTest {
         Branch wrongBranch = new Branch();
         SecureSetter.setId(wrongBranch, INVALID_ID);
 
-        List<Booking> bookings = repository.findByBranchAndWeeks(wrongBranch, WEEKS);
+        List<Booking> bookings = repository.findByBranchAndYearAndWeeks(wrongBranch, YEAR, WEEKS);
         assertTrue(bookings.isEmpty());
     }
 
     @Test
     public void findByInvalidWeeks() {
 
-        List<Booking> bookings = repository.findByBranchAndWeeks(branch, INVALID_WEEKS);
+        List<Booking> bookings = repository.findByBranchAndYearAndWeeks(branch, YEAR, INVALID_WEEKS);
         assertTrue(bookings.isEmpty());
     }
 
     @Test
     public void findByPartiallyValidWeeks() {
 
-        List<Booking> bookings = repository.findByBranchAndWeeks(branch, PARTIALLY_VALID_WEEKS);
+        List<Booking> bookings = repository.findByBranchAndYearAndWeeks(branch, YEAR, PARTIALLY_VALID_WEEKS);
         assertEquals(2, bookings.size());
     }
 
     @Test
     public void findByBranchAndWeeksSuccessfully() {
 
-        List<Booking> bookings = repository.findByBranchAndWeeks(branch, WEEKS);
+        List<Booking> bookings = repository.findByBranchAndYearAndWeeks(branch, YEAR, WEEKS);
         assertEquals(3, bookings.size());
     }
 
