@@ -77,6 +77,16 @@ public class CompanyServiceImpl implements CompanyService {
 
     /*
      * (non-Javadoc)
+     * @see busy.company.CompanyService#findBranchById(int)
+     */
+    @Override
+    public Branch findBranchById(int id) {
+
+        return branchDao.findById(id);
+    }
+
+    /*
+     * (non-Javadoc)
      * @see busy.company.CompanyService#allCompanies()
      */
     @Override

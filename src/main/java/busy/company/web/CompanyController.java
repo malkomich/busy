@@ -54,6 +54,7 @@ public class CompanyController {
     static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
     static final String MESSAGE_REQUEST = "messageFromController";
     static final String COMPANY_REQUEST = "company";
+    static final String BRANCH_REQUEST = "branch";
 
     /**
      * URL Paths.
@@ -64,12 +65,14 @@ public class CompanyController {
     private static final String PATH_COMPANY_CHANGE_STATE = "/change_company_state";
     private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
     private static final String PATH_COMPANY_INFO = "/company/{id}";
+    private static final String PATH_BRANCH = "/company/{cId}/branch{bId}";
 
     /**
      * JSP's
      */
     private static final String REGISTER_COMPANY_PAGE = "new-company";
     private static final String COMPANY_INFO_PAGE = "company-info";
+    private static final String BRANCH_PAGE = "company";
 
     @Autowired
     private CompanyService companyService;
@@ -114,6 +117,24 @@ public class CompanyController {
         model.addAttribute(CATEGORY_ITEMS_REQUEST, categoryItems);
 
         return REGISTER_COMPANY_PAGE;
+    }
+
+    /**
+     * Shows the calendar view of a specific branch.
+     * 
+     * @param bId
+     *            unique ID of the branch requested
+     * @param model
+     *            Spring model instance
+     * @return The page to register companies
+     */
+    @RequestMapping(value = PATH_BRANCH, method = RequestMethod.GET)
+    public String showBranchPage(@PathVariable("bId") String branchId, Model model) {
+
+        Branch branch = companyService.findBranchById(Integer.parseInt(branchId));
+        model.addAttribute(BRANCH_REQUEST, branch);
+
+        return BRANCH_PAGE;
     }
 
     /**

@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import busy.AbstractFunctionalTest;
-import busy.company.web.CompanyPage;
+import busy.company.web.BranchPage;
 import busy.user.web.LoginPage;
 import busy.user.web.MainPage;
 import cucumber.api.java.After;
@@ -28,7 +28,7 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
     private MainPage mainPage;
 
     @Page
-    private CompanyPage companyPage;
+    private BranchPage branchPage;
 
     @Before
     public void runOnce() {
@@ -80,20 +80,20 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
     @Then("^I should see a calendar with the bookings already made$")
     public void see_calendar() throws Throwable {
 
-        FluentLeniumAssertions.assertThat(companyPage).isAt();
-        assertTrue(companyPage.calendarShown());
+        FluentLeniumAssertions.assertThat(branchPage).isAt();
+        assertTrue(branchPage.calendarShown());
     }
 
     @When("^I select a day$")
     public void select_a_day() throws Throwable {
 
-        companyPage.selectDayInCalendar();
+        branchPage.selectDayInCalendar();
     }
 
     @Then("^I should see the bookings of this day in a more detailed way$")
     public void see_detailed_calendar() throws Throwable {
 
-        assertTrue(companyPage.calendarDayShown());
+        assertTrue(branchPage.calendarDayShown());
     }
 
 }

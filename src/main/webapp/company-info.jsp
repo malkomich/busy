@@ -13,7 +13,7 @@
 
 <link rel="icon" href="/favicon.ico">
 
-<title><spring:message code="company_info.page.title" /></title>
+<title><spring:message code="company.page.title" arguments="${company.tradeName}" argumentSeparator="¬" /></title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 

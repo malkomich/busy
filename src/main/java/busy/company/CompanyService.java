@@ -89,6 +89,15 @@ public interface CompanyService {
     void saveBranch(Branch branch);
 
     /**
+     * Gets a branch by his ID
+     * 
+     * @param id
+     *            unique ID of the branch
+     * @return The resultant branch
+     */
+    Branch findBranchById(int id);
+
+    /**
      * Gets the list of all the categories currently available.
      * 
      * @return The list of current categories

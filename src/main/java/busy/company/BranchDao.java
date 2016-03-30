@@ -15,4 +15,13 @@ public interface BranchDao {
      */
     void save(Branch branch);
 
+    /**
+     * Gets the branch object which ID matches the given one.
+     * 
+     * @param id
+     *            unique ID of the branch
+     * @return The resultant branch
+     */
+    Branch findById(int id);
+
 }
