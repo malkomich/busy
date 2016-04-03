@@ -61,7 +61,7 @@ public class AbstractFunctionalTest extends FluentTest {
 
     @PostConstruct
     public void setUp() {
-        this.initFluent(new BusyDriver(true));
+        initFluent(new BusyDriver(true));
         this.initTest();
     }
 

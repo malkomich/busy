@@ -29,6 +29,8 @@ import busy.util.SecureSetter;
 @DatabaseSetup("../company/branchSet.xml")
 @DatabaseSetup("../schedule/scheduleSet.xml")
 @DatabaseSetup("../user/userSet.xml")
+@DatabaseSetup("../role/roleSet.xml")
+@DatabaseSetup("../booking/serviceSet.xml")
 @DatabaseSetup("../booking/bookingSet.xml")
 public class BookingDBTest extends AbstractDBTest {
 

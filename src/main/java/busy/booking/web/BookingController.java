@@ -68,16 +68,16 @@ public class BookingController {
             JSONArray jsonBookings = new JSONArray();
             for (Booking booking : bookingList) {
                 JSONObject bookingJSON = new JSONObject();
-                bookingJSON.put("id", "u" + booking.getUser().getId() + "h" + booking.getHourSchedule().getId());
+                bookingJSON.put("id", "u" + booking.getUser().getId() + "h" + booking.getService().getHourSchedule().getId());
                 bookingJSON.put("title", booking.getUser().getFirstName() + " " + booking.getUser().getLastName());
                 bookingJSON.put("url", "/localhost:8080");
                 bookingJSON.put("class", "event-info");
 
-                int week = booking.getHourSchedule().getDaySchedule().getWeekSchedule().getWeekOfYear();
-                int day = booking.getHourSchedule().getDaySchedule().getDayOfWeek();
+                int week = booking.getService().getHourSchedule().getDaySchedule().getWeekSchedule().getWeekOfYear();
+                int day = booking.getService().getHourSchedule().getDaySchedule().getDayOfWeek();
 
-                LocalTime startTime = booking.getHourSchedule().getStartTime();
-                LocalTime endTime = booking.getHourSchedule().getEndTime();
+                LocalTime startTime = booking.getService().getHourSchedule().getStartTime();
+                LocalTime endTime = booking.getService().getHourSchedule().getEndTime();
 
                 DateTime iniDate = new DateTime().withYear(year).withMonthOfYear(month).withWeekOfWeekyear(week)
                         .withDayOfWeek(day).withTime(startTime);

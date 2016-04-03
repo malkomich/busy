@@ -34,7 +34,7 @@ import busy.util.SecureSetter;
 public class VerificationDaoImpl implements VerificationDao {
 
     private static final String SQL_SELECT_BY_TOKEN =
-            "SELECT * FROM " + TABLE_REGISTRY + " LEFT JOIN (" + USER_SELECT_QUERY + "asdsadasd" + ") AS userJoin ON "
+            "SELECT * FROM " + TABLE_REGISTRY + " LEFT JOIN (" + USER_SELECT_QUERY + ") AS userJoin ON "
                     + TABLE_REGISTRY + "." + USERID + "= userJoin." + ALIAS_USER_ID + " WHERE " + TOKEN + "= ?";
 
     private static final String SQL_DELETE_REGISTRY = "DELETE FROM " + TABLE_REGISTRY + " WHERE " + USERID + "= ?";

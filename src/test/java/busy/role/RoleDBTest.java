@@ -79,21 +79,10 @@ public class RoleDBTest extends AbstractDBTest {
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void insertWithActivityTooLong() {
-
-        Role role = new Role();
-        role.setUser(user);
-        role.setBranch(branch);
-        role.setActivity("Abcdefghijklmnñopqrstuvwxyz Abc");
-
-        repository.save(role);
-    }
-
-    @Test(expected = DataIntegrityViolationException.class)
     public void insertWithPersonAndBranchDuplicated() {
 
-        Role role1 = new Role(user, branch, "Profesor de guitarra");
-        Role role2 = new Role(user, branch, "Limpiabotas");
+        Role role1 = new Role(user, branch);
+        Role role2 = new Role(user, branch);
 
         repository.save(role1);
         repository.save(role2);

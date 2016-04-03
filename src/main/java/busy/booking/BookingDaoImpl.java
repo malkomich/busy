@@ -11,28 +11,33 @@ import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
 import static busy.util.SQLUtil.ALIAS_DAY_SCHEDULE_ID;
 import static busy.util.SQLUtil.ALIAS_HOUR_SCHEDULE_ID;
+import static busy.util.SQLUtil.ALIAS_SERVICE_ID;
+import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_ID;
+import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_NAME;
 import static busy.util.SQLUtil.ALIAS_USER_ID;
 import static busy.util.SQLUtil.ALIAS_WEEK_SCHEDULE_ID;
 import static busy.util.SQLUtil.ALIAS_YEAR_SCHEDULE_ID;
+import static busy.util.SQLUtil.BOOKINGS_PER_ROLE;
 import static busy.util.SQLUtil.BRANCHID;
 import static busy.util.SQLUtil.CODE;
 import static busy.util.SQLUtil.DAY_OF_WEEK;
+import static busy.util.SQLUtil.DESCRIPTION;
 import static busy.util.SQLUtil.EMAIL;
 import static busy.util.SQLUtil.END_TIME;
 import static busy.util.SQLUtil.FIRSTNAME;
-import static busy.util.SQLUtil.HOUR_SCHEDULE_ID;
 import static busy.util.SQLUtil.IS_DEFAULT;
 import static busy.util.SQLUtil.LASTNAME;
 import static busy.util.SQLUtil.NIF;
 import static busy.util.SQLUtil.PASSWORD;
 import static busy.util.SQLUtil.PHONE;
+import static busy.util.SQLUtil.SERVICE_ID;
+import static busy.util.SQLUtil.SERVICE_QUERY;
 import static busy.util.SQLUtil.START_TIME;
 import static busy.util.SQLUtil.TABLE_BOOKING;
 import static busy.util.SQLUtil.USERID;
 import static busy.util.SQLUtil.USER_SELECT_QUERY;
 import static busy.util.SQLUtil.WEEK_OF_YEAR;
 import static busy.util.SQLUtil.YEAR;
-import static busy.util.SQLUtil.YEAR_SCHEDULE_QUERY;
 import static busy.util.SQLUtil.ZIPCODE;
 
 import java.sql.ResultSet;
@@ -57,6 +62,8 @@ import busy.schedule.DaySchedule;
 import busy.schedule.HourSchedule;
 import busy.schedule.WeekSchedule;
 import busy.schedule.YearSchedule;
+import busy.service.Service;
+import busy.service.ServiceType;
 import busy.user.User;
 import busy.util.SecureSetter;
 
@@ -69,11 +76,10 @@ import busy.util.SecureSetter;
 @Repository
 public class BookingDaoImpl implements BookingDao {
 
-    private static final String SQL_SELECT_BY_BRANCH_AND_YEAR =
-            "SELECT userJoin.*, yearScheduleJoin.* FROM " + TABLE_BOOKING + " LEFT JOIN (" + USER_SELECT_QUERY
-                    + ") as userJoin ON " + TABLE_BOOKING + "." + USERID + "=userJoin." + ALIAS_USER_ID + " LEFT JOIN ("
-                    + YEAR_SCHEDULE_QUERY + ") as yearScheduleJoin ON " + TABLE_BOOKING + "." + HOUR_SCHEDULE_ID
-                    + "=yearScheduleJoin." + ALIAS_HOUR_SCHEDULE_ID + " WHERE " + BRANCHID + "=? AND " + YEAR + "=?";
+    private static final String SQL_SELECT_BY_BRANCH_AND_YEAR = "SELECT userJoin.*, serviceJoin.* FROM " + TABLE_BOOKING
+            + " LEFT JOIN (" + USER_SELECT_QUERY + ") as userJoin ON " + TABLE_BOOKING + "." + USERID + "=userJoin."
+            + ALIAS_USER_ID + " LEFT JOIN (" + SERVICE_QUERY + ") as serviceJoin ON " + TABLE_BOOKING + "." + SERVICE_ID
+            + "=" + ALIAS_SERVICE_ID + " WHERE " + BRANCHID + "=? AND " + YEAR + "=?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -171,7 +177,7 @@ public class BookingDaoImpl implements BookingDao {
 
             booking.setUser(user);
 
-            // Parse Schedule
+            // Parse Service
             HourSchedule hourSchedule = new HourSchedule();
             SecureSetter.setId(hourSchedule, rs.getInt(ALIAS_HOUR_SCHEDULE_ID));
             hourSchedule.setStartTime(new LocalTime(rs.getTime(START_TIME)));
@@ -197,7 +203,20 @@ public class BookingDaoImpl implements BookingDao {
 
             hourSchedule.setDaySchedule(daySchedule);
 
-            booking.setHourSchedule(hourSchedule);
+            Service service = new Service();
+            SecureSetter.setId(service, rs.getInt(ALIAS_SERVICE_ID));
+            service.setHourSchedule(hourSchedule);
+
+            ServiceType serviceType = new ServiceType();
+            SecureSetter.setId(serviceType, rs.getInt(ALIAS_SERVICE_TYPE_ID));
+            serviceType.setName(rs.getString(ALIAS_SERVICE_TYPE_NAME));
+            serviceType.setDescription(rs.getString(DESCRIPTION));
+            serviceType.setMaxBookingsPerRole(rs.getInt(BOOKINGS_PER_ROLE));
+            serviceType.setCompany(branch.getCompany());
+
+            service.setServiceType(serviceType);
+
+            booking.setService(service);
 
             return booking;
         }

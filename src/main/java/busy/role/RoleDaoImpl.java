@@ -1,7 +1,6 @@
 package busy.role;
 
 import static busy.util.SQLUtil.ACTIVE;
-import static busy.util.SQLUtil.ACTIVITY;
 import static busy.util.SQLUtil.ADDR1;
 import static busy.util.SQLUtil.ADDR2;
 import static busy.util.SQLUtil.ADMIN;
@@ -74,7 +73,7 @@ public class RoleDaoImpl implements RoleDao {
             ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_COMPANY_ID + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_ROLE + " SET " + USERID + "= ?," + BRANCHID + "= ?,"
-            + IS_MANAGER + "= ?, " + ACTIVITY + "= ? " + "WHERE " + ID + "= ?";
+            + IS_MANAGER + "= ?" + " WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -88,7 +87,7 @@ public class RoleDaoImpl implements RoleDao {
         jdbcInsert = new SimpleJdbcInsert(dataSource);
         jdbcInsert.withTableName(TABLE_ROLE);
         jdbcInsert.setGeneratedKeyName(ID);
-        jdbcInsert.setColumnNames(Arrays.asList(USERID, BRANCHID, IS_MANAGER, ACTIVITY));
+        jdbcInsert.setColumnNames(Arrays.asList(USERID, BRANCHID, IS_MANAGER));
     }
 
     /*
@@ -100,7 +99,7 @@ public class RoleDaoImpl implements RoleDao {
 
         if (role.getId() > 0) {
 
-            jdbcTemplate.update(SQL_UPDATE, role.getUserId(), role.getBranchId(), role.isManager(), role.getActivity(),
+            jdbcTemplate.update(SQL_UPDATE, role.getUserId(), role.getBranchId(), role.isManager(),
                     role.getId());
 
         } else {
@@ -109,7 +108,6 @@ public class RoleDaoImpl implements RoleDao {
             parameters.put(USERID, role.getUserId());
             parameters.put(BRANCHID, role.getBranchId());
             parameters.put(IS_MANAGER, (role.isManager() != null) ? role.isManager() : DEFAULT);
-            parameters.put(ACTIVITY, role.getActivity());
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
@@ -244,7 +242,6 @@ public class RoleDaoImpl implements RoleDao {
             role.setBranch(branch);
 
             SecureSetter.setAttribute(role, "setManager", Boolean.class, rs.getBoolean(IS_MANAGER));
-            role.setActivity(rs.getString(ACTIVITY));
 
             return role;
         }

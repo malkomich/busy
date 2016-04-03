@@ -6,6 +6,10 @@
  */
 
 DROP TABLE IF EXISTS booking;
+DROP TABLE IF EXISTS service;
+DROP SEQUENCE IF EXISTS service_seq;
+DROP TABLE IF EXISTS service_type;
+DROP SEQUENCE IF EXISTS service_type_seq;
 DROP TABLE IF EXISTS hour_schedule;
 DROP SEQUENCE IF EXISTS hour_schedule_seq;
 DROP TABLE IF EXISTS day_schedule;
@@ -113,7 +117,7 @@ CREATE TABLE branch (
     id                  integer             DEFAULT nextval('branch_seq') NOT NULL PRIMARY KEY,
     company_id          integer             NOT NULL REFERENCES company(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    address_id        integer               NOT NULL REFERENCES address(id)
+    address_id          integer             NOT NULL REFERENCES address(id)
         ON DELETE NO ACTION ON UPDATE CASCADE,
     main                boolean             NOT NULL DEFAULT false,
     phone               varchar(12)         NULL,
@@ -130,7 +134,6 @@ CREATE TABLE role (
     branch_id           integer             NOT NULL REFERENCES branch(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
     is_manager          boolean             NOT NULL DEFAULT false,
-    activity            varchar(30)         NULL,
     UNIQUE (person_id, branch_id)
 );
 
@@ -184,9 +187,32 @@ CREATE TABLE hour_schedule (
     end_time            time             NOT NULL
 );
 
+CREATE SEQUENCE service_type_seq;
+
+CREATE TABLE service_type(
+    id                  integer             DEFAULT nextval('service_type_seq') NOT NULL PRIMARY KEY,
+    name                varchar(20)         NOT NULL,
+    description         text                NULL,
+    bookings_per_role   integer             NOT NULL DEFAULT 1,
+    company_id          integer             NOT NULL REFERENCES company(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE SEQUENCE service_seq;
+
+CREATE TABLE service(
+    id                  integer             DEFAULT nextval('service_seq') NOT NULL PRIMARY KEY,
+    service_type_id     integer             NOT NULL REFERENCES service_type(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    hour_schedule_id    integer             NOT NULL REFERENCES hour_schedule(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    role_id             integer             NOT NULL REFERENCES role(id)
+        ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE booking(
     person_id           integer             NOT NULL REFERENCES person(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    hour_schedule_id    integer             NOT NULL REFERENCES hour_schedule(id)
+    service_id          integer             NOT NULL REFERENCES service(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );

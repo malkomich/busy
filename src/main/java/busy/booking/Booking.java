@@ -2,11 +2,11 @@ package busy.booking;
 
 import java.io.Serializable;
 
-import busy.schedule.HourSchedule;
+import busy.service.Service;
 import busy.user.User;
 
 /**
- * Booking model. It defines a booking from a user in a specific hour schedule.
+ * Booking model. It defines a booking from a user in a specific service.
  * 
  * @author malkomich
  *
@@ -16,7 +16,7 @@ public class Booking implements Serializable {
     private static final long serialVersionUID = -710554949407300960L;
 
     private User user;
-    private HourSchedule hourSchedule;
+    private Service service;
 
     public User getUser() {
         return user;
@@ -26,12 +26,12 @@ public class Booking implements Serializable {
         this.user = user;
     }
 
-    public HourSchedule getHourSchedule() {
-        return hourSchedule;
+    public Service getService() {
+        return service;
     }
 
-    public void setHourSchedule(HourSchedule hourSchedule) {
-        this.hourSchedule = hourSchedule;
+    public void setService(Service service) {
+        this.service = service;
     }
 
 }

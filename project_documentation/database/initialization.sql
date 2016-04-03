@@ -20,12 +20,12 @@ INSERT INTO address(address1, address2, zip_code, city_id) VALUES('Calle Toreros
 INSERT INTO category(name) VALUES('Mobiliario');
 INSERT INTO company(trade_name, business_name, email, cif, active, category_id) VALUES('Boom', 'Boom S.A.', 'jefe@boom.x', 'B12345678', true, (SELECT id FROM category WHERE name='Mobiliario'));
 INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM company WHERE cif='B12345678'), (SELECT id FROM address WHERE address1='Calle Mayor'), true, '902202122');
-INSERT INTO role(person_id, branch_id, is_manager, activity) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM branch WHERE phone='902202122'), true, 'Jefe');
+INSERT INTO role(person_id, branch_id, is_manager) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM branch WHERE phone='902202122'), true);
 
 INSERT INTO category(name) VALUES('Software');
 INSERT INTO company(trade_name, business_name, email, cif, active, category_id) VALUES('Busy', 'Busy S.A.', 'busy.validation@gmail.com', 'B12345679', false, (SELECT id FROM category WHERE name='Software'));
 INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM company WHERE cif='B12345679'), (SELECT id FROM address WHERE address1='Calle Mayor'), true, '902202123');
-INSERT INTO role(person_id, branch_id, is_manager, activity) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), (SELECT id FROM branch WHERE phone='902202123'), true, 'Jefe');
+INSERT INTO role(person_id, branch_id, is_manager) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), (SELECT id FROM branch WHERE phone='902202123'), true);
 
 INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), 'Gestión de empresa', 'Su empresa está pendiente de aprobación', true, DEFAULT);
 INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), 'Gestión de empresa', 'Su empresa ha sido aprobada con éxito', DEFAULT, DEFAULT);
@@ -41,6 +41,11 @@ INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT 
 INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT id FROM day_schedule WHERE day_of_week=2), '12:00:00', '13:30:00');
 INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT id FROM day_schedule WHERE day_of_week=2), '15:00:00', '16:00:00');
 
-INSERT INTO booking(person_id, hour_schedule_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM hour_schedule WHERE start_time='23:00:00'));
-INSERT INTO booking(person_id, hour_schedule_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM hour_schedule WHERE start_time='12:00:00'));
-INSERT INTO booking(person_id, hour_schedule_id) VALUES((SELECT id FROM person WHERE email='user2@domain.x'), (SELECT id FROM hour_schedule WHERE start_time='12:00:00'));
+INSERT INTO service_type(name, description, bookings_per_role, company_id) VALUES('Engineer', NULL, 2, (SELECT id FROM company WHERE cif='B12345679'));
+
+INSERT INTO service(service_type_id, hour_schedule_id, role_id) VALUES((SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM hour_schedule WHERE start_time='23:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
+INSERT INTO service(service_type_id, hour_schedule_id, role_id) VALUES((SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM hour_schedule WHERE start_time='12:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
+
+INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM service WHERE hour_schedule_id=(SELECT id FROM hour_schedule WHERE start_time='23:00:00')));
+INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM service WHERE hour_schedule_id=(SELECT id FROM hour_schedule WHERE start_time='12:00:00')));
+INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user2@domain.x'), (SELECT id FROM service WHERE hour_schedule_id=(SELECT id FROM hour_schedule WHERE start_time='12:00:00')));

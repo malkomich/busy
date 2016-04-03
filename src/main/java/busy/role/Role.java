@@ -19,14 +19,12 @@ public class Role implements Serializable {
     private User user;
     private Branch branch;
     private Boolean manager;
-    private String activity;
 
     public Role() {}
 
-    public Role(User user, Branch branch, String activity) {
+    public Role(User user, Branch branch) {
         this.user = user;
         this.branch = branch;
-        this.activity = activity;
     }
 
     public void setUser(User user) {
@@ -52,14 +50,6 @@ public class Role implements Serializable {
 
     public Boolean isManager() {
         return manager;
-    }
-
-    public void setActivity(String activity) {
-        this.activity = activity;
-    }
-
-    public String getActivity() {
-        return activity;
     }
 
     @SuppressWarnings("unused")

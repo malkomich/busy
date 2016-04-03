@@ -223,7 +223,7 @@ public class CompanyController {
         branch.setCompany(company);
         branch.setAddress(address);
         branch.setPhone(form.getPhone());
-        SecureSetter.setAttribute(branch, "setHeadquarter", Boolean.class, true);
+        SecureSetter.setAttribute(branch, "setHeadquarters", Boolean.class, true);
 
         companyService.saveBranch(branch);
 
@@ -231,7 +231,6 @@ public class CompanyController {
         role.setUser((User) session.getAttribute(USER_SESSION));
         role.setBranch(branch);
         SecureSetter.setAttribute(role, "setManager", Boolean.class, true);
-        role.setActivity("Jefe");
 
         roleService.saveRole(role);
 

@@ -26,6 +26,8 @@ public class SQLUtil {
     public static final String TABLE_WEEK_SCHEDULE = "week_schedule";
     public static final String TABLE_DAY_SCHEDULE = "day_schedule";
     public static final String TABLE_HOUR_SCHEDULE = "hour_schedule";
+    public static final String TABLE_SERVICE_TYPE = "service_type";
+    public static final String TABLE_SERVICE = "service";
     public static final String TABLE_BOOKING = "booking";
 
     // Table fields names
@@ -64,7 +66,6 @@ public class SQLUtil {
 
     public static final String BRANCHID = "branch_id";
     public static final String IS_MANAGER = "is_manager";
-    public static final String ACTIVITY = "activity";
 
     public static final String NOTIFICATION_TYPE = "notif_type";
     public static final String MESSAGE = "message";
@@ -84,7 +85,14 @@ public class SQLUtil {
     public static final String START_TIME = "start_time";
     public static final String END_TIME = "end_time";
 
+    public static final String DESCRIPTION = "description";
+    public static final String BOOKINGS_PER_ROLE = "bookings_per_role";
+
+    public static final String SERVICE_TYPE_ID = "service_type_id";
     public static final String HOUR_SCHEDULE_ID = "hour_schedule_id";
+    public static final String ROLE_ID = "role_id";
+    
+    public static final String SERVICE_ID = "service_id";
 
     // Table field alias
     public static final String ALIAS_COUNTRY_ID = "countryId";
@@ -99,10 +107,13 @@ public class SQLUtil {
     public static final String ALIAS_WEEK_SCHEDULE_ID = "weekScheduleId";
     public static final String ALIAS_DAY_SCHEDULE_ID = "dayScheduleId";
     public static final String ALIAS_HOUR_SCHEDULE_ID = "hourScheduleId";
+    public static final String ALIAS_SERVICE_ID = "serviceId";
+    public static final String ALIAS_SERVICE_TYPE_ID = "serviceTypeId";
 
     public static final String ALIAS_COUNTRY_NAME = "countryName";
     public static final String ALIAS_CITY_NAME = "cityName";
     public static final String ALIAS_CATEGORY_NAME = "categoryName";
+    public static final String ALIAS_SERVICE_TYPE_NAME = "serviceTypeName";
 
     public static final String ALIAS_USER_EMAIL = "userEmail";
     public static final String ALIAS_COMPANY_EMAIL = "companyEmail";
@@ -137,10 +148,9 @@ public class SQLUtil {
             + COMPANYID + "= companyJoin." + ALIAS_COMPANY_ID;
 
     public static final String ROLE_SELECT_QUERY = "SELECT " + TABLE_ROLE + "." + ID + " AS " + ALIAS_ROLE_ID + ","
-            + IS_MANAGER + "," + ACTIVITY + ", branchJoin.*, userJoin.* FROM " + TABLE_ROLE + " LEFT JOIN ("
-            + BRANCH_SELECT_QUERY + ") AS branchJoin ON " + TABLE_ROLE + "." + BRANCHID + "= branchJoin."
-            + ALIAS_BRANCH_ID + " LEFT JOIN (" + USER_SELECT_QUERY + ") AS userJoin ON " + TABLE_ROLE + "." + USERID
-            + "=userJoin." + ALIAS_USER_ID;
+            + IS_MANAGER + ", branchJoin.*, userJoin.* FROM " + TABLE_ROLE + " LEFT JOIN (" + BRANCH_SELECT_QUERY
+            + ") AS branchJoin ON " + TABLE_ROLE + "." + BRANCHID + "= branchJoin." + ALIAS_BRANCH_ID + " LEFT JOIN ("
+            + USER_SELECT_QUERY + ") AS userJoin ON " + TABLE_ROLE + "." + USERID + "=userJoin." + ALIAS_USER_ID;
 
     public static final String DAY_SCHEDULE_QUERY = "SELECT " + TABLE_DAY_SCHEDULE + "." + ID + " AS "
             + ALIAS_DAY_SCHEDULE_ID + "," + WEEK_SCHEDULE_ID + "," + DAY_OF_WEEK + "," + TABLE_HOUR_SCHEDULE + "." + ID
@@ -157,4 +167,17 @@ public class SQLUtil {
             + ALIAS_YEAR_SCHEDULE_ID + "," + BRANCHID + "," + YEAR + ", weekScheduleJoin.* " + " FROM "
             + TABLE_YEAR_SCHEDULE + " LEFT JOIN (" + WEEK_SCHEDULE_QUERY + ") AS weekScheduleJoin ON "
             + TABLE_YEAR_SCHEDULE + "." + ID + "= weekScheduleJoin." + YEAR_SCHEDULE_ID;
+
+    public static final String SERVICE_TYPE_QUERY = "SELECT " + TABLE_SERVICE_TYPE + "." + ID + " AS "
+            + ALIAS_SERVICE_TYPE_ID + "," + TABLE_SERVICE_TYPE + "." + NAME + " AS " + ALIAS_SERVICE_TYPE_NAME + ","
+            + DESCRIPTION + "," + BOOKINGS_PER_ROLE + "," + COMPANYID + " FROM " + TABLE_SERVICE_TYPE;
+
+    public static final String SERVICE_QUERY =
+            "SELECT " + TABLE_SERVICE + "." + ID + " AS " + ALIAS_SERVICE_ID + "," + SERVICE_TYPE_ID + ","
+                    + HOUR_SCHEDULE_ID + "," + ROLE_ID + ", serviceTypeJoin.*, yearScheduleJoin.*, roleJoin.*"
+                    + " FROM " + TABLE_SERVICE + " LEFT JOIN (" + SERVICE_TYPE_QUERY + ") AS serviceTypeJoin ON "
+                    + TABLE_SERVICE + "." + SERVICE_TYPE_ID + "=serviceTypeJoin." + ALIAS_SERVICE_TYPE_ID
+                    + " LEFT JOIN (" + YEAR_SCHEDULE_QUERY + ") AS yearScheduleJoin ON " + TABLE_SERVICE + "."
+                    + HOUR_SCHEDULE_ID + " = " + ALIAS_HOUR_SCHEDULE_ID + " LEFT JOIN (" + ROLE_SELECT_QUERY
+                    + ") AS roleJoin ON " + TABLE_SERVICE + "." + ROLE_ID + "=roleJoin." + ALIAS_ROLE_ID;
 }

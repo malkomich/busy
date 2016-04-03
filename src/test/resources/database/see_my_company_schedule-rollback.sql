@@ -1,10 +1,13 @@
 /* Busy 
  * Author: Juan Carlos González Cabrero 
  *
- * Database rollback for the feature of searching a company by name
+ * Database rollback for the feature of show the company schedule
  */
 
 DELETE FROM booking;
+
+DELETE FROM service;
+DELETE FROM service_type;
 
 DELETE FROM hour_schedule;
 DELETE FROM day_schedule;

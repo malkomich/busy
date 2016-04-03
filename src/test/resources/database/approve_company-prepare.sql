@@ -14,6 +14,6 @@ INSERT INTO address(address1, address2, zip_code, city_id) VALUES('Calle Mayor',
 INSERT INTO category(name) VALUES('Mobiliario');
 INSERT INTO company(trade_name, business_name, email, cif, active, category_id) VALUES('Boom', 'Boom S.A.', 'jefe@boom.com', 'B12345678', false, (SELECT id FROM category WHERE name='Mobiliario'));
 INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM company WHERE cif='B12345678'), (SELECT id FROM address WHERE address1='Calle Mayor'), true, '902202122');
-INSERT INTO role(person_id, branch_id, is_manager, activity) VALUES((SELECT id FROM person WHERE email='user@domain.com'), (SELECT id FROM branch WHERE phone='902202122'), true, 'Jefe');
+INSERT INTO role(person_id, branch_id, is_manager) VALUES((SELECT id FROM person WHERE email='user@domain.com'), (SELECT id FROM branch WHERE phone='902202122'), true);
 
 INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user@domain.com'), 'Company management', 'Your company is pending to be approved', DEFAULT, DEFAULT);

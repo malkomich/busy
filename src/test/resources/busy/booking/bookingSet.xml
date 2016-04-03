@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <booking person_id="1" hour_schedule_id="1" />
-    <booking person_id="1" hour_schedule_id="2" />
-    <booking person_id="1" hour_schedule_id="8" />
+    <booking person_id="2" service_id="1" />
+    <booking person_id="2" service_id="2" />
+    <booking person_id="2" service_id="3" />
 </dataset>
