@@ -21,8 +21,8 @@ public class BranchPage extends BusyPage {
      * CSS Selectors
      */
     private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
-    private static final String CALENDAR_DAY_SELECTOR = ".cal-day-box";
-    private static final String DAY_MODE_SELECTOR = ".cal-month-day";
+    private static final String CALENDAR_DAY_SELECTOR = "#cal-day-box";
+    private static final String DAY_MODE_SELECTOR = "[data-calendar-view='day']";
 
     @Override
     public String relativePath() {

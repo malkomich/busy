@@ -168,8 +168,9 @@ public class MainPage extends BusyPage {
 
         FluentWebElement dropdowm = findFirst(BUSINESS_SECTION_SELECTOR);
         dropdowm.click();
+        
         FluentWebElement companySelector = null;
-        for (FluentWebElement element : dropdowm.find(BUSINESS_SECTION_ITEM_SELECTOR)) {
+        for (FluentWebElement element : find(BUSINESS_SECTION_ITEM_SELECTOR)) {
             if (element.getText().contains(companyName)) {
                 companySelector = element;
             }

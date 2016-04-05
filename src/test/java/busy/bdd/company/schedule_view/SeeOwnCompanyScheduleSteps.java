@@ -50,7 +50,7 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
         goTo(loginPage).await().untilPage();
         FluentLeniumAssertions.assertThat(loginPage).isAt();
 
-        String email = "user@domain.com";
+        String email = "busy.validation@gmail.com";
         String password = "pass";
 
         loginPage.setEmail(email);

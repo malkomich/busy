@@ -124,7 +124,6 @@
             <version>2.20</version>
         </dependency>
 
-
         <!-- ============ BDD ============ -->
         <dependency>
             <groupId>info.cukes</groupId>
