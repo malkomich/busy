@@ -50,8 +50,7 @@ public class AdminPage extends BusyPage {
     public AdminPage selectCompany(String company) {
 
         if (!company.isEmpty()) {
-            FluentWebElement companyItem =
-                    find(COMPANY_SELECTOR, FilterConstructor.withText().contains(company)).first();
+            FluentWebElement companyItem = findFirst(COMPANY_SELECTOR, FilterConstructor.withText().contains(company));
             this.companyItem = companyItem;
         }
         return this;
@@ -66,9 +65,8 @@ public class AdminPage extends BusyPage {
     public AdminPage companyIsActive(String company) {
 
         if (!company.isEmpty()) {
-            FluentWebElement companyItem =
-                    find(COMPANY_SELECTOR, FilterConstructor.withText().contains(company)).first();
-            assertThat(companyItem.find(SWITCH_SELECTOR).first().isSelected());
+            FluentWebElement companyItem = findFirst(COMPANY_SELECTOR, FilterConstructor.withText().contains(company));
+            assertThat(companyItem.findFirst(SWITCH_SELECTOR).isSelected());
         }
         return this;
     }
@@ -76,9 +74,8 @@ public class AdminPage extends BusyPage {
     public AdminPage companyIsBlocked(String company) {
 
         if (!company.isEmpty()) {
-            FluentWebElement companyItem =
-                    find(COMPANY_SELECTOR, FilterConstructor.withText().contains(company)).first();
-            assertThat(!companyItem.find(SWITCH_SELECTOR).first().isSelected());
+            FluentWebElement companyItem = findFirst(COMPANY_SELECTOR, FilterConstructor.withText().contains(company));
+            assertThat(!companyItem.findFirst(SWITCH_SELECTOR).isSelected());
         }
         return this;
     }

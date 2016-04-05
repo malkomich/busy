@@ -19,7 +19,8 @@ public class ConfirmPage extends BusyPage {
 
     private static final String CONFIRMATION_ID = "IDPRUEBA";
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see busy.BusyPage#relativePath()
      */
     @Override

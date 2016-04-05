@@ -30,7 +30,8 @@ public class LoginPage extends BusyPage {
     private static final String SUCCESS_MESSAGE_SELECTOR = "#signupConfirmation";
     private static final String VALIDATION_MESSAGE_SELECTOR = "#validationMessage";
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see busy.BusyPage#relativePath()
      */
     @Override

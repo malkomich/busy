@@ -146,7 +146,7 @@ public class MainPage extends BusyPage {
 
     public MainPage selectCompanyInSearchList(String companyName) {
 
-        FluentWebElement item = find(SEARCH_LIST_ITEM_SELECTOR, FilterConstructor.withText(companyName)).first();
+        FluentWebElement item = findFirst(SEARCH_LIST_ITEM_SELECTOR, FilterConstructor.withText(companyName));
         click(item);
         return this;
     }
@@ -154,7 +154,7 @@ public class MainPage extends BusyPage {
     public boolean isSearchListShown() {
 
         try {
-            if (find(SEARCH_LIST_ITEM_SELECTOR).first().isDisplayed()) {
+            if (findFirst(SEARCH_LIST_ITEM_SELECTOR).isDisplayed()) {
                 return true;
             }
         } catch (NoSuchElementException e) {
@@ -168,13 +168,10 @@ public class MainPage extends BusyPage {
 
         FluentWebElement dropdowm = findFirst(BUSINESS_SECTION_SELECTOR);
         dropdowm.click();
-        
-        FluentWebElement companySelector = null;
-        for (FluentWebElement element : find(BUSINESS_SECTION_ITEM_SELECTOR)) {
-            if (element.getText().contains(companyName)) {
-                companySelector = element;
-            }
-        }
+
+        FluentWebElement companySelector =
+                findFirst(BUSINESS_SECTION_ITEM_SELECTOR, FilterConstructor.withText().contains(companyName));
+
         if (companySelector == null) {
             throw new AssertionError("Selector for company " + companyName + " not found.");
         }

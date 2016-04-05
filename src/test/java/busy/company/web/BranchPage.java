@@ -39,7 +39,7 @@ public class BranchPage extends BusyPage {
 
     public boolean calendarShown() {
 
-        return find(CALENDAR_MONTH_SELECTOR).first().isDisplayed();
+        return findFirst(CALENDAR_MONTH_SELECTOR).isDisplayed();
     }
 
     public BranchPage selectDayInCalendar() {
@@ -50,7 +50,7 @@ public class BranchPage extends BusyPage {
 
     public boolean calendarDayShown() {
 
-        return find(CALENDAR_DAY_SELECTOR).first().isDisplayed();
+        return findFirst(CALENDAR_DAY_SELECTOR).isDisplayed();
     }
 
 }

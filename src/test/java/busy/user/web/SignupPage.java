@@ -34,7 +34,8 @@ public class SignupPage extends BusyPage {
     private static final String SUBMIT_SELECTOR = "#submit";
     private static final String ERROR_SELECTOR = "span.error";
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see busy.BusyPage#relativePath()
      */
     @Override
