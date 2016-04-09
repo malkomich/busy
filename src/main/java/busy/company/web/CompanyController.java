@@ -145,7 +145,10 @@ public class CompanyController {
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
-        YearSchedule schedule = scheduleService.findScheduleByBranch(branch, year);
+        // Load 3 year to handle right the weeks between years.
+        YearSchedule[] schedule = {scheduleService.findScheduleByBranch(branch, year - 1),
+            scheduleService.findScheduleByBranch(branch, year),
+            scheduleService.findScheduleByBranch(branch, year + 1)};
         model.addAttribute(SCHEDULE_SESSION, schedule);
 
         return BRANCH_PAGE;
