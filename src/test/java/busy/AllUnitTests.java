@@ -13,7 +13,8 @@ import busy.schedule.ScheduleTests;
 import busy.user.UserTests;
 
 @RunWith(Suite.class)
-@SuiteClasses({ LocationTests.class, UserTests.class, CompanyTests.class, RoleTests.class, NotificationTests.class, ScheduleTests.class, BookingTests.class })
+@SuiteClasses({LocationTests.class, UserTests.class, CompanyTests.class, RoleTests.class, NotificationTests.class,
+    ScheduleTests.class, BookingTests.class})
 public class AllUnitTests {
 
 }

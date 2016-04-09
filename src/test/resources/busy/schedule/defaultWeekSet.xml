@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
     <week_schedule id="10" year_schedule_id="1" week_of_year="10" is_default="true" />
+
+    <day_schedule id="30" week_schedule_id="10" day_of_week="7" />
+
+    <hour_schedule id="50" day_schedule_id="30" start_time="5:00:00" end_time="6:00:00" />
+
+    <service id="50" service_type_id="1" hour_schedule_id="50" role_id="1" />
 </dataset>

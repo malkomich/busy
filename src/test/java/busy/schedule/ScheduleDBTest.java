@@ -15,6 +15,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
 import busy.company.Branch;
+import busy.company.Company;
 import busy.util.SecureSetter;
 
 /**
@@ -30,6 +31,9 @@ import busy.util.SecureSetter;
 @DatabaseSetup("../location/addressSet.xml")
 @DatabaseSetup("../company/branchSet.xml")
 @DatabaseSetup("../schedule/scheduleSet.xml")
+@DatabaseSetup("../user/userSet.xml")
+@DatabaseSetup("../role/roleSet.xml")
+@DatabaseSetup("../schedule/serviceSet.xml")
 public class ScheduleDBTest extends AbstractDBTest {
 
     private static final int YEAR = 2016;
@@ -49,15 +53,19 @@ public class ScheduleDBTest extends AbstractDBTest {
 
         branch = new Branch();
         SecureSetter.setId(branch, 1);
+
+        Company company = new Company();
+        SecureSetter.setId(company, 1);
+
+        branch.setCompany(company);
     }
 
     @Test
     public void findYearScheduleByInvalidBranch() {
 
-        Branch wrongBranch = new Branch();
-        SecureSetter.setId(wrongBranch, INVALID_ID);
+        SecureSetter.setId(branch, INVALID_ID);
 
-        YearSchedule yearSchedule = repository.findYearFromBranch(wrongBranch, YEAR);
+        YearSchedule yearSchedule = repository.findYearFromBranch(branch, YEAR);
         assertNull(yearSchedule);
     }
 
@@ -78,10 +86,9 @@ public class ScheduleDBTest extends AbstractDBTest {
     @Test
     public void findWeekSchedulesByInvalidBranch() {
 
-        Branch wrongBranch = new Branch();
-        SecureSetter.setId(wrongBranch, INVALID_ID);
+        SecureSetter.setId(branch, INVALID_ID);
 
-        List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(wrongBranch, YEAR, WEEKS);
+        List<WeekSchedule> weekSchedules = repository.findWeeksFromBranch(branch, YEAR, WEEKS);
         assertTrue(weekSchedules.isEmpty());
     }
 
@@ -124,10 +131,9 @@ public class ScheduleDBTest extends AbstractDBTest {
     @DatabaseSetup("../schedule/defaultWeekSet.xml")
     public void findDefaultWeekScheduleByInvalidBranch() {
 
-        Branch wrongBranch = new Branch();
-        SecureSetter.setId(wrongBranch, INVALID_ID);
+        SecureSetter.setId(branch, INVALID_ID);
 
-        WeekSchedule defaultWeek = repository.findDefaultWeek(wrongBranch);
+        WeekSchedule defaultWeek = repository.findDefaultWeek(branch);
         assertNull(defaultWeek);
     }
 

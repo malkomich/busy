@@ -4,5 +4,7 @@
     
     <service id="1" service_type_id="1" hour_schedule_id="1" role_id="1" />
     <service id="2" service_type_id="1" hour_schedule_id="2" role_id="1" />
-    <service id="3" service_type_id="1" hour_schedule_id="8" role_id="1" />
+    <service id="3" service_type_id="1" hour_schedule_id="7" role_id="1" />
+    
+    <service id="4" service_type_id="1" hour_schedule_id="8" role_id="1" />
 </dataset>

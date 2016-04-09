@@ -1,9 +1,12 @@
 package busy.booking;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
-import busy.company.Branch;
+import busy.service.Service;
 import busy.util.SecureSetter;
 
 /**
@@ -30,56 +33,80 @@ import busy.util.SecureSetter;
 @DatabaseSetup("../schedule/scheduleSet.xml")
 @DatabaseSetup("../user/userSet.xml")
 @DatabaseSetup("../role/roleSet.xml")
-@DatabaseSetup("../booking/serviceSet.xml")
+@DatabaseSetup("../schedule/serviceSet.xml")
 @DatabaseSetup("../booking/bookingSet.xml")
 public class BookingDBTest extends AbstractDBTest {
 
-    private static final int YEAR = 2016;
-    private static final int[] WEEKS = {1, 2};
-    private static final int[] INVALID_WEEKS = {50};
-    private static final int[] PARTIALLY_VALID_WEEKS = {1, 50};
+    private static final int NUM_SERVICES_BOOKED = 3;
+    private static final int SERVICE_NOT_BOOKED = 4;
 
     @Autowired
     private BookingDaoImpl repository;
 
-    private Branch branch;
+    private List<Service> serviceList;
 
     @Before
     public void setUp() {
 
-        branch = new Branch();
-        SecureSetter.setId(branch, 1);
+        serviceList = new ArrayList<Service>();
+        for (int i = 1; i <= NUM_SERVICES_BOOKED; i++) {
+            Service service = new Service();
+            SecureSetter.setId(service, i);
+            serviceList.add(service);
+        }
     }
 
     @Test
-    public void findByInvalidBranch() {
+    public void findByNoServices() {
 
-        Branch wrongBranch = new Branch();
-        SecureSetter.setId(wrongBranch, INVALID_ID);
-
-        List<Booking> bookings = repository.findByBranchAndYearAndWeeks(wrongBranch, YEAR, WEEKS);
-        assertTrue(bookings.isEmpty());
+        Map<Service, List<Booking>> bookingMap = repository.findByServices(new ArrayList<Service>());
+        assertTrue(bookingMap.isEmpty());
     }
 
     @Test
-    public void findByInvalidWeeks() {
+    public void findByInvalidService() {
 
-        List<Booking> bookings = repository.findByBranchAndYearAndWeeks(branch, YEAR, INVALID_WEEKS);
-        assertTrue(bookings.isEmpty());
+        Service wrongService = new Service();
+        SecureSetter.setId(wrongService, INVALID_ID);
+        List<Service> wrongServiceList = new ArrayList<Service>();
+        wrongServiceList.add(wrongService);
+
+        Map<Service, List<Booking>> bookingMap = repository.findByServices(wrongServiceList);
+        assertTrue(bookingMap.get(wrongService).isEmpty());
     }
 
     @Test
-    public void findByPartiallyValidWeeks() {
+    public void findByNotBookedService() {
 
-        List<Booking> bookings = repository.findByBranchAndYearAndWeeks(branch, YEAR, PARTIALLY_VALID_WEEKS);
-        assertEquals(2, bookings.size());
+        Service notBookedService = new Service();
+        SecureSetter.setId(notBookedService, SERVICE_NOT_BOOKED);
+        serviceList.add(notBookedService);
+
+        Map<Service, List<Booking>> bookingMap = repository.findByServices(serviceList);
+        assertTrue(bookingMap.get(notBookedService).isEmpty());
     }
 
     @Test
-    public void findByBranchAndWeeksSuccessfully() {
+    public void findByPartiallyValidServices() {
 
-        List<Booking> bookings = repository.findByBranchAndYearAndWeeks(branch, YEAR, WEEKS);
-        assertEquals(3, bookings.size());
+        Service wrongService = new Service();
+        SecureSetter.setId(wrongService, INVALID_ID);
+        serviceList.add(wrongService);
+
+        Map<Service, List<Booking>> bookingMap = repository.findByServices(serviceList);
+        assertEquals(NUM_SERVICES_BOOKED + 1, bookingMap.size());
+        assertTrue(bookingMap.get(wrongService).isEmpty());
+    }
+
+    @Test
+    public void findByServicesSuccessfully() {
+
+        Map<Service, List<Booking>> bookingMap = repository.findByServices(serviceList);
+        assertEquals(NUM_SERVICES_BOOKED, bookingMap.size());
+
+        for (List<Booking> list : bookingMap.values()) {
+            assertFalse(list.isEmpty());
+        }
     }
 
 }
