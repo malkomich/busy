@@ -12,6 +12,7 @@ public class ServiceType implements Serializable {
     private String name;
     private String description;
     private int maxBookingsPerRole;
+    private int duration;
     private Company company;
 
     public String getName() {
@@ -53,5 +54,13 @@ public class ServiceType implements Serializable {
     @SuppressWarnings("unused")
     private void setId(Integer id) {
         this.id = id;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getDuration() {
+        return duration;
     }
 }

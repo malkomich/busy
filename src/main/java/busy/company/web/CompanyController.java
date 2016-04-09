@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -45,12 +46,14 @@ import busy.util.SecureSetter;
  *
  */
 @Controller
+@SessionAttributes(value = {CompanyController.SCHEDULE_SESSION})
 public class CompanyController {
 
     /**
      * Spring Model Attributes.
      */
     static final String USER_SESSION = "user";
+    public static final String SCHEDULE_SESSION = "schedule";
 
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
     static final String COUNTRY_ITEMS_REQUEST = "countryItems";
@@ -58,7 +61,6 @@ public class CompanyController {
     static final String MESSAGE_REQUEST = "messageFromController";
     static final String COMPANY_REQUEST = "company";
     static final String BRANCH_REQUEST = "branch";
-    static final String SCHEDULE_REQUEST = "schedule";
 
     /**
      * URL Paths.
@@ -144,7 +146,7 @@ public class CompanyController {
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
         YearSchedule schedule = scheduleService.findScheduleByBranch(branch, year);
-        model.addAttribute(SCHEDULE_REQUEST, schedule);
+        model.addAttribute(SCHEDULE_SESSION, schedule);
 
         return BRANCH_PAGE;
     }

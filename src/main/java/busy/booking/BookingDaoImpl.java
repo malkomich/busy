@@ -9,44 +9,30 @@ import static busy.util.SQLUtil.ALIAS_CITY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_NAME;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
-import static busy.util.SQLUtil.ALIAS_DAY_SCHEDULE_ID;
-import static busy.util.SQLUtil.ALIAS_HOUR_SCHEDULE_ID;
-import static busy.util.SQLUtil.ALIAS_SERVICE_ID;
-import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_ID;
-import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_NAME;
 import static busy.util.SQLUtil.ALIAS_USER_ID;
-import static busy.util.SQLUtil.ALIAS_WEEK_SCHEDULE_ID;
-import static busy.util.SQLUtil.ALIAS_YEAR_SCHEDULE_ID;
-import static busy.util.SQLUtil.BOOKINGS_PER_ROLE;
-import static busy.util.SQLUtil.BRANCHID;
 import static busy.util.SQLUtil.CODE;
-import static busy.util.SQLUtil.DAY_OF_WEEK;
-import static busy.util.SQLUtil.DESCRIPTION;
 import static busy.util.SQLUtil.EMAIL;
-import static busy.util.SQLUtil.END_TIME;
 import static busy.util.SQLUtil.FIRSTNAME;
-import static busy.util.SQLUtil.IS_DEFAULT;
 import static busy.util.SQLUtil.LASTNAME;
 import static busy.util.SQLUtil.NIF;
 import static busy.util.SQLUtil.PASSWORD;
 import static busy.util.SQLUtil.PHONE;
 import static busy.util.SQLUtil.SERVICE_ID;
-import static busy.util.SQLUtil.SERVICE_QUERY;
-import static busy.util.SQLUtil.START_TIME;
 import static busy.util.SQLUtil.TABLE_BOOKING;
 import static busy.util.SQLUtil.USERID;
 import static busy.util.SQLUtil.USER_SELECT_QUERY;
-import static busy.util.SQLUtil.WEEK_OF_YEAR;
-import static busy.util.SQLUtil.YEAR;
 import static busy.util.SQLUtil.ZIPCODE;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -54,16 +40,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import busy.company.Branch;
 import busy.location.Address;
 import busy.location.City;
 import busy.location.Country;
-import busy.schedule.DaySchedule;
-import busy.schedule.HourSchedule;
-import busy.schedule.WeekSchedule;
-import busy.schedule.YearSchedule;
 import busy.service.Service;
-import busy.service.ServiceType;
 import busy.user.User;
 import busy.util.SecureSetter;
 
@@ -76,10 +56,9 @@ import busy.util.SecureSetter;
 @Repository
 public class BookingDaoImpl implements BookingDao {
 
-    private static final String SQL_SELECT_BY_BRANCH_AND_YEAR = "SELECT userJoin.*, serviceJoin.* FROM " + TABLE_BOOKING
-            + " LEFT JOIN (" + USER_SELECT_QUERY + ") as userJoin ON " + TABLE_BOOKING + "." + USERID + "=userJoin."
-            + ALIAS_USER_ID + " LEFT JOIN (" + SERVICE_QUERY + ") as serviceJoin ON " + TABLE_BOOKING + "." + SERVICE_ID
-            + "=" + ALIAS_SERVICE_ID + " WHERE " + BRANCHID + "=? AND " + YEAR + "=?";
+    private static final String SQL_SELECT_BY_SERVICES = "SELECT " + TABLE_BOOKING + "." + SERVICE_ID
+            + ", userJoin.* FROM " + TABLE_BOOKING + " LEFT JOIN (" + USER_SELECT_QUERY + ") as userJoin ON "
+            + TABLE_BOOKING + "." + USERID + "=userJoin." + ALIAS_USER_ID + " WHERE (";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -92,45 +71,55 @@ public class BookingDaoImpl implements BookingDao {
 
     /*
      * (non-Javadoc)
-     * @see busy.booking.BookingDao#findByUserAndWeeks(busy.user.User, int[])
+     * @see busy.booking.BookingDao#findByServices(java.util.List)
      */
     @Override
-    public List<Booking> findByBranchAndYearAndWeeks(Branch branch, int year, int... weeks) {
+    public Map<Service, List<Booking>> findByServices(List<Service> serviceList) {
 
-        int numOfWeeks = weeks.length;
-
-        String query = (numOfWeeks > 0) ? SQL_SELECT_BY_BRANCH_AND_YEAR + " AND (" : SQL_SELECT_BY_BRANCH_AND_YEAR;
-        for (int i = 0; i < numOfWeeks; i++) {
-            query += WEEK_OF_YEAR + "=?" + ((i < weeks.length - 1) ? " OR " : ")");
+        Map<Service, List<Booking>> resultMap = new HashMap<Service, List<Booking>>();
+        for (Service service : serviceList) {
+            resultMap.put(service, new ArrayList<Booking>());
         }
 
-        Object[] params = new Object[numOfWeeks + 2];
-        params[0] = branch.getId();
-        params[1] = year;
-        for (int i = 0; i < numOfWeeks; i++) {
-            params[i + 2] = weeks[i];
+        // Generate the SQL query
+        int numOfServices = serviceList.size();
+        String query = SQL_SELECT_BY_SERVICES;
+
+        for (int i = 0; i < numOfServices; i++) {
+            query += SERVICE_ID + "=?" + ((i < numOfServices - 1) ? " OR " : ")");
         }
 
-        BookingRowMapper rowMapper = new BookingRowMapper();
-        rowMapper.setBranch(branch);
-
-        try {
-
-            return jdbcTemplate.query(query, rowMapper, params);
-
-        } catch (EmptyResultDataAccessException e) {
-
-            return null;
+        Object[] params = new Object[numOfServices];
+        for (int i = 0; i < numOfServices; i++) {
+            params[i] = serviceList.get(i).getId();
         }
+
+        // Execute the query
+        List<Booking> bookingList = new ArrayList<Booking>();
+        if (!serviceList.isEmpty()) {
+            try {
+
+                bookingList = jdbcTemplate.query(query, new BookingRowMapper(), params);
+
+            } catch (EmptyResultDataAccessException e) {
+                // Nothing to do here, the list just keeps empty
+            }
+        }
+
+        // Parse the results to the map
+        for (Booking booking : bookingList) {
+
+            Service service = serviceList.stream().filter(item -> item.getId() == booking.getServiceId())
+                    .collect(Collectors.toList()).get(0);
+
+            resultMap.get(service).add(booking);
+        }
+
+        return resultMap;
+
     }
 
     private class BookingRowMapper implements RowMapper<Booking> {
-
-        private Branch branch;
-
-        public void setBranch(Branch branch) {
-            this.branch = branch;
-        }
 
         @Override
         public Booking mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -177,46 +166,8 @@ public class BookingDaoImpl implements BookingDao {
 
             booking.setUser(user);
 
-            // Parse Service
-            HourSchedule hourSchedule = new HourSchedule();
-            SecureSetter.setId(hourSchedule, rs.getInt(ALIAS_HOUR_SCHEDULE_ID));
-            hourSchedule.setStartTime(new LocalTime(rs.getTime(START_TIME)));
-            hourSchedule.setEndTime(new LocalTime(rs.getTime(END_TIME)));
-
-            DaySchedule daySchedule = new DaySchedule();
-            SecureSetter.setId(daySchedule, rs.getInt(ALIAS_DAY_SCHEDULE_ID));
-            daySchedule.setDayOfWeek(rs.getInt(DAY_OF_WEEK));
-
-            WeekSchedule weekSchedule = new WeekSchedule();
-            SecureSetter.setId(weekSchedule, rs.getInt(ALIAS_WEEK_SCHEDULE_ID));
-            weekSchedule.setWeekOfYear(rs.getInt(WEEK_OF_YEAR));
-            weekSchedule.setDefault(rs.getBoolean(IS_DEFAULT));
-
-            YearSchedule yearSchedule = new YearSchedule();
-            SecureSetter.setId(yearSchedule, rs.getInt(ALIAS_YEAR_SCHEDULE_ID));
-            yearSchedule.setBranch(branch);
-            yearSchedule.setYear(rs.getInt(YEAR));
-
-            weekSchedule.setYearSchedule(yearSchedule);
-
-            daySchedule.setWeekSchedule(weekSchedule);
-
-            hourSchedule.setDaySchedule(daySchedule);
-
-            Service service = new Service();
-            SecureSetter.setId(service, rs.getInt(ALIAS_SERVICE_ID));
-            service.setHourSchedule(hourSchedule);
-
-            ServiceType serviceType = new ServiceType();
-            SecureSetter.setId(serviceType, rs.getInt(ALIAS_SERVICE_TYPE_ID));
-            serviceType.setName(rs.getString(ALIAS_SERVICE_TYPE_NAME));
-            serviceType.setDescription(rs.getString(DESCRIPTION));
-            serviceType.setMaxBookingsPerRole(rs.getInt(BOOKINGS_PER_ROLE));
-            serviceType.setCompany(branch.getCompany());
-
-            service.setServiceType(serviceType);
-
-            booking.setService(service);
+            // Parse Service id
+            booking.setServiceId(rs.getInt(SERVICE_ID));
 
             return booking;
         }

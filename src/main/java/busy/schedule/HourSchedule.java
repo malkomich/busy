@@ -1,8 +1,12 @@
 package busy.schedule;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.LocalTime;
+
+import busy.service.Service;
 
 /**
  * Hour schedule model. It defines a time schedule in a specific day.
@@ -18,6 +22,11 @@ public class HourSchedule implements Serializable {
     private LocalTime startTime;
     private LocalTime endTime;
     private DaySchedule daySchedule;
+    private List<Service> serviceList;
+
+    public HourSchedule() {
+        serviceList = new ArrayList<Service>();
+    }
 
     public LocalTime getStartTime() {
         return startTime;
@@ -50,6 +59,14 @@ public class HourSchedule implements Serializable {
 
     public void setDaySchedule(DaySchedule daySchedule) {
         this.daySchedule = daySchedule;
+    }
+
+    public List<Service> getServiceList() {
+        return serviceList;
+    }
+
+    public void addService(Service service) {
+        serviceList.add(service);
     }
 
 }

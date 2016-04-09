@@ -2,6 +2,7 @@ package busy.schedule;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import busy.company.Branch;
@@ -57,5 +58,24 @@ public class YearSchedule implements Serializable {
     @SuppressWarnings("unused")
     private void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * Retrieves the sublist of week schedules with the given week numbers of year
+     * 
+     * @param weeks
+     *            array of weeks of year requested
+     * @return The list of resultant week schedules
+     */
+    public List<WeekSchedule> getWeekSchedules(int[] weeks) {
+
+        Arrays.sort(weeks);
+        List<WeekSchedule> weekScheduleList = new ArrayList<WeekSchedule>();
+        for (WeekSchedule schedule : this.weekScheduleList) {
+            if (Arrays.binarySearch(weeks, schedule.getWeekOfYear()) >= 0) {
+                weekScheduleList.add(schedule);
+            }
+        }
+        return weekScheduleList;
     }
 }

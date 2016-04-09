@@ -1,6 +1,7 @@
 package busy.booking.web;
 
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
@@ -9,15 +10,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import busy.booking.Booking;
 import busy.booking.BookingService;
-import busy.company.Branch;
-import busy.company.CompanyService;
+import busy.company.web.CompanyController;
+import busy.schedule.WeekSchedule;
+import busy.schedule.YearSchedule;
+import busy.service.Service;
 
 /**
  * Controller for booking operations.
@@ -26,6 +31,7 @@ import busy.company.CompanyService;
  *
  */
 @Controller
+@SessionAttributes(value = {CompanyController.SCHEDULE_SESSION})
 public class BookingController {
 
     /**
@@ -35,9 +41,6 @@ public class BookingController {
 
     @Autowired
     private BookingService bookingService;
-
-    @Autowired
-    private CompanyService companyService;
 
     /**
      * Request to get all bookings made in the specific month of the given branch.
@@ -51,49 +54,72 @@ public class BookingController {
      * @return The list of resultant bookings in JSON format
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
-    public @ResponseBody String getMonthBookings(@RequestParam(value = "branchId", required = true) String branchId,
-            @RequestParam(value = "year", required = true) String yearTmp,
-            @RequestParam(value = "month", required = true) String monthTmp) {
+    public @ResponseBody String getMonthBookings(@RequestParam(value = "month", required = true) String monthTmp,
+            Model model) {
 
-        Branch branch = companyService.findBranchById(Integer.parseInt(branchId));
+        YearSchedule yearSchedule = (YearSchedule) model.asMap().get(CompanyController.SCHEDULE_SESSION);
 
-        int year = Integer.parseInt(yearTmp);
         int month = Integer.parseInt(monthTmp);
+        int year = yearSchedule.getYear();
 
-        List<Booking> bookingList = bookingService.findBookingsByBranchAndYearAndMonth(branch, year, month);
+        // Joda Datetime count the weeks of year from the first week with at least 4 days
+        boolean extraWeek = new DateTime().withYear(year).withDayOfYear(1).getWeekyear() != year;
+
+        // Get the week of the first day of month
+        DateTime dateTime = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(1);
+        int firstWeek = extraWeek ? dateTime.plusWeeks(1).getWeekOfWeekyear() : dateTime.getWeekOfWeekyear();
+
+        // Get the week of the last day of month
+        dateTime = dateTime.plusMonths(1).minusDays(1);
+        int lastWeek = extraWeek ? dateTime.getWeekOfWeekyear() + 1 : dateTime.getWeekOfWeekyear();
+
+        int[] weeks = new int[lastWeek - firstWeek + 1];
+        for (int i = firstWeek; i <= lastWeek; i++) {
+            weeks[i - firstWeek] = i;
+        }
+
+        List<WeekSchedule> weekSchedules = yearSchedule.getWeekSchedules(weeks);
+
+        Map<Service, List<Booking>> bookingMap = bookingService.findBookingsByWeekSchedules(weekSchedules);
 
         JSONObject jsonResult = new JSONObject();
+        JSONArray jsonBookings = new JSONArray();
 
-        try {
-            JSONArray jsonBookings = new JSONArray();
-            for (Booking booking : bookingList) {
-                JSONObject bookingJSON = new JSONObject();
-                bookingJSON.put("id", "u" + booking.getUser().getId() + "h" + booking.getService().getHourSchedule().getId());
-                bookingJSON.put("title", booking.getUser().getFirstName() + " " + booking.getUser().getLastName());
-                bookingJSON.put("url", "/localhost:8080");
-                bookingJSON.put("class", "event-info");
+        for (Service service : bookingMap.keySet()) {
+            List<Booking> bookingList = bookingMap.get(service);
 
-                int week = booking.getService().getHourSchedule().getDaySchedule().getWeekSchedule().getWeekOfYear();
-                int day = booking.getService().getHourSchedule().getDaySchedule().getDayOfWeek();
+            try {
+                for (Booking booking : bookingList) {
+                    JSONObject bookingJSON = new JSONObject();
+                    bookingJSON.put("id", "u" + booking.getUser().getId() + "h" + service.getHourSchedule().getId());
+                    bookingJSON.put("title", booking.getUser().getFirstName() + " " + booking.getUser().getLastName());
+                    bookingJSON.put("url", "/localhost:8080");
+                    bookingJSON.put("class", "event-info");
 
-                LocalTime startTime = booking.getService().getHourSchedule().getStartTime();
-                LocalTime endTime = booking.getService().getHourSchedule().getEndTime();
+                    int week = service.getHourSchedule().getDaySchedule().getWeekSchedule().getWeekOfYear();
+                    int day = service.getHourSchedule().getDaySchedule().getDayOfWeek();
 
-                DateTime iniDate = new DateTime().withYear(year).withMonthOfYear(month).withWeekOfWeekyear(week)
-                        .withDayOfWeek(day).withTime(startTime);
-                DateTime endDate = new DateTime().withYear(year).withMonthOfYear(month).withWeekOfWeekyear(week)
-                        .withDayOfWeek(day).withTime(endTime);
+                    LocalTime startTime = service.getHourSchedule().getStartTime();
+                    LocalTime endTime = service.getHourSchedule().getEndTime();
 
-                bookingJSON.put("start", String.valueOf(iniDate.getMillis()));
-                bookingJSON.put("end", String.valueOf(endDate.getMillis()));
+                    DateTime iniDate = new DateTime().withYear(year).withMonthOfYear(month).withWeekOfWeekyear(week)
+                            .withDayOfWeek(day).withTime(startTime);
+                    DateTime endDate = new DateTime().withYear(year).withMonthOfYear(month).withWeekOfWeekyear(week)
+                            .withDayOfWeek(day).withTime(endTime);
 
-                jsonBookings.put(bookingJSON);
+                    bookingJSON.put("start", String.valueOf(iniDate.getMillis()));
+                    bookingJSON.put("end", String.valueOf(endDate.getMillis()));
+
+                    jsonBookings.put(bookingJSON);
+                    System.out.println(bookingJSON);
+                }
+            } catch (JSONException jse) {
+                jse.printStackTrace();
             }
-            jsonResult.put("result", jsonBookings);
-            jsonResult.put("success", 1);
-        } catch (JSONException jse) {
-            jse.printStackTrace();
         }
+
+        jsonResult.put("result", jsonBookings);
+        jsonResult.put("success", 1);
 
         return jsonResult.toString();
     }

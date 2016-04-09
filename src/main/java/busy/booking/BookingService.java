@@ -1,8 +1,10 @@
 package busy.booking;
 
 import java.util.List;
+import java.util.Map;
 
-import busy.company.Branch;
+import busy.schedule.WeekSchedule;
+import busy.service.Service;
 
 /**
  * Booking service logic interface. Connects the UI Application layer with the Persistence one,
@@ -14,16 +16,12 @@ import busy.company.Branch;
 public interface BookingService {
 
     /**
-     * Gets all the bookings in a branch of the specific month of a year.
+     * Gets all the bookings made in the requested weeks.
      * 
-     * @param branch
-     *            the branch attached to the bookings
-     * @param year
-     *            the year which the month belong to
-     * @param month
-     *            the month which bookings are requested
+     * @param weekScheduleList
+     *            list of week schedules to find in
      * @return The list of resultant bookings
      */
-    List<Booking> findBookingsByBranchAndYearAndMonth(Branch branch, int year, int month);
+    Map<Service, List<Booking>> findBookingsByWeekSchedules(List<WeekSchedule> weekScheduleList);
 
 }

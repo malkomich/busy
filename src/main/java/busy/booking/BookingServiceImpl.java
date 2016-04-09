@@ -1,12 +1,16 @@
 package busy.booking;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import busy.company.Branch;
+import busy.schedule.DaySchedule;
+import busy.schedule.HourSchedule;
+import busy.schedule.WeekSchedule;
 
 /**
  * Booking service logic implementation.
@@ -24,24 +28,21 @@ public class BookingServiceImpl implements BookingService {
         this.bookingDao = bookingDao;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see busy.booking.BookingService#findBookingsByBranchAndYearAndMonth(busy.company.Branch,
-     * int, int)
-     */
     @Override
-    public List<Booking> findBookingsByBranchAndYearAndMonth(Branch branch, int year, int month) {
+    public Map<busy.service.Service, List<Booking>> findBookingsByWeekSchedules(List<WeekSchedule> weekScheduleList) {
 
-        DateTime dateTime = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(1);
-        int firstWeek = dateTime.getWeekOfWeekyear() + 1;
-        int lastWeek = dateTime.plusMonths(1).minusDays(1).getWeekOfWeekyear() + 1;
-
-        int[] weeks = new int[lastWeek - firstWeek + 1];
-        for (int i = firstWeek; i <= lastWeek; i++) {
-            weeks[i - firstWeek] = i;
+        List<busy.service.Service> serviceList = new ArrayList<busy.service.Service>();
+        for (WeekSchedule weekSchedule : weekScheduleList) {
+            for (DaySchedule daySchedule : weekSchedule.getDayScheduleList()) {
+                for (HourSchedule hourSchedule : daySchedule.getHourScheduleList()) {
+                    serviceList.addAll(hourSchedule.getServiceList());
+                }
+            }
         }
+        Map<busy.service.Service, List<Booking>> map = (serviceList.isEmpty())
+                ? new HashMap<busy.service.Service, List<Booking>>() : bookingDao.findByServices(serviceList);
 
-        return bookingDao.findByBranchAndYearAndWeeks(branch, year, weeks);
+        return map;
     }
 
 }

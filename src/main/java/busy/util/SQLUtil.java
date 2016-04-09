@@ -87,11 +87,12 @@ public class SQLUtil {
 
     public static final String DESCRIPTION = "description";
     public static final String BOOKINGS_PER_ROLE = "bookings_per_role";
+    public static final String DURATION = "duration";
 
     public static final String SERVICE_TYPE_ID = "service_type_id";
     public static final String HOUR_SCHEDULE_ID = "hour_schedule_id";
     public static final String ROLE_ID = "role_id";
-    
+
     public static final String SERVICE_ID = "service_id";
 
     // Table field alias
@@ -152,32 +153,34 @@ public class SQLUtil {
             + ") AS branchJoin ON " + TABLE_ROLE + "." + BRANCHID + "= branchJoin." + ALIAS_BRANCH_ID + " LEFT JOIN ("
             + USER_SELECT_QUERY + ") AS userJoin ON " + TABLE_ROLE + "." + USERID + "=userJoin." + ALIAS_USER_ID;
 
+    public static final String SERVICE_TYPE_QUERY = "SELECT " + TABLE_SERVICE_TYPE + "." + ID + " AS "
+            + ALIAS_SERVICE_TYPE_ID + "," + TABLE_SERVICE_TYPE + "." + NAME + " AS " + ALIAS_SERVICE_TYPE_NAME + ","
+            + DESCRIPTION + "," + BOOKINGS_PER_ROLE + "," + DURATION + "," + COMPANYID + " FROM " + TABLE_SERVICE_TYPE;
+
+    public static final String SERVICE_QUERY = "SELECT " + TABLE_SERVICE + "." + ID + " AS " + ALIAS_SERVICE_ID + ","
+            + SERVICE_TYPE_ID + "," + HOUR_SCHEDULE_ID + "," + ROLE_ID + ", serviceTypeJoin.*, roleJoin.*" + " FROM "
+            + TABLE_SERVICE + " LEFT JOIN (" + SERVICE_TYPE_QUERY + ") AS serviceTypeJoin ON " + TABLE_SERVICE + "."
+            + SERVICE_TYPE_ID + "=serviceTypeJoin." + ALIAS_SERVICE_TYPE_ID + " LEFT JOIN (" + ROLE_SELECT_QUERY
+            + ") AS roleJoin ON " + TABLE_SERVICE + "." + ROLE_ID + "=roleJoin." + ALIAS_ROLE_ID;
+
+    public static final String HOUR_SCHEDULE_QUERY = "SELECT " + TABLE_HOUR_SCHEDULE + "." + ID + " AS "
+            + ALIAS_HOUR_SCHEDULE_ID + "," + DAY_SCHEDULE_ID + "," + START_TIME + "," + END_TIME + ", serviceJoin.*"
+            + " FROM " + TABLE_HOUR_SCHEDULE + " RIGHT JOIN (" + SERVICE_QUERY + ") AS serviceJoin ON "
+            + TABLE_HOUR_SCHEDULE + "." + ID + "=serviceJoin." + HOUR_SCHEDULE_ID;
+
     public static final String DAY_SCHEDULE_QUERY = "SELECT " + TABLE_DAY_SCHEDULE + "." + ID + " AS "
-            + ALIAS_DAY_SCHEDULE_ID + "," + WEEK_SCHEDULE_ID + "," + DAY_OF_WEEK + "," + TABLE_HOUR_SCHEDULE + "." + ID
-            + " AS " + ALIAS_HOUR_SCHEDULE_ID + "," + DAY_SCHEDULE_ID + "," + START_TIME + "," + END_TIME + " FROM "
-            + TABLE_DAY_SCHEDULE + " LEFT JOIN " + TABLE_HOUR_SCHEDULE + " ON " + TABLE_DAY_SCHEDULE + "." + ID + "="
-            + TABLE_HOUR_SCHEDULE + "." + DAY_SCHEDULE_ID;
+            + ALIAS_DAY_SCHEDULE_ID + "," + WEEK_SCHEDULE_ID + "," + DAY_OF_WEEK + ", hourScheduleJoin.*" + " FROM "
+            + TABLE_DAY_SCHEDULE + " RIGHT JOIN (" + HOUR_SCHEDULE_QUERY + ") AS hourScheduleJoin ON "
+            + TABLE_DAY_SCHEDULE + "." + ID + "= hourScheduleJoin." + DAY_SCHEDULE_ID;
 
     public static final String WEEK_SCHEDULE_QUERY = "SELECT " + TABLE_WEEK_SCHEDULE + "." + ID + " AS "
             + ALIAS_WEEK_SCHEDULE_ID + "," + YEAR_SCHEDULE_ID + "," + WEEK_OF_YEAR + "," + IS_DEFAULT
-            + ", dayScheduleJoin.*" + " FROM " + TABLE_WEEK_SCHEDULE + " LEFT JOIN (" + DAY_SCHEDULE_QUERY
+            + ", dayScheduleJoin.*" + " FROM " + TABLE_WEEK_SCHEDULE + " RIGHT JOIN (" + DAY_SCHEDULE_QUERY
             + ") AS dayScheduleJoin ON " + TABLE_WEEK_SCHEDULE + "." + ID + "= dayScheduleJoin." + WEEK_SCHEDULE_ID;
 
     public static final String YEAR_SCHEDULE_QUERY = "SELECT " + TABLE_YEAR_SCHEDULE + "." + ID + " AS "
             + ALIAS_YEAR_SCHEDULE_ID + "," + BRANCHID + "," + YEAR + ", weekScheduleJoin.* " + " FROM "
-            + TABLE_YEAR_SCHEDULE + " LEFT JOIN (" + WEEK_SCHEDULE_QUERY + ") AS weekScheduleJoin ON "
+            + TABLE_YEAR_SCHEDULE + " RIGHT JOIN (" + WEEK_SCHEDULE_QUERY + ") AS weekScheduleJoin ON "
             + TABLE_YEAR_SCHEDULE + "." + ID + "= weekScheduleJoin." + YEAR_SCHEDULE_ID;
 
-    public static final String SERVICE_TYPE_QUERY = "SELECT " + TABLE_SERVICE_TYPE + "." + ID + " AS "
-            + ALIAS_SERVICE_TYPE_ID + "," + TABLE_SERVICE_TYPE + "." + NAME + " AS " + ALIAS_SERVICE_TYPE_NAME + ","
-            + DESCRIPTION + "," + BOOKINGS_PER_ROLE + "," + COMPANYID + " FROM " + TABLE_SERVICE_TYPE;
-
-    public static final String SERVICE_QUERY =
-            "SELECT " + TABLE_SERVICE + "." + ID + " AS " + ALIAS_SERVICE_ID + "," + SERVICE_TYPE_ID + ","
-                    + HOUR_SCHEDULE_ID + "," + ROLE_ID + ", serviceTypeJoin.*, yearScheduleJoin.*, roleJoin.*"
-                    + " FROM " + TABLE_SERVICE + " LEFT JOIN (" + SERVICE_TYPE_QUERY + ") AS serviceTypeJoin ON "
-                    + TABLE_SERVICE + "." + SERVICE_TYPE_ID + "=serviceTypeJoin." + ALIAS_SERVICE_TYPE_ID
-                    + " LEFT JOIN (" + YEAR_SCHEDULE_QUERY + ") AS yearScheduleJoin ON " + TABLE_SERVICE + "."
-                    + HOUR_SCHEDULE_ID + " = " + ALIAS_HOUR_SCHEDULE_ID + " LEFT JOIN (" + ROLE_SELECT_QUERY
-                    + ") AS roleJoin ON " + TABLE_SERVICE + "." + ROLE_ID + "=roleJoin." + ALIAS_ROLE_ID;
 }

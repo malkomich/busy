@@ -1,8 +1,9 @@
 package busy.booking;
 
 import java.util.List;
+import java.util.Map;
 
-import busy.company.Branch;
+import busy.service.Service;
 
 /**
  * Booking persistence interface.
@@ -13,16 +14,12 @@ import busy.company.Branch;
 public interface BookingDao {
 
     /**
-     * Gets the list of bookings made the weeks specified in the given branch.
+     * Gets the map which link the given services with its lists of bookings made on them
      * 
-     * @param branch
-     *            branch attached to the bookings
-     * @param year
-     *            the year which the month belong to
-     * @param weeks
-     *            variable number of weeks to search for
-     * @return The list of resultant bookings
+     * @param serviceList
+     *            list of services which bookings are requested
+     * @return Map with the lists of bookings associated to each service
      */
-    List<Booking> findByBranchAndYearAndWeeks(Branch branch, int year, int... weeks);
+    Map<Service, List<Booking>> findByServices(List<Service> serviceList);
 
 }

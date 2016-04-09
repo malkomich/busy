@@ -2,7 +2,6 @@ package busy.booking;
 
 import java.io.Serializable;
 
-import busy.service.Service;
 import busy.user.User;
 
 /**
@@ -16,7 +15,7 @@ public class Booking implements Serializable {
     private static final long serialVersionUID = -710554949407300960L;
 
     private User user;
-    private Service service;
+    private Integer serviceId;
 
     public User getUser() {
         return user;
@@ -26,12 +25,12 @@ public class Booking implements Serializable {
         this.user = user;
     }
 
-    public Service getService() {
-        return service;
+    public Integer getServiceId() {
+        return serviceId;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setServiceId(Integer serviceId) {
+        this.serviceId = serviceId;
     }
 
 }
