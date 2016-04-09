@@ -1,5 +1,6 @@
 package busy.booking.web;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +20,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import busy.booking.Booking;
 import busy.booking.BookingService;
+import busy.company.Branch;
+import busy.company.CompanyService;
 import busy.company.web.CompanyController;
+import busy.schedule.ScheduleService;
 import busy.schedule.WeekSchedule;
 import busy.schedule.YearSchedule;
 import busy.service.Service;
@@ -35,12 +39,24 @@ import busy.service.Service;
 public class BookingController {
 
     /**
+     * Util constants
+     */
+    private static final int FIRST_DAY = 1;
+    private static final int LAST_DAY = 7;
+
+    /**
      * URL Paths.
      */
     private static final String PATH_BOOKINGS_OF_MONTH = "/get_month_bookings";
 
     @Autowired
     private BookingService bookingService;
+
+    @Autowired
+    private ScheduleService scheduleService;
+
+    @Autowired
+    private CompanyService companyService;
 
     /**
      * Request to get all bookings made in the specific month of the given branch.
@@ -54,31 +70,77 @@ public class BookingController {
      * @return The list of resultant bookings in JSON format
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
-    public @ResponseBody String getMonthBookings(@RequestParam(value = "month", required = true) String monthTmp,
-            Model model) {
+    public @ResponseBody String getMonthBookings(@RequestParam(value = "branch", required = true) String branchIdTmp,
+            @RequestParam(value = "from", required = true) String fromTmp,
+            @RequestParam(value = "to", required = true) String toTmp, Model model) {
 
-        YearSchedule yearSchedule = (YearSchedule) model.asMap().get(CompanyController.SCHEDULE_SESSION);
+        YearSchedule[] schedule = (YearSchedule[]) model.asMap().get(CompanyController.SCHEDULE_SESSION);
 
-        int month = Integer.parseInt(monthTmp);
-        int year = yearSchedule.getYear();
+        int branchId = Integer.parseInt(branchIdTmp);
+        long from = Long.parseLong(fromTmp);
+        long to = Long.parseLong(toTmp);
+        DateTime fromDateTime = new DateTime(from);
+        // Minus a millisecond to avoid referencing to the next day
+        DateTime toDateTime = new DateTime(to).minus(1);
 
-        // Joda Datetime count the weeks of year from the first week with at least 4 days
-        boolean extraWeek = new DateTime().withYear(year).withDayOfYear(1).getWeekyear() != year;
+        int currentYear = fromDateTime.getYear();
 
-        // Get the week of the first day of month
-        DateTime dateTime = new DateTime().withYear(year).withMonthOfYear(month).withDayOfMonth(1);
-        int firstWeek = extraWeek ? dateTime.plusWeeks(1).getWeekOfWeekyear() : dateTime.getWeekOfWeekyear();
+        fromDateTime = fromDateTime.withDayOfWeek(FIRST_DAY);
+        toDateTime = toDateTime.withDayOfWeek(LAST_DAY);
 
-        // Get the week of the last day of month
-        dateTime = dateTime.plusMonths(1).minusDays(1);
-        int lastWeek = extraWeek ? dateTime.getWeekOfWeekyear() + 1 : dateTime.getWeekOfWeekyear();
+        boolean weekBetweenYears = fromDateTime.getYear() < currentYear;
+
+        Branch branch = companyService.findBranchById(branchId);
+
+        // Update schedule session variable
+        if (schedule[1] != null) {
+            if (currentYear < schedule[1].getYear()) {
+                schedule[2] = schedule[1];
+                schedule[1] = schedule[0];
+                schedule[0] = scheduleService.findScheduleByBranch(branch, fromDateTime.getYear());
+
+                model.addAttribute(CompanyController.SCHEDULE_SESSION, schedule);
+
+            } else if (currentYear > schedule[1].getYear()) {
+                schedule[0] = schedule[1];
+                schedule[1] = schedule[2];
+                schedule[2] = scheduleService.findScheduleByBranch(branch, toDateTime.getYear());
+
+                model.addAttribute(CompanyController.SCHEDULE_SESSION, schedule);
+            }
+        } else {
+
+            schedule[0] = scheduleService.findScheduleByBranch(branch, currentYear - 1);
+            schedule[1] = scheduleService.findScheduleByBranch(branch, currentYear);
+            schedule[2] = scheduleService.findScheduleByBranch(branch, currentYear + 1);
+
+            model.addAttribute(CompanyController.SCHEDULE_SESSION, schedule);
+        }
+
+        List<WeekSchedule> weekSchedules = new ArrayList<WeekSchedule>();
+        WeekSchedule weekSchedule = null;
+
+        // Get the week of the first and last days of month
+        if (weekBetweenYears) {
+            if (schedule[0] != null) {
+                weekSchedule = schedule[0].getLastWeekSchedule();
+                if (weekSchedule != null) {
+                    weekSchedules.add(weekSchedule);
+                }
+            }
+            fromDateTime = fromDateTime.plusWeeks(1);
+        }
+        int firstWeek = fromDateTime.getWeekOfWeekyear();
+        int lastWeek = toDateTime.getWeekOfWeekyear();
 
         int[] weeks = new int[lastWeek - firstWeek + 1];
         for (int i = firstWeek; i <= lastWeek; i++) {
             weeks[i - firstWeek] = i;
         }
 
-        List<WeekSchedule> weekSchedules = yearSchedule.getWeekSchedules(weeks);
+        if (schedule[1] != null) {
+            weekSchedules.addAll(schedule[1].getWeekSchedules(weeks));
+        }
 
         Map<Service, List<Booking>> bookingMap = bookingService.findBookingsByWeekSchedules(weekSchedules);
 
@@ -96,22 +158,23 @@ public class BookingController {
                     bookingJSON.put("url", "/localhost:8080");
                     bookingJSON.put("class", "event-info");
 
-                    int week = service.getHourSchedule().getDaySchedule().getWeekSchedule().getWeekOfYear();
                     int day = service.getHourSchedule().getDaySchedule().getDayOfWeek();
+                    int week = service.getHourSchedule().getDaySchedule().getWeekSchedule().getWeekOfYear();
+                    int year = service.getHourSchedule().getDaySchedule().getWeekSchedule().getYearSchedule().getYear();
 
                     LocalTime startTime = service.getHourSchedule().getStartTime();
                     LocalTime endTime = service.getHourSchedule().getEndTime();
 
-                    DateTime iniDate = new DateTime().withYear(year).withMonthOfYear(month).withWeekOfWeekyear(week)
-                            .withDayOfWeek(day).withTime(startTime);
-                    DateTime endDate = new DateTime().withYear(year).withMonthOfYear(month).withWeekOfWeekyear(week)
-                            .withDayOfWeek(day).withTime(endTime);
+                    DateTime iniDate = new DateTime().withYear(year).withWeekOfWeekyear(week).withDayOfWeek(day)
+                            .withTime(startTime);
+                    DateTime endDate =
+                            new DateTime().withYear(year).withWeekOfWeekyear(week).withDayOfWeek(day).withTime(endTime);
 
                     bookingJSON.put("start", String.valueOf(iniDate.getMillis()));
                     bookingJSON.put("end", String.valueOf(endDate.getMillis()));
 
                     jsonBookings.put(bookingJSON);
-                    System.out.println(bookingJSON);
+                    System.out.println(bookingJSON); // Debug logging of the booking info
                 }
             } catch (JSONException jse) {
                 jse.printStackTrace();

@@ -20,7 +20,7 @@ public class YearSchedule implements Serializable {
 
     private int id;
     private Branch branch;
-    private int year;
+    private Integer year;
     private List<WeekSchedule> weekScheduleList;
 
     public YearSchedule() {
@@ -77,5 +77,21 @@ public class YearSchedule implements Serializable {
             }
         }
         return weekScheduleList;
+    }
+
+    /**
+     * Retrieves the week schedule of the last week of the year. This is due to the share of the
+     * last week of a year with the next year.
+     * 
+     * @return The resultant week schedule, or null if it not exists
+     */
+    public WeekSchedule getLastWeekSchedule() {
+
+        for (WeekSchedule schedule : weekScheduleList) {
+            if (schedule.getWeekOfYear() == 12) {
+                return schedule;
+            }
+        }
+        return null;
     }
 }
