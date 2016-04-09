@@ -56,9 +56,9 @@
 
                 <div class="pull-right form-inline">
                     <div class="btn-group">
-                        <button class="btn btn-primary" data-calendar-nav="prev"><< Prev</button>
-                        <button class="btn" data-calendar-nav="today">Today</button>
-                        <button class="btn btn-primary" data-calendar-nav="next">Next >></button>
+                        <button class="btn btn-primary calendar-nav" data-calendar-nav="prev"><< Prev</button>
+                        <button class="btn calendar-nav" data-calendar-nav="today">Today</button>
+                        <button class="btn btn-primary calendar-nav" data-calendar-nav="next">Next >></button>
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-warning active" data-calendar-view="month">Month</button>
@@ -122,7 +122,7 @@
     <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="/js/busy-logic.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script type="text/javascript" src="/js/calendar.min.js"></script>
+    <script type="text/javascript" src="/js/calendar.js"></script>
     <script type="text/javascript" src="/js/language/es-ES.js"></script>
     <script type="text/javascript" src="/js/date.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
