@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -51,6 +52,13 @@ public class BookingController {
      */
     private static final String PATH_BOOKINGS_OF_MONTH = "/get_month_bookings";
 
+    /**
+     * HTTP params.
+     */
+    private static final String PARAM_DATE_FROM = "from";
+    private static final String PARAM_DATE_TO = "to";
+    private static final String PARAM_DATE_OFFSET = "utc_offset";
+
     @Autowired
     private BookingService bookingService;
 
@@ -69,14 +77,17 @@ public class BookingController {
      *            the initial instant in milliseconds of the period in which find bookings
      * @param toTmp
      *            the final instant in milliseconds of the period in which find bookings
+     * @param offSetMinutesTmp
+     *            the offset from UTC in milliseconds of the dates received
      * @param model
      *            Spring model instance
      * @return The list of resultant bookings in JSON format
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
     public @ResponseBody String getMonthBookings(@RequestParam(value = "branch", required = true) String branchIdTmp,
-            @RequestParam(value = "from", required = true) String fromTmp,
-            @RequestParam(value = "to", required = true) String toTmp, Model model) {
+            @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
+            @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
+            @RequestParam(value = PARAM_DATE_OFFSET, required = true) String offSetMinutesTmp, Model model) {
 
         YearSchedule[] schedule = (YearSchedule[]) model.asMap().get(CompanyController.SCHEDULE_SESSION);
 
@@ -85,10 +96,18 @@ public class BookingController {
         int branchId = Integer.parseInt(branchIdTmp);
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
-        // Add and lower a millisecond to each respective datetime to ensure the dates are inside
-        // the requested month
-        DateTime fromDateTime = new DateTime(from).plus(1);
-        DateTime toDateTime = new DateTime(to).minus(1);
+        long offSet = Long.parseLong(offSetMinutesTmp);
+        
+        int offSetHours = (int) (offSet / 60);
+        int offSetMinutes = (int) (offSet % 60);
+
+        DateTimeZone dtZone = DateTimeZone.forOffsetHoursMinutes(offSetHours, offSetMinutes);
+        
+        System.out.println(dtZone.toTimeZone().getDisplayName());
+
+        DateTime fromDateTime = new DateTime(from, dtZone);
+        // Lower a millisecond to ensure the date are inside the requested month
+        DateTime toDateTime = new DateTime(to, dtZone).minus(1);
 
         System.out.println("BEFORE(from): " + dtfOut.print(fromDateTime));
         System.out.println("BEFORE(to): " + dtfOut.print(toDateTime));
