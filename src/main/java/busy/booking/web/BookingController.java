@@ -6,6 +6,8 @@ import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,6 +80,8 @@ public class BookingController {
 
         YearSchedule[] schedule = (YearSchedule[]) model.asMap().get(CompanyController.SCHEDULE_SESSION);
 
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/MM/yyyy");
+        
         int branchId = Integer.parseInt(branchIdTmp);
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
@@ -85,12 +89,21 @@ public class BookingController {
         // Minus a millisecond to avoid referencing to the next day
         DateTime toDateTime = new DateTime(to).minus(1);
 
+        System.out.println("BEFORE: " + dtfOut.print(fromDateTime));
+        System.out.println("BEFORE: " + dtfOut.print(toDateTime));
+        
         int currentYear = fromDateTime.getYear();
 
         fromDateTime = fromDateTime.withDayOfWeek(FIRST_DAY);
         toDateTime = toDateTime.withDayOfWeek(LAST_DAY);
+        
+        System.out.println("AFTER: " + dtfOut.print(fromDateTime));
+        System.out.println("AFTER: " + dtfOut.print(toDateTime));
 
         boolean weekBetweenYears = fromDateTime.getYear() < currentYear;
+        
+        if(weekBetweenYears)
+            System.out.println("weekBetweenYears TRUE...current year:" + currentYear);
 
         Branch branch = companyService.findBranchById(branchId);
 
