@@ -7,8 +7,6 @@ import java.util.Map;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -93,13 +91,11 @@ public class BookingController {
 
         YearSchedule[] schedule = (YearSchedule[]) model.asMap().get(CompanyController.SCHEDULE_SESSION);
 
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
-
         int branchId = Integer.parseInt(branchIdTmp);
         long from = Long.parseLong(fromTmp);
-        System.out.println("FROM: " + from);
         long to = Long.parseLong(toTmp);
-        // Get the inverse due to JS Date implementation
+        
+        // Get the inverse of offset due to JS Date implementation
         long offSetFrom = -Long.parseLong(offSetFromTmp);
         long offSetTo = -Long.parseLong(offSetToTmp);
 
@@ -111,28 +107,16 @@ public class BookingController {
         DateTimeZone dtZoneFrom = DateTimeZone.forOffsetHoursMinutes(offSetFromHours, offSetFromMinutes);
         DateTimeZone dtZoneTo = DateTimeZone.forOffsetHoursMinutes(offSetToHours, offSetToMinutes);
 
-        System.out.println("FROM: " + dtZoneFrom.toTimeZone().getDisplayName());
-        System.out.println("TO: " + dtZoneTo.toTimeZone().getDisplayName());
-
         DateTime fromDateTime = new DateTime(from, dtZoneFrom);
         // Lower a millisecond to ensure the date are inside the requested month
         DateTime toDateTime = new DateTime(to, dtZoneTo).minus(1);
-
-        System.out.println("BEFORE(from): " + dtfOut.print(fromDateTime));
-        System.out.println("BEFORE(to): " + dtfOut.print(toDateTime));
 
         int currentYear = fromDateTime.getYear();
 
         fromDateTime = fromDateTime.withDayOfWeek(FIRST_DAY);
         toDateTime = toDateTime.withDayOfWeek(LAST_DAY);
 
-        System.out.println("AFTER(from): " + dtfOut.print(fromDateTime));
-        System.out.println("AFTER(to): " + dtfOut.print(toDateTime));
-
         boolean weekBetweenYears = fromDateTime.getYear() < currentYear;
-
-        if (weekBetweenYears)
-            System.out.println("weekBetweenYears TRUE...current year:" + currentYear);
 
         Branch branch = companyService.findBranchById(branchId);
 
@@ -177,8 +161,6 @@ public class BookingController {
         int firstWeek = fromDateTime.getWeekOfWeekyear();
         int lastWeek = toDateTime.getWeekOfWeekyear();
 
-        System.out.println("FROM WEEK " + firstWeek + " TO WEEK " + lastWeek); // Just debugging
-
         int[] weeks = new int[lastWeek - firstWeek + 1];
         for (int i = firstWeek; i <= lastWeek; i++) {
             weeks[i - firstWeek] = i;
@@ -220,7 +202,6 @@ public class BookingController {
                     bookingJSON.put("end", String.valueOf(endDate.getMillis()));
 
                     jsonBookings.put(bookingJSON);
-                    System.out.println(bookingJSON); // Debug logging of the booking info
                 }
             } catch (JSONException jse) {
                 jse.printStackTrace();
