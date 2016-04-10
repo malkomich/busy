@@ -104,10 +104,13 @@ public class BookingController {
         DateTimeZone dtZone = DateTimeZone.forOffsetHoursMinutes(offSetHours, offSetMinutes);
         
         System.out.println(dtZone.toTimeZone().getDisplayName());
+        
+        long fromUTC = dtZone.convertLocalToUTC(from, false);
+        long toUTC = dtZone.convertLocalToUTC(to, false);
 
-        DateTime fromDateTime = new DateTime(from, dtZone);
+        DateTime fromDateTime = new DateTime(fromUTC, dtZone);
         // Lower a millisecond to ensure the date are inside the requested month
-        DateTime toDateTime = new DateTime(to, dtZone).minus(1);
+        DateTime toDateTime = new DateTime(toUTC, dtZone).minus(1);
 
         System.out.println("BEFORE(from): " + dtfOut.print(fromDateTime));
         System.out.println("BEFORE(to): " + dtfOut.print(toDateTime));
