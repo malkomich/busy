@@ -59,14 +59,16 @@ public class BookingController {
     private CompanyService companyService;
 
     /**
-     * Request to get all bookings made in the specific month of the given branch.
+     * Request to get all bookings made between the given dates in the specific branch
      * 
-     * @param branchId
+     * @param branchIdTmp
      *            the branch attached to the requested bookings
-     * @param year
-     *            the year which the month belong to
-     * @param month
-     *            the month which bookings are requested
+     * @param fromTmp
+     *            the initial instant in milliseconds of the period in which find bookings
+     * @param toTmp
+     *            the final instant in milliseconds of the period in which find bookings
+     * @param model
+     *            Spring model instance
      * @return The list of resultant bookings in JSON format
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)

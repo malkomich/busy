@@ -131,7 +131,7 @@ public class CompanyController {
     /**
      * Shows the calendar view of a specific branch.
      * 
-     * @param bId
+     * @param branchId
      *            unique ID of the branch requested
      * @param model
      *            Spring model instance
