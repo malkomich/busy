@@ -57,7 +57,8 @@ public class BookingController {
      */
     private static final String PARAM_DATE_FROM = "from";
     private static final String PARAM_DATE_TO = "to";
-    private static final String PARAM_DATE_OFFSET = "utc_offset";
+    private static final String PARAM_DATE_OFFSET_FROM = "utc_offset_from";
+    private static final String PARAM_DATE_OFFSET_TO = "utc_offset_to";
 
     @Autowired
     private BookingService bookingService;
@@ -87,7 +88,8 @@ public class BookingController {
     public @ResponseBody String getMonthBookings(@RequestParam(value = "branch", required = true) String branchIdTmp,
             @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
             @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
-            @RequestParam(value = PARAM_DATE_OFFSET, required = true) String offSetMinutesTmp, Model model) {
+            @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
+            @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
 
         YearSchedule[] schedule = (YearSchedule[]) model.asMap().get(CompanyController.SCHEDULE_SESSION);
 
@@ -98,24 +100,23 @@ public class BookingController {
         System.out.println("FROM: " + from);
         long to = Long.parseLong(toTmp);
         // Get the inverse due to JS Date implementation
-        long offSet = - Long.parseLong(offSetMinutesTmp);
-        
-        int offSetHours = (int) (offSet / 60);
-        int offSetMinutes = (int) (offSet % 60);
+        long offSetFrom = -Long.parseLong(offSetFromTmp);
+        long offSetTo = -Long.parseLong(offSetToTmp);
 
-        DateTimeZone dtZone = DateTimeZone.forOffsetHoursMinutes(offSetHours, offSetMinutes);
-        
-        System.out.println(dtZone.toTimeZone().getDisplayName());
-        
-        long fromUTC = dtZone.convertLocalToUTC(from, false);
-        long toUTC = dtZone.convertLocalToUTC(to, false);
-        
-        long fromLocal = dtZone.convertUTCToLocal(fromUTC);
-        long toLocal = dtZone.convertUTCToLocal(toUTC);
+        int offSetFromHours = (int) (offSetFrom / 60);
+        int offSetFromMinutes = (int) (offSetFrom % 60);
+        int offSetToHours = (int) (offSetTo / 60);
+        int offSetToMinutes = (int) (offSetTo % 60);
 
-        DateTime fromDateTime = new DateTime(from, dtZone);
+        DateTimeZone dtZoneFrom = DateTimeZone.forOffsetHoursMinutes(offSetFromHours, offSetFromMinutes);
+        DateTimeZone dtZoneTo = DateTimeZone.forOffsetHoursMinutes(offSetToHours, offSetToMinutes);
+
+        System.out.println("FROM: " + dtZoneFrom.toTimeZone().getDisplayName());
+        System.out.println("TO: " + dtZoneTo.toTimeZone().getDisplayName());
+
+        DateTime fromDateTime = new DateTime(from, dtZoneFrom);
         // Lower a millisecond to ensure the date are inside the requested month
-        DateTime toDateTime = new DateTime(to, dtZone).minus(1);
+        DateTime toDateTime = new DateTime(to, dtZoneTo).minus(1);
 
         System.out.println("BEFORE(from): " + dtfOut.print(fromDateTime));
         System.out.println("BEFORE(to): " + dtfOut.print(toDateTime));
