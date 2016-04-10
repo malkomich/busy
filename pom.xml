@@ -206,6 +206,13 @@
                 </configuration>
             </plugin>
 
+            <!-- Heroku plugin to execute deployment task on Heroku -->
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>1.0.0</version>
+            </plugin>
+
         </plugins>
     </build>
 

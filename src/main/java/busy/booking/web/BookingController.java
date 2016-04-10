@@ -135,6 +135,8 @@ public class BookingController {
         int firstWeek = fromDateTime.getWeekOfWeekyear();
         int lastWeek = toDateTime.getWeekOfWeekyear();
 
+        System.out.println("FROM WEEK " + firstWeek + " TO WEEK " + lastWeek); // Just debugging
+
         int[] weeks = new int[lastWeek - firstWeek + 1];
         for (int i = firstWeek; i <= lastWeek; i++) {
             weeks[i - firstWeek] = i;
