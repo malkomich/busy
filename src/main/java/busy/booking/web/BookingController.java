@@ -80,29 +80,30 @@ public class BookingController {
 
         YearSchedule[] schedule = (YearSchedule[]) model.asMap().get(CompanyController.SCHEDULE_SESSION);
 
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/MM/yyyy");
-        
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/MM/yyyy HH:mm:ss");
+
         int branchId = Integer.parseInt(branchIdTmp);
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
-        DateTime fromDateTime = new DateTime(from);
-        // Minus a millisecond to avoid referencing to the next day
+        // Add and lower a millisecond to each respective datetime to ensure the dates are inside
+        // the requested month
+        DateTime fromDateTime = new DateTime(from).plus(1);
         DateTime toDateTime = new DateTime(to).minus(1);
 
-        System.out.println("BEFORE: " + dtfOut.print(fromDateTime));
-        System.out.println("BEFORE: " + dtfOut.print(toDateTime));
-        
+        System.out.println("BEFORE(from): " + dtfOut.print(fromDateTime));
+        System.out.println("BEFORE(to): " + dtfOut.print(toDateTime));
+
         int currentYear = fromDateTime.getYear();
 
         fromDateTime = fromDateTime.withDayOfWeek(FIRST_DAY);
         toDateTime = toDateTime.withDayOfWeek(LAST_DAY);
-        
-        System.out.println("AFTER: " + dtfOut.print(fromDateTime));
-        System.out.println("AFTER: " + dtfOut.print(toDateTime));
+
+        System.out.println("AFTER(from): " + dtfOut.print(fromDateTime));
+        System.out.println("AFTER(to): " + dtfOut.print(toDateTime));
 
         boolean weekBetweenYears = fromDateTime.getYear() < currentYear;
-        
-        if(weekBetweenYears)
+
+        if (weekBetweenYears)
             System.out.println("weekBetweenYears TRUE...current year:" + currentYear);
 
         Branch branch = companyService.findBranchById(branchId);
