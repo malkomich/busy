@@ -1,11 +1,15 @@
 busy
 busy.admin.web
+busy.booking
+busy.booking.web
 busy.company
 busy.company.web
 busy.location
 busy.location.web
 busy.notifications
 busy.role
+busy.schedule
+busy.service
 busy.user
 busy.user.web
 busy.util
