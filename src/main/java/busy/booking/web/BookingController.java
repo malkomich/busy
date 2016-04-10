@@ -95,6 +95,7 @@ public class BookingController {
 
         int branchId = Integer.parseInt(branchIdTmp);
         long from = Long.parseLong(fromTmp);
+        System.out.println("FROM: " + from);
         long to = Long.parseLong(toTmp);
         long offSet = Long.parseLong(offSetMinutesTmp);
         
@@ -111,9 +112,9 @@ public class BookingController {
         long fromLocal = dtZone.convertUTCToLocal(fromUTC);
         long toLocal = dtZone.convertUTCToLocal(toUTC);
 
-        DateTime fromDateTime = new DateTime(fromLocal);
+        DateTime fromDateTime = new DateTime(fromLocal, dtZone);
         // Lower a millisecond to ensure the date are inside the requested month
-        DateTime toDateTime = new DateTime(toLocal).minus(1);
+        DateTime toDateTime = new DateTime(toLocal, dtZone).minus(1);
 
         System.out.println("BEFORE(from): " + dtfOut.print(fromDateTime));
         System.out.println("BEFORE(to): " + dtfOut.print(toDateTime));
