@@ -15,6 +15,10 @@ public class ServiceType implements Serializable {
     private int duration;
     private Company company;
 
+    public ServiceType() {
+
+    }
+
     public String getName() {
         return name;
     }
