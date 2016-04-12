@@ -196,7 +196,8 @@ CREATE TABLE service_type(
     bookings_per_role   integer             NOT NULL DEFAULT 1,
     duration            integer             NOT NULL DEFAULT 3600,
     company_id          integer             NOT NULL REFERENCES company(id)
-        ON DELETE CASCADE ON UPDATE CASCADE
+        ON DELETE CASCADE ON UPDATE CASCADE,
+	UNIQUE (name, company_id)
 );
 
 CREATE SEQUENCE service_seq;
