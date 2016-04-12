@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.joda.time.LocalTime;
 
-import busy.service.Service;
-
 /**
  * Hour schedule model. It defines a time schedule in a specific day.
  * 

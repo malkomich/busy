@@ -57,8 +57,6 @@ import busy.location.Address;
 import busy.location.City;
 import busy.location.Country;
 import busy.role.Role;
-import busy.service.Service;
-import busy.service.ServiceType;
 import busy.user.User;
 import busy.util.SecureSetter;
 

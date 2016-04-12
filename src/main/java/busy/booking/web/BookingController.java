@@ -25,9 +25,9 @@ import busy.company.Branch;
 import busy.company.CompanyService;
 import busy.company.web.CompanyController;
 import busy.schedule.ScheduleService;
+import busy.schedule.Service;
 import busy.schedule.WeekSchedule;
 import busy.schedule.YearSchedule;
-import busy.service.Service;
 
 /**
  * Controller for booking operations.

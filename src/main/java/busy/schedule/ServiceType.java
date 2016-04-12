@@ -1,4 +1,4 @@
-package busy.service;
+package busy.schedule;
 
 import java.io.Serializable;
 

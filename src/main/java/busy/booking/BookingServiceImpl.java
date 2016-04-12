@@ -29,9 +29,9 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public Map<busy.service.Service, List<Booking>> findBookingsByWeekSchedules(List<WeekSchedule> weekScheduleList) {
+    public Map<busy.schedule.Service, List<Booking>> findBookingsByWeekSchedules(List<WeekSchedule> weekScheduleList) {
 
-        List<busy.service.Service> serviceList = new ArrayList<busy.service.Service>();
+        List<busy.schedule.Service> serviceList = new ArrayList<busy.schedule.Service>();
         for (WeekSchedule weekSchedule : weekScheduleList) {
             for (DaySchedule daySchedule : weekSchedule.getDayScheduleList()) {
                 for (HourSchedule hourSchedule : daySchedule.getHourScheduleList()) {
@@ -39,8 +39,8 @@ public class BookingServiceImpl implements BookingService {
                 }
             }
         }
-        Map<busy.service.Service, List<Booking>> map = (serviceList.isEmpty())
-                ? new HashMap<busy.service.Service, List<Booking>>() : bookingDao.findByServices(serviceList);
+        Map<busy.schedule.Service, List<Booking>> map = (serviceList.isEmpty())
+                ? new HashMap<busy.schedule.Service, List<Booking>>() : bookingDao.findByServices(serviceList);
 
         return map;
     }
