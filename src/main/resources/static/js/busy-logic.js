@@ -76,6 +76,27 @@ $(function() {
             window.location.href = "/company/" + suggestion.data;
         }
     });
+
+    /*
+     * Hide the search icon when the search bar is focused
+     */
+    $('.search-bar-text').focus(function() {
+        var iconDiv = $(this).siblings('.input-group-addon');
+        $('.glyphicon-search', iconDiv).hide();
+    });
+    /*
+     * Show the search icon when the search bar lost the focus
+     */
+    $('.search-bar-text').blur(function() {
+        var iconDiv = $(this).siblings('.input-group-addon');
+        $('.glyphicon-search', iconDiv).show();
+    });
+    /*
+     * Set focus on input when click anywhere of search bar
+     */
+    $('.search-bar').click(function() {
+        $('.search-bar-text', this).focus();
+    });
 });
 
 function messageModal(message) {

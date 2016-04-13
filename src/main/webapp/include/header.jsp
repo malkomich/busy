@@ -44,7 +44,7 @@
                 </a>
                     <div id="notifications-content" class="dialog">
                         <div class="notifications-title">
-                            <h4>Notifications</h4>
+                            <h4><spring:message code="navbar.notifications.title" /></h4>
                         </div>
                         <c:forEach items="${notifications}" var="item">
                             <div class="item-notification-content">
