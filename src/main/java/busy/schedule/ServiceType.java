@@ -40,6 +40,9 @@ public class ServiceType implements Serializable {
     }
 
     public void setMaxBookingsPerRole(int maxBookingsPerRole) {
+        if (maxBookingsPerRole <= 0) {
+            throw new IllegalArgumentException("A service type has to let at least 1 booking per role.");
+        }
         this.maxBookingsPerRole = maxBookingsPerRole;
     }
 
@@ -61,10 +64,17 @@ public class ServiceType implements Serializable {
     }
 
     public void setDuration(int duration) {
+        if (duration <= 0) {
+            throw new IllegalArgumentException("The service duration must be a positive number of minutes.");
+        }
         this.duration = duration;
     }
 
     public int getDuration() {
         return duration;
+    }
+
+    public Integer getCompanyId() {
+        return (company != null) ? company.getId() : null;
     }
 }
