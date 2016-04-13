@@ -54,19 +54,21 @@
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <table class="table" role="grid">
-                                        <thead>
-                                            <tr role="row">
-                                                <th><spring:message code="company.trade_name.label" /></th>
-                                                <th><spring:message code="company.business_name.label" /></th>
-                                                <th><spring:message code="company.email.label" /></th>
-                                                <th><spring:message code="company.cif.label" /></th>
-                                                <th><spring:message code="category.name.label" /></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table" role="grid">
+                                            <thead>
+                                                <tr role="row">
+                                                    <th><spring:message code="company.trade_name.label" /></th>
+                                                    <th><spring:message code="company.business_name.label" /></th>
+                                                    <th><spring:message code="company.email.label" /></th>
+                                                    <th><spring:message code="company.cif.label" /></th>
+                                                    <th><spring:message code="category.name.label" /></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
