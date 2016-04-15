@@ -1,5 +1,7 @@
 package busy.bdd.company.manage_service_types;
 
+import static org.junit.Assert.assertTrue;
+
 import org.fluentlenium.assertj.FluentLeniumAssertions;
 import org.fluentlenium.core.annotation.Page;
 
@@ -74,76 +76,93 @@ public class ManageServiceTypesSteps extends AbstractFunctionalTest {
     @Then("^I should see an empty list of services$")
     public void empty_service_type_list() throws Throwable {
 
+        assertTrue(branchPage.serviceTypeListIsEmpty());
     }
 
     @When("^I click on Add$")
     public void click_on_add() throws Throwable {
 
+        branchPage.clickOnAddServiceType();
     }
 
     @When("^I click on Modify$")
     public void click_on_modify() throws Throwable {
 
+        branchPage.clickOnModifyServiceType();
     }
 
     @When("^I click on Delete$")
     public void click_on_delete() throws Throwable {
 
+        branchPage.clickOnDeleteServiceType();
     }
 
     @Then("^I should see a window with a form to input the data$")
     public void form_shown() throws Throwable {
 
+        assertTrue(branchPage.formIsShown());
     }
 
     @When("^I enter the name \"([^\"]*)\"$")
     public void enter_name(String name) throws Throwable {
 
+        branchPage.setServiceName(name);
     }
 
     @When("^I enter the description \"([^\"]*)\"$")
     public void enter_description(String description) throws Throwable {
 
+        branchPage.setServiceDescription(description);
     }
 
     @When("^I enter the number of maximum bookings per role \"([^\"]*)\"$")
     public void enter_maximum_bookings(String maximumBookings) throws Throwable {
 
+        branchPage.setServiceMaximumBookings(maximumBookings);
     }
 
     @When("^I enter the duration of the service \"([^\"]*)\"$")
     public void enter_duration(String duration) throws Throwable {
 
+        branchPage.setServiceDuration(duration);
     }
 
     @When("^I click on Accept$")
     public void submit() throws Throwable {
 
+        branchPage.submitServiceType();
     }
 
     @Then("^I should see \"([^\"]*)\" in the list of services with the data \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\"$")
     public void data_shown(String name, String description, String maximumBookings, String duration) throws Throwable {
 
+        assertTrue(branchPage.serviceTypeShown(name, description, maximumBookings, duration));
     }
 
     @Then("^I should see \"([^\"]*)\" in the list of services$")
     public void data_shown(String name) throws Throwable {
 
+        assertTrue(branchPage.serviceTypeShown(name));
     }
 
     @When("^I add a new type of service \"([^\"]*)\"$")
     public void add_service_type(String name) throws Throwable {
 
-    }
-
-    @Then("^I should see an error in the name field$")
-    public void duplicated_name_error() throws Throwable {
-
+        String scriptPath = "classpath:database/add_service_type.sql";
+        template.execute(getSQLScript(scriptPath));
     }
 
     @When("^I add a service with a booking in the service type \"([^\"]*)\"$")
     public void add_service_with_booking(String name) {
 
+        String scriptPath = "classpath:database/add_service_with_booking.sql";
+        template.execute(getSQLScript(scriptPath));
+    }
+
+    @Then("^I should see an error in the name field$")
+    public void duplicated_name_error() throws Throwable {
+
+        assertTrue(branchPage.duplicateServiceTypeErrorShown());
     }
 
 }

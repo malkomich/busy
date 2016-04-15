@@ -2,6 +2,7 @@ package busy.company.web;
 
 import static org.fest.assertions.Assertions.assertThat;
 
+import org.fluentlenium.core.domain.FluentWebElement;
 import org.openqa.selenium.By;
 
 import busy.BusyPage;
@@ -23,6 +24,22 @@ public class BranchPage extends BusyPage {
     private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
     private static final String CALENDAR_DAY_SELECTOR = "#cal-day-box";
     private static final String DAY_MODE_SELECTOR = "[data-calendar-view='day']";
+
+    private static final String SERVICE_TYPE_LIST_SELECTOR = "#service-type-list";
+    private static final String SERVICE_TYPE_ITEM_SELECTOR = "#service-type-item";
+    private static final String[] SERVICE_TYPE_PARAMS_SELECTOR =
+            {"#service-type-name", "#service-type-description", "#service-type-bookings", "#service-type-duration"};
+    private static final String SERVICE_TYPE_ADD_SELECTOR = "#service-type_add";
+    private static final String SERVICE_TYPE_MODIFY_SELECTOR = "#service-type_modify";
+    private static final String SERVICE_TYPE_DELETE_SELECTOR = "#service-type_delete";
+
+    private static final String SERVICE_TYPE_FORM_SELECTOR = ".service-type-form";
+    private static final String SERVICE_TYPE_FORM_NAME_SELECTOR = "#name";
+    private static final String SERVICE_TYPE_FORM_DESCRIPTION_SELECTOR = "#description";
+    private static final String SERVICE_TYPE_FORM_BOOKINGS_SELECTOR = "#max_bookings";
+    private static final String SERVICE_TYPE_FORM_DURATION_SELECTOR = "#duration";
+    private static final String SERVICE_TYPE_FORM_SUBMIT_SELECTOR = "#submit";
+    private static final String SERVICE_TYPE_FORM_ERROR_SELECTOR = "span.error";
 
     @Override
     public String relativePath() {
@@ -51,6 +68,95 @@ public class BranchPage extends BusyPage {
     public boolean calendarDayShown() {
 
         return findFirst(CALENDAR_DAY_SELECTOR).isDisplayed();
+    }
+
+    public boolean serviceTypeListIsEmpty() {
+
+        FluentWebElement serviceTypeList = findFirst(SERVICE_TYPE_LIST_SELECTOR);
+        return serviceTypeList.find(SERVICE_TYPE_ITEM_SELECTOR).isEmpty();
+    }
+
+    public boolean serviceTypeShown(String... serviceProperties) {
+
+        FluentWebElement serviceTypeList = findFirst(SERVICE_TYPE_LIST_SELECTOR);
+        for (FluentWebElement item : serviceTypeList.find(SERVICE_TYPE_ITEM_SELECTOR)) {
+
+            int matches = 0;
+            for (int i = 0; i < serviceProperties.length; i++) {
+                if (item.findFirst(SERVICE_TYPE_PARAMS_SELECTOR[i]).getText().contains(serviceProperties[0])) {
+                    matches++;
+                }
+            }
+
+            if (matches == serviceProperties.length) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public BranchPage clickOnAddServiceType() {
+
+        findFirst(SERVICE_TYPE_ADD_SELECTOR).click();
+        return this;
+    }
+
+    public BranchPage clickOnModifyServiceType() {
+
+        findFirst(SERVICE_TYPE_MODIFY_SELECTOR).click();
+        return this;
+    }
+
+    public BranchPage clickOnDeleteServiceType() {
+
+        findFirst(SERVICE_TYPE_DELETE_SELECTOR).click();
+        return this;
+    }
+
+    public boolean formIsShown() {
+
+        return findFirst(SERVICE_TYPE_FORM_SELECTOR).isDisplayed();
+    }
+
+    public BranchPage setName(String name) {
+
+        fill(SERVICE_TYPE_FORM_NAME_SELECTOR).with(name);
+        return this;
+    }
+
+    public BranchPage setServiceName(String name) {
+
+        fill(SERVICE_TYPE_FORM_NAME_SELECTOR).with(name);
+        return this;
+    }
+
+    public BranchPage setServiceDescription(String description) {
+
+        fill(SERVICE_TYPE_FORM_DESCRIPTION_SELECTOR).with(description);
+        return this;
+    }
+
+    public BranchPage setServiceMaximumBookings(String maximumBookings) {
+
+        fill(SERVICE_TYPE_FORM_BOOKINGS_SELECTOR).with(maximumBookings);
+        return this;
+    }
+
+    public BranchPage setServiceDuration(String duration) {
+
+        fill(SERVICE_TYPE_FORM_DURATION_SELECTOR).with(duration);
+        return this;
+    }
+
+    public BranchPage submitServiceType() {
+
+        submit(SERVICE_TYPE_FORM_SUBMIT_SELECTOR);
+        return this;
+    }
+
+    public boolean duplicateServiceTypeErrorShown() {
+
+        return !find(SERVICE_TYPE_FORM_ERROR_SELECTOR).isEmpty();
     }
 
 }
