@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +37,7 @@ import busy.schedule.YearSchedule;
  *
  */
 @Controller
+@Scope(value="singleton")
 @SessionAttributes(value = {CompanyController.SCHEDULE_SESSION})
 public class BookingController {
 

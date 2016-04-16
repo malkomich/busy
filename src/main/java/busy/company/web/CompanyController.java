@@ -12,6 +12,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -35,6 +36,7 @@ import busy.location.LocationService;
 import busy.role.Role;
 import busy.role.RoleService;
 import busy.schedule.ScheduleService;
+import busy.schedule.ServiceType;
 import busy.schedule.YearSchedule;
 import busy.user.User;
 import busy.util.SecureSetter;
@@ -46,6 +48,7 @@ import busy.util.SecureSetter;
  *
  */
 @Controller
+@Scope(value="singleton")
 @SessionAttributes(value = {CompanyController.SCHEDULE_SESSION})
 public class CompanyController {
 
@@ -54,6 +57,7 @@ public class CompanyController {
      */
     static final String USER_SESSION = "user";
     public static final String SCHEDULE_SESSION = "schedule";
+    static final String SERVICE_TYPES_SESSION = "serviceTypes";
 
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
     static final String COUNTRY_ITEMS_REQUEST = "countryItems";
@@ -150,6 +154,10 @@ public class CompanyController {
             scheduleService.findScheduleByBranch(branch, year),
             scheduleService.findScheduleByBranch(branch, year + 1)};
         model.addAttribute(SCHEDULE_SESSION, schedule);
+        
+        // Load the service types of the company
+        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(branch.getCompany());
+        model.addAttribute(SERVICE_TYPES_SESSION, serviceTypes);
 
         return BRANCH_PAGE;
     }

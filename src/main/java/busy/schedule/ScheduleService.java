@@ -1,6 +1,9 @@
 package busy.schedule;
 
+import java.util.List;
+
 import busy.company.Branch;
+import busy.company.Company;
 
 /**
  * Schedule service logic interface. Connects the UI Application layer with the Persistence one,
@@ -22,4 +25,12 @@ public interface ScheduleService {
      */
     YearSchedule findScheduleByBranch(Branch branch, int year);
 
+    /**
+     * Gets the list of service types attached to the given company.
+     * 
+     * @param company
+     *            company which service types are requested
+     * @return The list of resultant service types
+     */
+    List<ServiceType> findServiceTypesByCompany(Company company);
 }

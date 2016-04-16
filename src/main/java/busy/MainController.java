@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,7 @@ import busy.user.web.LoginForm;
  *
  */
 @Controller
+@Scope(value="singleton")
 @SessionAttributes(value = {MainController.NOTIFICATIONS_SESSION, MainController.ROLES_SESSION, MainController.USERNAME_SESSION})
 public class MainController {
 
