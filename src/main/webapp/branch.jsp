@@ -25,6 +25,7 @@
 </head>
 <body>
     <jsp:include page="include/header.jsp" />
+
     <div class="container">
         <div class="content">
 
@@ -46,6 +47,43 @@
                         </div>
                     </div>
                     <!-- .role-select-menu -->
+                </div>
+                <!-- .col -->
+                <div class="col-xs-9 pull-right">
+                    <div class="table-list-filters pull-right">
+                        <div class="select-menu pull-left">
+                            <button class="select-menu-button" href="#service-type-collapse" data-toggle="collapse"
+                                aria-expanded="false" aria-controls="service-type-collapse">
+                                <spring:message code="menu.filters.service-type.title" />
+                                <span class="glyphicon glyphicon-triangle-bottom" />
+                            </button>
+                            <div class="collapse select-menu-modal" id="service-type-collapse">
+                                <div id="service-type-list">
+                                    <c:forEach items="${serviceTypes}" var="serviceType">
+
+                                        <a href="#" class="select-menu-item">
+                                            <div class="select-menu-item-text">
+                                                <span class="name">${serviceType.name}</span>
+                                            </div>
+                                        </a>
+
+                                    </c:forEach>
+
+                                    <a href="#" class="select-menu-item">
+                                        <div class="select-menu-item-text">
+                                            <span class="glyphicon glyphicon-plus"></span> <span><spring:message
+                                                    code="menu.filters.service-type.add" /></span>
+                                        </div>
+                                    </a>
+
+                                </div>
+                                <!-- .select-menu-list -->
+                            </div>
+                            <!-- .select-menu-modal -->
+                        </div>
+                        <!-- .select-menu -->
+                    </div>
+                    <!-- .table-list-filters -->
                 </div>
                 <!-- .col -->
             </div>
@@ -126,6 +164,5 @@
     <script type="text/javascript" src="/js/language/es-ES.js"></script>
     <script type="text/javascript" src="/js/date.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
-
 </body>
 </html>

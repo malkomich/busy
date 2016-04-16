@@ -181,3 +181,45 @@ to {
         margin-top: 30px;
     }
 }
+/*
+ * Service Types menu
+ */
+.select-menu {
+    position: relative;
+}
+
+button.select-menu-button {
+    display: inline-block;
+    padding: 12px 15px 12px 15px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 17px;
+    border: 1px solid #d8d8d8;
+    border-radius: 3px 3px 0 0;
+}
+
+.select-menu-modal {
+    width: 300px;
+    right: 0px;
+    position: absolute;
+    z-index: 30;
+    color: #666;
+    background-color: #fff;
+    border: 1px solid rgba(200, 200, 200, 0.4);
+    border-radius: 3px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+}
+
+.select-menu-item {
+    display: block;
+    padding: 8px 8px 8px 30px;
+    overflow: hidden;
+    color: inherit;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.select-menu-item:hover {
+    background-color: #f4f4f4;
+}
