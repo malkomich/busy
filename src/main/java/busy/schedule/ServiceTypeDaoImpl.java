@@ -23,6 +23,7 @@ import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -51,6 +52,8 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_SERVICE_TYPE + " SET " + NAME + "= ?," + DESCRIPTION
             + "= ?," + BOOKINGS_PER_ROLE + "= ?, " + DURATION + "= ?," + COMPANYID + "= ?" + " WHERE " + ID + "= ?";
+
+    private static final String SQL_DELETE = "DELETE FROM " + TABLE_SERVICE_TYPE + " WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -109,14 +112,20 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
         return jdbcTemplate.query(SQL_SELECT_BY_COMPANY, rowMapper, company.getId());
 
     }
-    
-    /* (non-Javadoc)
+
+    /*
+     * (non-Javadoc)
      * @see busy.schedule.ServiceTypeDao#delete(busy.schedule.ServiceType)
      */
     @Override
-    public boolean delete(ServiceType serviceType) {
-        // TODO Auto-generated method stub
-        return false;
+    public int delete(ServiceType serviceType) {
+
+        try {
+            return jdbcTemplate.update(SQL_DELETE, serviceType.getId());
+        } catch (DataIntegrityViolationException e) {
+            return -1;
+        }
+
     }
 
     private class ServiceTypeRowMapper implements RowMapper<ServiceType> {

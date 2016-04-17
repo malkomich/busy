@@ -216,6 +216,6 @@ CREATE TABLE booking(
     person_id           integer             NOT NULL REFERENCES person(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
     service_id          integer             NOT NULL REFERENCES service(id)
-        ON DELETE CASCADE ON UPDATE CASCADE,
+        ON DELETE NO ACTION ON UPDATE CASCADE,
     PRIMARY KEY(person_id, service_id)
 );

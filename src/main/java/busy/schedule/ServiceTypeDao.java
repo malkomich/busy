@@ -34,8 +34,8 @@ public interface ServiceTypeDao {
      * 
      * @param serviceType
      *            service type to delete
-     * @return True if the service type has been deleted successfully
+     * @return The number of rows affected, or an error code if an exception was caught
      */
-    boolean delete(ServiceType serviceType);
+    int delete(ServiceType serviceType);
 
 }
