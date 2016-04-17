@@ -103,4 +103,42 @@ public class ServiceTypeDBTest extends AbstractDBTest {
 
         assertFalse(serviceTypes.isEmpty());
     }
+
+    @Test
+    @DatabaseSetup("../schedule/serviceTypeSet.xml")
+    public void deleteNotExisting() {
+
+        ServiceType serviceType = new ServiceType();
+        SecureSetter.setId(serviceType, INVALID_ID);
+
+        boolean deleted = repository.delete(serviceType);
+
+        assertFalse(deleted);
+    }
+
+    @Test
+    @DatabaseSetup("../schedule/serviceTypeSet.xml")
+    @DatabaseSetup("../user/userSet.xml")
+    @DatabaseSetup("../booking/bookingSet.xml")
+    public void deleteWithBookings() {
+
+        ServiceType serviceType = new ServiceType();
+        SecureSetter.setId(serviceType, 1);
+
+        boolean deleted = repository.delete(serviceType);
+
+        assertFalse(deleted);
+    }
+
+    @Test
+    @DatabaseSetup("../schedule/serviceTypeSet.xml")
+    public void deleteSuccessfully() {
+
+        ServiceType serviceType = new ServiceType();
+        SecureSetter.setId(serviceType, 1);
+
+        boolean deleted = repository.delete(serviceType);
+
+        assertTrue(deleted);
+    }
 }

@@ -29,4 +29,13 @@ public interface ServiceTypeDao {
      */
     List<ServiceType> findByCompany(Company company);
 
+    /**
+     * Deletes the specified service type object.
+     * 
+     * @param serviceType
+     *            service type to delete
+     * @return True if the service type has been deleted successfully
+     */
+    boolean delete(ServiceType serviceType);
+
 }

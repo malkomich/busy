@@ -109,6 +109,15 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
         return jdbcTemplate.query(SQL_SELECT_BY_COMPANY, rowMapper, company.getId());
 
     }
+    
+    /* (non-Javadoc)
+     * @see busy.schedule.ServiceTypeDao#delete(busy.schedule.ServiceType)
+     */
+    @Override
+    public boolean delete(ServiceType serviceType) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
     private class ServiceTypeRowMapper implements RowMapper<ServiceType> {
 
