@@ -188,16 +188,6 @@ to {
     position: relative;
 }
 
-button.select-menu-button {
-    display: inline-block;
-    padding: 12px 15px 12px 15px;
-    margin: 0;
-    font-size: 14px;
-    line-height: 17px;
-    border: 1px solid #d8d8d8;
-    border-radius: 3px 3px 0 0;
-}
-
 .select-menu-modal {
     width: 300px;
     right: 0px;
@@ -222,4 +212,8 @@ button.select-menu-button {
 
 .select-menu-item:hover {
     background-color: #f4f4f4;
+}
+
+.service-type_modify, .service-type_delete {
+    vertical-align: -webkit-baseline-middle;
 }

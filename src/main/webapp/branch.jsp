@@ -1,6 +1,5 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <!DOCTYPE html>
 <html>
@@ -21,6 +20,7 @@
 <link href="/css/busy-content.css" rel="stylesheet">
 <link href="/css/busy-components.css" rel="stylesheet">
 <link href="/css/calendar.min.css" rel="stylesheet">
+<link href="/css/signin.css" rel="stylesheet" type="text/css">
 
 </head>
 <body>
@@ -32,8 +32,8 @@
             <!-- Section selector -->
             <div class="row">
                 <div class="col-sm-3 col-xs-3">
-                    <button id="select-role" class="btn collapse-switch" type="button" data-toggle="collapse"
-                        data-target="#role-menu" aria-expanded="false" aria-controls="#role-menu">
+                    <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button"
+                        data-toggle="collapse" data-target="#role-menu" aria-expanded="false" aria-controls="#role-menu">
                         <span>${username}</span>
                     </button>
                     <div class="role-select-menu collapse" id="role-menu">
@@ -41,7 +41,8 @@
                             <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text">${username}</span>
                             </a>
                             <c:forEach items="${roles}" var="role">
-                                <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text">${role.branch.company.tradeName}</span>
+                                <a href="/company/${role.branch.company.id}/branch/${role.branch.id}"
+                                    class="role-select-menu-item"> <span class="role-select-menu-item-text">${role.branch.company.tradeName}</span>
                                 </a>
                             </c:forEach>
                         </div>
@@ -52,32 +53,13 @@
                 <div class="col-xs-9 pull-right">
                     <div class="table-list-filters pull-right">
                         <div class="select-menu pull-left">
-                            <button class="select-menu-button" href="#service-type-collapse" data-toggle="collapse"
-                                aria-expanded="false" aria-controls="service-type-collapse">
+                            <button id="service-types-button" class="btn btn-default btn-lg" href="#service-types-collapse"
+                                data-toggle="collapse" aria-expanded="false" aria-controls="service-types-collapse">
                                 <spring:message code="menu.filters.service-type.title" />
                                 <span class="glyphicon glyphicon-triangle-bottom" />
                             </button>
-                            <div class="collapse select-menu-modal" id="service-type-collapse">
-                                <div id="service-type-list">
-                                    <c:forEach items="${serviceTypes}" var="serviceType">
-
-                                        <a href="#" class="select-menu-item">
-                                            <div class="select-menu-item-text">
-                                                <span class="name">${serviceType.name}</span>
-                                            </div>
-                                        </a>
-
-                                    </c:forEach>
-
-                                    <a href="#" class="select-menu-item">
-                                        <div class="select-menu-item-text">
-                                            <span class="glyphicon glyphicon-plus"></span> <span><spring:message
-                                                    code="menu.filters.service-type.add" /></span>
-                                        </div>
-                                    </a>
-
-                                </div>
-                                <!-- .select-menu-list -->
+                            <div class="collapse select-menu-modal" id="service-types-collapse">
+                                <jsp:include page="service-types.jsp" />
                             </div>
                             <!-- .select-menu-modal -->
                         </div>
@@ -149,6 +131,20 @@
         </div>
     </div>
 
+    <!-- Modal Form -->
+    <div class="modal fade" id="modalForm" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+
+                <div class="modal-body"></div>
+
+            </div>
+            <!-- .modal-content -->
+        </div>
+        <!-- .modal-dialog -->
+    </div>
+
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -164,5 +160,6 @@
     <script type="text/javascript" src="/js/language/es-ES.js"></script>
     <script type="text/javascript" src="/js/date.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
+
 </body>
 </html>

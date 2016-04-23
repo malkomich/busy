@@ -14,8 +14,7 @@ import static busy.util.SQLUtil.TABLE_SERVICE_TYPE;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,13 +23,14 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import busy.company.Company;
+import busy.util.OperationResult;
+import busy.util.OperationResult.ResultCode;
 import busy.util.SecureSetter;
 
 /**
@@ -49,6 +49,8 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
             + "=companyJoin." + ALIAS_COMPANY_ID;
 
     private static final String SQL_SELECT_BY_COMPANY = SQL_SELECT_ALL + " WHERE " + COMPANYID + "=?";
+    private static final String SQL_SELECT_BY_COMPANY_AND_NAME =
+            SQL_SELECT_BY_COMPANY + " AND " + TABLE_SERVICE_TYPE + "." + NAME + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_SERVICE_TYPE + " SET " + NAME + "= ?," + DESCRIPTION
             + "= ?," + BOOKINGS_PER_ROLE + "= ?, " + DURATION + "= ?," + COMPANYID + "= ?" + " WHERE " + ID + "= ?";
@@ -57,17 +59,11 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
 
     private JdbcTemplate jdbcTemplate;
 
-    private SimpleJdbcInsert jdbcInsert;
-
     @Autowired
     public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
 
-        jdbcInsert = new SimpleJdbcInsert(dataSource);
-        jdbcInsert.withTableName(TABLE_SERVICE_TYPE);
-        jdbcInsert.setGeneratedKeyName(ID);
-        jdbcInsert.setColumnNames(Arrays.asList(NAME, DESCRIPTION, BOOKINGS_PER_ROLE, DURATION, COMPANYID));
     }
 
     /*
@@ -75,27 +71,36 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
      * @see busy.schedule.ServiceTypeDao#save(busy.schedule.ServiceType)
      */
     @Override
-    public void save(ServiceType serviceType) {
+    public ServiceType save(ServiceType serviceType) {
 
         if (serviceType.getId() > 0) {
 
             jdbcTemplate.update(SQL_UPDATE, serviceType.getName(), serviceType.getDescription(),
                     serviceType.getMaxBookingsPerRole(), serviceType.getDuration(), serviceType.getCompanyId(),
                     serviceType.getId());
+            return serviceType;
 
         } else {
 
-            Map<String, Object> parameters = new HashMap<String, Object>();
+            ServiceTypeRowMapper rowMapper = new ServiceTypeRowMapper();
+            rowMapper.setCompany(serviceType.getCompany());
+
+            Map<String, Object> parameters = new LinkedHashMap<String, Object>();
             parameters.put(NAME, serviceType.getName());
             parameters.put(DESCRIPTION, serviceType.getDescription());
-            parameters.put(BOOKINGS_PER_ROLE, serviceType.getMaxBookingsPerRole());
-            parameters.put(DURATION, serviceType.getDuration());
+            if (serviceType.getMaxBookingsPerRole() != null) {
+                parameters.put(BOOKINGS_PER_ROLE, serviceType.getMaxBookingsPerRole());
+            }
+            if (serviceType.getDuration() != null) {
+                parameters.put(DURATION, serviceType.getDuration());
+            }
             parameters.put(COMPANYID, serviceType.getCompanyId());
 
-            Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-            if (key != null) {
-                SecureSetter.setId(serviceType, key.intValue());
-            }
+            String query = generateInsertClause(parameters.keySet().toArray(new String[parameters.size()]));
+
+            ServiceType sType = jdbcTemplate.queryForObject(query, parameters.values().toArray(), rowMapper);
+            return sType;
+
         }
     }
 
@@ -115,17 +120,61 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
 
     /*
      * (non-Javadoc)
+     * @see busy.schedule.ServiceTypeDao#findByNameAndCompany(java.lang.String,
+     * busy.company.Company)
+     */
+    @Override
+    public ServiceType findByCompanyAndName(Company company, String name) {
+
+        ServiceTypeRowMapper rowMapper = new ServiceTypeRowMapper();
+        rowMapper.setCompany(company);
+
+        try {
+
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_COMPANY_AND_NAME, rowMapper, company.getId(), name);
+
+        } catch (EmptyResultDataAccessException e) {
+
+            return null;
+        }
+    }
+
+    private String generateInsertClause(String[] args) {
+
+        String fieldNames = "";
+        String valueMappers = "";
+
+        for (int i = 0; i < args.length; i++) {
+            fieldNames += args[i];
+            valueMappers += "?";
+            if (i < args.length - 1) {
+                fieldNames += ",";
+                valueMappers += ",";
+            }
+        }
+
+        return "INSERT INTO " + TABLE_SERVICE_TYPE + "(" + fieldNames + ") VALUES(" + valueMappers
+                + ") RETURNING " + ID + " AS " + ALIAS_SERVICE_TYPE_ID + "," + NAME + " AS " + ALIAS_SERVICE_TYPE_NAME
+                + "," + DESCRIPTION + "," + BOOKINGS_PER_ROLE + "," + DURATION + "," + COMPANYID;
+    }
+
+    /*
+     * (non-Javadoc)
      * @see busy.schedule.ServiceTypeDao#delete(busy.schedule.ServiceType)
      */
     @Override
-    public int delete(ServiceType serviceType) {
+    public OperationResult delete(ServiceType sType) {
 
+        OperationResult result;
         try {
-            return jdbcTemplate.update(SQL_DELETE, serviceType.getId());
+            int rowsAffected = jdbcTemplate.update(SQL_DELETE, sType.getId());
+            result = (rowsAffected == 1) ? new OperationResult(ResultCode.OK)
+                    : new OperationResult(ResultCode.NOT_EXISTS);
         } catch (DataIntegrityViolationException e) {
-            return -1;
+            result = new OperationResult(ResultCode.SERVICE_TYPE_WITH_BOOKINGS);
         }
 
+        return result;
     }
 
     private class ServiceTypeRowMapper implements RowMapper<ServiceType> {

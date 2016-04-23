@@ -5,8 +5,9 @@ $(function() {
 
     // Loads the cities when page loads (country can be selected before) and
     // when the country changes.
-    var code = $('select#country').val();
-    if (code != "") {
+    var countrySelectTag = $('select#country');
+    var code = countrySelectTag.val();
+    if (countrySelectTag.is(":visible") && code != "") {
         updateCities();
     }
     $('select#country').change(updateCities);

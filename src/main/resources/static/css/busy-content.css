@@ -135,3 +135,7 @@
 .bg-inactive {
     background: #FAF2F2;
 }
+.tip-text {
+    font-size: x-small;
+    color: #ccc;
+}

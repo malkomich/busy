@@ -76,6 +76,7 @@ $(function() {
             window.location.href = "/company/" + suggestion.data;
         }
     });
+<<<<<<< 58c50a35443c1973af4c37fc20f8c71415225c00
 
     /*
      * Hide the search icon when the search bar is focused
@@ -97,10 +98,73 @@ $(function() {
     $('.search-bar').click(function() {
         $('.search-bar-text', this).focus();
     });
+=======
+    
+    setServiceTypesListeners();
+
+>>>>>>> Service types management fully implemented
 });
 
 function messageModal(message) {
 
     $("#messageModal").find(".modal-body").text(message);
     $("#messageModal").modal();
+}
+
+function setServiceTypesListeners() {
+    $('.service-type_delete').click(deleteServiceType);
+    $('.service-type_modify').click(showServiceTypeForm);
+    $('.service-type_add').click(showServiceTypeForm);
+}
+
+function showServiceTypeForm() {
+
+    var sTypeId = $(this).attr('sTypeId');
+    
+    $.get("/service-type/save", {
+        id : sTypeId
+    }, function(data) {
+        var modalContainer = $('#modalForm');
+        $('.modal-body', modalContainer).html(data);
+        modalContainer.modal();
+    });
+}
+
+function saveServiceType() {
+    var form = $('#serviceTypeForm');
+    $.post("/service-type/save", form.serialize(), function(data) {
+        var type = $.type(data);
+        
+        var modalContainer = $('#modalForm');
+        
+        if ($(data).is("form")) {
+            $('.modal-body', modalContainer).html(data);
+            modalContainer.modal('show');
+        }
+        
+        if($(data).is("div")) {
+            var collapseContainer = $('#service-types-collapse'); 
+            collapseContainer.html(data);
+            collapseContainer.collapse('show');
+            setServiceTypesListeners();
+            modalContainer.modal('hide')
+        }
+        
+    });
+}
+
+function deleteServiceType() {
+
+    var sTypeId = $(this).attr('sTypeId');
+    
+    var menuItem = $(this).closest('.select-menu-item');
+    $.post("/service-type/delete", {
+        id : sTypeId
+    }, function(data) {
+        if (data.success) {
+            $(menuItem).remove();
+        } else {
+            messageModal(data.errorMsg);
+        }
+    });
 }

@@ -3,6 +3,7 @@ package busy.schedule;
 import java.util.List;
 
 import busy.company.Company;
+import busy.util.OperationResult;
 
 /**
  * Service type persistence interface.
@@ -17,8 +18,9 @@ public interface ServiceTypeDao {
      * 
      * @param serviceType
      *            The service type object to be persisted
+     * @return The service type saved
      */
-    void save(ServiceType serviceType);
+    ServiceType save(ServiceType serviceType);
 
     /**
      * Gets all the service types from the given company.
@@ -32,10 +34,21 @@ public interface ServiceTypeDao {
     /**
      * Deletes the specified service type object.
      * 
-     * @param serviceType
-     *            service type to delete
-     * @return The number of rows affected, or an error code if an exception was caught
+     * @param sType
+     *            the service type to delete
+     * @return The result of the operation
      */
-    int delete(ServiceType serviceType);
+    OperationResult delete(ServiceType sType);
+
+    /**
+     * Gets the service type with the given name and company, if it exists.
+     * 
+     * @param company
+     *            the company which service type is attached to
+     * @param name
+     *            the name of the type
+     * @return The resultant service type
+     */
+    ServiceType findByCompanyAndName(Company company, String name);
 
 }

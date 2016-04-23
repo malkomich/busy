@@ -38,7 +38,11 @@ import busy.role.RoleService;
 import busy.schedule.ScheduleService;
 import busy.schedule.ServiceType;
 import busy.schedule.YearSchedule;
+import busy.schedule.web.ServiceTypeForm;
+import busy.schedule.web.ServiceTypeValidator;
 import busy.user.User;
+import busy.util.OperationResult;
+import busy.util.OperationResult.ResultCode;
 import busy.util.SecureSetter;
 
 /**
@@ -48,8 +52,9 @@ import busy.util.SecureSetter;
  *
  */
 @Controller
-@Scope(value="singleton")
-@SessionAttributes(value = {CompanyController.SCHEDULE_SESSION})
+@Scope(value = "singleton")
+@SessionAttributes(value = {CompanyController.SCHEDULE_SESSION, CompanyController.BRANCH_SESSION,
+    CompanyController.SERVICE_TYPES_SESSION})
 public class CompanyController {
 
     /**
@@ -57,6 +62,7 @@ public class CompanyController {
      */
     static final String USER_SESSION = "user";
     public static final String SCHEDULE_SESSION = "schedule";
+    static final String BRANCH_SESSION = "branch";
     static final String SERVICE_TYPES_SESSION = "serviceTypes";
 
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
@@ -64,7 +70,8 @@ public class CompanyController {
     static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
     static final String MESSAGE_REQUEST = "messageFromController";
     static final String COMPANY_REQUEST = "company";
-    static final String BRANCH_REQUEST = "branch";
+    private static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
+    static final String SERVICE_TYPE_REQUEST = "serviceType";
 
     /**
      * URL Paths.
@@ -76,6 +83,9 @@ public class CompanyController {
     private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
     private static final String PATH_COMPANY_INFO = "/company/{id}";
     private static final String PATH_BRANCH = "/company/{cId}/branch/{bId}";
+    private static final String PATH_SERVICE_TYPE_DELETE = "/service-type/delete";
+    private static final String PATH_SERVICE_TYPE_SAVE = "/service-type/save";
+    private static final String PATH_RETURN_OBJECT = "/return-model-object";
 
     /**
      * JSP's
@@ -83,6 +93,8 @@ public class CompanyController {
     private static final String REGISTER_COMPANY_PAGE = "new-company";
     private static final String COMPANY_INFO_PAGE = "company-info";
     private static final String BRANCH_PAGE = "branch";
+
+    private static final String SERVICE_TYPE_FORM_PAGE = "service-type-form";
 
     @Autowired
     private CompanyService companyService;
@@ -145,16 +157,15 @@ public class CompanyController {
     public String showBranchPage(@PathVariable("bId") String branchId, Model model) {
 
         Branch branch = companyService.findBranchById(Integer.parseInt(branchId));
-        model.addAttribute(BRANCH_REQUEST, branch);
+        model.addAttribute(BRANCH_SESSION, branch);
 
         int year = Calendar.getInstance().get(Calendar.YEAR);
 
         // Load 3 year to handle right the weeks between years.
         YearSchedule[] schedule = {scheduleService.findScheduleByBranch(branch, year - 1),
-            scheduleService.findScheduleByBranch(branch, year),
-            scheduleService.findScheduleByBranch(branch, year + 1)};
+            scheduleService.findScheduleByBranch(branch, year), scheduleService.findScheduleByBranch(branch, year + 1)};
         model.addAttribute(SCHEDULE_SESSION, schedule);
-        
+
         // Load the service types of the company
         List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(branch.getCompany());
         model.addAttribute(SERVICE_TYPES_SESSION, serviceTypes);
@@ -302,6 +313,140 @@ public class CompanyController {
             getCompanySearches(@RequestParam(value = "partialName", required = true) String partialName) {
 
         return companyService.findActiveCompaniesByPartialName(partialName);
+    }
+
+    /**
+     * Shows the form to save a service type.
+     * 
+     * @param id
+     *            the unique id of an existing service type
+     * @param mav
+     *            Spring Model instance
+     * @return The JSP view of the form
+     */
+    @RequestMapping(value = PATH_SERVICE_TYPE_SAVE, method = RequestMethod.GET)
+    public String showServiceTypeForm(@RequestParam(value = "id", required = false) String id, Model model) {
+
+        if (!model.containsAttribute(SERVICE_TYPE_FORM_REQUEST)) {
+            ServiceTypeForm form = new ServiceTypeForm();
+
+            if (id != null) {
+                int sTypeId = Integer.parseInt(id);
+                ServiceType sType = getServiceTypeFromModel(sTypeId, model);
+                form.setId(sTypeId);
+                form.setName(sType.getName());
+                form.setDescription(sType.getDescription());
+                form.setMaxBookingsPerRole(sType.getMaxBookingsPerRole());
+                form.setDuration(sType.getDuration());
+            }
+
+            model.addAttribute(SERVICE_TYPE_FORM_REQUEST, form);
+        }
+
+        return SERVICE_TYPE_FORM_PAGE;
+    }
+
+    /**
+     * Request to save a service type
+     * 
+     * @param sTypeForm
+     *            form with the data of the service type
+     * @param result
+     *            result of the form validation
+     * @param model
+     *            Spring Model instance
+     * @return The operation result
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = PATH_SERVICE_TYPE_SAVE, method = RequestMethod.POST)
+    public String saveServiceType(@ModelAttribute(SERVICE_TYPE_FORM_REQUEST) @Valid ServiceTypeForm sTypeForm,
+            BindingResult result, Model model) {
+
+        Company company = ((Branch) model.asMap().get(BRANCH_SESSION)).getCompany();
+
+        ServiceTypeValidator validator = new ServiceTypeValidator(scheduleService);
+        validator.setCompany(company);
+
+        if (!result.hasErrors()) {
+            validator.validate(sTypeForm, result);
+        }
+
+        if (result.hasErrors()) {
+            return showServiceTypeForm(null, model);
+        }
+
+        ServiceType sType =
+                (sTypeForm.getId() > 0) ? getServiceTypeFromModel(sTypeForm.getId(), model) : new ServiceType();
+
+        sType.setName(sTypeForm.getName());
+        sType.setDescription(sTypeForm.getDescription());
+        sType.setMaxBookingsPerRole(sTypeForm.getMaxBookingsPerRole());
+        sType.setDuration(sTypeForm.getDuration());
+        sType.setCompany(company);
+
+        sType = scheduleService.saveServiceType(sType);
+
+        List<ServiceType> list = (List<ServiceType>) model.asMap().get(SERVICE_TYPES_SESSION);
+        if (!list.contains(sType)) {
+            list.add(sType);
+        }
+
+        return "service-types";
+    }
+
+    /**
+     * Request to delete a service type given its unique identifier
+     * 
+     * @param idTmp
+     *            unique id of the service type to delete
+     * @param model
+     *            Spring model instance
+     * @return The operation result
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = PATH_SERVICE_TYPE_DELETE, method = RequestMethod.POST)
+    public @ResponseBody OperationResult deleteServiceType(@RequestParam(value = "id", required = true) String idTmp,
+            Model model) {
+
+        int id = Integer.parseInt(idTmp);
+        ServiceType sType = getServiceTypeFromModel(id, model);
+
+        OperationResult result = scheduleService.deleteServiceType(sType);
+        if (ResultCode.OK.equals(result.getCode())) {
+            ((List<ServiceType>) model.asMap().get(SERVICE_TYPES_SESSION)).remove(sType);
+        }
+        return result;
+    }
+
+    @SuppressWarnings("unchecked")
+    private ServiceType getServiceTypeFromModel(int id, Model model) {
+
+        Object sTypeList = model.asMap().get(SERVICE_TYPES_SESSION);
+        if (sTypeList != null && sTypeList instanceof List) {
+
+            for (ServiceType sType : (List<ServiceType>) sTypeList) {
+                if (sType.getId() == id) {
+                    return sType;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns a parsed object from the Spring model as a response to a GET request
+     * 
+     * @param model
+     *            Spring Model instance
+     * @param objectKey
+     *            the identifier key of the stored object
+     * @return The resultant object
+     */
+    @SuppressWarnings("unchecked")
+    @RequestMapping(value = PATH_RETURN_OBJECT, method = RequestMethod.GET)
+    public @ResponseBody <T> T returnModelObject(Model model, String objectKey) {
+        T object = (T) model.asMap().get(SERVICE_TYPE_REQUEST);
+        return object;
     }
 
 }

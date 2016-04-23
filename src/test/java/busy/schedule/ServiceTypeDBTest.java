@@ -1,6 +1,8 @@
 package busy.schedule;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -14,6 +16,8 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
 import busy.company.Company;
+import busy.util.OperationResult;
+import busy.util.OperationResult.ResultCode;
 import busy.util.SecureSetter;
 
 /**
@@ -81,7 +85,11 @@ public class ServiceTypeDBTest extends AbstractDBTest {
         serviceType.setName(NAME);
         serviceType.setCompany(company);
 
-        repository.save(serviceType);
+        serviceType = repository.save(serviceType);
+        
+        assertNotNull(serviceType);
+        assertNotNull(serviceType.getMaxBookingsPerRole());
+        assertNotNull(serviceType.getDuration());
     }
 
     @Test
@@ -111,23 +119,30 @@ public class ServiceTypeDBTest extends AbstractDBTest {
         ServiceType serviceType = new ServiceType();
         SecureSetter.setId(serviceType, INVALID_ID);
 
-        boolean deleted = repository.delete(serviceType);
+        OperationResult deleted = repository.delete(serviceType);
 
-        assertFalse(deleted);
+        assertEquals(ResultCode.NOT_EXISTS, deleted.getCode());
     }
 
     @Test
     @DatabaseSetup("../schedule/serviceTypeSet.xml")
     @DatabaseSetup("../user/userSet.xml")
+    @DatabaseSetup("../location/countrySet.xml")
+    @DatabaseSetup("../location/citySet.xml")
+    @DatabaseSetup("../location/addressSet.xml")
+    @DatabaseSetup("../company/branchSet.xml")
+    @DatabaseSetup("../schedule/scheduleSet.xml")
+    @DatabaseSetup("../role/roleSet.xml")
+    @DatabaseSetup("../schedule/serviceSet.xml")
     @DatabaseSetup("../booking/bookingSet.xml")
     public void deleteWithBookings() {
 
         ServiceType serviceType = new ServiceType();
         SecureSetter.setId(serviceType, 1);
 
-        boolean deleted = repository.delete(serviceType);
+        OperationResult deleted = repository.delete(serviceType);
 
-        assertFalse(deleted);
+        assertEquals(ResultCode.SERVICE_TYPE_WITH_BOOKINGS, deleted.getCode());
     }
 
     @Test
@@ -137,8 +152,8 @@ public class ServiceTypeDBTest extends AbstractDBTest {
         ServiceType serviceType = new ServiceType();
         SecureSetter.setId(serviceType, 1);
 
-        boolean deleted = repository.delete(serviceType);
+        OperationResult deleted = repository.delete(serviceType);
 
-        assertTrue(deleted);
+        assertEquals(ResultCode.OK, deleted.getCode());
     }
 }

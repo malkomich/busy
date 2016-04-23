@@ -6,7 +6,7 @@ Feature: The manager of a company will be able to manage the service types of hi
     Background:
         Given I am logged as an user
         And I have a registered company with my account
-        And I am in my main page
+        And I am on the main page
     
     Scenario Outline: Add a new service type successfully
         When I select my company name "Busy" in the dropdown
@@ -60,7 +60,7 @@ Feature: The manager of a company will be able to manage the service types of hi
             
     Scenario: Delete successfully of a service type
         When I add a new type of service "Tipo 1"
-        And I select my company name 'Busy' in the dropdown
+        And I select my company name "Busy" in the dropdown
         Then I should see "Tipo 1" in the list of services
         When I click on Delete
         Then I should see an empty list of services
@@ -68,7 +68,7 @@ Feature: The manager of a company will be able to manage the service types of hi
     Scenario: Delete failed of a service type
         When I add a new type of service "Tipo 1"
         And I add a service with a booking in the service type "Tipo 1"
-        And I select my company name 'Busy' in the dropdown
+        And I select my company name "Busy" in the dropdown
         Then I should see "Tipo 1" in the list of services
         When I click on Delete
         Then I should see "Tipo 1" in the list of services

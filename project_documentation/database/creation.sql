@@ -194,7 +194,7 @@ CREATE TABLE service_type(
     name                varchar(20)         NOT NULL,
     description         text                NULL,
     bookings_per_role   integer             NOT NULL DEFAULT 1,
-    duration            integer             NOT NULL DEFAULT 3600,
+    duration            integer             NOT NULL DEFAULT 60,
     company_id          integer             NOT NULL REFERENCES company(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
 	UNIQUE (name, company_id)
