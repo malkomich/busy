@@ -35,7 +35,7 @@
                 </c:if>
                 <c:if test="${not empty roles}">
                     <div class="col-sm-3 col-xs-3">
-                        <button id="select-role" class="btn collapse-switch" type="button" data-toggle="collapse"
+                        <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button" data-toggle="collapse"
                             data-target="#role-menu" aria-expanded="false" aria-controls="#role-menu">
                             <span>${username}</span>
                         </button>

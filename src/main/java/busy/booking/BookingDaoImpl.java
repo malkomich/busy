@@ -43,7 +43,7 @@ import org.springframework.stereotype.Repository;
 import busy.location.Address;
 import busy.location.City;
 import busy.location.Country;
-import busy.service.Service;
+import busy.schedule.Service;
 import busy.user.User;
 import busy.util.SecureSetter;
 

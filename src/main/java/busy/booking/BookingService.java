@@ -3,8 +3,8 @@ package busy.booking;
 import java.util.List;
 import java.util.Map;
 
+import busy.schedule.Service;
 import busy.schedule.WeekSchedule;
-import busy.service.Service;
 
 /**
  * Booking service logic interface. Connects the UI Application layer with the Persistence one,

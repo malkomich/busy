@@ -1,9 +1,8 @@
-package busy.service;
+package busy.schedule;
 
 import java.io.Serializable;
 
 import busy.role.Role;
-import busy.schedule.HourSchedule;
 
 public class Service implements Serializable {
 

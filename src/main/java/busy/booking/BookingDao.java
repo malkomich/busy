@@ -3,7 +3,7 @@ package busy.booking;
 import java.util.List;
 import java.util.Map;
 
-import busy.service.Service;
+import busy.schedule.Service;
 
 /**
  * Booking persistence interface.

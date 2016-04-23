@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.joda.time.DateTime;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Company model
  * 
@@ -14,14 +16,22 @@ public class Company implements Serializable {
 
     private static final long serialVersionUID = 7609051478409569105L;
 
+    @Expose
     private int id;
+    @Expose
     private String tradeName;
+    @Expose
     private String businessName;
+    @Expose
     private String email;
+    @Expose
     private String cif;
+    @Expose
     private boolean active;
-    private DateTime createDate;
+    @Expose
     private Category category;
+    
+    private DateTime createDate;
 
     public Company() {}
 

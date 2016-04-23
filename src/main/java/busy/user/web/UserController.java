@@ -7,6 +7,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,6 +34,7 @@ import busy.user.Verification;
  *
  */
 @Controller
+@Scope(value="singleton")
 @SessionAttributes(value = { UserController.USER_SESSION })
 public class UserController {
 

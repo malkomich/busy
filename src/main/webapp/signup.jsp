@@ -34,8 +34,7 @@
                 <div class="inner cover">
 
                     <div class="form-box">
-                        <form:form class="form-signin" action="signup" modelAttribute="signupForm"
-                            commandName="signupForm" method="POST">
+                        <form:form class="form-signin" action="signup" modelAttribute="signupForm" method="POST">
 
                             <div class="row">
                                 <div class="col-sm-6 form-group">

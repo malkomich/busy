@@ -181,3 +181,39 @@ to {
         margin-top: 30px;
     }
 }
+/*
+ * Service Types menu
+ */
+.select-menu {
+    position: relative;
+}
+
+.select-menu-modal {
+    width: 300px;
+    right: 0px;
+    position: absolute;
+    z-index: 30;
+    color: #666;
+    background-color: #fff;
+    border: 1px solid rgba(200, 200, 200, 0.4);
+    border-radius: 3px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+    background-color: #fff;
+}
+
+.select-menu-item {
+    display: block;
+    padding: 8px 8px 8px 30px;
+    overflow: hidden;
+    color: inherit;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+.select-menu-item:hover {
+    background-color: #f4f4f4;
+}
+
+.service-type_modify, .service-type_delete {
+    vertical-align: -webkit-baseline-middle;
+}

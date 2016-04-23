@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
-import busy.service.Service;
+import busy.schedule.Service;
 import busy.util.SecureSetter;
 
 /**

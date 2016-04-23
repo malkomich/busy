@@ -1,6 +1,8 @@
-package busy.service;
+package busy.schedule;
 
 import java.io.Serializable;
+
+import com.google.gson.annotations.Expose;
 
 import busy.company.Company;
 
@@ -8,12 +10,22 @@ public class ServiceType implements Serializable {
 
     private static final long serialVersionUID = -4876036444292584389L;
 
+    @Expose
     private int id;
+    @Expose
     private String name;
+    @Expose
     private String description;
-    private int maxBookingsPerRole;
-    private int duration;
+    @Expose
+    private Integer maxBookingsPerRole;
+    @Expose
+    private Integer duration;
+    @Expose
     private Company company;
+
+    public ServiceType() {
+
+    }
 
     public String getName() {
         return name;
@@ -31,11 +43,14 @@ public class ServiceType implements Serializable {
         this.description = description;
     }
 
-    public int getMaxBookingsPerRole() {
+    public Integer getMaxBookingsPerRole() {
         return maxBookingsPerRole;
     }
 
-    public void setMaxBookingsPerRole(int maxBookingsPerRole) {
+    public void setMaxBookingsPerRole(Integer maxBookingsPerRole) {
+        if (maxBookingsPerRole != null && maxBookingsPerRole <= 0) {
+            throw new IllegalArgumentException("A service type has to let at least 1 booking per role.");
+        }
         this.maxBookingsPerRole = maxBookingsPerRole;
     }
 
@@ -56,11 +71,18 @@ public class ServiceType implements Serializable {
         this.id = id;
     }
 
-    public void setDuration(int duration) {
+    public void setDuration(Integer duration) {
+        if (duration != null && duration <= 0) {
+            throw new IllegalArgumentException("The service duration must be a positive number of minutes.");
+        }
         this.duration = duration;
     }
 
-    public int getDuration() {
+    public Integer getDuration() {
         return duration;
+    }
+
+    public Integer getCompanyId() {
+        return (company != null) ? company.getId() : null;
     }
 }
