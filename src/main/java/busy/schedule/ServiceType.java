@@ -2,25 +2,17 @@ package busy.schedule;
 
 import java.io.Serializable;
 
-import com.google.gson.annotations.Expose;
-
 import busy.company.Company;
 
 public class ServiceType implements Serializable {
 
     private static final long serialVersionUID = -4876036444292584389L;
 
-    @Expose
     private int id;
-    @Expose
     private String name;
-    @Expose
     private String description;
-    @Expose
     private Integer maxBookingsPerRole;
-    @Expose
     private Integer duration;
-    @Expose
     private Company company;
 
     public ServiceType() {
