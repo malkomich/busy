@@ -76,7 +76,6 @@ $(function() {
             window.location.href = "/company/" + suggestion.data;
         }
     });
-<<<<<<< 58c50a35443c1973af4c37fc20f8c71415225c00
 
     /*
      * Hide the search icon when the search bar is focused
@@ -98,11 +97,9 @@ $(function() {
     $('.search-bar').click(function() {
         $('.search-bar-text', this).focus();
     });
-=======
     
     setServiceTypesListeners();
 
->>>>>>> Service types management fully implemented
 });
 
 function messageModal(message) {

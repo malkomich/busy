@@ -209,7 +209,9 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <useSystemClassLoader>false</useSystemClassLoader>
-          <skipTests>true</skipTests>
+          <skipTests>false</skipTests>
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <argLine>-Dfile.encoding=UTF-8</argLine>
         </configuration>
       </plugin>
 
