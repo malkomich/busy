@@ -209,9 +209,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <useSystemClassLoader>false</useSystemClassLoader>
-          <skipTests>false</skipTests>
-          <encoding>${project.build.sourceEncoding}</encoding>
-          <argLine>-Dfile.encoding=UTF-8</argLine>
+          <skipTests>true</skipTests>
         </configuration>
       </plugin>
 
@@ -221,7 +219,6 @@
         <artifactId>heroku-maven-plugin</artifactId>
         <version>1.0.0</version>
       </plugin>
-
     </plugins>
   </build>
 

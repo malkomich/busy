@@ -3,12 +3,11 @@ language: java
 jdk:
   - oraclejdk8
 
-cache:
-  directories:
-    - $HOME/.m2
-
 services:
   - postgresql
 
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
+  - psql -U postgres -q -d travis_ci_test -f project_documentation/database/creation.sql
+  
+script: "mvn clean install -B -Denv=test"
