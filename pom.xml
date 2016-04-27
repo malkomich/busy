@@ -170,14 +170,11 @@
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
     </dependency>
-
-    <!-- ============ ElementTraversal fixing ============ -->
     <dependency>
-      <groupId>xml-apis</groupId>
-      <artifactId>xml-apis</artifactId>
-      <version>1.4.01</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
     </dependency>
-
   </dependencies>
 
   <build>
@@ -199,8 +196,8 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <!-- Enable maven resource filters in application.properties files -->
-          <addResources>false</addResources>
+          <!-- Enable maven resource filter of application.properties files -->
+          <addResources>true</addResources>
         </configuration>
       </plugin>
 
@@ -211,13 +208,6 @@
           <useSystemClassLoader>false</useSystemClassLoader>
           <skipTests>true</skipTests>
         </configuration>
-      </plugin>
-
-      <!-- Heroku plugin to execute deployment task on Heroku -->
-      <plugin>
-        <groupId>com.heroku.sdk</groupId>
-        <artifactId>heroku-maven-plugin</artifactId>
-        <version>1.0.0</version>
       </plugin>
     </plugins>
   </build>
