@@ -9,7 +9,7 @@
 
   <name>Busy WebApp</name>
   <description>PyMes Schedule's Management Application</description>
-  <url>busy-app.herokuapp.com</url>
+  <url>https://busy-web.herokuapp.com/login</url>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -40,6 +40,10 @@
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
@@ -52,6 +56,11 @@
       <artifactId>spring-test-dbunit</artifactId>
       <version>1.2.1</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-configuration-processor</artifactId>
+      <optional>true</optional>
     </dependency>
 
     <!-- ============ JavaEE ============ -->
@@ -170,11 +179,6 @@
       <groupId>org.json</groupId>
       <artifactId>json</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-configuration-processor</artifactId>
-      <optional>true</optional>
-    </dependency>
   </dependencies>
 
   <build>
@@ -206,7 +210,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <useSystemClassLoader>false</useSystemClassLoader>
-          <skipTests>true</skipTests>
+          <skipTests>false</skipTests>
         </configuration>
       </plugin>
     </plugins>

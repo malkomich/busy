@@ -1,0 +1,70 @@
+spring:
+  profiles.active: dev
+
+---
+
+spring:
+  profiles: dev
+  application:
+    name: buSy
+  mvc:
+    favicon:
+      enabled: true
+    view:
+      prefix: /
+      suffix: .jsp
+  datasource:
+    url: ${DB_BUSY_URL}
+    driver-class-name: org.postgresql.Driver
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: busy.validation@gmail.com
+    password: b1u2s3y4#SeCuRePASSWORD
+    default-encoding: UTF-8
+    protocol: smtps
+    properties:
+      mail:
+        transport:
+          protocol: smtps
+        debug: true
+        smtps:
+          auth: true
+          timeout: 15000
+          ssl:
+            trust: smtp.gmail.com
+          starttls:
+            enable: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: false
+server:
+  error:
+    whitelabel:
+      enabled: true
+web:
+  rootUrl: http://localhost:8080
+
+---
+
+spring:
+  profiles: prod
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+  mail:
+    properties:
+      mail:
+        debug: false
+server:
+  error:
+    whitelabel:
+      enabled: false
+web:
+  rootUrl: http://localhost:8080
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    url: ${DB_POSTGRESQL_URL}
