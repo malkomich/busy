@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -26,6 +28,12 @@ public class Application extends WebMvcConfigurerAdapter {
         SpringApplication.run(Application.class, args);
     }
 
+    @Bean(name= "javaMailSender")
+    @Scope(value = "singleton")
+    public JavaMailSender javaMailSender() {
+        return new JavaMailSenderImpl();
+    }
+    
     /**
      * Injection of the message properties files, so internationalization is enabled.
      * 
