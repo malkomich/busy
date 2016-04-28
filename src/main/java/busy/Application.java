@@ -25,7 +25,7 @@ public class Application extends WebMvcConfigurerAdapter {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
-    
+
     /**
      * Injection of the message properties files, so internationalization is enabled.
      * 

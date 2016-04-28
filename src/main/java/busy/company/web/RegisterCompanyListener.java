@@ -1,7 +1,6 @@
 package busy.company.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -25,12 +24,6 @@ public class RegisterCompanyListener implements ApplicationListener<OnRegisterCo
 
     @Autowired
     private MessageSource messages;
-
-    /**
-     * Absolute path of the root URL, to let from now the use of relative URL paths.
-     */
-    @Value("${rootUrl}")
-    private String rootUrl;
 
     @Override
     public void onApplicationEvent(OnRegisterCompany event) {

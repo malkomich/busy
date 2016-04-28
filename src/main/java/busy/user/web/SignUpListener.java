@@ -3,15 +3,16 @@ package busy.user.web;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
 import busy.user.User;
 import busy.user.UserService;
+import busy.util.UriUtils;
 
 /**
  * Application listener called when a sign up is performed.
@@ -35,11 +36,8 @@ public class SignUpListener implements ApplicationListener<OnSignUpCompleteEvent
     @Autowired
     private JavaMailSender mailSender;
 
-    /**
-     * Absolute path of the root URL, to let from now the use of relative URL paths.
-     */
-    @Value("${rootUrl}")
-    private String rootUrl;
+    @Autowired
+    private Environment env;
 
     @Override
     public void onApplicationEvent(OnSignUpCompleteEvent event) {
@@ -64,7 +62,8 @@ public class SignUpListener implements ApplicationListener<OnSignUpCompleteEvent
         SimpleMailMessage email = new SimpleMailMessage();
         email.setTo(recipientAddress);
         email.setSubject(subject);
-        email.setText(message + rootUrl + confirmationUrl);
+        String rootPath = UriUtils.getRootPath(env);
+        email.setText(message + rootPath + confirmationUrl);
         mailSender.send((SimpleMailMessage) email);
 
     }

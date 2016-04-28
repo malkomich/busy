@@ -12,10 +12,10 @@ import org.fluentlenium.core.FluentPage;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationContextLoader;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -23,6 +23,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.gargoylesoftware.htmlunit.WebClient;
+
+import busy.util.UriUtils;
 
 /**
  * Basic class configurated to let subclasses easily automate integration testing using a library
@@ -42,12 +44,9 @@ public class AbstractFunctionalTest extends FluentTest {
 
     @Autowired
     protected JdbcTemplate template;
-
-    /**
-     * Absolute path of the root URL, to let from now the use of relative URL paths.
-     */
-    @Value("${rootUrl}")
-    private String rootUrl;
+    
+    @Autowired
+    private Environment env;
 
     /*
      * (non-Javadoc)
@@ -55,7 +54,8 @@ public class AbstractFunctionalTest extends FluentTest {
      */
     @Override
     public <P extends FluentPage> P goTo(P page) {
-        ((BusyPage) page).setUrl(rootUrl);
+        String rootPath = UriUtils.getRootPath(env);
+        ((BusyPage) page).setUrl(rootPath);
         return super.goTo(page);
     }
 
