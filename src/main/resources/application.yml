@@ -1,10 +1,10 @@
 spring:
-  profiles.active: dev
+  profiles.active: prod
 
 ---
 
 spring:
-  profiles: dev
+  profiles: prod
   application:
     name: buSy
   mvc:
@@ -14,7 +14,7 @@ spring:
       prefix: /
       suffix: .jsp
   datasource:
-    url: ${DB_BUSY_URL}
+    url: ${JDBC_DATABASE_URL}
     driver-class-name: org.postgresql.Driver
   mail:
     host: smtp.gmail.com
@@ -27,7 +27,7 @@ spring:
       mail:
         transport:
           protocol: smtps
-        debug: true
+        debug: false
         smtps:
           auth: true
           timeout: 15000
@@ -41,26 +41,24 @@ spring:
 server:
   error:
     whitelabel:
-      enabled: true
-web:
-  rootUrl: http://localhost:8080
+      enabled: false
+rootUrl: https://busy-web.herokuapp.com
 
 ---
 
 spring:
-  profiles: prod
+  profiles: dev
   datasource:
-    url: ${JDBC_DATABASE_URL}
+    url: ${DB_BUSY_URL}
   mail:
     properties:
       mail:
-        debug: false
+        debug: true
 server:
   error:
     whitelabel:
-      enabled: false
-web:
-  rootUrl: http://localhost:8080
+      enabled: true
+rootUrl: http://localhost:8080
 
 ---
 

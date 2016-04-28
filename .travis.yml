@@ -10,4 +10,4 @@ before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - psql -U postgres -q -d travis_ci_test -f project_documentation/database/creation.sql
   
-script: "mvn clean install -B -Denv=test"
+script: "mvn clean install -B -Dspring.profiles.active=test"

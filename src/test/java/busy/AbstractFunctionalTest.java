@@ -46,7 +46,7 @@ public class AbstractFunctionalTest extends FluentTest {
     /**
      * Absolute path of the root URL, to let from now the use of relative URL paths.
      */
-    @Value("${web.rootUrl}")
+    @Value("${rootUrl}")
     private String rootUrl;
 
     /*
