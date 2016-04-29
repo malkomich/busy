@@ -38,7 +38,10 @@ public class NotificationDBTest extends AbstractDBTest {
     public void insertWithUserInvalid() {
 
         Notification notification = new Notification();
-        notification.setUserId(INVALID_ID);
+        
+        User user = new User();
+        SecureSetter.setId(user, INVALID_ID);
+        notification.setUser(user);
 
         notification.setType("Empresa");
         notification.setMessage("Su empresa ha sido verificada");
@@ -49,7 +52,7 @@ public class NotificationDBTest extends AbstractDBTest {
     public void insertWithTypeNull() {
 
         Notification notification = new Notification();
-        notification.setUserId(user.getId());
+        notification.setUser(user);
         notification.setMessage("Su empresa ha sido verificada");
         repository.save(notification);
     }
@@ -58,7 +61,7 @@ public class NotificationDBTest extends AbstractDBTest {
     public void insertWithMessageNull() {
 
         Notification notification = new Notification();
-        notification.setUserId(user.getId());
+        notification.setUser(user);
         notification.setType("Empresa");
         repository.save(notification);
     }
@@ -67,7 +70,7 @@ public class NotificationDBTest extends AbstractDBTest {
     public void insertSuccessfully() {
 
         Notification notification = new Notification();
-        notification.setUserId(user.getId());
+        notification.setUser(user);
         notification.setType("Empresa");
         notification.setMessage("Su empresa ha sido verificada");
         repository.save(notification);

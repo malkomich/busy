@@ -56,7 +56,7 @@ public class UpdateCompanyStatusListener implements ApplicationListener<OnUpdate
         // Add a new notification for the user
         String notificationType = messages.getMessage(Notification.Type.COMPANY.getMsgCode(), null, event.getLocale());
         String notificationMessage = messages.getMessage(NOTIFICATION_MSG_CODE, null, event.getLocale());
-        Notification notification = new Notification(event.getManager().getId(), notificationType, notificationMessage);
+        Notification notification = new Notification(event.getManager(), notificationType, notificationMessage);
         service.saveNotification(notification);
 
         // Send an informative email

@@ -21,6 +21,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import busy.user.User;
 import busy.util.SecureSetter;
 
 /**
@@ -85,11 +86,14 @@ public class NotificationDaoImpl implements NotificationDao {
      * @see busy.notifications.NotificationDao#findByUserId(int)
      */
     @Override
-    public List<Notification> findByUserId(int userId) {
+    public List<Notification> findByUser(User user) {
 
+        NotificationRowMapper rowMapper = new NotificationRowMapper();
+        rowMapper.setUser(user);
+        
         try {
 
-            return jdbcTemplate.query(SQL_SELECT_BY_USERID, new NotificationRowMapper(), userId);
+            return jdbcTemplate.query(SQL_SELECT_BY_USERID, rowMapper, user.getId());
 
         } catch (EmptyResultDataAccessException e) {
 
@@ -99,12 +103,18 @@ public class NotificationDaoImpl implements NotificationDao {
 
     private class NotificationRowMapper implements RowMapper<Notification> {
 
+        private User user;
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+
         @Override
         public Notification mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             Notification notification = new Notification();
             SecureSetter.setId(notification, rs.getInt(ID));
-            notification.setUserId(rs.getInt(USERID));
+            notification.setUser(user);
             notification.setType(rs.getString(NOTIFICATION_TYPE));
             notification.setMessage(rs.getString(MESSAGE));
             notification.setRead(rs.getBoolean(IS_READ));

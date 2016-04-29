@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import busy.notifications.Notification;
 import busy.notifications.NotificationService;
+import busy.user.User;
 
 /**
  * Application listener called when a company registration is performed.
@@ -37,11 +38,11 @@ public class RegisterCompanyListener implements ApplicationListener<OnRegisterCo
      */
     private void confirmRegistration(OnRegisterCompany event) {
 
-        int userId = event.getManager().getUser().getId();
+        User user = event.getManager().getUser();
         // Add a new notification for the user
         String notificationType = messages.getMessage(Notification.Type.COMPANY.getMsgCode(), null, event.getLocale());
         String notificationMessage = messages.getMessage(NOTIFICATION_MSG_CODE, null, event.getLocale());
-        Notification notification = new Notification(userId, notificationType, notificationMessage);
+        Notification notification = new Notification(user, notificationType, notificationMessage);
         service.saveNotification(notification);
 
     }

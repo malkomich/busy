@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import org.joda.time.DateTime;
 
+import busy.user.User;
+
 /**
  * Notification model. It provides a feedback to the user for the events in the application.
  * 
@@ -29,7 +31,7 @@ public class Notification implements Serializable {
     }
 
     private int id;
-    private int userId;
+    private User user;
     private String type;
     private String message;
     private boolean read;
@@ -37,18 +39,18 @@ public class Notification implements Serializable {
 
     public Notification() {}
 
-    public Notification(int userId, String type, String message) {
-        this.userId = userId;
+    public Notification(User user, String type, String message) {
+        this.user = user;
         this.type = type;
         this.message = message;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
     public void setType(String type) {
@@ -90,6 +92,10 @@ public class Notification implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public Integer getUserId() {
+        return (user != null) ? user.getId(): null;
     }
 
 }

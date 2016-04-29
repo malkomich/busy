@@ -2,6 +2,8 @@ package busy.notifications;
 
 import java.util.List;
 
+import busy.user.User;
+
 /**
  * Notification persistence interface.
  * 
@@ -20,10 +22,10 @@ public interface NotificationDao {
     /**
      * Gets the list of all current notification objects attached to the user with the given userId.
      * 
-     * @param userId
-     *            unique ID of the user
+     * @param user
+     *            user which notifications are requested
      * @return The list of resultant notifications
      */
-    List<Notification> findByUserId(int userId);
+    List<Notification> findByUser(User user);
 
 }
