@@ -48,8 +48,8 @@
                         </div>
                         <c:forEach items="${notifications}" var="item">
                             <div class="item-notification-content">
-                                <h5>${item.type}</h5>
-                                <div class="item-notification-message">${item.message}</div>
+                                <h5><spring:message code="${item.typeCode}" /></h5>
+                                <div class="item-notification-message"><spring:message code="${item.messageCode}" /></div>
                             </div>
                         </c:forEach>
                     </div></li>

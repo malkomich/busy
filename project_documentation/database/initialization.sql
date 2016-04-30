@@ -27,10 +27,10 @@ INSERT INTO company(trade_name, business_name, email, cif, active, category_id) 
 INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM company WHERE cif='B12345679'), (SELECT id FROM address WHERE address1='Calle Mayor'), true, '902202123');
 INSERT INTO role(person_id, branch_id, is_manager) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), (SELECT id FROM branch WHERE phone='902202123'), true);
 
-INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), 'Gestión de empresa', 'Su empresa está pendiente de aprobación', true, DEFAULT);
-INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), 'Gestión de empresa', 'Su empresa ha sido aprobada con éxito', DEFAULT, DEFAULT);
+INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), 'notification.type.company', 'notification.message.company.pending', true, DEFAULT);
+INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), 'notification.type.company', 'notification.message.company.approved', DEFAULT, DEFAULT);
 
-INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), 'Gestión de empresa', 'Su empresa está pendiente de aprobación', DEFAULT, DEFAULT);
+INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), 'notification.type.company', 'notification.message.company.pending', DEFAULT, DEFAULT);
 
 INSERT INTO year_schedule(branch_id, year) VALUES((SELECT id FROM branch WHERE phone='902202123'), 2016);
 INSERT INTO week_schedule(year_schedule_id, week_of_year, is_default) VALUES((SELECT id FROM year_schedule WHERE year=2016), 1, false);

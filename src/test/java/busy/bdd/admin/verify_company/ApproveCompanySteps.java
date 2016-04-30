@@ -1,19 +1,19 @@
 package busy.bdd.admin.verify_company;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Locale;
 
 import org.fluentlenium.assertj.FluentLeniumAssertions;
 import org.fluentlenium.core.annotation.Page;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.jdbc.core.RowMapper;
 
 import busy.AbstractFunctionalTest;
 import busy.admin.web.AdminPage;
+import busy.notifications.messages.CompanyMsg;
 import busy.user.web.LoginPage;
 import busy.util.SQLUtil;
 import cucumber.api.java.After;
@@ -24,16 +24,11 @@ import cucumber.api.java.en.When;
 
 public class ApproveCompanySteps extends AbstractFunctionalTest {
 
-    private static final String NOTIFICATION_CODE = "notification.message.company_approved";
-
     @Page
     private LoginPage loginPage;
 
     @Page
     private AdminPage adminPage;
-
-    @Autowired
-    private MessageSource messageSource;
 
     @Before
     public void runOnce() {
@@ -99,10 +94,11 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
     @Then("^a verify notification is sent to the manager of the company$")
     public void notification_sent() throws Throwable {
 
-        String msgResource = messageSource.getMessage(NOTIFICATION_CODE, null, Locale.getDefault());
+        String messageExpected = messageSource.getMessage(CompanyMsg.COMPANY_APPROVED.getMessageCode(), null,
+                LocaleContextHolder.getLocale()).trim();
 
         String scriptPath = "classpath:database/check_notifications.sql";
-        String message = template.queryForObject(getSQLScript(scriptPath), new RowMapper<String>() {
+        String messageCode = template.queryForObject(getSQLScript(scriptPath), new RowMapper<String>() {
 
             @Override
             public String mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -110,9 +106,11 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
                 return rs.getString(SQLUtil.MESSAGE);
             }
         });
-        System.out.println(message);
-        System.out.println(msgResource);
-        assertTrue(message.contains(msgResource));
+        
+        String messageActual = messageSource.getMessage(messageCode, null,
+                LocaleContextHolder.getLocale()).trim();
+        
+        assertEquals(messageExpected, messageActual);
     }
 
     @Then("^an email is sent to the manager of the company$")

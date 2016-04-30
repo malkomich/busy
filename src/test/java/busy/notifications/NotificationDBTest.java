@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
+import busy.notifications.messages.CompanyMsg;
 import busy.user.User;
 import busy.util.SecureSetter;
 
@@ -29,8 +30,8 @@ public class NotificationDBTest extends AbstractDBTest {
     @Test(expected = DataIntegrityViolationException.class)
     public void insertWithUserNull() {
         Notification notification = new Notification();
-        notification.setType("Empresa");
-        notification.setMessage("Su empresa ha sido verificada");
+        notification.setType(Notification.Type.COMPANY);
+        notification.setMessage(CompanyMsg.COMPANY_PENDING);
         repository.save(notification);
     }
 
@@ -38,10 +39,13 @@ public class NotificationDBTest extends AbstractDBTest {
     public void insertWithUserInvalid() {
 
         Notification notification = new Notification();
-        notification.setUserId(INVALID_ID);
 
-        notification.setType("Empresa");
-        notification.setMessage("Su empresa ha sido verificada");
+        User user = new User();
+        SecureSetter.setId(user, INVALID_ID);
+        notification.setUser(user);
+
+        notification.setType(Notification.Type.COMPANY);
+        notification.setMessage(CompanyMsg.COMPANY_PENDING);
         repository.save(notification);
     }
 
@@ -49,8 +53,8 @@ public class NotificationDBTest extends AbstractDBTest {
     public void insertWithTypeNull() {
 
         Notification notification = new Notification();
-        notification.setUserId(user.getId());
-        notification.setMessage("Su empresa ha sido verificada");
+        notification.setUser(user);
+        notification.setMessage(CompanyMsg.COMPANY_PENDING);
         repository.save(notification);
     }
 
@@ -58,8 +62,8 @@ public class NotificationDBTest extends AbstractDBTest {
     public void insertWithMessageNull() {
 
         Notification notification = new Notification();
-        notification.setUserId(user.getId());
-        notification.setType("Empresa");
+        notification.setUser(user);
+        notification.setType(Notification.Type.COMPANY);
         repository.save(notification);
     }
 
@@ -67,9 +71,9 @@ public class NotificationDBTest extends AbstractDBTest {
     public void insertSuccessfully() {
 
         Notification notification = new Notification();
-        notification.setUserId(user.getId());
-        notification.setType("Empresa");
-        notification.setMessage("Su empresa ha sido verificada");
+        notification.setUser(user);
+        notification.setType(Notification.Type.COMPANY);
+        notification.setMessage(CompanyMsg.COMPANY_PENDING);
         repository.save(notification);
     }
 
