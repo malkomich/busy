@@ -9,12 +9,14 @@ import static busy.util.SQLUtil.ALIAS_CITY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_NAME;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
+import static busy.util.SQLUtil.ALIAS_DAY_SCHEDULE_DEFAULT;
 import static busy.util.SQLUtil.ALIAS_DAY_SCHEDULE_ID;
 import static busy.util.SQLUtil.ALIAS_HOUR_SCHEDULE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_NAME;
 import static busy.util.SQLUtil.ALIAS_USER_ID;
+import static busy.util.SQLUtil.ALIAS_WEEK_SCHEDULE_DEFAULT;
 import static busy.util.SQLUtil.ALIAS_WEEK_SCHEDULE_ID;
 import static busy.util.SQLUtil.ALIAS_YEAR_SCHEDULE_ID;
 import static busy.util.SQLUtil.BOOKINGS_PER_ROLE;
@@ -26,7 +28,6 @@ import static busy.util.SQLUtil.DURATION;
 import static busy.util.SQLUtil.EMAIL;
 import static busy.util.SQLUtil.END_TIME;
 import static busy.util.SQLUtil.FIRSTNAME;
-import static busy.util.SQLUtil.IS_DEFAULT;
 import static busy.util.SQLUtil.LASTNAME;
 import static busy.util.SQLUtil.NIF;
 import static busy.util.SQLUtil.PASSWORD;
@@ -76,7 +77,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
             YEAR_SCHEDULE_QUERY + " WHERE " + BRANCHID + "=? AND " + YEAR + "=?";
 
     private static final String SQL_SELECT_DEFAULT_WEEK =
-            YEAR_SCHEDULE_QUERY + " WHERE " + IS_DEFAULT + "= 't' AND " + BRANCHID + "=?";
+            YEAR_SCHEDULE_QUERY + " WHERE " + ALIAS_WEEK_SCHEDULE_DEFAULT + "= 't' AND " + BRANCHID + "=?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -198,7 +199,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                         weekSchedule = new WeekSchedule();
                         SecureSetter.setId(weekSchedule, rs.getInt(ALIAS_WEEK_SCHEDULE_ID));
                         weekSchedule.setWeekOfYear(rs.getInt(WEEK_OF_YEAR));
-                        weekSchedule.setDefault(rs.getBoolean(IS_DEFAULT));
+                        weekSchedule.setDefault(rs.getBoolean(ALIAS_WEEK_SCHEDULE_DEFAULT));
                         weekSchedule.setYearSchedule(yearSchedule);
                     }
 
@@ -210,6 +211,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                             daySchedule = new DaySchedule();
                             SecureSetter.setId(daySchedule, rs.getInt(ALIAS_DAY_SCHEDULE_ID));
                             daySchedule.setDayOfWeek(rs.getInt(DAY_OF_WEEK));
+                            daySchedule.setDefault(rs.getBoolean(ALIAS_DAY_SCHEDULE_DEFAULT));
                             daySchedule.setWeekSchedule(weekSchedule);
                         }
 
@@ -336,7 +338,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                         weekSchedule = new WeekSchedule();
                         SecureSetter.setId(weekSchedule, rs.getInt(ALIAS_WEEK_SCHEDULE_ID));
                         weekSchedule.setWeekOfYear(rs.getInt(WEEK_OF_YEAR));
-                        weekSchedule.setDefault(rs.getBoolean(IS_DEFAULT));
+                        weekSchedule.setDefault(rs.getBoolean(ALIAS_WEEK_SCHEDULE_DEFAULT));
                         weekSchedule.setYearSchedule(yearSchedule);
                     }
 
@@ -348,6 +350,7 @@ public class ScheduleDaoImpl implements ScheduleDao {
                             daySchedule = new DaySchedule();
                             SecureSetter.setId(daySchedule, rs.getInt(ALIAS_DAY_SCHEDULE_ID));
                             daySchedule.setDayOfWeek(rs.getInt(DAY_OF_WEEK));
+                            daySchedule.setDefault(rs.getBoolean(ALIAS_DAY_SCHEDULE_DEFAULT));
                             daySchedule.setWeekSchedule(weekSchedule);
                         }
 

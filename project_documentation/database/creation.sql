@@ -174,7 +174,8 @@ CREATE TABLE day_schedule (
     id                  integer             DEFAULT nextval('day_schedule_seq') NOT NULL PRIMARY KEY,
     week_schedule_id    integer             NOT NULL REFERENCES week_schedule(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    day_of_week         integer             NOT NULL
+    day_of_week         integer             NOT NULL,
+    is_default          boolean             NOT NULL DEFAULT false
 );
 
 CREATE SEQUENCE hour_schedule_seq;

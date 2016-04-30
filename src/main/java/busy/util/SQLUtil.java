@@ -119,6 +119,9 @@ public class SQLUtil {
     public static final String ALIAS_USER_EMAIL = "userEmail";
     public static final String ALIAS_COMPANY_EMAIL = "companyEmail";
 
+    public static final String ALIAS_WEEK_SCHEDULE_DEFAULT = "weekScheduleDefault";
+    public static final String ALIAS_DAY_SCHEDULE_DEFAULT = "dayScheduleDefault";
+
     // SQL reusable Queries
     public static final String ADDRESS_SELECT_QUERY = "SELECT " + TABLE_ADDRESS + "." + ID + " AS " + ALIAS_ADDR_ID
             + "," + ADDR1 + "," + ADDR2 + "," + ZIPCODE + ", cityJoin.* FROM " + TABLE_ADDRESS + " LEFT JOIN ( SELECT "
@@ -169,14 +172,16 @@ public class SQLUtil {
             + TABLE_HOUR_SCHEDULE + "." + ID + "=serviceJoin." + HOUR_SCHEDULE_ID;
 
     public static final String DAY_SCHEDULE_QUERY = "SELECT " + TABLE_DAY_SCHEDULE + "." + ID + " AS "
-            + ALIAS_DAY_SCHEDULE_ID + "," + WEEK_SCHEDULE_ID + "," + DAY_OF_WEEK + ", hourScheduleJoin.*" + " FROM "
-            + TABLE_DAY_SCHEDULE + " RIGHT JOIN (" + HOUR_SCHEDULE_QUERY + ") AS hourScheduleJoin ON "
-            + TABLE_DAY_SCHEDULE + "." + ID + "= hourScheduleJoin." + DAY_SCHEDULE_ID;
+            + ALIAS_DAY_SCHEDULE_ID + "," + WEEK_SCHEDULE_ID + "," + DAY_OF_WEEK + "," + TABLE_DAY_SCHEDULE + "."
+            + IS_DEFAULT + " AS " + ALIAS_DAY_SCHEDULE_DEFAULT + ", hourScheduleJoin.*" + " FROM " + TABLE_DAY_SCHEDULE
+            + " RIGHT JOIN (" + HOUR_SCHEDULE_QUERY + ") AS hourScheduleJoin ON " + TABLE_DAY_SCHEDULE + "." + ID
+            + "= hourScheduleJoin." + DAY_SCHEDULE_ID;
 
     public static final String WEEK_SCHEDULE_QUERY = "SELECT " + TABLE_WEEK_SCHEDULE + "." + ID + " AS "
-            + ALIAS_WEEK_SCHEDULE_ID + "," + YEAR_SCHEDULE_ID + "," + WEEK_OF_YEAR + "," + IS_DEFAULT
-            + ", dayScheduleJoin.*" + " FROM " + TABLE_WEEK_SCHEDULE + " RIGHT JOIN (" + DAY_SCHEDULE_QUERY
-            + ") AS dayScheduleJoin ON " + TABLE_WEEK_SCHEDULE + "." + ID + "= dayScheduleJoin." + WEEK_SCHEDULE_ID;
+            + ALIAS_WEEK_SCHEDULE_ID + "," + YEAR_SCHEDULE_ID + "," + WEEK_OF_YEAR + "," + TABLE_WEEK_SCHEDULE + "."
+            + IS_DEFAULT + " AS " + ALIAS_WEEK_SCHEDULE_DEFAULT + ", dayScheduleJoin.*" + " FROM " + TABLE_WEEK_SCHEDULE
+            + " RIGHT JOIN (" + DAY_SCHEDULE_QUERY + ") AS dayScheduleJoin ON " + TABLE_WEEK_SCHEDULE + "." + ID
+            + "= dayScheduleJoin." + WEEK_SCHEDULE_ID;
 
     public static final String YEAR_SCHEDULE_QUERY = "SELECT " + TABLE_YEAR_SCHEDULE + "." + ID + " AS "
             + ALIAS_YEAR_SCHEDULE_ID + "," + BRANCHID + "," + YEAR + ", weekScheduleJoin.* " + " FROM "

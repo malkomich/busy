@@ -17,6 +17,7 @@ public class DaySchedule implements Serializable {
 
     private int id;
     private int dayOfWeek;
+    private boolean isDefault;
     private WeekSchedule weekSchedule;
     private List<HourSchedule> hourScheduleList;
 
@@ -30,6 +31,14 @@ public class DaySchedule implements Serializable {
 
     public void setDayOfWeek(int dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+    
+    public boolean isDefault() {
+        return isDefault;
+    }
+    
+    public void setDefault(boolean isDefault) {
+        this.isDefault = isDefault;
     }
 
     public WeekSchedule getWeekSchedule() {
