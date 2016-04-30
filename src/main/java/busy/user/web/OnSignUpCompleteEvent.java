@@ -16,9 +16,9 @@ public class OnSignUpCompleteEvent extends ApplicationEvent {
 
     private static final long serialVersionUID = -2387113760576861285L;
 
-    private final String appUrl;
-    private final Locale locale;
-    private final User user;
+    private String appUrl;
+    private Locale locale;
+    private User user;
 
     public OnSignUpCompleteEvent(User user, Locale locale, String appUrl) {
         super(user);

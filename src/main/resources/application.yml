@@ -1,7 +1,7 @@
 spring:
   profiles:
     include: default
-    active: prod
+    active: dev
 
 ---
 

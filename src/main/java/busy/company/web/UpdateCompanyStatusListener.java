@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import busy.company.Company;
 import busy.notifications.Notification;
 import busy.notifications.NotificationService;
+import busy.notifications.messages.CompanyMsg;
 import busy.util.UriUtils;
 
 /**
@@ -24,8 +25,6 @@ public class UpdateCompanyStatusListener implements ApplicationListener<OnUpdate
 
     private static final String EMAIL_SUBJECT_CODE = "new_notifications.email.subject";
     private static final String EMAIL_CONTENT_CODE = "new_notifications.email.content";
-
-    private static final String NOTIFICATION_MSG_CODE = "notification.message.company_approved";
 
     @Autowired
     private NotificationService service;
@@ -54,9 +53,8 @@ public class UpdateCompanyStatusListener implements ApplicationListener<OnUpdate
         Company company = event.getCompany();
 
         // Add a new notification for the user
-        String notificationType = messages.getMessage(Notification.Type.COMPANY.getMsgCode(), null, event.getLocale());
-        String notificationMessage = messages.getMessage(NOTIFICATION_MSG_CODE, null, event.getLocale());
-        Notification notification = new Notification(event.getManager(), notificationType, notificationMessage);
+        Notification notification =
+                new Notification(Notification.Type.COMPANY, CompanyMsg.COMPANY_APPROVED, event.getManager());
         service.saveNotification(notification);
 
         // Send an informative email

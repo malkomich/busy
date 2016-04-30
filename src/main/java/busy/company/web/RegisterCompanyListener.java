@@ -2,11 +2,11 @@ package busy.company.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import busy.notifications.Notification;
 import busy.notifications.NotificationService;
+import busy.notifications.messages.CompanyMsg;
 import busy.user.User;
 
 /**
@@ -18,13 +18,8 @@ import busy.user.User;
 @Component
 public class RegisterCompanyListener implements ApplicationListener<OnRegisterCompany> {
 
-    private static final String NOTIFICATION_MSG_CODE = "notification.message.company_pending";
-
     @Autowired
     private NotificationService service;
-
-    @Autowired
-    private MessageSource messages;
 
     @Override
     public void onApplicationEvent(OnRegisterCompany event) {
@@ -38,11 +33,10 @@ public class RegisterCompanyListener implements ApplicationListener<OnRegisterCo
      */
     private void confirmRegistration(OnRegisterCompany event) {
 
-        User user = event.getManager().getUser();
         // Add a new notification for the user
-        String notificationType = messages.getMessage(Notification.Type.COMPANY.getMsgCode(), null, event.getLocale());
-        String notificationMessage = messages.getMessage(NOTIFICATION_MSG_CODE, null, event.getLocale());
-        Notification notification = new Notification(user, notificationType, notificationMessage);
+        User user = event.getManager().getUser();
+        Notification notification = new Notification(Notification.Type.COMPANY, CompanyMsg.COMPANY_PENDING, user);
+
         service.saveNotification(notification);
 
     }

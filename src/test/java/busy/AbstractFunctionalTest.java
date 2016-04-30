@@ -11,10 +11,14 @@ import org.fluentlenium.adapter.FluentTest;
 import org.fluentlenium.core.FluentPage;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.remote.DriverCommand;
+import org.openqa.selenium.remote.RemoteExecuteMethod;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationContextLoader;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.Resource;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -40,14 +44,17 @@ import busy.util.UriUtils;
 public class AbstractFunctionalTest extends FluentTest {
 
     @Autowired
-    private ApplicationContext context;
+    protected JdbcTemplate template;
 
     @Autowired
-    protected JdbcTemplate template;
+    protected MessageSource messageSource;
+
+    @Autowired
+    private ApplicationContext context;
     
     @Autowired
     private Environment env;
-
+    
     /*
      * (non-Javadoc)
      * @see org.fluentlenium.core.Fluent#goTo(org.fluentlenium.core.FluentPage)
@@ -92,6 +99,12 @@ public class AbstractFunctionalTest extends FluentTest {
             }
         }
         return stBuilder.toString();
+    }
+
+    protected String getCurrentContextHandle() {
+        RemoteExecuteMethod executeMethod = new RemoteExecuteMethod((RemoteWebDriver) getDriver());
+        String context = (String) executeMethod.execute(DriverCommand.GET_CURRENT_CONTEXT_HANDLE, null);
+        return context;
     }
 }
 

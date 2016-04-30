@@ -1,6 +1,13 @@
 package busy.notifications;
 
-import static busy.util.SQLUtil.*;
+import static busy.util.SQLUtil.CREATE_DATE;
+import static busy.util.SQLUtil.DEFAULT;
+import static busy.util.SQLUtil.ID;
+import static busy.util.SQLUtil.IS_READ;
+import static busy.util.SQLUtil.MESSAGE;
+import static busy.util.SQLUtil.NOTIFICATION_TYPE;
+import static busy.util.SQLUtil.TABLE_NOTIFICATION;
+import static busy.util.SQLUtil.USERID;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,6 +28,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import busy.notifications.Notification.Type;
 import busy.user.User;
 import busy.util.SecureSetter;
 
@@ -63,15 +71,15 @@ public class NotificationDaoImpl implements NotificationDao {
 
         if (notification.getId() > 0) {
 
-            jdbcTemplate.update(SQL_UPDATE, notification.getUserId(), notification.getType(), notification.getMessage(),
-                    notification.isRead(), notification.getId());
+            jdbcTemplate.update(SQL_UPDATE, notification.getUserId(), notification.getTypeCode(),
+                    notification.getMessageCode(), notification.isRead(), notification.getId());
 
         } else {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put(USERID, notification.getUserId());
-            parameters.put(NOTIFICATION_TYPE, notification.getType());
-            parameters.put(MESSAGE, notification.getMessage());
+            parameters.put(NOTIFICATION_TYPE, notification.getTypeCode());
+            parameters.put(MESSAGE, notification.getMessageCode());
             parameters.put(IS_READ, DEFAULT);
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
@@ -90,7 +98,7 @@ public class NotificationDaoImpl implements NotificationDao {
 
         NotificationRowMapper rowMapper = new NotificationRowMapper();
         rowMapper.setUser(user);
-        
+
         try {
 
             return jdbcTemplate.query(SQL_SELECT_BY_USERID, rowMapper, user.getId());
@@ -115,8 +123,9 @@ public class NotificationDaoImpl implements NotificationDao {
             Notification notification = new Notification();
             SecureSetter.setId(notification, rs.getInt(ID));
             notification.setUser(user);
-            notification.setType(rs.getString(NOTIFICATION_TYPE));
-            notification.setMessage(rs.getString(MESSAGE));
+            Type type = Type.fromCode(rs.getString(NOTIFICATION_TYPE));
+            notification.setType(type);
+            SecureSetter.setAttribute(notification, "setMessageUnsecured", String.class, rs.getString(MESSAGE));
             notification.setRead(rs.getBoolean(IS_READ));
             DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
             notification.setCreateDate(createDate);

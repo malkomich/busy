@@ -8,8 +8,11 @@ import org.fluentlenium.core.filter.FilterConstructor;
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotVisibleException;
 import org.openqa.selenium.NoSuchElementException;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import busy.BusyPage;
+import busy.notifications.messages.CompanyMsg;
 
 /**
  * Page for the main page of Busy.
@@ -37,12 +40,6 @@ public class MainPage extends BusyPage {
 
     private static final String MESSAGE_SELECTOR = "#infoMessage";
     private static final String ITEM_NOTIFICATION_MESSAGE_SELECTOR = "div.item-notification-message";
-
-    /*
-     * Others
-     */
-    private static final String APPROVED = "approved";
-    private static final String REJECTED = "rejected";
 
     /*
      * (non-Javadoc)
@@ -95,10 +92,13 @@ public class MainPage extends BusyPage {
         return findFirst(MESSAGE_SELECTOR).isDisplayed();
     }
 
-    public boolean companyApprovedNotificationIsShown() {
+    public boolean companyApprovedNotificationIsShown(MessageSource messageSource) {
 
+        String messageExpected = messageSource.getMessage(CompanyMsg.COMPANY_APPROVED.getMessageCode(), null,
+                LocaleContextHolder.getLocale()).trim();
         for (FluentWebElement notification : find(ITEM_NOTIFICATION_MESSAGE_SELECTOR)) {
-            if (notification.getText().contains(APPROVED)) {
+            String messageActual = notification.getText().trim();
+            if (messageActual.equals(messageExpected)) {
                 return true;
             }
         }
@@ -110,10 +110,13 @@ public class MainPage extends BusyPage {
         return findFirst(BUSINESS_SECTION_SELECTOR).isDisplayed();
     }
 
-    public boolean companyRejectedNotificationIsShown() {
+    public boolean companyRejectedNotificationIsShown(MessageSource messageSource) {
 
+        String messageExpected = messageSource.getMessage(CompanyMsg.COMPANY_REJECTED.getMessageCode(), null,
+                LocaleContextHolder.getLocale()).trim();
         for (FluentWebElement notification : find(ITEM_NOTIFICATION_MESSAGE_SELECTOR)) {
-            if (notification.getText().contains(REJECTED)) {
+            String messageActual = notification.getText().trim();
+            if (messageActual.equals(messageExpected)) {
                 return true;
             }
         }

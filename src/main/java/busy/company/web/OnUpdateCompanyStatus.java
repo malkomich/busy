@@ -17,10 +17,10 @@ public class OnUpdateCompanyStatus extends ApplicationEvent {
 
     private static final long serialVersionUID = -8633073453998216839L;
 
-    private final String appUrl;
-    private final Locale locale;
-    private final Company company;
-    private final User manager;
+    private String appUrl;
+    private Locale locale;
+    private Company company;
+    private User manager;
 
     public OnUpdateCompanyStatus(Company company, User manager, Locale locale, String appUrl) {
         super(company);

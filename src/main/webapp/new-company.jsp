@@ -150,7 +150,7 @@
                                     <spring:message code="category.label" var="categoryLabel" />
                                     <label for="category">${categoryLabel}:</label>
 
-                                    <form:select path="categoryId" id="category" tabindex="5" class="form-control">
+                                    <form:select path="categoryId" id="category" tabindex="11" class="form-control">
                                         <spring:message code="category.select.header" var="categorySelect" />
                                         <form:option value="" label="${categorySelect}" />
                                         <form:options items="${categoryItems}" />
@@ -163,7 +163,7 @@
                                 <div class="col-sm-12">
                                     <div class="col-sm-3" style="float: right">
                                         <spring:message code="new_company.submit" var="newCompanySubmit" />
-                                        <button id="submit" type="submit" class="btn btn-primary" tabindex="11">${newCompanySubmit}</button>
+                                        <button id="submit" type="submit" class="btn btn-primary" tabindex="12">${newCompanySubmit}</button>
                                     </div>
                                 </div>
                             </div>

@@ -146,8 +146,8 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
     @Then("^the main page is shown$")
     public void main_page_is_shown() throws Throwable {
 
-        FluentLeniumAssertions.assertThat(mainPage).isAt();
         mainPage.await().untilPage();
+        FluentLeniumAssertions.assertThat(mainPage).isAt();
     }
 
     @Then("^a message informing that the company is pending to approve is shown$")
@@ -168,7 +168,7 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
     public void confirm_notification_is_shown() throws Throwable {
 
         goTo(mainPage).await().untilPage();
-        assertTrue(mainPage.companyApprovedNotificationIsShown());
+        assertTrue(mainPage.companyApprovedNotificationIsShown(messageSource));
     }
 
     @Then("^a business section is shown in my main page$")
@@ -194,7 +194,7 @@ public class RegisterCompanySteps extends AbstractFunctionalTest {
     public void problem_notification_is_shown() throws Throwable {
 
         goTo(mainPage).await().untilPage();
-        assertTrue(mainPage.companyRejectedNotificationIsShown());
+        assertTrue(mainPage.companyRejectedNotificationIsShown(messageSource));
     }
 
 }

@@ -16,9 +16,9 @@ public class OnRegisterCompany extends ApplicationEvent {
 
     private static final long serialVersionUID = -2640861557857133491L;
 
-    private final String appUrl;
-    private final Locale locale;
-    private final Role manager;
+    private String appUrl;
+    private Locale locale;
+    private Role manager;
 
     public OnRegisterCompany(Role manager, Locale locale, String appUrl) {
         super(manager);

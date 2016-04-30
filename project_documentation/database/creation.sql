@@ -143,8 +143,8 @@ CREATE TABLE notification (
     id                  integer             DEFAULT nextval('notification_seq') NOT NULL PRIMARY KEY,
     person_id           integer             NOT NULL REFERENCES person(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    notif_type          varchar(20)         NOT NULL,
-    message             text                NOT NULL,
+    notif_type          varchar(50)         NOT NULL,
+    message             varchar(50)         NOT NULL,
     read                boolean             NOT NULL DEFAULT false,
     create_date         timestamp with time zone    NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
