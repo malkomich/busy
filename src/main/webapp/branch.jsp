@@ -82,7 +82,6 @@
                     </div>
                     <div class="btn-group">
                         <button class="btn btn-warning active" data-calendar-view="month">Month</button>
-                        <button class="btn btn-warning" data-calendar-view="week">Week</button>
                         <button class="btn btn-warning" data-calendar-view="day">Day</button>
                     </div>
                 </div>
@@ -92,11 +91,9 @@
             <!-- .page-header -->
 
             <div class="row">
-                <div class="span9">
-                    <div id="calendar"></div>
-                </div>
+				<div id="calendar"></div>
             </div>
-            <!-- .row-profile -->
+            <!-- .row -->
 
         </div>
         <!-- .content -->
