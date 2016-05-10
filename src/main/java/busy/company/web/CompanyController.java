@@ -51,7 +51,7 @@ import busy.util.SecureSetter;
  */
 @Controller
 @Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.SERVICE_TYPES_SESSION})
+@SessionAttributes(value = {CompanyController.ROLE_SESSION, CompanyController.SERVICE_TYPES_SESSION})
 public class CompanyController {
 
     /**
@@ -67,7 +67,7 @@ public class CompanyController {
     static final String COMPANY_REQUEST = "company";
     static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
     static final String SERVICE_TYPE_REQUEST = "serviceType";
-    static final String ROLE_REQUEST = "role";
+    static final String ROLE_SESSION = "role";
 
     /**
      * URL Paths.
@@ -153,7 +153,7 @@ public class CompanyController {
     public String showBranchPage(@PathVariable("bId") String roleId, Model model) {
 
         Role role = roleService.findRoleById(Integer.parseInt(roleId));
-        model.addAttribute(ROLE_REQUEST, role);
+        model.addAttribute(ROLE_SESSION, role);
 
         // Load the service types of the company
         List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(role.getCompany());
@@ -351,7 +351,7 @@ public class CompanyController {
     public String saveServiceType(@ModelAttribute(SERVICE_TYPE_FORM_REQUEST) @Valid ServiceTypeForm sTypeForm,
             BindingResult result, Model model) {
 
-        Company company = ((Role) model.asMap().get(ROLE_REQUEST)).getCompany();
+        Company company = ((Role) model.asMap().get(ROLE_SESSION)).getCompany();
 
         ServiceTypeValidator validator = new ServiceTypeValidator(scheduleService);
         validator.setCompany(company);
