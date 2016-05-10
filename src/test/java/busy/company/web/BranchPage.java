@@ -16,6 +16,13 @@ import busy.BusyPage;
  */
 public class BranchPage extends BusyPage {
 
+    /**
+     * Method flow modifiers
+     */
+    public static final int MESSAGE_SERVICE_TYPE = 0;
+    public static final int FORM_SERVICE_TYPE = 0;
+    public static final int FORM_SERVICE = 1;
+    
     private static final String PARTIAL_PATH = "/company/"; // "/company/{id}/branch/{id}"
     private static final String DESCRIPTION = "Branch Page";
 
@@ -63,6 +70,11 @@ public class BranchPage extends BusyPage {
 
         find(DAY_CELL_SELECTOR, FilterConstructor.withText(String.valueOf(day))).click();
         return this;
+    }
+    
+    public BranchPage dblClickDayCell(String day) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     public boolean dayEventsDetailedShown() {
@@ -124,7 +136,7 @@ public class BranchPage extends BusyPage {
         return this;
     }
 
-    public boolean formIsShown() {
+    public boolean formIsShown(int formType) {
 
         return findFirst(SERVICE_TYPE_FORM_SELECTOR).isDisplayed();
     }
@@ -159,7 +171,7 @@ public class BranchPage extends BusyPage {
         return this;
     }
 
-    public BranchPage submitServiceType() {
+    public BranchPage submitForm(int formType) {
 
         submit(SERVICE_TYPE_FORM_SUBMIT_SELECTOR);
         waitForJSandJQueryToLoad();
@@ -169,6 +181,46 @@ public class BranchPage extends BusyPage {
     public boolean duplicateServiceTypeErrorShown() {
 
         return !find(SERVICE_TYPE_FORM_ERROR_SELECTOR).isEmpty();
+    }
+
+    public boolean messageShown(int messageServiceType) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public BranchPage setServiceStartTime(String startTime) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public BranchPage setServiceType(String serviceType) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public BranchPage setServiceRoles(String roles) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public BranchPage setRepetition(String repetition) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public boolean errorShown(int formType) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public boolean serviceCreated(String day) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public boolean serviceRepeated(String day, String repetition) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }
