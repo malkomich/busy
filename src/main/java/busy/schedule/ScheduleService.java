@@ -2,7 +2,6 @@ package busy.schedule;
 
 import java.util.List;
 
-import busy.company.Branch;
 import busy.company.Company;
 import busy.util.OperationResult;
 
@@ -14,17 +13,6 @@ import busy.util.OperationResult;
  *
  */
 public interface ScheduleService {
-
-    /**
-     * Gets the schedule of a complete year of a specific branch.
-     * 
-     * @param branch
-     *            the branch attached to the requested schedule
-     * @param year
-     *            the number of year which schedule is requested
-     * @return The resultant year schedule
-     */
-    YearSchedule findScheduleByBranch(Branch branch, int year);
 
     /**
      * Gets the list of service types attached to the given company.

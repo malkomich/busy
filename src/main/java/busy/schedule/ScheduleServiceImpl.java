@@ -8,7 +8,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
-import busy.company.Branch;
 import busy.company.Company;
 import busy.util.OperationResult;
 
@@ -25,27 +24,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     private MessageSource messageSource;
 
     @Autowired
-    private ScheduleDao scheduleDao;
-
-    @Autowired
     private ServiceTypeDao serviceTypeDao;
-
-    public void setScheduleDao(ScheduleDao scheduleDao) {
-        this.scheduleDao = scheduleDao;
-    }
 
     public void setServiceTypeDao(ServiceTypeDao serviceTypeDao) {
         this.serviceTypeDao = serviceTypeDao;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see busy.schedule.ScheduleService#findScheduleByBranch(busy.company.Branch)
-     */
-    @Override
-    public YearSchedule findScheduleByBranch(Branch branch, int year) {
-
-        return scheduleDao.findYearFromBranch(branch, year);
     }
 
     /*

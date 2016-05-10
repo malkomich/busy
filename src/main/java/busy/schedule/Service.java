@@ -10,7 +10,6 @@ public class Service implements Serializable {
 
     private int id;
     private ServiceType serviceType;
-    private HourSchedule hourSchedule;
     private Role role;
 
     public ServiceType getServiceType() {
@@ -19,14 +18,6 @@ public class Service implements Serializable {
 
     public void setServiceType(ServiceType serviceType) {
         this.serviceType = serviceType;
-    }
-
-    public HourSchedule getHourSchedule() {
-        return hourSchedule;
-    }
-
-    public void setHourSchedule(HourSchedule hourSchedule) {
-        this.hourSchedule = hourSchedule;
     }
 
     public Role getRole() {

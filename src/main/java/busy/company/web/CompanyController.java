@@ -1,6 +1,5 @@
 package busy.company.web;
 
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +36,6 @@ import busy.role.Role;
 import busy.role.RoleService;
 import busy.schedule.ScheduleService;
 import busy.schedule.ServiceType;
-import busy.schedule.YearSchedule;
 import busy.schedule.web.ServiceTypeForm;
 import busy.schedule.web.ServiceTypeValidator;
 import busy.user.User;
@@ -53,15 +51,13 @@ import busy.util.SecureSetter;
  */
 @Controller
 @Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.SCHEDULE_SESSION, CompanyController.BRANCH_SESSION,
-    CompanyController.SERVICE_TYPES_SESSION})
+@SessionAttributes(value = {CompanyController.BRANCH_SESSION, CompanyController.SERVICE_TYPES_SESSION})
 public class CompanyController {
 
     /**
      * Spring Model Attributes.
      */
     static final String USER_SESSION = "user";
-    public static final String SCHEDULE_SESSION = "schedule";
     static final String BRANCH_SESSION = "branch";
     static final String SERVICE_TYPES_SESSION = "serviceTypes";
 
@@ -158,13 +154,6 @@ public class CompanyController {
 
         Branch branch = companyService.findBranchById(Integer.parseInt(branchId));
         model.addAttribute(BRANCH_SESSION, branch);
-
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-
-        // Load 3 year to handle right the weeks between years.
-        YearSchedule[] schedule = {scheduleService.findScheduleByBranch(branch, year - 1),
-            scheduleService.findScheduleByBranch(branch, year), scheduleService.findScheduleByBranch(branch, year + 1)};
-        model.addAttribute(SCHEDULE_SESSION, schedule);
 
         // Load the service types of the company
         List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(branch.getCompany());
