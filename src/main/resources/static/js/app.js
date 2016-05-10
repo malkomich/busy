@@ -8,7 +8,7 @@ $(function() {
     var date = new Date();
 
     options = {
-        events_source : BOOKINGS_PATH + "?branch=" + branchId,
+        events_source : BOOKINGS_PATH + "?role=" + roleId,
         view : 'month',
         tmpl_path : '/tmpls/',
         tmpl_cache : false,

@@ -12,7 +12,7 @@
 
 <link rel="icon" href="/favicon.ico">
 
-<title><spring:message code="branch.page.title" arguments="${branch.company.tradeName}" argumentSeparator="¬" /></title>
+<title><spring:message code="branch.page.title" arguments="${role.branch.company.tradeName}" argumentSeparator="¬" /></title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -40,9 +40,9 @@
                         <div class="role-select-menu-list">
                             <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text">${username}</span>
                             </a>
-                            <c:forEach items="${roles}" var="role">
-                                <a href="/company/${role.branch.company.id}/branch/${role.branch.id}"
-                                    class="role-select-menu-item"> <span class="role-select-menu-item-text">${role.branch.company.tradeName}</span>
+                            <c:forEach items="${roleList}" var="roleItem">
+                                <a href="/company/${roleItem.branch.company.id}/role/${roleItem.id}"
+                                    class="role-select-menu-item"> <span class="role-select-menu-item-text">${roleItem.branch.company.tradeName}</span>
                                 </a>
                             </c:forEach>
                         </div>
@@ -148,7 +148,7 @@
 
     <script type="text/javascript">
                     var message = '<c:out value="${messageFromController}"/>';
-                    var branchId = "${branch.id}";
+                    var roleId = "${role.id}";
                 </script>
     <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="/js/busy-logic.js"></script>

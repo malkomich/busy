@@ -40,5 +40,14 @@ public interface RoleService {
      * @return The resultant role
      */
     Role findCompanyManager(Company company);
+    
+    /**
+     * Gets a role by his ID
+     * 
+     * @param id
+     *            unique ID of the role
+     * @return The resultant role
+     */
+    Role findRoleById(int id);
 
 }

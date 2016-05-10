@@ -50,4 +50,13 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.findManagerByCompany(company);
     }
 
+    /* (non-Javadoc)
+     * @see busy.role.RoleService#findRoleById(int)
+     */
+    @Override
+    public Role findRoleById(int id) {
+
+        return roleDao.findById(id);
+    }
+
 }

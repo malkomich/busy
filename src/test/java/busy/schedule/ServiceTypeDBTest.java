@@ -131,10 +131,9 @@ public class ServiceTypeDBTest extends AbstractDBTest {
     @DatabaseSetup("../location/citySet.xml")
     @DatabaseSetup("../location/addressSet.xml")
     @DatabaseSetup("../company/branchSet.xml")
-    @DatabaseSetup("../schedule/scheduleSet.xml")
     @DatabaseSetup("../role/roleSet.xml")
     @DatabaseSetup("../schedule/serviceSet.xml")
-    @DatabaseSetup("../booking/bookingSet.xml")
+    @DatabaseSetup("../schedule/bookingSet.xml")
     public void deleteWithBookings() {
 
         ServiceType serviceType = new ServiceType();

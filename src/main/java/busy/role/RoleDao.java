@@ -38,4 +38,13 @@ public interface RoleDao {
      */
     Role findManagerByCompany(Company company);
 
+    /**
+     * Gets the role object by his ID.
+     * 
+     * @param id
+     *            unique ID of the role
+     * @return The resultant role object
+     */
+    Role findById(int id);
+
 }

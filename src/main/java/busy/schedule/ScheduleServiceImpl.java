@@ -3,13 +3,14 @@ package busy.schedule;
 import java.util.List;
 import java.util.Locale;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 
-import busy.company.Branch;
 import busy.company.Company;
+import busy.role.Role;
 import busy.util.OperationResult;
 
 /**
@@ -25,27 +26,17 @@ public class ScheduleServiceImpl implements ScheduleService {
     private MessageSource messageSource;
 
     @Autowired
-    private ScheduleDao scheduleDao;
-
-    @Autowired
     private ServiceTypeDao serviceTypeDao;
-
-    public void setScheduleDao(ScheduleDao scheduleDao) {
-        this.scheduleDao = scheduleDao;
-    }
+    
+    @Autowired
+    private ServiceDao serviceDao;
 
     public void setServiceTypeDao(ServiceTypeDao serviceTypeDao) {
         this.serviceTypeDao = serviceTypeDao;
     }
-
-    /*
-     * (non-Javadoc)
-     * @see busy.schedule.ScheduleService#findScheduleByBranch(busy.company.Branch)
-     */
-    @Override
-    public YearSchedule findScheduleByBranch(Branch branch, int year) {
-
-        return scheduleDao.findYearFromBranch(branch, year);
+    
+    public void setServiceDao(ServiceDao serviceDao) {
+        this.serviceDao = serviceDao;
     }
 
     /*
@@ -94,6 +85,16 @@ public class ScheduleServiceImpl implements ScheduleService {
     public ServiceType saveServiceType(ServiceType sType) {
 
         return serviceTypeDao.save(sType);
+    }
+
+    /* (non-Javadoc)
+     * @see busy.schedule.ScheduleService#findServicesBetweenDays(org.joda.time.DateTime, org.joda.time.DateTime, busy.role.Role, busy.schedule.ServiceType)
+     */
+    @Override
+    public List<busy.schedule.Service> findServicesBetweenDays(DateTime fromDateTime, DateTime toDateTime, Role role,
+            ServiceType serviceType) {
+
+        return serviceDao.findBetweenDays(fromDateTime, toDateTime, role, serviceType);
     }
 
 }

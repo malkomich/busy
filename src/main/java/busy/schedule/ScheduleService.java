@@ -2,8 +2,10 @@ package busy.schedule;
 
 import java.util.List;
 
-import busy.company.Branch;
+import org.joda.time.DateTime;
+
 import busy.company.Company;
+import busy.role.Role;
 import busy.util.OperationResult;
 
 /**
@@ -14,17 +16,6 @@ import busy.util.OperationResult;
  *
  */
 public interface ScheduleService {
-
-    /**
-     * Gets the schedule of a complete year of a specific branch.
-     * 
-     * @param branch
-     *            the branch attached to the requested schedule
-     * @param year
-     *            the number of year which schedule is requested
-     * @return The resultant year schedule
-     */
-    YearSchedule findScheduleByBranch(Branch branch, int year);
 
     /**
      * Gets the list of service types attached to the given company.
@@ -63,4 +54,21 @@ public interface ScheduleService {
      * @return The service type saved
      */
     ServiceType saveServiceType(ServiceType sType);
+
+    /**
+     * Gets the list of the scheduled services between the given days, for a given role, and of a
+     * given service type. If the role or the service type are null, the services will be found for
+     * all roles or of all service types, respectively.
+     * 
+     * @param fromDateTime
+     *            the date time of the initial day of the period in which find services
+     * @param toDateTime
+     *            the date time of the ending day of the period in which find services
+     * @param role
+     *            the role attached to the requested services
+     * @param serviceType
+     *            the type of services wanted
+     * @return The resultant list of services
+     */
+    List<Service> findServicesBetweenDays(DateTime fromDateTime, DateTime toDateTime, Role role, ServiceType serviceType);
 }
