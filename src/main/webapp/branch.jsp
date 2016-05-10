@@ -80,10 +80,6 @@
                         <button class="btn calendar-nav" data-calendar-nav="today">Today</button>
                         <button class="btn btn-primary calendar-nav" data-calendar-nav="next">Next >></button>
                     </div>
-                    <div class="btn-group">
-                        <button class="btn btn-warning active" data-calendar-view="month">Month</button>
-                        <button class="btn btn-warning" data-calendar-view="day">Day</button>
-                    </div>
                 </div>
 
                 <h3></h3>
