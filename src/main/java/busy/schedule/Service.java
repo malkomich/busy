@@ -1,10 +1,13 @@
 package busy.schedule;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.joda.time.DateTime;
 
 import busy.role.Role;
+import busy.user.User;
 
 public class Service implements Serializable {
 
@@ -14,7 +17,12 @@ public class Service implements Serializable {
     private DateTime startTime;
     private ServiceType serviceType;
     private Role role;
+    private List<User> bookings;
 
+    public Service() {
+        bookings = new ArrayList<>();
+    }
+    
     public DateTime getStartTime() {
         return startTime;
     }
@@ -46,6 +54,18 @@ public class Service implements Serializable {
     @SuppressWarnings("unused")
     private void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<User> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<User> bookings) {
+        this.bookings = bookings;
+    }
+    
+    public void addBooking(User user) {
+        bookings.add(user);
     }
 
 }

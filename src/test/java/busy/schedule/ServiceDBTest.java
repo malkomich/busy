@@ -135,5 +135,35 @@ public class ServiceDBTest extends AbstractDBTest {
         assertFalse(services.isEmpty());
         assertEquals(4, services.size());
     }
+    
+    @Test
+    @DatabaseSetup("../schedule/serviceSet.xml")
+    public void findNotBookedServices() {
+
+        List<Service> services = repository.findBetweenDays(initDay, endDay, role, serviceType);
+
+        int bookings = 0;
+        for (Service service : services) {
+            bookings += service.getBookings().size();
+        }
+        
+        assertEquals(0, bookings);
+    }
+
+
+    @Test
+    @DatabaseSetup("../schedule/serviceSet.xml")
+    @DatabaseSetup("../schedule/bookingSet.xml")
+    public void findBookedServicesSuccessfully() {
+
+        List<Service> services = repository.findBetweenDays(initDay, endDay, role, serviceType);
+
+        int bookings = 0;
+        for (Service service : services) {
+            bookings += service.getBookings().size();
+        }
+        
+        assertEquals(3, bookings);
+    }
 
 }

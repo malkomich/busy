@@ -139,10 +139,15 @@ public class SQLUtil {
             + ALIAS_SERVICE_TYPE_ID + "," + TABLE_SERVICE_TYPE + "." + NAME + " AS " + ALIAS_SERVICE_TYPE_NAME + ","
             + DESCRIPTION + "," + BOOKINGS_PER_ROLE + "," + DURATION + "," + COMPANYID + " FROM " + TABLE_SERVICE_TYPE;
 
+    public static final String BOOKINGS_QUERY = "SELECT " + TABLE_BOOKING + "." + SERVICE_ID + ", userJoin.* FROM "
+            + TABLE_BOOKING + " LEFT JOIN (" + USER_SELECT_QUERY + ") AS userJoin ON " + TABLE_BOOKING + "." + USERID
+            + "=userJoin." + ALIAS_USER_ID;
+
     public static final String SERVICE_QUERY = "SELECT " + TABLE_SERVICE + "." + ID + " AS " + ALIAS_SERVICE_ID + ","
-            + START_DATETIME + "," + SERVICE_TYPE_ID + "," + ROLE_ID + ", serviceTypeJoin.*, roleJoin.*" + " FROM "
-            + TABLE_SERVICE + " LEFT JOIN (" + SERVICE_TYPE_QUERY + ") AS serviceTypeJoin ON " + TABLE_SERVICE + "."
-            + SERVICE_TYPE_ID + "=serviceTypeJoin." + ALIAS_SERVICE_TYPE_ID + " LEFT JOIN (" + ROLE_SELECT_QUERY
-            + ") AS roleJoin ON " + TABLE_SERVICE + "." + ROLE_ID + "=roleJoin." + ALIAS_ROLE_ID;
+            + START_DATETIME + "," + SERVICE_TYPE_ID + "," + ROLE_ID + ", serviceTypeJoin.*, bookingsJoin.*" + " FROM " + TABLE_SERVICE
+            + " LEFT JOIN (" + SERVICE_TYPE_QUERY + ") AS serviceTypeJoin ON " + TABLE_SERVICE + "." + SERVICE_TYPE_ID
+            + "=serviceTypeJoin." + ALIAS_SERVICE_TYPE_ID + " LEFT JOIN (" + ROLE_SELECT_QUERY + ") AS roleJoin ON "
+            + TABLE_SERVICE + "." + ROLE_ID + "=roleJoin." + ALIAS_ROLE_ID + " LEFT JOIN (" + BOOKINGS_QUERY
+            + ") AS bookingsJoin ON " + TABLE_SERVICE + "." + ID + "=bookingsJoin." + SERVICE_ID;
 
 }

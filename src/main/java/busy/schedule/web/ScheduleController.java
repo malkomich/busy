@@ -1,8 +1,11 @@
-package busy.booking.web;
+package busy.schedule.web;
+
+import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,26 +16,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import busy.booking.BookingService;
-import busy.company.Branch;
-import busy.company.CompanyService;
+import busy.role.Role;
+import busy.role.RoleService;
 import busy.schedule.ScheduleService;
+import busy.schedule.Service;
+import busy.user.User;
 
 /**
- * Controller for booking operations.
+ * Controller for schedule operations.
  * 
  * @author malkomich
  *
  */
 @Controller
 @Scope(value="singleton")
-public class BookingController {
-
-    /**
-     * Util constants
-     */
-    private static final int FIRST_DAY = 1;
-    private static final int LAST_DAY = 7;
+public class ScheduleController {
 
     /**
      * URL Paths.
@@ -48,19 +46,16 @@ public class BookingController {
     private static final String PARAM_DATE_OFFSET_TO = "utc_offset_to";
 
     @Autowired
-    private BookingService bookingService;
-
-    @Autowired
     private ScheduleService scheduleService;
 
     @Autowired
-    private CompanyService companyService;
+    private RoleService roleService;
 
     /**
      * Request to get all bookings made between the given dates in the specific branch
      * 
-     * @param branchIdTmp
-     *            the branch attached to the requested bookings
+     * @param roleIdTmp
+     *            the role attached to the requested bookings
      * @param fromTmp
      *            the initial instant in milliseconds of the period in which find bookings
      * @param toTmp
@@ -72,7 +67,7 @@ public class BookingController {
      * @return The list of resultant bookings in JSON format
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
-    public @ResponseBody String getMonthBookings(@RequestParam(value = "branch", required = true) String branchIdTmp,
+    public @ResponseBody String getMonthBookings(@RequestParam(value = "role", required = true) String roleIdTmp,
             @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
             @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
             @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
@@ -80,6 +75,7 @@ public class BookingController {
 
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
+        Role role = roleService.findRoleById(Integer.parseInt(roleIdTmp));
         
         // Get the inverse of offset due to JS Date implementation
         long offSetFrom = -Long.parseLong(offSetFromTmp);
@@ -96,45 +92,35 @@ public class BookingController {
         DateTime fromDateTime = new DateTime(from, dtZoneFrom);
         // Lower a millisecond to ensure the date are inside the requested month
         DateTime toDateTime = new DateTime(to, dtZoneTo).minus(1);
-
-        fromDateTime = fromDateTime.withDayOfWeek(FIRST_DAY);
-        toDateTime = toDateTime.withDayOfWeek(LAST_DAY);
+        
+        List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDateTime, toDateTime, role, null);
 
         JSONObject jsonResult = new JSONObject();
         JSONArray jsonBookings = new JSONArray();
 
-//        for (Service service : bookingMap.keySet()) {
-//            List<Booking> bookingList = bookingMap.get(service);
-//
-//            try {
-//                for (Booking booking : bookingList) {
-//                    JSONObject bookingJSON = new JSONObject();
-//                    bookingJSON.put("id", "u" + booking.getUser().getId() + "h" + service.getHourSchedule().getId());
-//                    bookingJSON.put("title", booking.getUser().getFirstName() + " " + booking.getUser().getLastName());
-//                    bookingJSON.put("url", "/localhost:8080");
-//                    bookingJSON.put("class", "event-info");
-//
-//                    int day = service.getHourSchedule().getDaySchedule().getDayOfWeek();
-//                    int week = service.getHourSchedule().getDaySchedule().getWeekSchedule().getWeekOfYear();
-//                    int year = service.getHourSchedule().getDaySchedule().getWeekSchedule().getYearSchedule().getYear();
-//
-//                    LocalTime startTime = service.getHourSchedule().getStartTime();
-//                    LocalTime endTime = service.getHourSchedule().getEndTime();
-//
-//                    DateTime iniDate = new DateTime().withYear(year).withWeekOfWeekyear(week).withDayOfWeek(day)
-//                            .withTime(startTime);
-//                    DateTime endDate =
-//                            new DateTime().withYear(year).withWeekOfWeekyear(week).withDayOfWeek(day).withTime(endTime);
-//
-//                    bookingJSON.put("start", String.valueOf(iniDate.getMillis()));
-//                    bookingJSON.put("end", String.valueOf(endDate.getMillis()));
-//
-//                    jsonBookings.put(bookingJSON);
-//                }
-//            } catch (JSONException jse) {
-//                jse.printStackTrace();
-//            }
-//        }
+        for (Service service : serviceList) {
+
+            try {
+                for (User booking : service.getBookings()) {
+                    JSONObject bookingJSON = new JSONObject();
+                    bookingJSON.put("id", "u" + booking.getId() + "s" + service.getId());
+                    bookingJSON.put("title", booking.getFirstName() + " " + booking.getLastName());
+                    bookingJSON.put("url", "/localhost:8080");
+                    bookingJSON.put("class", "event-info");
+
+                    DateTime startTime = service.getStartTime();
+                    int minutes = service.getServiceType().getDuration();
+                    DateTime endTime = startTime.plus(minutes*60*1000);
+
+                    bookingJSON.put("start", String.valueOf(startTime.getMillis()));
+                    bookingJSON.put("end", String.valueOf(endTime.getMillis()));
+
+                    jsonBookings.put(bookingJSON);
+                }
+            } catch (JSONException jse) {
+                jse.printStackTrace();
+            }
+        }
 
         jsonResult.put("result", jsonBookings);
         jsonResult.put("success", 1);

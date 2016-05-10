@@ -14,6 +14,8 @@ import busy.role.Role;
  */
 public interface ServiceDao {
 
+    static final int INVALID_ID = 0;
+    
     /**
      * Gets the list of the scheduled services between the given days, for a given role, and of a
      * given service type. If the role or the service type are null, the services will be found for

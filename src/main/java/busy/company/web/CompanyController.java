@@ -51,14 +51,13 @@ import busy.util.SecureSetter;
  */
 @Controller
 @Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.BRANCH_SESSION, CompanyController.SERVICE_TYPES_SESSION})
+@SessionAttributes(value = {CompanyController.SERVICE_TYPES_SESSION})
 public class CompanyController {
 
     /**
      * Spring Model Attributes.
      */
     static final String USER_SESSION = "user";
-    static final String BRANCH_SESSION = "branch";
     static final String SERVICE_TYPES_SESSION = "serviceTypes";
 
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
@@ -66,8 +65,9 @@ public class CompanyController {
     static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
     static final String MESSAGE_REQUEST = "messageFromController";
     static final String COMPANY_REQUEST = "company";
-    private static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
+    static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
     static final String SERVICE_TYPE_REQUEST = "serviceType";
+    static final String ROLE_REQUEST = "role";
 
     /**
      * URL Paths.
@@ -143,20 +143,20 @@ public class CompanyController {
     /**
      * Shows the calendar view of a specific branch.
      * 
-     * @param branchId
-     *            unique ID of the branch requested
+     * @param roleId
+     *            unique ID of the role requested
      * @param model
      *            Spring model instance
      * @return The page to register companies
      */
     @RequestMapping(value = PATH_BRANCH, method = RequestMethod.GET)
-    public String showBranchPage(@PathVariable("bId") String branchId, Model model) {
+    public String showBranchPage(@PathVariable("bId") String roleId, Model model) {
 
-        Branch branch = companyService.findBranchById(Integer.parseInt(branchId));
-        model.addAttribute(BRANCH_SESSION, branch);
+        Role role = roleService.findRoleById(Integer.parseInt(roleId));
+        model.addAttribute(ROLE_REQUEST, role);
 
         // Load the service types of the company
-        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(branch.getCompany());
+        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(role.getCompany());
         model.addAttribute(SERVICE_TYPES_SESSION, serviceTypes);
 
         return BRANCH_PAGE;
@@ -351,7 +351,7 @@ public class CompanyController {
     public String saveServiceType(@ModelAttribute(SERVICE_TYPE_FORM_REQUEST) @Valid ServiceTypeForm sTypeForm,
             BindingResult result, Model model) {
 
-        Company company = ((Branch) model.asMap().get(BRANCH_SESSION)).getCompany();
+        Company company = ((Role) model.asMap().get(ROLE_REQUEST)).getCompany();
 
         ServiceTypeValidator validator = new ServiceTypeValidator(scheduleService);
         validator.setCompany(company);

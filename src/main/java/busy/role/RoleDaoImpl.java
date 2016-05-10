@@ -71,6 +71,8 @@ public class RoleDaoImpl implements RoleDao {
 
     private static final String SQL_SELECT_MANAGER_BY_COMPANY_ID =
             ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_COMPANY_ID + "=?";
+    
+    private static final String SQL_SELECT_BY_ID = ROLE_SELECT_QUERY + " WHERE " + ALIAS_ROLE_ID + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_ROLE + " SET " + USERID + "= ?," + BRANCHID + "= ?,"
             + IS_MANAGER + "= ?" + " WHERE " + ID + "= ?";
@@ -99,8 +101,7 @@ public class RoleDaoImpl implements RoleDao {
 
         if (role.getId() > 0) {
 
-            jdbcTemplate.update(SQL_UPDATE, role.getUserId(), role.getBranchId(), role.isManager(),
-                    role.getId());
+            jdbcTemplate.update(SQL_UPDATE, role.getUserId(), role.getBranchId(), role.isManager(), role.getId());
 
         } else {
 
@@ -145,6 +146,24 @@ public class RoleDaoImpl implements RoleDao {
         try {
 
             return jdbcTemplate.queryForObject(SQL_SELECT_MANAGER_BY_COMPANY_ID, new RoleRowMapper(), company.getId());
+
+        } catch (EmptyResultDataAccessException e) {
+
+            return null;
+
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.role.RoleDao#findById(int)
+     */
+    @Override
+    public Role findById(int id) {
+
+        try {
+
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new RoleRowMapper(), id);
 
         } catch (EmptyResultDataAccessException e) {
 
