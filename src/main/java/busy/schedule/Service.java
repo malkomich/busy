@@ -22,7 +22,7 @@ public class Service implements Serializable {
     public Service() {
         bookings = new ArrayList<>();
     }
-    
+
     public DateTime getStartTime() {
         return startTime;
     }
@@ -60,10 +60,6 @@ public class Service implements Serializable {
         return bookings;
     }
 
-    public void setBookings(List<User> bookings) {
-        this.bookings = bookings;
-    }
-    
     public void addBooking(User user) {
         bookings.add(user);
     }

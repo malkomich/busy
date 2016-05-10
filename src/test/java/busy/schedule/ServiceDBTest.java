@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -18,6 +19,12 @@ import busy.AbstractDBTest;
 import busy.role.Role;
 import busy.util.SecureSetter;
 
+/**
+ * Test Cases for the ServiceDao implementation class.
+ * 
+ * @author malkomich
+ *
+ */
 @DatabaseSetup("../company/categorySet.xml")
 @DatabaseSetup("../company/companySet.xml")
 @DatabaseSetup("../location/countrySet.xml")
@@ -135,7 +142,7 @@ public class ServiceDBTest extends AbstractDBTest {
         assertFalse(services.isEmpty());
         assertEquals(4, services.size());
     }
-    
+
     @Test
     @DatabaseSetup("../schedule/serviceSet.xml")
     public void findNotBookedServices() {
@@ -146,10 +153,9 @@ public class ServiceDBTest extends AbstractDBTest {
         for (Service service : services) {
             bookings += service.getBookings().size();
         }
-        
+
         assertEquals(0, bookings);
     }
-
 
     @Test
     @DatabaseSetup("../schedule/serviceSet.xml")
@@ -162,8 +168,73 @@ public class ServiceDBTest extends AbstractDBTest {
         for (Service service : services) {
             bookings += service.getBookings().size();
         }
-        
+
         assertEquals(3, bookings);
+    }
+
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithStartTimeNull() {
+
+        Service service = new Service();
+        service.setRole(role);
+        service.setServiceType(serviceType);
+        
+        repository.save(service);
+    }
+    
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithRoleNull() {
+
+        Service service = new Service();
+        service.setStartTime(new DateTime());
+        service.setServiceType(serviceType);
+        
+        repository.save(service);
+    }
+    
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithServiceTypeNull() {
+
+        Service service = new Service();
+        service.setStartTime(new DateTime());
+        service.setRole(role);
+        
+        repository.save(service);
+    }
+    
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithRoleInvalid() {
+
+        Service service = new Service();
+        service.setStartTime(new DateTime());
+        SecureSetter.setId(role, INVALID_ID);
+        service.setRole(role);
+        service.setServiceType(serviceType);
+        
+        repository.save(service);
+    }
+    
+    @Test(expected = DataIntegrityViolationException.class)
+    public void insertWithServiceTypeInvalid() {
+
+        Service service = new Service();
+        service.setStartTime(new DateTime());
+        service.setRole(role);
+        SecureSetter.setId(serviceType, INVALID_ID);
+        service.setServiceType(serviceType);
+        
+        repository.save(service);
+    }
+    
+    @Test
+    public void insertSuccessfully() {
+
+        Service service = new Service();
+        service.setStartTime(new DateTime());
+        service.setRole(role);
+        service.setServiceType(serviceType);
+        
+        repository.save(service);
     }
 
 }
