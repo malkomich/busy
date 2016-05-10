@@ -10,6 +10,7 @@ import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
@@ -48,31 +49,25 @@ public class ServiceDBTest extends AbstractDBTest {
         SecureSetter.setId(serviceType, 1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidDataAccessApiUsageException.class)
     @DatabaseSetup("../schedule/serviceSet.xml")
     public void findWithNullInitDay() {
 
         repository.findBetweenDays(null, endDay, role, serviceType);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidDataAccessApiUsageException.class)
     @DatabaseSetup("../schedule/serviceSet.xml")
     public void findWithNullEndDay() {
 
         repository.findBetweenDays(initDay, null, role, serviceType);
     }
 
-    /**
-     * With null role, it should find services for all roles.
-     */
-    @Test
+    @Test(expected = InvalidDataAccessApiUsageException.class)
     @DatabaseSetup("../schedule/serviceSet.xml")
     public void findWithNullRole() {
 
-        List<Service> services = repository.findBetweenDays(initDay, endDay, null, serviceType);
-
-        assertFalse(services.isEmpty());
-        assertEquals(4, services.size());
+        repository.findBetweenDays(initDay, endDay, null, serviceType);
     }
 
     /**

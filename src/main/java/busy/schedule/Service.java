@@ -2,6 +2,8 @@ package busy.schedule;
 
 import java.io.Serializable;
 
+import org.joda.time.DateTime;
+
 import busy.role.Role;
 
 public class Service implements Serializable {
@@ -9,8 +11,17 @@ public class Service implements Serializable {
     private static final long serialVersionUID = -811217121096779784L;
 
     private int id;
+    private DateTime startTime;
     private ServiceType serviceType;
     private Role role;
+
+    public DateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(DateTime startTime) {
+        this.startTime = startTime;
+    }
 
     public ServiceType getServiceType() {
         return serviceType;

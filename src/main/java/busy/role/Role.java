@@ -3,6 +3,7 @@ package busy.role;
 import java.io.Serializable;
 
 import busy.company.Branch;
+import busy.company.Company;
 import busy.user.User;
 
 /**
@@ -67,6 +68,10 @@ public class Role implements Serializable {
 
     public Integer getBranchId() {
         return (branch != null) ? branch.getId() : null;
+    }
+
+    public Company getCompany() {
+        return (branch != null) ? branch.getCompany() : null;
     }
 
 }

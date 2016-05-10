@@ -140,7 +140,7 @@ public class SQLUtil {
             + DESCRIPTION + "," + BOOKINGS_PER_ROLE + "," + DURATION + "," + COMPANYID + " FROM " + TABLE_SERVICE_TYPE;
 
     public static final String SERVICE_QUERY = "SELECT " + TABLE_SERVICE + "." + ID + " AS " + ALIAS_SERVICE_ID + ","
-            + SERVICE_TYPE_ID + "," + HOUR_SCHEDULE_ID + "," + ROLE_ID + ", serviceTypeJoin.*, roleJoin.*" + " FROM "
+            + START_DATETIME + "," + SERVICE_TYPE_ID + "," + ROLE_ID + ", serviceTypeJoin.*, roleJoin.*" + " FROM "
             + TABLE_SERVICE + " LEFT JOIN (" + SERVICE_TYPE_QUERY + ") AS serviceTypeJoin ON " + TABLE_SERVICE + "."
             + SERVICE_TYPE_ID + "=serviceTypeJoin." + ALIAS_SERVICE_TYPE_ID + " LEFT JOIN (" + ROLE_SELECT_QUERY
             + ") AS roleJoin ON " + TABLE_SERVICE + "." + ROLE_ID + "=roleJoin." + ALIAS_ROLE_ID;
