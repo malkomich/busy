@@ -18,13 +18,3 @@ INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM c
 INSERT INTO role(person_id, branch_id, is_manager) VALUES((SELECT id FROM person WHERE email='busy.validation@gmail.com'), (SELECT id FROM branch WHERE phone='902202122'), true);
 
 INSERT INTO service_type(name, description, bookings_per_role, company_id) VALUES('Engineer', NULL, 2, (SELECT id FROM company WHERE cif='B12345678'));
-
-INSERT INTO service(start_time, service_type_id, role_id) VALUES('2016-01-01 12:00:00', (SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));
-INSERT INTO service(start_time, service_type_id, role_id) VALUES('2016-01-01 23:00:00', (SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));
-INSERT INTO service(start_time, service_type_id, role_id) VALUES('2016-02-25 17:00:00', (SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));
-INSERT INTO service(start_time, service_type_id, role_id) VALUES('2016-12-31 22:00:00', (SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));
-
-INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user1@domain.com'), (SELECT id FROM service WHERE start_time='2016-01-01 12:00:00'));
-INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user2@domain.com'), (SELECT id FROM service WHERE start_time='2016-01-01 23:00:00'));
-INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user1@domain.com'), (SELECT id FROM service WHERE start_time='2016-02-25 17:00:00'));
-INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user2@domain.com'), (SELECT id FROM service WHERE start_time='2016-12-31 22:00:00'));

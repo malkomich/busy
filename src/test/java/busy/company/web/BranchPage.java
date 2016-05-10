@@ -3,6 +3,7 @@ package busy.company.web;
 import static org.fest.assertions.Assertions.assertThat;
 
 import org.fluentlenium.core.domain.FluentWebElement;
+import org.fluentlenium.core.filter.FilterConstructor;
 import org.openqa.selenium.By;
 
 import busy.BusyPage;
@@ -22,8 +23,8 @@ public class BranchPage extends BusyPage {
      * CSS Selectors
      */
     private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
-    private static final String CALENDAR_DAY_SELECTOR = "#cal-day-box";
-    private static final String DAY_MODE_SELECTOR = "[data-calendar-view='day']";
+    private static final String DAY_EVENTS_SELECTOR = ".cal-event-list";
+    private static final String DAY_CELL_SELECTOR = ".cal-month-day";
 
     private static final String SERVICE_TYPE_LIST_SELECTOR = "#service-type-list";
     private static final String SERVICE_TYPE_ITEM_SELECTOR = ".service-type-item";
@@ -58,15 +59,15 @@ public class BranchPage extends BusyPage {
         return findFirst(CALENDAR_MONTH_SELECTOR).isDisplayed();
     }
 
-    public BranchPage selectDayInCalendar() {
+    public BranchPage selectDayInCalendar(int day) {
 
-        find(DAY_MODE_SELECTOR).click();
+        find(DAY_CELL_SELECTOR, FilterConstructor.withText(String.valueOf(day))).click();
         return this;
     }
 
-    public boolean calendarDayShown() {
+    public boolean dayEventsDetailedShown() {
 
-        return findFirst(CALENDAR_DAY_SELECTOR).isDisplayed();
+        return findFirst(DAY_EVENTS_SELECTOR).isDisplayed();
     }
 
     public boolean serviceTypeListIsEmpty() {
