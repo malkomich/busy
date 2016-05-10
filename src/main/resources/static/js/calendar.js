@@ -52,6 +52,8 @@ if(!String.prototype.formatNum) {
 (function($) {
 
 	var defaults = {
+        // Container to append the tooltip
+        tooltip_container : 'body',
 		// Width of the calendar
 		width: '100%',
 		// Initial view (can be 'month', 'week', 'day')
@@ -876,6 +878,21 @@ if(!String.prototype.formatNum) {
 		return;
 	};
 
+	Calendar.prototype.getYear = function() {
+		var p = this.options.position.start;
+		return p.getFullYear();
+	};
+
+	Calendar.prototype.getMonth = function() {
+		var p = this.options.position.start;
+		return this.locale['m' + p.getMonth()];
+	};
+
+	Calendar.prototype.getDay = function() {
+		var p = this.options.position.start;
+		return this.locale['d' + p.getDay()];
+	};
+
 	Calendar.prototype.isToday = function() {
 		var now = new Date().getTime();
 
@@ -988,16 +1005,11 @@ if(!String.prototype.formatNum) {
 	Calendar.prototype._update = function() {
 		var self = this;
 
-		$('*[data-toggle="tooltip"]').tooltip({container: 'body'});
+		$('*[data-toggle="tooltip"]').tooltip({container: this.options.tooltip_container});
 
 		$('*[data-cal-date]').click(function() {
 			var view = $(this).data('cal-view');
 			self.options.day = $(this).data('cal-date');
-			self.view(view);
-		});
-		$('.cal-cell').dblclick(function() {
-			var view = $('[data-cal-date]', this).data('cal-view');
-			self.options.day = $('[data-cal-date]', this).data('cal-date');
 			self.view(view);
 		});
 
