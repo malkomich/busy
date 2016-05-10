@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
 
-  <service id="1" start_time="20160112 12:00:00" service_type_id="1" role_id="1" />
-  <service id="2" start_time="20160112 23:00:00" service_type_id="1" role_id="1" />
-  <service id="3" start_time="20160125 12:00:00" service_type_id="1" role_id="1" />
-  <service id="4" start_time="20160125 23:00:00" service_type_id="1" role_id="1" />
+  <service id="1" start_time="2016-01-12 12:00:00" service_type_id="1" role_id="1" />
+  <service id="2" start_time="2016-01-12 23:00:00" service_type_id="1" role_id="1" />
+  <service id="3" start_time="2016-01-25 12:00:00" service_type_id="1" role_id="1" />
+  <service id="4" start_time="2016-01-25 23:00:00" service_type_id="1" role_id="1" />
 
 </dataset>
