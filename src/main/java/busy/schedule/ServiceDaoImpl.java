@@ -19,6 +19,7 @@ import static busy.util.SQLUtil.DESCRIPTION;
 import static busy.util.SQLUtil.DURATION;
 import static busy.util.SQLUtil.EMAIL;
 import static busy.util.SQLUtil.FIRSTNAME;
+import static busy.util.SQLUtil.ID;
 import static busy.util.SQLUtil.LASTNAME;
 import static busy.util.SQLUtil.NIF;
 import static busy.util.SQLUtil.PASSWORD;
@@ -27,12 +28,14 @@ import static busy.util.SQLUtil.ROLE_ID;
 import static busy.util.SQLUtil.SERVICE_QUERY;
 import static busy.util.SQLUtil.SERVICE_TYPE_ID;
 import static busy.util.SQLUtil.START_DATETIME;
+import static busy.util.SQLUtil.TABLE_SERVICE;
 import static busy.util.SQLUtil.ZIPCODE;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +48,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import busy.location.Address;
@@ -68,12 +73,22 @@ public class ServiceDaoImpl implements ServiceDao {
 
     private static final String SQL_SERVICE_TYPE_FILTER = " AND " + SERVICE_TYPE_ID + "=?";
 
+    private static final String SQL_UPDATE = "UPDATE " + TABLE_SERVICE + " SET " + START_DATETIME + "= ?,"
+            + SERVICE_TYPE_ID + "= ?," + ROLE_ID + "= ?" + " WHERE " + ID + "= ?";
+
     private JdbcTemplate jdbcTemplate;
+    
+    private SimpleJdbcInsert jdbcInsert;
 
     @Autowired
     public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
+        
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert.withTableName(TABLE_SERVICE);
+        jdbcInsert.setGeneratedKeyName(ID);
+        jdbcInsert.setColumnNames(Arrays.asList(START_DATETIME, SERVICE_TYPE_ID, ROLE_ID));
 
     }
 
@@ -117,8 +132,23 @@ public class ServiceDaoImpl implements ServiceDao {
      */
     @Override
     public void save(Service service) {
-        // TODO Auto-generated method stub
 
+        if (service.getId() > 0) {
+
+            jdbcTemplate.update(SQL_UPDATE, service.getStartTimestamp(), service.getServiceTypeId(), service.getRoleId(), service.getId());
+
+        } else {
+
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put(START_DATETIME, service.getStartTimestamp());
+            parameters.put(SERVICE_TYPE_ID, service.getServiceTypeId());
+            parameters.put(ROLE_ID, service.getRoleId());
+
+            Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+            if (key != null) {
+                SecureSetter.setId(service, key.intValue());
+            }
+        }
     }
 
     private class ServiceSetExtractor implements ResultSetExtractor<List<Service>> {

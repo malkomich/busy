@@ -1,6 +1,7 @@
 package busy.schedule;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +63,18 @@ public class Service implements Serializable {
 
     public void addBooking(User user) {
         bookings.add(user);
+    }
+
+    public Timestamp getStartTimestamp() {
+        return (startTime != null) ? new Timestamp(startTime.getMillis()) : null;
+    }
+
+    public Integer getServiceTypeId() {
+        return (serviceType != null) ? serviceType.getId() : null;
+    }
+
+    public Integer getRoleId() {
+        return (role != null) ? role.getId() : null;
     }
 
 }
