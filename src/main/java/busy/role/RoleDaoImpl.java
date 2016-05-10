@@ -71,8 +71,8 @@ public class RoleDaoImpl implements RoleDao {
 
     private static final String SQL_SELECT_MANAGER_BY_COMPANY_ID =
             ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_COMPANY_ID + "=?";
-    
-    private static final String SQL_SELECT_BY_ID = ROLE_SELECT_QUERY + " WHERE " + ALIAS_ROLE_ID + "=?";
+
+    private static final String SQL_SELECT_BY_ID = ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + ID + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_ROLE + " SET " + USERID + "= ?," + BRANCHID + "= ?,"
             + IS_MANAGER + "= ?" + " WHERE " + ID + "= ?";

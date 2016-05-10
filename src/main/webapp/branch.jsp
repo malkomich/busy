@@ -12,7 +12,7 @@
 
 <link rel="icon" href="/favicon.ico">
 
-<title><spring:message code="branch.page.title" arguments="${branch.company.tradeName}" argumentSeparator="¬" /></title>
+<title><spring:message code="branch.page.title" arguments="${role.branch.company.tradeName}" argumentSeparator="¬" /></title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -151,7 +151,7 @@
 
     <script type="text/javascript">
                     var message = '<c:out value="${messageFromController}"/>';
-                    var branchId = "${branch.id}";
+                    var roleId = "${role.id}";
                 </script>
     <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="/js/busy-logic.js"></script>

@@ -78,7 +78,7 @@ public class CompanyController {
     private static final String PATH_COMPANY_CHANGE_STATE = "/change_company_state";
     private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
     private static final String PATH_COMPANY_INFO = "/company/{id}";
-    private static final String PATH_BRANCH = "/company/{cId}/branch/{bId}";
+    private static final String PATH_BRANCH = "/company/{cId}/role/{bId}";
     private static final String PATH_SERVICE_TYPE_DELETE = "/service-type/delete";
     private static final String PATH_SERVICE_TYPE_SAVE = "/service-type/save";
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
