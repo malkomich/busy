@@ -32,20 +32,11 @@ INSERT INTO notification(person_id, notif_type, message, read, create_date) VALU
 
 INSERT INTO notification(person_id, notif_type, message, read, create_date) VALUES((SELECT id FROM person WHERE email='malkomich@gmail.com'), 'notification.type.company', 'notification.message.company.pending', DEFAULT, DEFAULT);
 
-INSERT INTO year_schedule(branch_id, year) VALUES((SELECT id FROM branch WHERE phone='902202123'), 2016);
-INSERT INTO week_schedule(year_schedule_id, week_of_year, is_default) VALUES((SELECT id FROM year_schedule WHERE year=2016), 1, false);
-INSERT INTO week_schedule(year_schedule_id, week_of_year, is_default) VALUES((SELECT id FROM year_schedule WHERE year=2016), 2, true);
-INSERT INTO day_schedule(week_schedule_id, day_of_week) VALUES((SELECT id FROM week_schedule WHERE week_of_year=1), 1);
-INSERT INTO day_schedule(week_schedule_id, day_of_week) VALUES((SELECT id FROM week_schedule WHERE week_of_year=2), 2);
-INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT id FROM day_schedule WHERE day_of_week=1), '23:00:00', '00:30:00');
-INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT id FROM day_schedule WHERE day_of_week=2), '12:00:00', '13:30:00');
-INSERT INTO hour_schedule(day_schedule_id, start_time, end_time) VALUES((SELECT id FROM day_schedule WHERE day_of_week=2), '15:00:00', '16:00:00');
-
 INSERT INTO service_type(name, description, bookings_per_role, company_id) VALUES('Engineer', NULL, 2, (SELECT id FROM company WHERE cif='B12345679'));
 
-INSERT INTO service(service_type_id, hour_schedule_id, role_id) VALUES((SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM hour_schedule WHERE start_time='23:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
-INSERT INTO service(service_type_id, hour_schedule_id, role_id) VALUES((SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM hour_schedule WHERE start_time='12:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
+INSERT INTO service(start_time, service_type_id, role_id) VALUES('20160112 23:00:00', (SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
+INSERT INTO service(start_time, service_type_id, role_id) VALUES('20160125 12:00:00', (SELECT id FROM service_type WHERE name='Engineer'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
 
-INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM service WHERE hour_schedule_id=(SELECT id FROM hour_schedule WHERE start_time='23:00:00')));
-INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM service WHERE hour_schedule_id=(SELECT id FROM hour_schedule WHERE start_time='12:00:00')));
-INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user2@domain.x'), (SELECT id FROM service WHERE hour_schedule_id=(SELECT id FROM hour_schedule WHERE start_time='12:00:00')));
+INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM service WHERE start_time='20160112 23:00:00'));
+INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM service WHERE start_time='20160125 12:00:00'));
+INSERT INTO booking(person_id, service_id) VALUES((SELECT id FROM person WHERE email='user2@domain.x'), (SELECT id FROM service WHERE start_time='20160125 12:00:00'));
