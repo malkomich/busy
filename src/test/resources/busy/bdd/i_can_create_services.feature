@@ -59,9 +59,7 @@ Feature: An user will be able to create new services in his company schedule
     
         Examples:
             | start_time | service_type | roles | repetition |
-            | "9:00" | "Tipo 1" | "Juan" | "Diaria" |
-            | "9:00" | "Tipo 1" | "Juan" | "Semanal" |
-            | "9:00" | "Tipo 1" | "Juan" | "Mensual" |
-            | "9:00" | "Tipo 1" | "Juan", "Carlos" | "Diaria" |
-            | "9:00" | "Tipo 1" | "Juan", "Carlos"  | "Semanal" |
-            | "9:00" | "Tipo 1" | "Juan", "Carlos"  | "Mensual" |
+            | "9:00" | "Tipo 1" | "Juan" | "Daily" |
+            | "9:00" | "Tipo 1" | "Juan" | "Weekly" |
+            | "9:00" | "Tipo 1" | "Juan", "Carlos" | "Daily" |
+            | "9:00" | "Tipo 1" | "Juan", "Carlos"  | "Weekly" |

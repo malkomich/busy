@@ -79,8 +79,9 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     }
 
     @When("^I double click the cell of day \"([^\"]*)\" in the schedule$")
-    public void double_click_day_cell(String day) throws Throwable {
+    public void double_click_day_cell(String dayTmp) throws Throwable {
 
+        int day = Integer.parseInt(dayTmp);
         branchPage.dblClickDayCell(day);
     }
 
@@ -105,19 +106,19 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     @When("^I select the service type \"([^\"]*)\"$")
     public void select_service_type(String serviceType) throws Throwable {
 
-        branchPage.setServiceType(serviceType);
+        branchPage.selectServiceType(serviceType);
     }
 
     @When("^I select the role/roles \"([^\"]*)\"$")
     public void select_roles(String roles) throws Throwable {
 
-        branchPage.setServiceRoles(roles);
+        branchPage.selectServiceRoles(roles);
     }
 
     @When("^I select the repetition \"([^\"]*)\"$")
     public void select_repetition(String repetition) throws Throwable {
 
-        branchPage.setRepetition(repetition);
+        branchPage.selectRepetition(repetition, messageSource);
     }
 
     @When("^I click on 'Save'$")
@@ -133,15 +134,17 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     }
 
     @Then("^I should see the service created on day \"([^\"]*)\"$")
-    public void service_created(String day) throws Throwable {
+    public void service_created(String dayTmp) throws Throwable {
 
+        int day = Integer.parseInt(dayTmp);
         branchPage.serviceCreated(day);
     }
 
     @Then("^I should see the service created on the days after the day \"([^\"]*)\" according to the repeat "
             + "type \"([^\"]*)\"$")
-    public void service_repeated(String day, String repetition) throws Throwable {
+    public void service_repeated(String dayTmp, String repetition) throws Throwable {
 
+        int day = Integer.parseInt(dayTmp);
         branchPage.serviceRepeated(day, repetition);
     }
 
