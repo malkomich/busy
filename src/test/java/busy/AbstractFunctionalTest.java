@@ -69,7 +69,7 @@ public class AbstractFunctionalTest extends FluentTest {
     @PostConstruct
     public void setUp() {
         initFluent(new BusyDriver(true));
-        this.initTest();
+        this.init();
     }
 
     @PreDestroy
