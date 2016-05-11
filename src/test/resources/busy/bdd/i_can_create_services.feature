@@ -20,14 +20,13 @@ Feature: An user will be able to create new services in his company schedule
         When I introduce the start time <start_time>
         And I select the service type <service_type>
         And I select the role/roles <roles>
-        And I select the repetition <repetition>
         And I click on 'Save'
         Then I should see an error message in the form
     
         Examples:
-            | start_time | service_type | roles | repetition |
-            | "09:00" | "" | "Juan" | "" |
-            | "09:00" | "Tipo 1" | "" | "" |
+            | start_time | service_type | roles |
+            | "09:00" | "" | "Juan" |
+            | "09:00" | "Tipo 1" | "" |
     
     Scenario Outline: Add a service without repetition successfully
         When I add at least one service type
@@ -36,14 +35,13 @@ Feature: An user will be able to create new services in his company schedule
         When I introduce the start time <start_time>
         And I select the service type <service_type>
         And I select the role/roles <roles>
-        And I select the repetition <repetition>
         And I click on 'Save'
         Then I should see the service created on the day "15"
     
         Examples:
-            | start_time | service_type | roles | repetition |
-            | "09:00" | "" | "Juan" | "" |
-            | "09:00" | "Tipo 1" | "" | "" |
+            | start_time | service_type | roles |
+            | "09:00" | "" | "Juan" |
+            | "09:00" | "Tipo 1" | "" |
     
     Scenario Outline: Add a service with repetition successfully
         When I add at least one service type
@@ -52,14 +50,15 @@ Feature: An user will be able to create new services in his company schedule
         When I introduce the start time <start_time>
         And I select the service type <service_type>
         And I select the role/roles <roles>
-        And I select the repetition <repetition>
+        And I select the repetition type <repetition_type>
+        And I introduce the repetition date until <repetition_days> days after
         And I click on 'Save'
         Then I should see the service created on the day "15"
         And I should see the service created on the days after the day "15" according to the repeat type <repetition>
     
         Examples:
-            | start_time | service_type | roles | repetition |
-            | "9:00" | "Tipo 1" | "Juan" | "Daily" |
-            | "9:00" | "Tipo 1" | "Juan" | "Weekly" |
-            | "9:00" | "Tipo 1" | "Juan", "Carlos" | "Daily" |
-            | "9:00" | "Tipo 1" | "Juan", "Carlos"  | "Weekly" |
+            | start_time | service_type | roles | repetition_type | repetition_days |
+            | "9:00" | "Tipo 1" | "Juan" | "Daily" | "3" |
+            | "9:00" | "Tipo 1" | "Juan" | "Weekly" | "21" |
+            | "9:00" | "Tipo 1" | "Juan", "Carlos" | "Daily" | "3" |
+            | "9:00" | "Tipo 1" | "Juan", "Carlos"  | "Weekly" | "21" |

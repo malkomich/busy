@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.filter.FilterConstructor;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.Select;
@@ -64,7 +67,8 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_FORM_START_TIME = "#start-time";
     private static final String SERVICE_FORM_ROLES = "#service-roles";
     private static final String SERVICE_FORM_STYPE = "#service-type";
-    private static final String SERVICE_FORM_REPETITION = "#service-repetition";
+    private static final String SERVICE_FORM_REPETITION_TYPE = "#service-repetition-type";
+    private static final String SERVICE_FORM_REPETITION_DATE = "#service-repetition-date";
 
     private static final String MESSAGE_SELECTOR = "#infoMessage";
     private static final String ERROR_SELECTOR = "span.error";
@@ -245,10 +249,18 @@ public class BranchPage extends BusyPage {
         if (repetition != null) {
             String repetitionLabel =
                     messageSource.getMessage(repetition.getMsgCode(), null, LocaleContextHolder.getLocale()).trim();
-            Select select = new Select(getDriver().findElement(By.cssSelector(SERVICE_FORM_REPETITION)));
+            Select select = new Select(getDriver().findElement(By.cssSelector(SERVICE_FORM_REPETITION_TYPE)));
             select.selectByVisibleText(repetitionLabel);
         }
 
+        return this;
+    }
+    
+    public BranchPage setRepetitionDate(int days, MessageSource messageSource) {
+
+        DateTime date = new DateTime().plusDays(days);
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd-MM-yyyy");
+        fill(SERVICE_FORM_REPETITION_DATE).with(dtfOut.print(date));
         return this;
     }
 

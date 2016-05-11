@@ -115,10 +115,17 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
         branchPage.selectServiceRoles(roles);
     }
 
-    @When("^I select the repetition \"([^\"]*)\"$")
-    public void select_repetition(String repetition) throws Throwable {
+    @When("^I select the repetition type \"([^\"]*)\"$")
+    public void select_repetition_type(String repetition) throws Throwable {
 
         branchPage.selectRepetition(repetition, messageSource);
+    }
+    
+    @When("^I introduce the repetition date until \"([^\"]*)\" days after$")
+    public void select_repetition_days(String daysTmp) throws Throwable {
+
+        int days = Integer.parseInt(daysTmp);
+        branchPage.setRepetitionDate(days, messageSource);
     }
 
     @When("^I click on 'Save'$")
