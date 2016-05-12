@@ -32,13 +32,13 @@
     <resource.directory>src/main/resources</resource.directory>
     <skipTests>false</skipTests>
   </properties>
-  
+
   <profiles>
     <profile>
-        <id>prod</id>
-        <properties>
-            <skipTests>true</skipTests>
-        </properties>
+      <id>prod</id>
+      <properties>
+        <skipTests>true</skipTests>
+      </properties>
     </profile>
   </profiles>
 
@@ -179,6 +179,12 @@
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
     </dependency>
+    <dependency>
+      <groupId>joda-time</groupId>
+      <artifactId>joda-time-jsptags</artifactId>
+      <version>1.1.1</version>
+    </dependency>
+
 
     <!-- ============ JSON ============ -->
     <dependency>
