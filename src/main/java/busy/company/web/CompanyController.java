@@ -57,6 +57,7 @@ public class CompanyController {
     /**
      * Spring Model Attributes.
      */
+    public static final String ROLE_SESSION = "role";
     static final String USER_SESSION = "user";
     static final String SERVICE_TYPES_SESSION = "serviceTypes";
 
@@ -67,7 +68,6 @@ public class CompanyController {
     static final String COMPANY_REQUEST = "company";
     static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
     static final String SERVICE_TYPE_REQUEST = "serviceType";
-    static final String ROLE_SESSION = "role";
 
     /**
      * URL Paths.
@@ -308,7 +308,7 @@ public class CompanyController {
      * 
      * @param id
      *            the unique id of an existing service type
-     * @param mav
+     * @param model
      *            Spring Model instance
      * @return The JSP view of the form
      */

@@ -12,7 +12,8 @@
 
 <link rel="icon" href="/favicon.ico">
 
-<title><spring:message code="branch.page.title" arguments="${role.branch.company.tradeName}" argumentSeparator="¬" /></title>
+<title><spring:message code="branch.page.title" arguments="${role.branch.company.tradeName}"
+        argumentSeparator="¬" /></title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -53,8 +54,9 @@
                 <div class="col-xs-9 pull-right">
                     <div class="table-list-filters pull-right">
                         <div class="select-menu pull-left">
-                            <button id="service-types-button" class="btn btn-default btn-lg" href="#service-types-collapse"
-                                data-toggle="collapse" aria-expanded="false" aria-controls="service-types-collapse">
+                            <button id="service-types-button" class="btn btn-default btn-lg"
+                                href="#service-types-collapse" data-toggle="collapse" aria-expanded="false"
+                                aria-controls="service-types-collapse">
                                 <spring:message code="menu.filters.service-type.title" />
                                 <span class="glyphicon glyphicon-triangle-bottom" />
                             </button>
@@ -87,7 +89,7 @@
             <!-- .page-header -->
 
             <div class="row">
-				<div id="calendar"></div>
+                <div id="calendar"></div>
             </div>
             <!-- .row -->
 
@@ -128,9 +130,7 @@
     <div class="modal fade" id="modalForm" tabindex="-1" role="dialog">
         <div class="modal-dialog">
 
-            <div class="modal-content">
-
-            </div>
+            <div class="modal-content"></div>
             <!-- .modal-content -->
         </div>
         <!-- .modal-dialog -->
