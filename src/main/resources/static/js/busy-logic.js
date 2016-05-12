@@ -130,8 +130,6 @@ function showServiceTypeForm() {
 function saveServiceType() {
     var form = $('#serviceTypeForm');
     $.post("/service-type/save", form.serialize(), function(data) {
-        var type = $.type(data);
-        
         var modalContainer = $('#modalForm');
         
         if ($(data).is("form")) {

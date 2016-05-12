@@ -46,4 +46,34 @@ $(function() {
         });
     });
 
+    $('.cal-cell').dblclick(function() {
+        calendar.options.day = $('[data-cal-date]', this).data('cal-date');
+
+        $.get("/service_form", {
+            date : calendar.options.day
+        }, function(data) {
+            var modalContainer = $('#modalForm');
+            $('.modal-content', modalContainer).html(data);
+            modalContainer.modal();
+        });
+    });
+
 });
+
+function saveServices() {
+    var form = $('#serviceForm');
+    $.post("/service_form", form.serialize(), function(data) {
+
+        var modalContainer = $('#modalForm');
+
+        if ($(data).is("form")) {
+            $('.modal-body', modalContainer).html(data);
+            modalContainer.modal('show');
+        } else {
+            modalContainer.modal('hide')
+
+            calendar.view();
+        }
+
+    });
+}
