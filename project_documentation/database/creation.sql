@@ -151,7 +151,7 @@ CREATE TABLE service_type(
     duration            integer             NOT NULL DEFAULT 60,
     company_id          integer             NOT NULL REFERENCES company(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-	UNIQUE (name, company_id)
+    UNIQUE (name, company_id)
 );
 
 CREATE SEQUENCE service_seq;
@@ -161,8 +161,9 @@ CREATE TABLE service(
     start_time          timestamp with time zone    NOT NULL,
     service_type_id     integer             NOT NULL REFERENCES service_type(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    role_id             integer             NOT NULL REFERENCES role(id)
-        ON DELETE CASCADE ON UPDATE CASCADE
+	role_id             integer             NOT NULL REFERENCES role(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    correlation         integer             NOT NULL DEFAULT 0
 );
 
 CREATE TABLE booking(
@@ -170,5 +171,5 @@ CREATE TABLE booking(
         ON DELETE CASCADE ON UPDATE CASCADE,
     service_id          integer             NOT NULL REFERENCES service(id)
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    PRIMARY KEY(person_id, service_id)
+    UNIQUE(person_id, service_id)
 );

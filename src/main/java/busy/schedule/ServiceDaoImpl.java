@@ -9,12 +9,14 @@ import static busy.util.SQLUtil.ALIAS_CITY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_NAME;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
+import static busy.util.SQLUtil.ALIAS_ROLE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_NAME;
 import static busy.util.SQLUtil.ALIAS_USER_ID;
 import static busy.util.SQLUtil.BOOKINGS_PER_ROLE;
 import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.CORRELATION;
 import static busy.util.SQLUtil.DESCRIPTION;
 import static busy.util.SQLUtil.DURATION;
 import static busy.util.SQLUtil.EMAIL;
@@ -68,16 +70,16 @@ import busy.util.SecureSetter;
 @Repository
 public class ServiceDaoImpl implements ServiceDao {
 
-    private static final String SQL_SELECT_BETWEEN_DAYS =
-            SERVICE_QUERY + " WHERE ? <= " + START_DATETIME + " AND ? >= " + START_DATETIME + " AND " + ROLE_ID + "=?";
+    private static final String SQL_SELECT_BETWEEN_DAYS = SERVICE_QUERY + " WHERE ? <= " + START_DATETIME
+            + " AND ? >= " + START_DATETIME + " AND " + ALIAS_ROLE_ID + "=?";
 
     private static final String SQL_SERVICE_TYPE_FILTER = " AND " + SERVICE_TYPE_ID + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_SERVICE + " SET " + START_DATETIME + "= ?,"
-            + SERVICE_TYPE_ID + "= ?," + ROLE_ID + "= ?" + " WHERE " + ID + "= ?";
+            + SERVICE_TYPE_ID + "= ?," + ROLE_ID + "=?," + CORRELATION + "= ?" + " WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
-    
+
     private SimpleJdbcInsert jdbcInsert;
 
     @Autowired
@@ -85,10 +87,10 @@ public class ServiceDaoImpl implements ServiceDao {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
         
-        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         jdbcInsert.withTableName(TABLE_SERVICE);
         jdbcInsert.setGeneratedKeyName(ID);
-        jdbcInsert.setColumnNames(Arrays.asList(START_DATETIME, SERVICE_TYPE_ID, ROLE_ID));
+        jdbcInsert.setColumnNames(Arrays.asList(START_DATETIME, SERVICE_TYPE_ID, ROLE_ID, CORRELATION));
 
     }
 
@@ -135,7 +137,8 @@ public class ServiceDaoImpl implements ServiceDao {
 
         if (service.getId() > 0) {
 
-            jdbcTemplate.update(SQL_UPDATE, service.getStartTimestamp(), service.getServiceTypeId(), service.getRoleId(), service.getId());
+            jdbcTemplate.update(SQL_UPDATE, service.getStartTimestamp(), service.getServiceTypeId(),
+                    service.getCorrelation(), service.getId());
 
         } else {
 
@@ -143,12 +146,15 @@ public class ServiceDaoImpl implements ServiceDao {
             parameters.put(START_DATETIME, service.getStartTimestamp());
             parameters.put(SERVICE_TYPE_ID, service.getServiceTypeId());
             parameters.put(ROLE_ID, service.getRoleId());
+            parameters.put(CORRELATION, service.getCorrelation());
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
                 SecureSetter.setId(service, key.intValue());
             }
+            
         }
+        
     }
 
     private class ServiceSetExtractor implements ResultSetExtractor<List<Service>> {
@@ -178,7 +184,7 @@ public class ServiceDaoImpl implements ServiceDao {
                     service = new Service();
                     int id = rs.getInt(ALIAS_SERVICE_ID);
                     SecureSetter.setId(service, id);
-                    service.setRole(role);
+                    service.setCorrelation(rs.getInt(CORRELATION));
 
                     if (serviceType == null) {
                         serviceType = new ServiceType();
@@ -192,6 +198,8 @@ public class ServiceDaoImpl implements ServiceDao {
                     service.setServiceType(serviceType);
 
                     service.setStartTime(new DateTime(rs.getTimestamp(START_DATETIME)));
+
+                    service.setRole(role);
 
                     items.put(id, service);
                 }

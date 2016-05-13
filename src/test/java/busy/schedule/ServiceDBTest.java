@@ -166,6 +166,8 @@ public class ServiceDBTest extends AbstractDBTest {
 
         int bookings = 0;
         for (Service service : services) {
+            System.out.println("SERVICE: " + service.getId());
+            System.out.println(service.getBookings().size());
             bookings += service.getBookings().size();
         }
 

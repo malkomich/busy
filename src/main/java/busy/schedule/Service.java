@@ -15,24 +15,26 @@ public class Service implements Serializable {
     private static final long serialVersionUID = -811217121096779784L;
 
     public enum Repetition {
-    	DAILY("schedule.service.repetition.daily"),
-    	WEEKLY("schedule.service.repetition.weekly");
-        
+        DAILY("schedule.service.repetition.daily"),
+        WEEKLY("schedule.service.repetition.weekly");
+
         String msgCode;
-        
+
         private Repetition(String msgCode) {
             this.msgCode = msgCode;
         }
-        
+
         public String getMsgCode() {
             return msgCode;
         }
     }
-    
+
     private int id;
     private DateTime startTime;
     private ServiceType serviceType;
     private Role role;
+    private int correlation;
+
     private List<User> bookings;
 
     public Service() {
@@ -55,12 +57,28 @@ public class Service implements Serializable {
         this.serviceType = serviceType;
     }
 
+    public int getCorrelation() {
+        return correlation;
+    }
+
+    public void setCorrelation(int correlation) {
+        this.correlation = correlation;
+    }
+
     public Role getRole() {
         return role;
     }
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<User> getBookings() {
+        return bookings;
+    }
+
+    public void addBooking(User user) {
+        bookings.add(user);
     }
 
     public int getId() {
@@ -70,14 +88,6 @@ public class Service implements Serializable {
     @SuppressWarnings("unused")
     private void setId(Integer id) {
         this.id = id;
-    }
-
-    public List<User> getBookings() {
-        return bookings;
-    }
-
-    public void addBooking(User user) {
-        bookings.add(user);
     }
 
     public Timestamp getStartTimestamp() {
