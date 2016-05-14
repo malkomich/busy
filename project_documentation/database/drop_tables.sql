@@ -7,6 +7,9 @@
 
 DROP TABLE IF EXISTS booking;
 
+DROP TABLE IF EXISTS schedule;
+DROP SEQUENCE IF EXISTS schedule_seq;
+
 DROP TABLE IF EXISTS service;
 DROP SEQUENCE IF EXISTS service_seq;
 

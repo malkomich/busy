@@ -151,7 +151,9 @@ public class ServiceDBTest extends AbstractDBTest {
 
         int bookings = 0;
         for (Service service : services) {
-            bookings += service.getBookings().size();
+            for(Schedule schedule : service.getSchedules()) {
+                bookings += schedule.getBookings().size();
+            }
         }
 
         assertEquals(0, bookings);
@@ -166,9 +168,9 @@ public class ServiceDBTest extends AbstractDBTest {
 
         int bookings = 0;
         for (Service service : services) {
-            System.out.println("SERVICE: " + service.getId());
-            System.out.println(service.getBookings().size());
-            bookings += service.getBookings().size();
+            for(Schedule schedule : service.getSchedules()) {
+                bookings += schedule.getBookings().size();
+            }
         }
 
         assertEquals(3, bookings);
@@ -178,17 +180,6 @@ public class ServiceDBTest extends AbstractDBTest {
     public void insertWithStartTimeNull() {
 
         Service service = new Service();
-        service.setRole(role);
-        service.setServiceType(serviceType);
-        
-        repository.save(service);
-    }
-    
-    @Test(expected = DataIntegrityViolationException.class)
-    public void insertWithRoleNull() {
-
-        Service service = new Service();
-        service.setStartTime(new DateTime());
         service.setServiceType(serviceType);
         
         repository.save(service);
@@ -199,19 +190,6 @@ public class ServiceDBTest extends AbstractDBTest {
 
         Service service = new Service();
         service.setStartTime(new DateTime());
-        service.setRole(role);
-        
-        repository.save(service);
-    }
-    
-    @Test(expected = DataIntegrityViolationException.class)
-    public void insertWithRoleInvalid() {
-
-        Service service = new Service();
-        service.setStartTime(new DateTime());
-        SecureSetter.setId(role, INVALID_ID);
-        service.setRole(role);
-        service.setServiceType(serviceType);
         
         repository.save(service);
     }
@@ -221,7 +199,6 @@ public class ServiceDBTest extends AbstractDBTest {
 
         Service service = new Service();
         service.setStartTime(new DateTime());
-        service.setRole(role);
         SecureSetter.setId(serviceType, INVALID_ID);
         service.setServiceType(serviceType);
         
@@ -233,7 +210,6 @@ public class ServiceDBTest extends AbstractDBTest {
 
         Service service = new Service();
         service.setStartTime(new DateTime());
-        service.setRole(role);
         service.setServiceType(serviceType);
         
         repository.save(service);

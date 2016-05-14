@@ -44,7 +44,7 @@ public class BranchPage extends BusyPage {
      * CSS Selectors
      */
     private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
-    private static final String DAY_CELL_SELECTOR = ".cal-cell";
+    private static final String DAY_CELL_SELECTOR = ".cal-month-day";
     private static final String DAY_EVENTS_DETAILED_SELECTOR = ".cal-event-list";
     private static final String DAY_EVENTS_SELECTOR = ".events-list";
     private static final String EVENT_SELECTOR = ".events";

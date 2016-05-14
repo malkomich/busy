@@ -1,9 +1,15 @@
 package busy.schedule.web;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,15 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import busy.company.web.CompanyController;
 import busy.role.Role;
 import busy.role.RoleService;
+import busy.schedule.Schedule;
 import busy.schedule.ScheduleService;
 import busy.schedule.Service;
+import busy.schedule.ServiceType;
 import busy.user.User;
 
 /**
@@ -29,13 +39,24 @@ import busy.user.User;
  *
  */
 @Controller
-@Scope(value="singleton")
+@Scope(value = "singleton")
 public class ScheduleController {
+
+    /**
+     * Spring Model Attributes.
+     */
+    private static final String SERVICE_FORM_REQUEST = "serviceForm";
 
     /**
      * URL Paths.
      */
     private static final String PATH_BOOKINGS_OF_MONTH = "/get_month_bookings";
+    private static final String PATH_SERVICES_FORM = "service_form";
+
+    /**
+     * JSP's
+     */
+    private static final String SERVICE_FORM_PAGE = "service-form";
 
     /**
      * HTTP params.
@@ -76,7 +97,7 @@ public class ScheduleController {
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
         Role role = roleService.findRoleById(Integer.parseInt(roleIdTmp));
-        
+
         // Get the inverse of offset due to JS Date implementation
         long offSetFrom = -Long.parseLong(offSetFromTmp);
         long offSetTo = -Long.parseLong(offSetToTmp);
@@ -92,7 +113,7 @@ public class ScheduleController {
         DateTime fromDateTime = new DateTime(from, dtZoneFrom);
         // Lower a millisecond to ensure the date are inside the requested month
         DateTime toDateTime = new DateTime(to, dtZoneTo).minus(1);
-        
+
         List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDateTime, toDateTime, role, null);
 
         JSONObject jsonResult = new JSONObject();
@@ -101,21 +122,23 @@ public class ScheduleController {
         for (Service service : serviceList) {
 
             try {
-                for (User booking : service.getBookings()) {
-                    JSONObject bookingJSON = new JSONObject();
-                    bookingJSON.put("id", "u" + booking.getId() + "s" + service.getId());
-                    bookingJSON.put("title", booking.getFirstName() + " " + booking.getLastName());
-                    bookingJSON.put("url", "/localhost:8080");
-                    bookingJSON.put("class", "event-info");
+                for (Schedule schedule : service.getSchedules()) {
+                    for (User booking : schedule.getBookings()) {
+                        JSONObject bookingJSON = new JSONObject();
+                        bookingJSON.put("id", "u" + booking.getId() + "s" + service.getId());
+                        bookingJSON.put("title", booking.getFirstName() + " " + booking.getLastName());
+                        bookingJSON.put("url", "/localhost:8080");
+                        bookingJSON.put("class", "event-info");
 
-                    DateTime startTime = service.getStartTime();
-                    int minutes = service.getServiceType().getDuration();
-                    DateTime endTime = startTime.plus(minutes*60*1000);
+                        DateTime startTime = service.getStartTime();
+                        int minutes = service.getServiceType().getDuration();
+                        DateTime endTime = startTime.plus(minutes * 60 * 1000);
 
-                    bookingJSON.put("start", String.valueOf(startTime.getMillis()));
-                    bookingJSON.put("end", String.valueOf(endTime.getMillis()));
+                        bookingJSON.put("start", String.valueOf(startTime.getMillis()));
+                        bookingJSON.put("end", String.valueOf(endTime.getMillis()));
 
-                    jsonBookings.put(bookingJSON);
+                        jsonBookings.put(bookingJSON);
+                    }
                 }
             } catch (JSONException jse) {
                 jse.printStackTrace();
@@ -127,4 +150,5 @@ public class ScheduleController {
 
         return jsonResult.toString();
     }
+
 }

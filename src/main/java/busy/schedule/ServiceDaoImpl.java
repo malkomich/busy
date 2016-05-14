@@ -1,37 +1,27 @@
 package busy.schedule;
 
-import static busy.util.SQLUtil.ACTIVE;
-import static busy.util.SQLUtil.ADDR1;
-import static busy.util.SQLUtil.ADDR2;
-import static busy.util.SQLUtil.ADMIN;
-import static busy.util.SQLUtil.ALIAS_ADDR_ID;
-import static busy.util.SQLUtil.ALIAS_CITY_ID;
-import static busy.util.SQLUtil.ALIAS_CITY_NAME;
-import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
-import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
 import static busy.util.SQLUtil.ALIAS_ROLE_ID;
+import static busy.util.SQLUtil.ALIAS_SCHEDULE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_NAME;
-import static busy.util.SQLUtil.ALIAS_USER_ID;
 import static busy.util.SQLUtil.BOOKINGS_PER_ROLE;
-import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.BOOKING_USER_ACTIVE;
+import static busy.util.SQLUtil.BOOKING_USER_ADMIN;
+import static busy.util.SQLUtil.BOOKING_USER_EMAIL;
+import static busy.util.SQLUtil.BOOKING_USER_FIRSTNAME;
+import static busy.util.SQLUtil.BOOKING_USER_ID;
+import static busy.util.SQLUtil.BOOKING_USER_LASTNAME;
+import static busy.util.SQLUtil.BOOKING_USER_NIF;
+import static busy.util.SQLUtil.BOOKING_USER_PHONE;
 import static busy.util.SQLUtil.CORRELATION;
 import static busy.util.SQLUtil.DESCRIPTION;
 import static busy.util.SQLUtil.DURATION;
-import static busy.util.SQLUtil.EMAIL;
-import static busy.util.SQLUtil.FIRSTNAME;
 import static busy.util.SQLUtil.ID;
-import static busy.util.SQLUtil.LASTNAME;
-import static busy.util.SQLUtil.NIF;
-import static busy.util.SQLUtil.PASSWORD;
-import static busy.util.SQLUtil.PHONE;
-import static busy.util.SQLUtil.ROLE_ID;
-import static busy.util.SQLUtil.SERVICE_QUERY;
+import static busy.util.SQLUtil.SCHEDULE_QUERY;
 import static busy.util.SQLUtil.SERVICE_TYPE_ID;
 import static busy.util.SQLUtil.START_DATETIME;
 import static busy.util.SQLUtil.TABLE_SERVICE;
-import static busy.util.SQLUtil.ZIPCODE;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,9 +44,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import busy.location.Address;
-import busy.location.City;
-import busy.location.Country;
 import busy.role.Role;
 import busy.user.User;
 import busy.util.SecureSetter;
@@ -70,13 +57,13 @@ import busy.util.SecureSetter;
 @Repository
 public class ServiceDaoImpl implements ServiceDao {
 
-    private static final String SQL_SELECT_BETWEEN_DAYS = SERVICE_QUERY + " WHERE ? <= " + START_DATETIME
+    private static final String SQL_SELECT_BETWEEN_DAYS = SCHEDULE_QUERY + " WHERE ? <= " + START_DATETIME
             + " AND ? >= " + START_DATETIME + " AND " + ALIAS_ROLE_ID + "=?";
 
     private static final String SQL_SERVICE_TYPE_FILTER = " AND " + SERVICE_TYPE_ID + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_SERVICE + " SET " + START_DATETIME + "= ?,"
-            + SERVICE_TYPE_ID + "= ?," + ROLE_ID + "=?," + CORRELATION + "= ?" + " WHERE " + ID + "= ?";
+            + SERVICE_TYPE_ID + "= ?," + CORRELATION + "= ?" + " WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -86,11 +73,11 @@ public class ServiceDaoImpl implements ServiceDao {
     public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
-        
-        jdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
+
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
         jdbcInsert.withTableName(TABLE_SERVICE);
         jdbcInsert.setGeneratedKeyName(ID);
-        jdbcInsert.setColumnNames(Arrays.asList(START_DATETIME, SERVICE_TYPE_ID, ROLE_ID, CORRELATION));
+        jdbcInsert.setColumnNames(Arrays.asList(START_DATETIME, SERVICE_TYPE_ID, CORRELATION));
 
     }
 
@@ -145,16 +132,15 @@ public class ServiceDaoImpl implements ServiceDao {
             Map<String, Object> parameters = new HashMap<String, Object>();
             parameters.put(START_DATETIME, service.getStartTimestamp());
             parameters.put(SERVICE_TYPE_ID, service.getServiceTypeId());
-            parameters.put(ROLE_ID, service.getRoleId());
             parameters.put(CORRELATION, service.getCorrelation());
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
                 SecureSetter.setId(service, key.intValue());
             }
-            
+
         }
-        
+
     }
 
     private class ServiceSetExtractor implements ResultSetExtractor<List<Service>> {
@@ -173,11 +159,13 @@ public class ServiceDaoImpl implements ServiceDao {
         @Override
         public List<Service> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
-            Map<Integer, Service> items = new HashMap<>();
+            boolean hasNext = rs.next();
+            
+            Map<Integer, Service> serviceMap = new HashMap<>();
 
-            while (rs.next()) {
+            while (hasNext) {
 
-                Service service = items.get(rs.getInt(ALIAS_SERVICE_ID));
+                Service service = serviceMap.get(rs.getInt(ALIAS_SERVICE_ID));
 
                 if (service == null) {
 
@@ -199,55 +187,37 @@ public class ServiceDaoImpl implements ServiceDao {
 
                     service.setStartTime(new DateTime(rs.getTimestamp(START_DATETIME)));
 
-                    service.setRole(role);
-
-                    items.put(id, service);
+                    serviceMap.put(id, service);
                 }
 
-                Integer userId = rs.getInt(ALIAS_USER_ID);
-                if (userId != INVALID_ID) {
-                    User user = new User();
-                    SecureSetter.setId(user, userId);
-                    user.setFirstName(rs.getString(FIRSTNAME));
-                    user.setLastName(rs.getString(LASTNAME));
-                    user.setEmail(rs.getString(EMAIL));
-                    user.setPassword(rs.getString(PASSWORD));
-                    user.setNif(rs.getString(NIF));
-                    user.setPhone(rs.getString(PHONE));
-                    user.setActive(rs.getBoolean(ACTIVE));
-                    SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
+                Schedule schedule = new Schedule();
+                SecureSetter.setId(schedule, rs.getInt(ALIAS_SCHEDULE_ID));
+                schedule.setService(service);
+                schedule.setRole(role);
 
-                    Integer addressId = 0;
-                    if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
+                do {
+                    Integer userId = rs.getInt(BOOKING_USER_ID);
+                    if (userId != INVALID_ID) {
+                        User user = new User();
+                        SecureSetter.setId(user, userId);
+                        user.setFirstName(rs.getString(BOOKING_USER_FIRSTNAME));
+                        user.setLastName(rs.getString(BOOKING_USER_LASTNAME));
+                        user.setEmail(rs.getString(BOOKING_USER_EMAIL));
+                        user.setNif(rs.getString(BOOKING_USER_NIF));
+                        user.setPhone(rs.getString(BOOKING_USER_PHONE));
+                        user.setActive(rs.getBoolean(BOOKING_USER_ACTIVE));
+                        SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(BOOKING_USER_ADMIN));
 
-                        Address address = new Address();
-
-                        SecureSetter.setId(address, addressId);
-                        address.setAddress1(rs.getString(ADDR1));
-                        address.setAddress2(rs.getString(ADDR2));
-                        address.setZipCode(rs.getString(ZIPCODE));
-
-                        City city = new City();
-                        SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
-                        city.setName(rs.getString(ALIAS_CITY_NAME));
-
-                        Country country = new Country();
-                        SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
-                        country.setName(rs.getString(ALIAS_COUNTRY_NAME));
-                        country.setCode(rs.getString(CODE));
-
-                        city.setCountry(country);
-
-                        address.setCity(city);
-
-                        user.setAddress(address);
+                        schedule.addBooking(user);
                     }
+                    hasNext = rs.next();
+                } while (hasNext && rs.getInt(ALIAS_SCHEDULE_ID) == schedule.getId());
 
-                    service.addBooking(user);
-                }
+                service.addSchedule(schedule);
+
             }
 
-            return new ArrayList<Service>(items.values());
+            return new ArrayList<Service>(serviceMap.values());
         }
 
     }

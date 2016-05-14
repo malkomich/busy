@@ -7,9 +7,12 @@ import java.util.List;
 
 import org.joda.time.DateTime;
 
-import busy.role.Role;
-import busy.user.User;
-
+/**
+ * Service model.
+ * 
+ * @author malkomich
+ *
+ */
 public class Service implements Serializable {
 
     private static final long serialVersionUID = -811217121096779784L;
@@ -32,13 +35,12 @@ public class Service implements Serializable {
     private int id;
     private DateTime startTime;
     private ServiceType serviceType;
-    private Role role;
     private int correlation;
 
-    private List<User> bookings;
+    private List<Schedule> schedules;
 
     public Service() {
-        bookings = new ArrayList<>();
+        schedules = new ArrayList<>();
     }
 
     public DateTime getStartTime() {
@@ -65,20 +67,12 @@ public class Service implements Serializable {
         this.correlation = correlation;
     }
 
-    public Role getRole() {
-        return role;
+    public List<Schedule> getSchedules() {
+        return schedules;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public List<User> getBookings() {
-        return bookings;
-    }
-
-    public void addBooking(User user) {
-        bookings.add(user);
+    public void addSchedule(Schedule schedule) {
+        schedules.add(schedule);
     }
 
     public int getId() {
@@ -96,10 +90,6 @@ public class Service implements Serializable {
 
     public Integer getServiceTypeId() {
         return (serviceType != null) ? serviceType.getId() : null;
-    }
-
-    public Integer getRoleId() {
-        return (role != null) ? role.getId() : null;
     }
 
 }

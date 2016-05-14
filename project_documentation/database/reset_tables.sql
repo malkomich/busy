@@ -7,6 +7,8 @@
 
 DELETE FROM booking;
 
+DELETE FROM schedule;
+
 DELETE FROM service;
 
 DELETE FROM service_type;
