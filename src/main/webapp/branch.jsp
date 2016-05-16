@@ -118,8 +118,8 @@
     </div>
 
     <!-- Message Modal -->
-    <div class="modal fade bs-example-modal-lg" id="messageModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" id="infoMessage">
                 <div class="modal-body"></div>
             </div>
@@ -128,7 +128,7 @@
 
     <!-- Modal Form -->
     <div class="modal fade" id="modalForm" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
 
             <div class="modal-content"></div>
             <!-- .modal-content -->

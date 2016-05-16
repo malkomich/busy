@@ -74,4 +74,9 @@ public class Role implements Serializable {
         return (branch != null) ? branch.getCompany() : null;
     }
 
+    @Override
+    public String toString() {
+        return (user != null) ? user.toString() : null;
+    }
+    
 }

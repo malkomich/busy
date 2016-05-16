@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import busy.company.Branch;
 import busy.company.Company;
 import busy.user.User;
 
@@ -63,6 +64,15 @@ public class RoleServiceImpl implements RoleService {
     public Role findRoleById(int id) {
 
         return roleDao.findById(id);
+    }
+
+    /* (non-Javadoc)
+     * @see busy.role.RoleService#findRolesByBranch(busy.company.Branch)
+     */
+    @Override
+    public List<Role> findRolesByBranch(Branch branch) {
+
+        return roleDao.findByBranch(branch);
     }
 
 }

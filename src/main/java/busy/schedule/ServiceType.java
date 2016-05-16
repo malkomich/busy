@@ -2,6 +2,9 @@ package busy.schedule;
 
 import java.io.Serializable;
 
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+
 import busy.company.Company;
 
 public class ServiceType implements Serializable {
@@ -81,5 +84,12 @@ public class ServiceType implements Serializable {
 
     public Integer getCompanyId() {
         return (company != null) ? company.getId() : null;
+    }
+
+    @Override
+    public String toString() {
+        LocalTime durationTime = new LocalTime(duration / 60, duration % 60);
+        String output = DateTimeFormat.forPattern("HH:mm").print(durationTime);
+        return name + " [" + output + "]";
     }
 }

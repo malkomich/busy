@@ -60,14 +60,26 @@ $(function() {
 
 });
 
+function newService() {
+    var form = $('#serviceForm');
+    var modalContainer = $('#modalForm');
+    $.get("/service_form/new", {
+        serviceForm : form.serialize()
+    }, function(data) {
+        var modalContainer = $('#modalForm');
+        $('.modal-content', modalContainer).html(data);
+        modalContainer.modal();
+    });
+}
+
 function saveServices() {
     var form = $('#serviceForm');
-    $.post("/service_form", form.serialize(), function(data) {
+    $.post("/service_form/save", form.serialize(), function(data) {
 
         var modalContainer = $('#modalForm');
 
         if ($(data).is("form")) {
-            $('.modal-body', modalContainer).html(data);
+            $('.modal-content', modalContainer).html(data);
             modalContainer.modal('show');
         } else {
             modalContainer.modal('hide')

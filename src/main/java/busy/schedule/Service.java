@@ -18,10 +18,11 @@ public class Service implements Serializable {
     private static final long serialVersionUID = -811217121096779784L;
 
     public enum Repetition {
+        NONE("schedule.service.repetition.none"),
         DAILY("schedule.service.repetition.daily"),
         WEEKLY("schedule.service.repetition.weekly");
 
-        String msgCode;
+        private String msgCode;
 
         private Repetition(String msgCode) {
             this.msgCode = msgCode;
