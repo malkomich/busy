@@ -128,7 +128,7 @@
 
     <!-- Modal Form -->
     <div class="modal fade" id="modalForm" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-lg" role="document">
 
             <div class="modal-content"></div>
             <!-- .modal-content -->
