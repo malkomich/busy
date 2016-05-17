@@ -35,8 +35,9 @@
                 </c:if>
                 <c:if test="${not empty roleList}">
                     <div class="col-sm-3 col-xs-3">
-                        <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button" data-toggle="collapse"
-                            data-target="#role-menu" aria-expanded="false" aria-controls="#role-menu">
+                        <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button"
+                            data-toggle="collapse" data-target="#role-menu" aria-expanded="false"
+                            aria-controls="#role-menu">
                             <span>${username}</span>
                         </button>
                         <div class="role-select-menu collapse" id="role-menu">
@@ -44,8 +45,8 @@
                                 <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text">${username}</span>
                                 </a>
                                 <c:forEach items="${roleList}" var="roleItem">
-                                    <a href="/company/${roleItem.branch.company.id}/role/${roleItem.id}" class="role-select-menu-item"> <span
-                                        class="role-select-menu-item-text">${roleItem.branch.company.tradeName}</span>
+                                    <a href="/company/${roleItem.branch.company.id}/role/${roleItem.id}"
+                                        class="role-select-menu-item"> <span class="role-select-menu-item-text">${roleItem.branch.company.tradeName}</span>
                                     </a>
                                 </c:forEach>
                             </div>

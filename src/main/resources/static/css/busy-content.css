@@ -135,6 +135,7 @@
 .bg-inactive {
     background: #FAF2F2;
 }
+
 .tip-text {
     font-size: x-small;
     color: #ccc;
@@ -142,14 +143,14 @@
 
 /*
  * Service form
- */ 
+ */
 .service-roles-summary {
-	font-size: x-small;
-	color: #ccc;
+    font-size: x-small;
+    color: #ccc;
 }
 
 .service-roles-summary ul {
-	margin-left: 0px;
-	padding-left: 0px;
-	list-style-type: none;
+    margin-left: 0px;
+    padding-left: 0px;
+    list-style-type: none;
 }
