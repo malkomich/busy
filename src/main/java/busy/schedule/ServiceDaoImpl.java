@@ -104,6 +104,7 @@ public class ServiceDaoImpl implements ServiceDao {
         List<Object> params = new ArrayList<>();
         params.add(new Timestamp(initDay.getMillis()));
         params.add(new Timestamp(endDay.getMillis()));
+        
         params.add(role.getId());
 
         if (serviceType != null) {

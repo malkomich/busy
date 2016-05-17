@@ -6,6 +6,7 @@ import java.util.List;
 import org.joda.time.LocalDate;
 
 import busy.role.Role;
+import busy.schedule.Service;
 import busy.schedule.Service.Repetition;
 
 public class ServiceListForm {
@@ -46,9 +47,24 @@ public class ServiceListForm {
     public List<ServiceForm> getServices() {
         return services;
     }
+    
+    public void setServices(List<ServiceForm> services) {
+        this.services = services;
+    }
 
     public void addService(ServiceForm service) {
         services.add(service);
+    }
+
+    public List<Service> toServices() {
+
+        List<Service> serviceList = new ArrayList<>();
+        for(ServiceForm form : services) {
+            Service service = new Service();
+//            service.set 
+        }
+        
+        return serviceList;
     }
 
 }

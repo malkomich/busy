@@ -31,11 +31,13 @@ $(function() {
     };
 
     calendar = $('#calendar').calendar(options);
+    setupListeners();
 
     $('.btn-group button[data-calendar-nav]').each(function() {
         var $this = $(this);
         $this.click(function() {
             calendar.navigate($this.data('calendar-nav'));
+            setupListeners();
         });
     });
 
@@ -43,10 +45,14 @@ $(function() {
         var $this = $(this);
         $this.click(function() {
             calendar.view($this.data('calendar-view'));
+            setupListeners();
         });
     });
 
-    $('.cal-cell').dblclick(function() {
+});
+
+function setupListeners() {
+	$('.cal-cell').dblclick(function() {
         calendar.options.day = $('[data-cal-date]', this).data('cal-date');
 
         $.get("/service_form", {
@@ -57,8 +63,7 @@ $(function() {
             modalContainer.modal();
         });
     });
-
-});
+}
 
 function newService() {
     var form = $('#serviceForm');

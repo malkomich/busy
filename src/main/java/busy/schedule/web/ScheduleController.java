@@ -2,6 +2,8 @@ package busy.schedule.web;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
@@ -15,6 +17,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,7 +42,7 @@ import busy.user.User;
  */
 @Controller
 @Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.ROLE_SESSION, ScheduleController.SERVICE_FORM_SESSION})
+@SessionAttributes(value = { CompanyController.ROLE_SESSION, ScheduleController.SERVICE_FORM_SESSION })
 public class ScheduleController {
 
     /**
@@ -78,14 +81,17 @@ public class ScheduleController {
     private MessageSource messageSource;
 
     /**
-     * Request to get all bookings made between the given dates in the specific branch
+     * Request to get all bookings made between the given dates in the specific
+     * branch
      * 
      * @param roleIdTmp
      *            the role attached to the requested bookings
      * @param fromTmp
-     *            the initial instant in milliseconds of the period in which find bookings
+     *            the initial instant in milliseconds of the period in which
+     *            find bookings
      * @param toTmp
-     *            the final instant in milliseconds of the period in which find bookings
+     *            the final instant in milliseconds of the period in which find
+     *            bookings
      * @param offSetMinutesTmp
      *            the offset from UTC in milliseconds of the dates received
      * @param model
@@ -94,10 +100,10 @@ public class ScheduleController {
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
     public @ResponseBody String getMonthBookings(@RequestParam(value = "role", required = true) String roleIdTmp,
-        @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
-        @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
-        @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
-        @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
+            @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
+            @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
+            @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
+            @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
 
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
@@ -180,8 +186,9 @@ public class ScheduleController {
 
         form.setExistingRepetitionTypes(Repetition.values());
 
-        List<Service> serviceList = scheduleService.findServicesBetweenDays(date.toDateTime(new LocalTime(0, 0)),
-            date.toDateTime(new LocalTime(23, 59)), role, null);
+        DateTime fromDate = date.toDateTime(new LocalTime(0, 0));
+        DateTime toDate = date.toDateTime(new LocalTime(23, 59));
+        List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDate, toDate, role, null);
 
         for (Service service : serviceList) {
             ServiceForm serviceForm = new ServiceForm();
@@ -203,14 +210,29 @@ public class ScheduleController {
 
     /**
      * Adds a new service item to the services form
+     * 
      * @param model
-     * @return
+     *            Spring model instance
+     * @return The service form dialog view with a new service row
      */
     @RequestMapping(value = PATH_SERVICES_FORM_NEW, method = RequestMethod.GET)
     public String newService(Model model) {
 
         ServiceListForm form = (ServiceListForm) model.asMap().get(SERVICE_FORM_SESSION);
         form.addService(new ServiceForm());
+
+        return SERVICE_FORM_PAGE;
+    }
+
+    @RequestMapping(value = PATH_SERVICES_FORM_SAVE, method = RequestMethod.POST)
+    public String saveServices(@ModelAttribute(SERVICE_FORM_SESSION) @Valid ServiceListForm form, BindingResult result,
+            Model model) {
+
+        if (result.hasErrors()) {
+//            return showServiceForm(model);
+        }
+
+//        scheduleService.saveServiceType(form.toService());
 
         return SERVICE_FORM_PAGE;
     }

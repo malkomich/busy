@@ -301,6 +301,8 @@ public class BranchPage extends BusyPage {
                     repeatedDayList.add(day);
                     day += 7;
                 }
+            default:
+                break;
         }
 
         FluentWebElement dayCell = null;
