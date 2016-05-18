@@ -3,7 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.joda.org/joda/time/tags" prefix="joda"%>
 
-<form:form class="form-signin service-form" id="serviceForm" action="javascript:saveServices()"
+<form:form class="service-form" id="serviceForm" action="javascript:saveServices()"
     modelAttribute="serviceForm" commandName="serviceForm" method="POST">
 
     <div class="modal-header">
@@ -27,11 +27,9 @@
 
                 <div class="col-sm-2 form-group">
                     <div class="row">
-                        <spring:message code="schedule.service.start_time.placeholder" var="startTimePlaceholder" />
                         <form:input path="services[${status.index}].startTime" id="startTime" type="time" tabindex="1"
-                            class="form-control" placeholder="${startTimePlaceholder}" value="${service.startTime}" />
+                            class="form-control" value="${service.startTime}" />
                     </div>
-                    <div class="row service-endTime"></div>
                 </div>
 
                 <div class="col-sm-2 form-group">
@@ -64,7 +62,7 @@
                                         <c:set var="contains" value="true" />
                                     </c:if>
                                 </c:forEach>
-                                <li class="role-item"><input type="checkbox" value="${branchRole.id}"
+                                <li class="role-item"><input type="checkbox" class="form-control" value="${branchRole.id}"
                                     checked="${checked}">${branchRole}</li>
                             </c:forEach>
                         </ul>
@@ -133,4 +131,4 @@
     </div>
 </form:form>
 
-<script type="text/javascript" src="/js/signup.js"></script>
+<script type="text/javascript" src="/js/forms.js"></script>

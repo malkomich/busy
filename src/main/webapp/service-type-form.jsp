@@ -2,7 +2,7 @@
 <%@ taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 
 <div class="modal-body">
-    <form:form class="form-signin service-type-form" id="serviceTypeForm" action="javascript:saveServiceType()"
+    <form:form class="service-type-form" id="serviceTypeForm" action="javascript:saveServiceType()"
         modelAttribute="serviceTypeForm" method="POST">
 
         <div class="row">
@@ -51,4 +51,4 @@
 </div>
 <!-- .modal-body -->
 
-<script type="text/javascript" src="/js/signup.js"></script>
+<script type="text/javascript" src="/js/forms.js"></script>
