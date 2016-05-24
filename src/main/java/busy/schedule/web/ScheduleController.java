@@ -32,6 +32,7 @@ import busy.schedule.Schedule;
 import busy.schedule.ScheduleService;
 import busy.schedule.Service;
 import busy.schedule.Service.Repetition;
+import busy.schedule.ServiceType;
 import busy.user.User;
 
 /**
@@ -42,7 +43,8 @@ import busy.user.User;
  */
 @Controller
 @Scope(value = "singleton")
-@SessionAttributes(value = { CompanyController.ROLE_SESSION, ScheduleController.SERVICE_FORM_SESSION })
+@SessionAttributes(value = {CompanyController.ROLE_SESSION, ScheduleController.SERVICE_FORM_SESSION,
+    CompanyController.SERVICE_TYPES_SESSION})
 public class ScheduleController {
 
     /**
@@ -81,17 +83,14 @@ public class ScheduleController {
     private MessageSource messageSource;
 
     /**
-     * Request to get all bookings made between the given dates in the specific
-     * branch
+     * Request to get all bookings made between the given dates in the specific branch
      * 
      * @param roleIdTmp
      *            the role attached to the requested bookings
      * @param fromTmp
-     *            the initial instant in milliseconds of the period in which
-     *            find bookings
+     *            the initial instant in milliseconds of the period in which find bookings
      * @param toTmp
-     *            the final instant in milliseconds of the period in which find
-     *            bookings
+     *            the final instant in milliseconds of the period in which find bookings
      * @param offSetMinutesTmp
      *            the offset from UTC in milliseconds of the dates received
      * @param model
@@ -100,10 +99,10 @@ public class ScheduleController {
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
     public @ResponseBody String getMonthBookings(@RequestParam(value = "role", required = true) String roleIdTmp,
-            @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
-            @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
-            @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
-            @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
+        @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
+        @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
+        @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
+        @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
 
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
@@ -186,6 +185,10 @@ public class ScheduleController {
 
         form.setExistingRepetitionTypes(Repetition.values());
 
+        @SuppressWarnings("unchecked")
+        List<ServiceType> sTypes = (List<ServiceType>) model.asMap().get(CompanyController.SERVICE_TYPES_SESSION);
+        form.setExistingServiceTypes(sTypes);
+
         DateTime fromDate = date.toDateTime(new LocalTime(0, 0));
         DateTime toDate = date.toDateTime(new LocalTime(23, 59));
         List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDate, toDate, role, null);
@@ -194,10 +197,12 @@ public class ScheduleController {
             ServiceForm serviceForm = new ServiceForm();
             serviceForm.setId(service.getId());
             serviceForm.setStartTime(service.getStartTime().toLocalTime());
-            serviceForm.setServiceType(service.getServiceType());
+            serviceForm.setServiceType(service.getServiceType().getId());
             serviceForm.setRepeated((service.getCorrelation() > 0) ? true : false);
             for (Schedule schedule : service.getSchedules()) {
-                serviceForm.addRole(schedule.getRole());
+                if(!serviceForm.contains(schedule.getRole())) {
+                    serviceForm.addRole(schedule.getRole());                    
+                }
             }
 
             form.addService(serviceForm);
@@ -226,14 +231,16 @@ public class ScheduleController {
 
     @RequestMapping(value = PATH_SERVICES_FORM_SAVE, method = RequestMethod.POST)
     public String saveServices(@ModelAttribute(SERVICE_FORM_SESSION) @Valid ServiceListForm form, BindingResult result,
-            Model model) {
+        Model model) {
 
         if (result.hasErrors()) {
-//            return showServiceForm(model);
+            return SERVICE_FORM_PAGE;
         }
 
-//        scheduleService.saveServiceType(form.toService());
+        scheduleService.saveServices(form.toServices());
 
-        return SERVICE_FORM_PAGE;
+        Role role = (Role) model.asMap().get(CompanyController.ROLE_SESSION);
+
+        return "redirect:" + CompanyController.PATH_SCHEDULE + role.getId();
     }
 }

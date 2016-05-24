@@ -58,8 +58,8 @@ public class CompanyController {
      * Spring Model Attributes.
      */
     public static final String ROLE_SESSION = "role";
+    public static final String SERVICE_TYPES_SESSION = "serviceTypes";
     static final String USER_SESSION = "user";
-    static final String SERVICE_TYPES_SESSION = "serviceTypes";
 
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
     static final String COUNTRY_ITEMS_REQUEST = "countryItems";
@@ -72,17 +72,20 @@ public class CompanyController {
     /**
      * URL Paths.
      */
+    public static final String PATH_SCHEDULE = "/schedule/";
+    
     private static final String PATH_ROOT = "/";
     private static final String PATH_REGISTER_COMPANY = "/new_company";
     private static final String PATH_COMPANIES_UPDATE = "/get_company_list";
     private static final String PATH_COMPANY_CHANGE_STATE = "/change_company_state";
     private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
     private static final String PATH_COMPANY_INFO = "/company/{id}";
-    private static final String PATH_BRANCH = "/company/{cId}/role/{bId}";
     private static final String PATH_SERVICE_TYPE_DELETE = "/service-type/delete";
     private static final String PATH_SERVICE_TYPE_SAVE = "/service-type/save";
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
 
+    private static final String PATH_PARAM_ROLE = "{rId}";
+    
     /**
      * JSP's
      */
@@ -149,8 +152,8 @@ public class CompanyController {
      *            Spring model instance
      * @return The page to register companies
      */
-    @RequestMapping(value = PATH_BRANCH, method = RequestMethod.GET)
-    public String showBranchPage(@PathVariable("bId") String roleId, Model model) {
+    @RequestMapping(value = PATH_SCHEDULE + PATH_PARAM_ROLE, method = RequestMethod.GET)
+    public String showBranchPage(@PathVariable("rId") String roleId, Model model) {
 
         Role role = roleService.findRoleById(Integer.parseInt(roleId));
         model.addAttribute(ROLE_SESSION, role);
