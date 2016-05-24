@@ -17,6 +17,7 @@ $(function() {
             $('.page-header h3').text(this.getTitle());
             $('.btn-group button').removeClass('active');
             $('button[data-calendar-view="' + view + '"]').addClass('active');
+            setupListeners();
         },
         classes : {
             months : {
@@ -31,7 +32,6 @@ $(function() {
     };
 
     calendar = $('#calendar').calendar(options);
-    setupListeners();
 
     $('.btn-group button[data-calendar-nav]').each(function() {
         var $this = $(this);
