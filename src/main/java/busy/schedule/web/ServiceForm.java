@@ -7,10 +7,9 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormat;
 
-import busy.role.Role;
+import busy.schedule.Schedule;
+import busy.schedule.Service;
 
 public class ServiceForm {
 
@@ -31,16 +30,21 @@ public class ServiceForm {
     private LocalDate repetitionDate;
     private boolean repeated;
 
+    public ServiceForm(Service service) {
+        this();
+        id = service.getId();
+        startTime = service.getStartTime().toString("HH:mm");
+        serviceType = service.getServiceType().getId();
+        repeated = (service.getCorrelation() > 0) ? true : false;
+        for (Schedule schedule : service.getSchedules()) {
+            if (!roles.contains(schedule.getRole())) {
+                roles.add(schedule.getRoleId());
+            }
+        }
+    }
+
     public ServiceForm() {
         roles = new ArrayList<>();
-    }
-    
-    public boolean contains(int role) {
-        return roles.contains(role);
-    }
-    
-    public boolean contains(Role role) {
-        return roles.contains(role.getId());
     }
 
     // Getters and Setters
@@ -57,12 +61,8 @@ public class ServiceForm {
         return startTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime.toString("HH:mm");
-    }
-    
     public void setStartTime(String startTime) {
-        this.startTime = DateTimeFormat.forPattern("HH:mm").parseLocalTime(startTime).toString("HH:mm");
+        this.startTime = startTime;
     }
 
     public Integer getServiceType() {
@@ -83,10 +83,6 @@ public class ServiceForm {
 
     public void addRole(Integer role) {
         roles.add(role);
-    }
-    
-    public void addRole(Role role) {
-        roles.add(role.getId());
     }
 
     public boolean isRepeated() {

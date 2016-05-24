@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -78,9 +77,6 @@ public class ScheduleController {
 
     @Autowired
     private RoleService roleService;
-
-    @Autowired
-    private MessageSource messageSource;
 
     /**
      * Request to get all bookings made between the given dates in the specific branch
@@ -194,17 +190,7 @@ public class ScheduleController {
         List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDate, toDate, role, null);
 
         for (Service service : serviceList) {
-            ServiceForm serviceForm = new ServiceForm();
-            serviceForm.setId(service.getId());
-            serviceForm.setStartTime(service.getStartTime().toLocalTime());
-            serviceForm.setServiceType(service.getServiceType().getId());
-            serviceForm.setRepeated((service.getCorrelation() > 0) ? true : false);
-            for (Schedule schedule : service.getSchedules()) {
-                if(!serviceForm.contains(schedule.getRole())) {
-                    serviceForm.addRole(schedule.getRole());                    
-                }
-            }
-
+            ServiceForm serviceForm = new ServiceForm(service);
             form.addService(serviceForm);
         }
 
