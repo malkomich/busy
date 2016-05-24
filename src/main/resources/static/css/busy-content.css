@@ -142,10 +142,24 @@
 }
 
 /*
+ * Font size classes
+ */
+.fs-xs {
+    font-size: x-small;
+    line-height: 80%;
+}
+
+/*
+ * Position
+ */
+.center-v {
+    vertical-align: -webkit-baseline-middle;
+}
+
+/*
  * Service form
  */
 .service-roles-summary {
-    font-size: x-small;
     color: #ccc;
 }
 

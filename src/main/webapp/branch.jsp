@@ -42,7 +42,7 @@
                             <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text">${username}</span>
                             </a>
                             <c:forEach items="${roleList}" var="roleItem">
-                                <a href="/company/${roleItem.branch.company.id}/role/${roleItem.id}"
+                                <a href="/schedule/${roleItem.id}"
                                     class="role-select-menu-item"> <span class="role-select-menu-item-text">${roleItem.branch.company.tradeName}</span>
                                 </a>
                             </c:forEach>

@@ -3,8 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://www.joda.org/joda/time/tags" prefix="joda"%>
 
-<form:form class="service-form" id="serviceForm" action="javascript:saveServices()"
-    modelAttribute="serviceForm" commandName="serviceForm" method="POST">
+<form:form class="service-form" id="serviceForm" action="javascript:saveServices()" modelAttribute="serviceForm"
+    commandName="serviceForm" method="POST">
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -21,101 +21,109 @@
 
         <c:forEach items="${serviceForm.services}" var="service" varStatus="status">
             <div class="row service-row">
-                <div class="col-sm-1 form-group">
-                    <span class="glyphicon glyphicon-time"></span>
-                </div>
 
-                <div class="col-sm-2 form-group">
-                    <div class="row">
-                        <form:input path="services[${status.index}].startTime" id="startTime" type="time" tabindex="1"
-                            class="form-control" value="${service.startTime}" />
+                <div class="col-sm-3 form-group">
+                    <div class="col-sm-4">
+                        <span class="glyphicon glyphicon-time center-v"></span>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="row">
+                            <spring:message code="schedule.service.tooltip.start_time" var="startTimeTip" />
+                            <form:input path="services[${status.index}].startTime" id="startTime" type="time"
+                                tabindex="1" class="form-control" data-toggle="tooltip" data-placement="left"
+                                title="${startTimeTip}" />
+                            <form:errors path="services[${status.index}].startTime" cssClass="error fs-xs" />
+                        </div>
+                        <div class="row">
+                            <input id="endTime" type="time" tabindex="-1" class="form-control" readonly="true" />
+                        </div>
                     </div>
                 </div>
+                <!-- .form-group (TIME) -->
 
-                <div class="col-sm-2 form-group">
+                <div class="col-sm-3 form-group">
+                    <spring:message code="schedule.service.tooltip.service_type" var="sTypeTip" />
                     <form:select path="services[${status.index}].serviceType" id="serviceType" tabindex="2"
-                        class="form-control">
+                        class="form-control" data-toggle="tooltip" data-placement="left" title="${sTypeTip}">
                         <spring:message code="schedule.service.service_type.select" var="serviceTypeSelect" />
                         <form:option value="" label="${serviceTypeSelect}" />
-                        <c:choose>
-                            <c:when test="${empty services[status.index].serviceType}">
-                                <form:options items="${serviceTypes}" />
-                            </c:when>
-                            <c:otherwise>
-                                <form:options items="${serviceTypes}" itemValue="${service.serviceType}" />
-                            </c:otherwise>
-                        </c:choose>
+                        <c:forEach items="${serviceTypes}" var="type">
+                            <form:option label="${type}" value="${type.id}" duration="${type.duration}" />
+                        </c:forEach>
                     </form:select>
-                    <form:errors path="services[${status.index}].serviceType" cssClass="error" />
+                    <form:errors path="services[${status.index}].serviceType" cssClass="error fs-xs" />
                 </div>
+                <!-- .form-group (SERVICE TYPE) -->
 
-                <div class="col-sm-2 form-group">
+                <div class="col-sm-3 form-group">
                     <div class="row">
                         <a id="role-dropdown" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"
                             aria-expanded="false"><spring:message code="schedule.service.roles.dropdown" /> <b
                             class="caret"></b></a>
                         <ul class="dropdown-menu role-list" role="menu" aria-labelledby="role-dropdown">
                             <c:forEach items="${serviceForm.existingRoles}" var="branchRole">
-                                <c:set var="checked" value="false" />
-                                <c:forEach var="item" items="${service.roles}">
-                                    <c:if test="${item eq branchRole}">
-                                        <c:set var="contains" value="true" />
-                                    </c:if>
-                                </c:forEach>
-                                <li class="role-item"><input type="checkbox" class="form-control" value="${branchRole.id}"
-                                    checked="${checked}">${branchRole}</li>
+                                <li class="role-item"><form:checkbox path="services[${status.index}].roles"
+                                        value="${branchRole.key}" label="${branchRole.value}" /></li>
                             </c:forEach>
                         </ul>
-                        <form:errors path="services[${status.index}].roles" cssClass="error" />
                     </div>
                     <div class="row service-roles-summary">
+                        <form:errors path="services[${status.index}].roles" cssClass="error fs-xs" />
                         <ul>
                             <c:forEach var="item" items="${service.roles}">
-                                <li>${item}</li>
+                                <li id="${item}" class="fs-xs">${serviceForm.existingRoles[item]}</li>
                             </c:forEach>
                         </ul>
                     </div>
                 </div>
+                <!-- .form-group (ROLES) -->
 
-                <div class="col-sm-2 form-group">
+                <div class="col-sm-3 form-group">
                     <c:choose>
                         <c:when test="${service.repeated}">
                             <button type="button" class="btn btn-default">
-                                <spring:message code="modal.close" />
+                                <spring:message code="schedule.service.repetition.remove" />
                             </button>
                         </c:when>
                         <c:otherwise>
-                            <form:select path="services[${status.index}].repetitionType" id="repetitionType"
-                                tabindex="4" class="form-control">
-                                <c:forEach items="${serviceForm.existingRepetitionTypes}" var="rType">
-                                    <form:option value="${rType.msgCode}">
-                                        <spring:message code="${rType.msgCode}" />
-                                    </form:option>
-                                </c:forEach>
-                            </form:select>
+                            <div class="row">
+                                <spring:message code="schedule.service.tooltip.repetition_type" var="repTypeTip" />
+                                <form:select path="services[${status.index}].repetitionType" id="repetitionType"
+                                    tabindex="4" class="form-control" data-toggle="tooltip" data-placement="left"
+                                    title="${repTypeTip}">
+                                    <c:forEach items="${serviceForm.existingRepetitionTypes}" var="rType">
+                                        <form:option value="${rType.key}">
+                                            <spring:message code="${rType.value.msgCode}" />
+                                        </form:option>
+                                    </c:forEach>
+                                </form:select>
+                            </div>
+                            <div class="row">
+                                <spring:message code="schedule.service.tooltip.repetition_date" var="repDateTip" />
+                                <form:input path="services[${status.index}].repetitionDate" id="repetitionDate"
+                                    type="date" tabindex="5" class="form-control" value="${service.repetitionDate}"
+                                    data-toggle="tooltip" data-placement="left" title="${repDateTip}" />
+                                <form:errors path="services[${status.index}].repetitionDate" cssClass="error" />
+                            </div>
                         </c:otherwise>
                     </c:choose>
 
                 </div>
+                <!-- .form-group (REPETITION) -->
 
-                <div class="col-sm-2 form-group">
-                    <form:input path="services[${status.index}].repetitionDate" id="repetitionDate" type="date"
-                        tabindex="5" class="form-control" value="${service.repetitionDate}" />
-                    <form:errors path="services[${status.index}].repetitionDate" cssClass="error" />
-                </div>
             </div>
             <!-- .service-row -->
         </c:forEach>
 
         <div class="row service-row">
-            <div class="col-sm-1 form-group">
-                <span class="glyphicon glyphicon-time"></span>
+            <div class="col-sm-3 form-group">
+                <div class="col-sm-4">
+                    <span class="glyphicon glyphicon-time"></span>
+                </div>
+                <div class="col-sm-8">
+                    <a href="javascript:newService()"><span class="service-add glyphicon glyphicon-plus"></span></a>
+                </div>
             </div>
-
-            <div class="col-sm-1 form-group">
-                <a href="javascript:newService()"><span class="service-add glyphicon glyphicon-plus"></span></a>
-            </div>
-
         </div>
 
     </div>
@@ -132,3 +140,5 @@
 </form:form>
 
 <script type="text/javascript" src="/js/forms.js"></script>
+<script type="text/javascript" src="/js/moment.js"></script>
+<script type="text/javascript" src="/js/services.js"></script>
