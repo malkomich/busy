@@ -3,28 +3,44 @@ package busy.schedule.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 
 import busy.role.Role;
-import busy.schedule.ServiceType;
-import busy.schedule.Service.Repetition;
 
 public class ServiceForm {
 
     // Fields
 
     private int id;
+
+    @NotNull(message = "{schedule.service.start_time.empty}")
     private String startTime;
-    private ServiceType serviceType;
-    private List<Role> roles;
-    private Repetition repetitionType;
+
+    @NotNull(message = "{schedule.service.service_type.empty}")
+    private Integer serviceType;
+
+    @NotEmpty(message = "{schedule.service.roles.empty}")
+    private List<Integer> roles;
+
+    private Integer repetitionType;
     private LocalDate repetitionDate;
     private boolean repeated;
 
     public ServiceForm() {
         roles = new ArrayList<>();
+    }
+    
+    public boolean contains(int role) {
+        return roles.contains(role);
+    }
+    
+    public boolean contains(Role role) {
+        return roles.contains(role.getId());
     }
 
     // Getters and Setters
@@ -41,34 +57,38 @@ public class ServiceForm {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime.toString("HH:mm");
     }
     
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = DateTimeFormat.forPattern("HH:mm").print(startTime);
+    public void setStartTime(String startTime) {
+        this.startTime = DateTimeFormat.forPattern("HH:mm").parseLocalTime(startTime).toString("HH:mm");
     }
 
-    public ServiceType getServiceType() {
+    public Integer getServiceType() {
         return serviceType;
     }
 
-    public void setServiceType(ServiceType serviceType) {
+    public void setServiceType(Integer serviceType) {
         this.serviceType = serviceType;
     }
 
-    public List<Role> getRoles() {
+    public List<Integer> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Role> roles) {
+    public void setRoles(List<Integer> roles) {
         this.roles = roles;
     }
 
-    public void addRole(Role role) {
+    public void addRole(Integer role) {
         roles.add(role);
     }
     
+    public void addRole(Role role) {
+        roles.add(role.getId());
+    }
+
     public boolean isRepeated() {
         return repeated;
     }
@@ -76,12 +96,12 @@ public class ServiceForm {
     public void setRepeated(boolean repeated) {
         this.repeated = repeated;
     }
-    
-    public Repetition getRepetitionType() {
+
+    public Integer getRepetitionType() {
         return repetitionType;
     }
 
-    public void setRepetitionType(Repetition repetitionType) {
+    public void setRepetitionType(Integer repetitionType) {
         this.repetitionType = repetitionType;
     }
 
