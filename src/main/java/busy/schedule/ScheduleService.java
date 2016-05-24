@@ -70,5 +70,14 @@ public interface ScheduleService {
      *            the type of services wanted
      * @return The resultant list of services
      */
-    List<Service> findServicesBetweenDays(DateTime fromDateTime, DateTime toDateTime, Role role, ServiceType serviceType);
+    List<Service> findServicesBetweenDays(DateTime fromDateTime, DateTime toDateTime, Role role,
+        ServiceType serviceType);
+
+    /**
+     * Saves or updates a list of services
+     * 
+     * @param services
+     *            the list of services to be saved
+     */
+    void saveServices(List<Service> services);
 }

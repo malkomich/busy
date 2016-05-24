@@ -33,12 +33,19 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private ServiceDao serviceDao;
 
+    @Autowired
+    private ScheduleDao scheduleDao;
+
     public void setServiceTypeDao(ServiceTypeDao serviceTypeDao) {
         this.serviceTypeDao = serviceTypeDao;
     }
 
     public void setServiceDao(ServiceDao serviceDao) {
         this.serviceDao = serviceDao;
+    }
+
+    public void setSscheduleDao(ScheduleDao scheduleDao) {
+        this.scheduleDao = scheduleDao;
     }
 
     /*
@@ -104,6 +111,31 @@ public class ScheduleServiceImpl implements ScheduleService {
         ServiceType serviceType) {
 
         return serviceDao.findBetweenDays(fromDateTime, toDateTime, role, serviceType);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.schedule.ScheduleService#saveServices(java.util.List)
+     */
+    @Override
+    public void saveServices(List<busy.schedule.Service> serviceList) {
+
+        for (busy.schedule.Service service : serviceList) {
+            serviceDao.save(service);
+            saveSchedules(service.getSchedules());
+        }
+    }
+
+    /**
+     * Saves or updates a list of schedules.
+     * 
+     * @param scheduleList
+     *            the list of schedules to be saved
+     */
+    private void saveSchedules(List<Schedule> scheduleList) {
+        for (Schedule schedule : scheduleList) {
+            scheduleDao.save(schedule);
+        }
     }
 
 }
