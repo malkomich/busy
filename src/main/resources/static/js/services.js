@@ -1,6 +1,10 @@
 $(function() {
 
     var service_form = $('.service-form');
+    
+    if(!$('.service-row', service_form).length) {
+        newService();
+    }
 
     $('.service-row', service_form).each(function() {
         var row = $(this);

@@ -118,7 +118,7 @@
             <!-- .service-row -->
         </c:forEach>
 
-        <div class="row service-row">
+        <div class="row">
             <div class="col-sm-3 form-group">
                 <div class="col-sm-4">
                     <span class="glyphicon glyphicon-time"></span>
