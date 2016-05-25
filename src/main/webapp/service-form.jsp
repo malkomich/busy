@@ -35,7 +35,9 @@
                             <form:errors path="services[${status.index}].startTime" cssClass="error fs-xs" />
                         </div>
                         <div class="row">
-                            <input id="endTime" type="time" tabindex="-1" class="form-control" readonly="true" />
+                            <spring:message code="schedule.service.tooltip.end_time" var="endTimeTip" />
+                            <input id="endTime" type="time" tabindex="-1" class="form-control" readonly="true"
+                                data-toggle="tooltip" data-placement="left" title="${endTimeTip}" />
                         </div>
                     </div>
                 </div>
@@ -44,7 +46,7 @@
                 <div class="col-sm-3 form-group">
                     <spring:message code="schedule.service.tooltip.service_type" var="sTypeTip" />
                     <form:select path="services[${status.index}].serviceType" id="serviceType" tabindex="2"
-                        class="form-control" data-toggle="tooltip" data-placement="left" title="${sTypeTip}">
+                        class="form-control" data-toggle="tooltip" data-placement="top" title="${sTypeTip}">
                         <spring:message code="schedule.service.service_type.select" var="serviceTypeSelect" />
                         <form:option value="" label="${serviceTypeSelect}" />
                         <c:forEach items="${serviceTypes}" var="type">
@@ -89,7 +91,7 @@
                             <div class="row">
                                 <spring:message code="schedule.service.tooltip.repetition_type" var="repTypeTip" />
                                 <form:select path="services[${status.index}].repetitionType" id="repetitionType"
-                                    tabindex="4" class="form-control" data-toggle="tooltip" data-placement="left"
+                                    tabindex="4" class="form-control" data-toggle="tooltip" data-placement="right"
                                     title="${repTypeTip}">
                                     <c:forEach items="${serviceForm.existingRepetitionTypes}" var="rType">
                                         <form:option value="${rType}">
@@ -103,7 +105,7 @@
                                 <spring:message code="schedule.service.tooltip.repetition_date" var="repDateTip" />
                                 <form:input path="services[${status.index}].repetitionDate" id="repetitionDate"
                                     type="date" tabindex="5" class="form-control" value="${service.repetitionDate}"
-                                    data-toggle="tooltip" data-placement="left" title="${repDateTip}" />
+                                    data-toggle="tooltip" data-placement="right" title="${repDateTip}" />
                                 <form:errors path="services[${status.index}].repetitionDate" cssClass="error" />
                             </div>
                         </c:otherwise>
