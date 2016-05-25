@@ -64,6 +64,7 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_TYPE_FORM_SUBMIT_SELECTOR = "#submit";
     private static final String SERVICE_TYPE_FORM_ERROR_SELECTOR = "span.error";
 
+    private static final String SERVICE_FORM_SELECTOR = ".service-form";
     private static final String SERVICE_FORM_START_TIME = "#start-time";
     private static final String SERVICE_FORM_ROLES = "#service-roles";
     private static final String SERVICE_FORM_STYPE = "#service-type";
@@ -100,6 +101,7 @@ public class BranchPage extends BusyPage {
     public BranchPage dblClickDayCell(int day) {
 
         findFirst(DAY_CELL_SELECTOR, FilterConstructor.withText(String.valueOf(day))).doubleClick();
+        waitForJSandJQueryToLoad();
         return this;
     }
 
@@ -161,7 +163,13 @@ public class BranchPage extends BusyPage {
 
     public boolean formIsShown(int formType) {
 
-        return findFirst(SERVICE_TYPE_FORM_SELECTOR).isDisplayed();
+        String selector = null;
+        if(formType == FORM_SERVICE_TYPE) {
+            selector = SERVICE_TYPE_FORM_SELECTOR;
+        } else if(formType == FORM_SERVICE) {
+            selector = SERVICE_FORM_SELECTOR;
+        }
+        return findFirst(selector).isDisplayed();
     }
 
     public BranchPage setName(String name) {
@@ -283,7 +291,7 @@ public class BranchPage extends BusyPage {
         return !eventList.find(EVENT_SELECTOR).isEmpty();
     }
 
-    public boolean serviceRepeated(int day, String repetitionTmp) {
+    public boolean serviceRepeated(int day, String repetitionTmp, int daysAfter) {
 
         Repetition repetition = parseRepetition(repetitionTmp);
         

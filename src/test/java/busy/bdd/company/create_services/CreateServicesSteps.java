@@ -120,7 +120,7 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
 
         branchPage.selectRepetition(repetition, messageSource);
     }
-    
+
     @When("^I introduce the repetition date until \"([^\"]*)\" days after$")
     public void select_repetition_days(String daysTmp) throws Throwable {
 
@@ -140,19 +140,20 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
         branchPage.errorShown(BranchPage.FORM_SERVICE);
     }
 
-    @Then("^I should see the service created on day \"([^\"]*)\"$")
+    @Then("^I should see the service created on the day \"([^\"]*)\"$")
     public void service_created(String dayTmp) throws Throwable {
 
         int day = Integer.parseInt(dayTmp);
         branchPage.serviceCreated(day);
     }
 
-    @Then("^I should see the service created on the days after the day \"([^\"]*)\" according to the repeat "
-            + "type \"([^\"]*)\"$")
-    public void service_repeated(String dayTmp, String repetition) throws Throwable {
+    @Then("^I should see the service until \"([^\"]*)\" days after the day \"([^\"]*)\" with"
+        + " repetition type \"([^\"]*)\"$")
+    public void service_repeated(String daysAfterTmp,String dayTmp, String repetition) throws Throwable {
 
+        int daysAfter = Integer.parseInt(daysAfterTmp);
         int day = Integer.parseInt(dayTmp);
-        branchPage.serviceRepeated(day, repetition);
+        branchPage.serviceRepeated(day, repetition, daysAfter);
     }
 
 }
