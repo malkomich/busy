@@ -83,8 +83,8 @@
                 <div class="col-sm-3 form-group">
                     <c:choose>
                         <c:when test="${service.repeated}">
-                            <button type="button" class="btn btn-default">
-                                <spring:message code="schedule.service.repetition.remove" />
+                            <button type="button" class="btn btn-default" disabled="disabled">
+                                <spring:message code="schedule.service.repetition.repeated" />
                             </button>
                         </c:when>
                         <c:otherwise>
