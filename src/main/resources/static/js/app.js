@@ -33,6 +33,14 @@ $(function() {
 
     calendar = $('#calendar').calendar(options);
 
+});
+
+/*
+ * Initialize the event listeners for the calendar items.
+ */
+function setupListeners() {
+
+    // Navigation buttons
     $('.btn-group button[data-calendar-nav]').each(function() {
         var $this = $(this);
         $this.click(function() {
@@ -41,6 +49,7 @@ $(function() {
         });
     });
 
+    // View mode option buttons
     $('.btn-group button[data-calendar-view]').each(function() {
         var $this = $(this);
         $this.click(function() {
@@ -49,10 +58,8 @@ $(function() {
         });
     });
 
-});
-
-function setupListeners() {
-	$('.cal-cell').dblclick(function() {
+    // Day cells
+    $('.cal-cell').dblclick(function() {
         calendar.options.day = $('[data-cal-date]', this).data('cal-date');
 
         $.get("/service_form", {
@@ -62,35 +69,5 @@ function setupListeners() {
             $('.modal-content', modalContainer).html(data);
             modalContainer.modal();
         });
-    });
-}
-
-function newService() {
-    var form = $('#serviceForm');
-    var modalContainer = $('#modalForm');
-    $.get("/service_form/new", {
-        serviceForm : form.serialize()
-    }, function(data) {
-        var modalContainer = $('#modalForm');
-        $('.modal-content', modalContainer).html(data);
-        modalContainer.modal();
-    });
-}
-
-function saveServices() {
-    var form = $('#serviceForm');
-    $.post("/service_form/save", form.serialize(), function(data) {
-
-        var modalContainer = $('#modalForm');
-
-        if ($(data).is("form")) {
-            $('.modal-content', modalContainer).html(data);
-            modalContainer.modal('show');
-        } else {
-            modalContainer.modal('hide')
-
-            calendar.view();
-        }
-
     });
 }

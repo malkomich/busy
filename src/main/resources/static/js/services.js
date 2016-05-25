@@ -24,9 +24,9 @@ $(function() {
             var list = $('.service-roles-summary ul', row);
             var roleId = $(this).val();
 
-            var roleTipItem = $('#' + roleId, list); 
+            var roleTipItem = $('#' + roleId, list);
             var exists = $(roleTipItem).attr('id') === roleId;
-            
+
             if ($(this).is(':checked') && !exists) {
                 var roleLabel = $(this).next('label').text();
                 $(list).append('<li id="' + roleId + '" class="fs-xs">' + roleLabel + '</li>')
@@ -41,6 +41,42 @@ $(function() {
 
     });
 });
+
+/*
+ * Request the updated form, with a new blank service created, to the controller.
+ */
+function newService() {
+    var form = $('#serviceForm');
+    var modalContainer = $('#modalForm');
+    $.get("/service_form/new", {
+        serviceForm : form.serialize()
+    }, function(data) {
+        var modalContainer = $('#modalForm');
+        $('.modal-content', modalContainer).html(data);
+        modalContainer.modal();
+    });
+}
+
+/*
+ * Submit the service form to create the list of services.
+ */
+function saveServices() {
+    var form = $('#serviceForm');
+    $.post("/service_form/save", form.serialize(), function(data) {
+
+        var modalContainer = $('#modalForm');
+
+        if ($(data).is("form")) {
+            $('.modal-content', modalContainer).html(data);
+            modalContainer.modal('show');
+        } else {
+            modalContainer.modal('hide')
+
+            calendar.view();
+        }
+
+    });
+}
 
 /*
  * Update the end time input of a specific row according to start time and service type values.
