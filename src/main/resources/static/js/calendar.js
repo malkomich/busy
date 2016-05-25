@@ -1007,12 +1007,6 @@ if(!String.prototype.formatNum) {
 
 		$('*[data-toggle="tooltip"]').tooltip({container: this.options.tooltip_container});
 
-		$('*[data-cal-date]').click(function() {
-			var view = $(this).data('cal-view');
-			self.options.day = $(this).data('cal-date');
-			self.view(view);
-		});
-
 		this['_update_' + this.options.view]();
 
 		this._update_modal();
