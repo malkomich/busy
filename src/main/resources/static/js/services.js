@@ -1,8 +1,8 @@
 $(function() {
 
     var service_form = $('.service-form');
-    
-    if(!$('.service-row', service_form).length) {
+
+    if (!$('.service-row', service_form).length) {
         newService();
     }
 
@@ -12,10 +12,13 @@ $(function() {
 
         var typeSelect = $('#serviceType', this);
         var roleCheckboxes = $('.role-item input:checkbox', this);
-        var repetitionSelect = $('#repetitionType', this);
+        var repetitionTypeSelect = $('#repetitionType', this);
 
+        // Init update
         updateEndTime(row);
+        updateRepetitionDate(row);
 
+        // Set up event listeners
         $(startTimeInput).change(function() {
             updateEndTime(row);
         });
@@ -39,8 +42,8 @@ $(function() {
             }
         });
 
-        $(repetitionSelect).change(function() {
-
+        $(repetitionTypeSelect).change(function() {
+            updateRepetitionDate(row);
         });
 
     });
@@ -74,7 +77,7 @@ function saveServices() {
             $('.modal-content', modalContainer).html(data);
             modalContainer.modal('show');
         } else {
-            modalContainer.modal('hide')
+            modalContainer.modal('hide');
 
             calendar.view();
         }
@@ -94,10 +97,26 @@ function updateEndTime(row) {
     if (startTime && duration) {
 
         var endTime = moment(startTime, "HH:mm").add(duration, 'minutes');
-        $(endInput).val(endTime.format('HH:mm')).show();
+        $(endInput).val(endTime.format('HH:mm')).css('visibility', 'visible')
 
     } else {
 
-        $('#endTime', row).hide();
+        $('#endTime', row).css('visibility', 'hidden');
+    }
+}
+
+/*
+ * Update the repetition date field visibility, depending if a repetition type has been chosen.
+ */
+function updateRepetitionDate(row) {
+
+    
+    var repetitionType = $('#repetitionType', row).val();
+    var repetitionDateInput = $('#repetitionDate', row);
+
+    if (repetitionType != 'NONE') {
+        $(repetitionDateInput).css('visibility', 'visible')
+    } else {
+        $(repetitionDateInput).css('visibility', 'hidden');
     }
 }
