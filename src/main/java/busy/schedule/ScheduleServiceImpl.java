@@ -2,6 +2,7 @@ package busy.schedule;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,11 +119,21 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#saveServices(java.util.List)
      */
     @Override
-    public void saveServices(List<busy.schedule.Service> serviceList) {
+    public void saveServices(Map<Integer, List<busy.schedule.Service>> serviceMap) {
 
-        for (busy.schedule.Service service : serviceList) {
-            serviceDao.save(service);
-            saveSchedules(service.getSchedules());
+        for (List<busy.schedule.Service> serviceList : serviceMap.values()) {
+
+            busy.schedule.Service serviceReference = serviceList.get(0);
+            serviceDao.save(serviceReference);
+            int correlation = (serviceList.size() > 1) ? serviceReference.getId() : 0;
+
+            for (busy.schedule.Service service : serviceList) {
+
+                service.setCorrelation(correlation);
+
+                serviceDao.save(service);
+                saveSchedules(service.getSchedules(), service.getId());
+            }
         }
     }
 
@@ -131,10 +142,13 @@ public class ScheduleServiceImpl implements ScheduleService {
      * 
      * @param scheduleList
      *            the list of schedules to be saved
+     * @param serviceId
+     *            the unique id of the service to attach the schedules
      */
-    private void saveSchedules(List<Schedule> scheduleList) {
+    private void saveSchedules(List<Schedule> scheduleList, int serviceId) {
         for (Schedule schedule : scheduleList) {
-            scheduleDao.save(schedule);
+            System.out.println("SERVICE: " + schedule.toString());
+            scheduleDao.save(schedule, serviceId);
         }
     }
 

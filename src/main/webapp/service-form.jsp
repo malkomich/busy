@@ -92,11 +92,12 @@
                                     tabindex="4" class="form-control" data-toggle="tooltip" data-placement="left"
                                     title="${repTypeTip}">
                                     <c:forEach items="${serviceForm.existingRepetitionTypes}" var="rType">
-                                        <form:option value="${rType.key}">
-                                            <spring:message code="${rType.value.msgCode}" />
+                                        <form:option value="${rType}">
+                                            <spring:message code="${rType.msgCode}" />
                                         </form:option>
                                     </c:forEach>
                                 </form:select>
+                                <form:errors path="services[${status.index}].repetitionType" cssClass="error fs-xs" />
                             </div>
                             <div class="row">
                                 <spring:message code="schedule.service.tooltip.repetition_date" var="repDateTip" />

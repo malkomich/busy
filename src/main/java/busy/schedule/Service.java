@@ -29,7 +29,7 @@ public class Service implements Serializable {
             this.id = id;
             this.msgCode = msgCode;
         }
-        
+
         public int getId() {
             return id;
         }
@@ -78,6 +78,10 @@ public class Service implements Serializable {
         return schedules;
     }
 
+    public void setSchedules(List<Schedule> scheduleList) {
+        schedules = scheduleList;
+    }
+
     public void addSchedule(Schedule schedule) {
         schedules.add(schedule);
     }
@@ -97,6 +101,16 @@ public class Service implements Serializable {
 
     public Integer getServiceTypeId() {
         return (serviceType != null) ? serviceType.getId() : null;
+    }
+
+    public List<Schedule> getScheduleReplications() {
+
+        List<Schedule> scheduleList = new ArrayList<>();
+        for (Schedule schedule : this.schedules) {
+            scheduleList.add(schedule.replicate());
+        }
+
+        return scheduleList;
     }
 
 }

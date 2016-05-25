@@ -6,6 +6,7 @@ import java.util.List;
 
 import busy.role.Role;
 import busy.user.User;
+import busy.util.Replicable;
 
 /**
  * Schedule model. It represent a service unitary scheduled for a specific role.
@@ -13,12 +14,11 @@ import busy.user.User;
  * @author malkomich
  *
  */
-public class Schedule implements Serializable {
+public class Schedule implements Serializable, Replicable<Schedule> {
 
     private static final long serialVersionUID = 5167696953323992336L;
 
     private int id;
-    private Service service;
     private Role role;
 
     private List<User> bookings;
@@ -34,14 +34,6 @@ public class Schedule implements Serializable {
     @SuppressWarnings("unused")
     private void setId(Integer id) {
         this.id = id;
-    }
-
-    public Service getService() {
-        return service;
-    }
-
-    public void setService(Service service) {
-        this.service = service;
     }
 
     public Role getRole() {
@@ -60,12 +52,16 @@ public class Schedule implements Serializable {
         bookings.add(user);
     }
 
-    public Integer getServiceId() {
-        return (service != null) ? service.getId() : null;
-    }
-
     public Integer getRoleId() {
         return (role != null) ? role.getId() : null;
+    }
+
+    @Override
+    public Schedule replicate() {
+
+        Schedule sTarget = new Schedule();
+        sTarget.role = role;
+        return sTarget;
     }
 
 }

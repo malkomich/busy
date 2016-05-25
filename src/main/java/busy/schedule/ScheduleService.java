@@ -1,6 +1,7 @@
 package busy.schedule;
 
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 
@@ -74,10 +75,11 @@ public interface ScheduleService {
         ServiceType serviceType);
 
     /**
-     * Saves or updates a list of services
+     * Saves or updates a map of service lists. The services are grouped by the correlation, which
+     * indicates that a list of services are result of a repetition of one of them.
      * 
      * @param services
-     *            the list of services to be saved
+     *            the map of services to be saved
      */
-    void saveServices(List<Service> services);
+    void saveServices(Map<Integer, List<Service>> services);
 }

@@ -46,53 +46,40 @@ public class ScheduleDBTest extends AbstractDBTest {
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void insertWithServiceNull() {
-
-        Schedule schedule = new Schedule();
-        schedule.setRole(role);
-
-        repository.save(schedule);
-    }
-
-    @Test(expected = DataIntegrityViolationException.class)
     public void insertWithServiceInvalid() {
 
         Schedule schedule = new Schedule();
         SecureSetter.setId(service, INVALID_ID);
-        schedule.setService(service);
         schedule.setRole(role);
 
-        repository.save(schedule);
+        repository.save(schedule, service.getId());
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void insertWithRoleNull() {
 
         Schedule schedule = new Schedule();
-        schedule.setService(service);
 
-        repository.save(schedule);
+        repository.save(schedule, service.getId());
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void insertWithRoleInvalid() {
 
         Schedule schedule = new Schedule();
-        schedule.setService(service);
         SecureSetter.setId(role, INVALID_ID);
         schedule.setRole(role);
 
-        repository.save(schedule);
+        repository.save(schedule, service.getId());
     }
     
     @Test
     public void insertSuccessfully() {
 
         Schedule schedule = new Schedule();
-        schedule.setService(service);
         schedule.setRole(role);
 
-        repository.save(schedule);
+        repository.save(schedule, service.getId());
     }
 
 }

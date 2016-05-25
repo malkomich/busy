@@ -6,10 +6,10 @@ import java.util.List;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
-import org.joda.time.LocalDate;
 
 import busy.schedule.Schedule;
 import busy.schedule.Service;
+import busy.schedule.Service.Repetition;
 
 public class ServiceForm {
 
@@ -26,8 +26,8 @@ public class ServiceForm {
     @NotEmpty(message = "{schedule.service.roles.empty}")
     private List<Integer> roles;
 
-    private Integer repetitionType;
-    private LocalDate repetitionDate;
+    private Repetition repetitionType;
+    private String repetitionDate;
     private boolean repeated;
 
     public ServiceForm(Service service) {
@@ -82,7 +82,9 @@ public class ServiceForm {
     }
 
     public void addRole(Integer role) {
-        roles.add(role);
+        if (!roles.contains(role)) {
+            roles.add(role);
+        }
     }
 
     public boolean isRepeated() {
@@ -93,19 +95,19 @@ public class ServiceForm {
         this.repeated = repeated;
     }
 
-    public Integer getRepetitionType() {
+    public Repetition getRepetitionType() {
         return repetitionType;
     }
 
-    public void setRepetitionType(Integer repetitionType) {
+    public void setRepetitionType(Repetition repetitionType) {
         this.repetitionType = repetitionType;
     }
 
-    public LocalDate getRepetitionDate() {
+    public String getRepetitionDate() {
         return repetitionDate;
     }
 
-    public void setRepetitionDate(LocalDate repetitionDate) {
+    public void setRepetitionDate(String repetitionDate) {
         this.repetitionDate = repetitionDate;
     }
 

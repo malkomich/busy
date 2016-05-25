@@ -13,7 +13,9 @@ public interface ScheduleDao {
      * 
      * @param schedule
      *            the schedule object to be saved
+     * @param serviceId
+     *            the unique id of the service to attach the schedules
      */
-    void save(Schedule schedule);
+    void save(Schedule schedule, int serviceId);
 
 }

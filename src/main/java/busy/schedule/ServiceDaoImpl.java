@@ -193,7 +193,6 @@ public class ServiceDaoImpl implements ServiceDao {
 
                 Schedule schedule = new Schedule();
                 SecureSetter.setId(schedule, rs.getInt(ALIAS_SCHEDULE_ID));
-                schedule.setService(service);
                 schedule.setRole(role);
 
                 do {

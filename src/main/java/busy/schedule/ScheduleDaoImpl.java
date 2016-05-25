@@ -53,16 +53,16 @@ public class ScheduleDaoImpl implements ScheduleDao {
      * @see busy.schedule.ScheduleDao#save(busy.schedule.Schedule)
      */
     @Override
-    public void save(Schedule schedule) {
+    public void save(Schedule schedule, int serviceId) {
 
         if (schedule.getId() > 0) {
 
-            jdbcTemplate.update(SQL_UPDATE, schedule.getServiceId(), schedule.getRoleId(), schedule.getId());
+            jdbcTemplate.update(SQL_UPDATE, serviceId, schedule.getRoleId(), schedule.getId());
 
         } else {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put(SERVICE_ID, schedule.getServiceId());
+            parameters.put(SERVICE_ID, serviceId);
             parameters.put(ROLE_ID, schedule.getRoleId());
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
