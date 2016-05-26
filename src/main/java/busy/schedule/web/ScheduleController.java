@@ -42,8 +42,7 @@ import busy.user.User;
  */
 @Controller
 @Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.ROLE_SESSION, ScheduleController.SERVICE_FORM_SESSION,
-    CompanyController.SERVICE_TYPES_SESSION})
+@SessionAttributes(value = {CompanyController.ROLE_SESSION, ScheduleController.SERVICE_FORM_SESSION})
 public class ScheduleController {
 
     /**
@@ -181,9 +180,8 @@ public class ScheduleController {
 
         form.setExistingRepetitionTypes(Repetition.values());
 
-        @SuppressWarnings("unchecked")
-        List<ServiceType> sTypes = (List<ServiceType>) model.asMap().get(CompanyController.SERVICE_TYPES_SESSION);
-        form.setExistingServiceTypes(sTypes);
+        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(role.getCompany());
+        form.setExistingServiceTypes(serviceTypes);
 
         DateTime fromDate = date.toDateTime(new LocalTime(0, 0));
         DateTime toDate = date.toDateTime(new LocalTime(23, 59));

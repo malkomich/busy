@@ -49,8 +49,8 @@
                         class="form-control" data-toggle="tooltip" data-placement="top" title="${sTypeTip}">
                         <spring:message code="schedule.service.service_type.select" var="serviceTypeSelect" />
                         <form:option value="" label="${serviceTypeSelect}" />
-                        <c:forEach items="${serviceTypes}" var="type">
-                            <form:option label="${type}" value="${type.id}" duration="${type.duration}" />
+                        <c:forEach items="${serviceForm.existingServiceTypes}" var="sType">
+                            <form:option label="${sType.value}" value="${sType.key}" duration="${sType.value.duration}" />
                         </c:forEach>
                     </form:select>
                     <form:errors path="services[${status.index}].serviceType" cssClass="error fs-xs" />
@@ -90,9 +90,9 @@
                         <c:otherwise>
                             <div class="row">
                                 <spring:message code="schedule.service.tooltip.repetition_type" var="repTypeTip" />
-                                <form:select path="services[${status.index}].repetitionType" id="service-repetition-type"
-                                    tabindex="4" class="form-control" data-toggle="tooltip" data-placement="right"
-                                    title="${repTypeTip}">
+                                <form:select path="services[${status.index}].repetitionType"
+                                    id="service-repetition-type" tabindex="4" class="form-control" data-toggle="tooltip"
+                                    data-placement="right" title="${repTypeTip}">
                                     <c:forEach items="${serviceForm.existingRepetitionTypes}" var="rType">
                                         <form:option value="${rType}">
                                             <spring:message code="${rType.msgCode}" />

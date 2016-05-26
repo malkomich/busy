@@ -58,7 +58,7 @@ public class CompanyController {
      * Spring Model Attributes.
      */
     public static final String ROLE_SESSION = "role";
-    public static final String SERVICE_TYPES_SESSION = "serviceTypes";
+    static final String SERVICE_TYPES_SESSION = "serviceTypes";
     static final String USER_SESSION = "user";
 
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
