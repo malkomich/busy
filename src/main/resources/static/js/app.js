@@ -33,13 +33,6 @@ $(function() {
 
     calendar = $('#calendar').calendar(options);
 
-});
-
-/*
- * Initialize the event listeners for the calendar items.
- */
-function setupListeners() {
-
     // Navigation buttons
     $('.btn-group button[data-calendar-nav]').each(function() {
         var $this = $(this);
@@ -57,6 +50,13 @@ function setupListeners() {
             setupListeners();
         });
     });
+
+});
+
+/*
+ * Initialize the event listeners for the calendar items.
+ */
+function setupListeners() {
 
     // Day cells
     $('.cal-cell').dblclick(function() {
