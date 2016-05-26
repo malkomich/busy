@@ -175,6 +175,7 @@ public class ServiceDaoImpl implements ServiceDao {
                     SecureSetter.setId(service, id);
                     service.setCorrelation(rs.getInt(CORRELATION));
 
+                    ServiceType serviceType = this.serviceType;
                     if (serviceType == null) {
                         serviceType = new ServiceType();
                         SecureSetter.setId(serviceType, rs.getInt(ALIAS_SERVICE_TYPE_ID));

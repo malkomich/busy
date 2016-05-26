@@ -206,6 +206,7 @@ public class RoleDaoImpl implements RoleDao {
             SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
 
             // Set User
+            User user = this.user;
             if (user == null) {
                 user = new User();
                 SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
@@ -246,6 +247,7 @@ public class RoleDaoImpl implements RoleDao {
 
             role.setUser(user);
 
+            Branch branch = this.branch;
             if (branch == null) {
                 branch = new Branch();
                 SecureSetter.setId(branch, rs.getInt(ALIAS_BRANCH_ID));
