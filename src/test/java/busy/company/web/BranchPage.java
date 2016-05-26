@@ -243,7 +243,8 @@ public class BranchPage extends BusyPage {
 
             String[] roles = rolesTmp.split(",");
             for (String role : roles) {
-                list.find("input[type='checkbox']", FilterConstructor.withText(role)).click();
+                FluentWebElement item = list.findFirst("li", FilterConstructor.containingText(role));
+                item.find("input[type=checkbox]").click();
             }
         }
 

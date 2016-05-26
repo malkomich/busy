@@ -77,6 +77,13 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
         String scriptPath = "classpath:database/add_service_type.sql";
         template.execute(getSQLScript(scriptPath));
     }
+    
+    @When("^I add the roles \"([^\"]*)\"$")
+    public void add_roles(String roles) throws Throwable {
+        
+        String scriptPath = "classpath:database/add_roles.sql";
+        template.execute(getSQLScript(scriptPath));
+    }
 
     @When("^I double click the cell of day \"([^\"]*)\" in the schedule$")
     public void double_click_day_cell(String dayTmp) throws Throwable {

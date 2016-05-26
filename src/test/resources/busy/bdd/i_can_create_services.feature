@@ -15,6 +15,7 @@ Feature: An user will be able to create new services in his company schedule
     
     Scenario Outline: Add a service with invalid data
         When I add at least one service type
+        And I add the roles <roles>
         And I double click the cell of day "15" in the schedule
         Then I should see a dialog to enter the data of the new service
         When I introduce the start time <start_time>
@@ -31,6 +32,7 @@ Feature: An user will be able to create new services in his company schedule
     
     Scenario Outline: Add a service without repetition successfully
         When I add at least one service type
+        And I add the roles <roles>
         And I double click the cell of day "15" in the schedule
         Then I should see a dialog to enter the data of the new service
         When I introduce the start time <start_time>
@@ -46,6 +48,7 @@ Feature: An user will be able to create new services in his company schedule
     
     Scenario Outline: Add a service with repetition successfully
         When I add at least one service type
+        And I add the roles <roles>
         And I double click the cell of day "15" in the schedule
         Then I should see a dialog to enter the data of the new service
         When I introduce the start time <start_time>
