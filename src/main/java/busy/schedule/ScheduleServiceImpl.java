@@ -147,7 +147,6 @@ public class ScheduleServiceImpl implements ScheduleService {
      */
     private void saveSchedules(List<Schedule> scheduleList, int serviceId) {
         for (Schedule schedule : scheduleList) {
-            System.out.println("SERVICE: " + schedule.toString());
             scheduleDao.save(schedule, serviceId);
         }
     }

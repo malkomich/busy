@@ -217,6 +217,10 @@ public class ScheduleController {
     public String saveServices(@ModelAttribute(SERVICE_FORM_SESSION) @Valid ServiceListForm form, BindingResult result,
         Model model) {
 
+        ServiceValidator validator = new ServiceValidator();
+
+        validator.validate(form, result);
+        
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
         }

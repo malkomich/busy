@@ -129,11 +129,16 @@ public class ServiceListForm {
                     break;
             }
 
-            LocalDate repetitionDate = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(form.getRepetitionDate());
-            List<Service> repeatedServices = getRepeatedServices(service, intervalDays, repetitionDate);
+            // Only if the user has requested the repetition
+            if (intervalDays > 0) {
 
-            for (Service s : repeatedServices) {
-                serviceMap.get(iteration).add(s);
+                LocalDate repetitionDate =
+                    DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(form.getRepetitionDate());
+                List<Service> repeatedServices = getRepeatedServices(service, intervalDays, repetitionDate);
+
+                for (Service s : repeatedServices) {
+                    serviceMap.get(iteration).add(s);
+                }
             }
 
             iteration++;
@@ -157,13 +162,13 @@ public class ServiceListForm {
     private List<Service> getRepeatedServices(Service service, int intervalDays, LocalDate repetitionDate) {
 
         List<Service> serviceList = new ArrayList<>();
-        
+
         if (intervalDays > 0) {
             DateTime date = service.getStartTime();
             long limitMillis = repetitionDate.toDateTime(date.toLocalTime()).getMillis();
-            
-            while((date = date.plusDays(intervalDays)).isBefore(limitMillis) ) {
-                
+
+            while ((date = date.plusDays(intervalDays)).isBefore(limitMillis)) {
+
                 Service serviceCopy = new Service();
                 serviceCopy.setStartTime(date);
                 serviceCopy.setServiceType(service.getServiceType());
@@ -171,7 +176,7 @@ public class ServiceListForm {
 
                 serviceList.add(serviceCopy);
             }
-            
+
         }
         return serviceList;
     }

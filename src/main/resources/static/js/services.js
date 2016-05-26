@@ -110,7 +110,7 @@ function updateEndTime(row) {
     if (startTime && duration) {
 
         var endTime = moment(startTime, "HH:mm").add(duration, 'minutes');
-        $(endInput).val(endTime.format('HH:mm')).css('visibility', 'visible')
+        $(endInput).val(endTime.format('HH:mm')).css('visibility', 'visible');
 
     } else {
 
@@ -128,8 +128,10 @@ function updateRepetitionDate(row) {
     var repetitionDateInput = $(selectors.REP_DATE_INPUT, row);
 
     if (repetitionType != 'NONE') {
-        $(repetitionDateInput).css('visibility', 'visible')
+        $(repetitionDateInput).css('visibility', 'visible');
+        $('#rep-date-error').show();
     } else {
         $(repetitionDateInput).css('visibility', 'hidden');
+        $('#rep-date-error').hide();
     }
 }

@@ -106,7 +106,8 @@
                                 <form:input path="services[${status.index}].repetitionDate" id="service-repetition-date"
                                     type="date" tabindex="5" class="form-control" value="${service.repetitionDate}"
                                     data-toggle="tooltip" data-placement="right" title="${repDateTip}" />
-                                <form:errors path="services[${status.index}].repetitionDate" cssClass="error" />
+                                <form:errors path="services[${status.index}].repetitionDate" cssClass="error fs-xs"
+                                    id="rep-date-error" />
                             </div>
                         </c:otherwise>
                     </c:choose>
