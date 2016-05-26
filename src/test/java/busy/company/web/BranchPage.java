@@ -29,7 +29,7 @@ public class BranchPage extends BusyPage {
 
     // Assures the maximum day for all possible months
     private static final int MAX_DAY_OF_MONTH = 28;
-    
+
     /**
      * Method flow modifiers
      */
@@ -51,7 +51,7 @@ public class BranchPage extends BusyPage {
 
     private static final String SERVICE_TYPE_LIST_SELECTOR = "#service-type-list";
     private static final String SERVICE_TYPE_ITEM_SELECTOR = ".service-type-item";
-    private static final String[] SERVICE_TYPE_PARAMS_SELECTOR = { ".name", ".description", ".bookings", ".duration" };
+    private static final String[] SERVICE_TYPE_PARAMS_SELECTOR = {".name", ".description", ".bookings", ".duration"};
     private static final String SERVICE_TYPE_ADD_SELECTOR = ".service-type_add";
     private static final String SERVICE_TYPE_MODIFY_SELECTOR = ".service-type_modify";
     private static final String SERVICE_TYPE_DELETE_SELECTOR = ".service-type_delete";
@@ -125,7 +125,7 @@ public class BranchPage extends BusyPage {
             for (int i = 0; i < serviceProperties.length; i++) {
                 if (SERVICE_TYPE_PARAMS_SELECTOR[i].contains("description")) {
                     if (item.findFirst(SERVICE_TYPE_PARAMS_SELECTOR[0]).getAttribute("title")
-                            .contains(serviceProperties[i])) {
+                        .contains(serviceProperties[i])) {
                         matches++;
                     }
                 } else if (item.findFirst(SERVICE_TYPE_PARAMS_SELECTOR[i]).getText().contains(serviceProperties[i])) {
@@ -164,9 +164,9 @@ public class BranchPage extends BusyPage {
     public boolean formIsShown(int formType) {
 
         String selector = null;
-        if(formType == FORM_SERVICE_TYPE) {
+        if (formType == FORM_SERVICE_TYPE) {
             selector = SERVICE_TYPE_FORM_SELECTOR;
-        } else if(formType == FORM_SERVICE) {
+        } else if (formType == FORM_SERVICE) {
             selector = SERVICE_FORM_SELECTOR;
         }
         return findFirst(selector).isDisplayed();
@@ -228,8 +228,8 @@ public class BranchPage extends BusyPage {
     public BranchPage selectServiceType(String serviceType) {
 
         if (!serviceType.isEmpty()) {
-            Select select = new Select(getDriver().findElement(By.cssSelector(SERVICE_FORM_STYPE)));
-            select.selectByVisibleText(serviceType);
+            FluentWebElement select = findFirst(SERVICE_FORM_STYPE);
+            select.find("option", FilterConstructor.containingText(serviceType)).click();
         }
 
         return this;
@@ -256,14 +256,14 @@ public class BranchPage extends BusyPage {
 
         if (repetition != null) {
             String repetitionLabel =
-                    messageSource.getMessage(repetition.getMsgCode(), null, LocaleContextHolder.getLocale()).trim();
+                messageSource.getMessage(repetition.getMsgCode(), null, LocaleContextHolder.getLocale()).trim();
             Select select = new Select(getDriver().findElement(By.cssSelector(SERVICE_FORM_REPETITION_TYPE)));
             select.selectByVisibleText(repetitionLabel);
         }
 
         return this;
     }
-    
+
     public BranchPage setRepetitionDate(int days, MessageSource messageSource) {
 
         DateTime date = new DateTime().plusDays(days);
@@ -294,18 +294,18 @@ public class BranchPage extends BusyPage {
     public boolean serviceRepeated(int day, String repetitionTmp, int daysAfter) {
 
         Repetition repetition = parseRepetition(repetitionTmp);
-        
+
         List<Integer> repeatedDayList = new ArrayList<>();
-        
-        switch(repetition) {
+
+        switch (repetition) {
             case DAILY:
-                while(day < MAX_DAY_OF_MONTH) {
+                while (day < MAX_DAY_OF_MONTH) {
                     repeatedDayList.add(day);
                     day++;
                 }
                 break;
             case WEEKLY:
-                while(day < MAX_DAY_OF_MONTH) {
+                while (day < MAX_DAY_OF_MONTH) {
                     repeatedDayList.add(day);
                     day += 7;
                 }
@@ -316,11 +316,11 @@ public class BranchPage extends BusyPage {
         FluentWebElement dayCell = null;
 
         FluentWebElement eventList = null;
-        for(int repeatedDay : repeatedDayList) {
+        for (int repeatedDay : repeatedDayList) {
             dayCell = findFirst(DAY_CELL_SELECTOR, FilterConstructor.withText(String.valueOf(repeatedDay)));
             try {
                 eventList = dayCell.findFirst(DAY_EVENTS_SELECTOR);
-                if(eventList.find(EVENT_SELECTOR).isEmpty()) {
+                if (eventList.find(EVENT_SELECTOR).isEmpty()) {
                     return false;
                 }
             } catch (NoSuchElementException e) {
