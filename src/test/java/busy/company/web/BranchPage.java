@@ -65,8 +65,8 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_TYPE_FORM_ERROR_SELECTOR = "span.error";
 
     private static final String SERVICE_FORM_SELECTOR = ".service-form";
-    private static final String SERVICE_FORM_START_TIME = "#start-time";
-    private static final String SERVICE_FORM_ROLES = "#service-roles";
+    private static final String SERVICE_FORM_START_TIME = "#service-start-time";
+    private static final String SERVICE_FORM_ROLES = ".role-list";
     private static final String SERVICE_FORM_STYPE = "#service-type";
     private static final String SERVICE_FORM_REPETITION_TYPE = "#service-repetition-type";
     private static final String SERVICE_FORM_REPETITION_DATE = "#service-repetition-date";
@@ -239,11 +239,11 @@ public class BranchPage extends BusyPage {
 
         if (!rolesTmp.isEmpty()) {
 
-            Select select = new Select(getDriver().findElement(By.cssSelector(SERVICE_FORM_ROLES)));
+            FluentWebElement list = findFirst(SERVICE_FORM_ROLES);
 
             String[] roles = rolesTmp.split(",");
             for (String role : roles) {
-                select.selectByVisibleText(role);
+                list.find("input[type='checkbox']", FilterConstructor.withText(role)).click();
             }
         }
 

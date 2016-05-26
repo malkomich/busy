@@ -1,18 +1,31 @@
+
+var selectors = {
+        'SERV_FORM': '.service-form',
+        'SERV_ROW': '.service-row',
+        'START_TIME_INPUT': '#service-start-time',
+        'END_TIME_INPUT': '#service-end-time',
+        'SERV_TYPE_SELECT': '#service-type',
+        'ROLE_CHECKBOX': '.role-item input:checkbox',
+        'ROLE_TIPS_LIST': '.service-roles-summary ul',
+        'REP_TYPE_SELECT': '#service-repetition-type',
+        'REP_DATE_INPUT': '#service-repetition-date',
+    };
+
 $(function() {
 
-    var service_form = $('.service-form');
+    var service_form = $(selectors.SERV_FORM);
 
-    if (!$('.service-row', service_form).length) {
+    if (!$(selectors.SERV_ROW, service_form).length) {
         newService();
     }
 
-    $('.service-row', service_form).each(function() {
+    $(selectors.SERV_ROW, service_form).each(function() {
         var row = $(this);
-        var startTimeInput = $('#startTime', this);
+        var startTimeInput = $(selectors.START_TIME_INPUT, this);
 
-        var typeSelect = $('#serviceType', this);
-        var roleCheckboxes = $('.role-item input:checkbox', this);
-        var repetitionTypeSelect = $('#repetitionType', this);
+        var typeSelect = $(selectors.SERV_TYPE_SELECT, this);
+        var roleCheckboxes = $(selectors.ROLE_CHECKBOX, this);
+        var repetitionTypeSelect = $(selectors.REP_TYPE_SELECT, this);
 
         // Init update
         updateEndTime(row);
@@ -28,7 +41,7 @@ $(function() {
         });
 
         $(roleCheckboxes).change(function() {
-            var list = $('.service-roles-summary ul', row);
+            var list = $(selectors.ROLE_TIPS_LIST, row);
             var roleId = $(this).val();
 
             var roleTipItem = $('#' + roleId, list);
@@ -53,7 +66,7 @@ $(function() {
  * Request the updated form, with a new blank service created, to the controller.
  */
 function newService() {
-    var form = $('#serviceForm');
+    var form = $(selectors.SERV_FORM);
     var modalContainer = $('#modalForm');
     $.get("/service_form/new", {
         serviceForm : form.serialize()
@@ -68,7 +81,7 @@ function newService() {
  * Submit the service form to create the list of services.
  */
 function saveServices() {
-    var form = $('#serviceForm');
+    var form = $(selectors.SERV_FORM);
     $.post("/service_form/save", form.serialize(), function(data) {
 
         var modalContainer = $('#modalForm');
@@ -89,10 +102,10 @@ function saveServices() {
  * Update the end time input of a specific row according to start time and service type values.
  */
 function updateEndTime(row) {
-    var endInput = $('#endTime', row);
+    var endInput = $(selectors.END_TIME_INPUT, row);
 
-    var startTime = $('#startTime', row).val();
-    var duration = $('#serviceType option:selected', row).attr('duration');
+    var startTime = $(selectors.START_TIME_INPUT, row).val();
+    var duration = $(selectors.SERV_TYPE_SELECT + ' option:selected', row).attr('duration');
 
     if (startTime && duration) {
 
@@ -101,7 +114,7 @@ function updateEndTime(row) {
 
     } else {
 
-        $('#endTime', row).css('visibility', 'hidden');
+        $(selectors.END_TIME_INPUT, row).css('visibility', 'hidden');
     }
 }
 
@@ -111,8 +124,8 @@ function updateEndTime(row) {
 function updateRepetitionDate(row) {
 
     
-    var repetitionType = $('#repetitionType', row).val();
-    var repetitionDateInput = $('#repetitionDate', row);
+    var repetitionType = $(selectors.REP_TYPE_SELECT, row).val();
+    var repetitionDateInput = $(selectors.REP_DATE_INPUT, row);
 
     if (repetitionType != 'NONE') {
         $(repetitionDateInput).css('visibility', 'visible')
