@@ -50,6 +50,8 @@ public class ScheduleController {
      */
     static final String SERVICE_FORM_SESSION = "serviceForm";
 
+    static final String MESSAGE_CODE_REQUEST = "msgCode";
+
     /**
      * URL Paths.
      */
@@ -62,6 +64,7 @@ public class ScheduleController {
      * JSP's
      */
     private static final String SERVICE_FORM_PAGE = "service-form";
+    private static final String MESSAGE_VIEW = "message";
 
     /**
      * HTTP params.
@@ -163,6 +166,8 @@ public class ScheduleController {
      *            the date of the services to modify or create
      * @param model
      *            Spring Model instance
+     * @param locale
+     *            current locale of the browser
      * @return The JSP view of the dialog form
      */
     @RequestMapping(value = PATH_SERVICES_FORM, method = RequestMethod.GET)
@@ -170,18 +175,22 @@ public class ScheduleController {
 
         ServiceListForm form = new ServiceListForm();
 
-        LocalDate date = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(dateTmp);
-
-        form.setDate(date);
-
         Role role = (Role) model.asMap().get(CompanyController.ROLE_SESSION);
+
+        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(role.getCompany());
+        if (serviceTypes.isEmpty()) {
+            model.addAttribute(MESSAGE_CODE_REQUEST, "modal.messages.service-type.left");
+            return MESSAGE_VIEW;
+        }
+        form.setExistingServiceTypes(serviceTypes);
+
         List<Role> roles = roleService.findRolesByBranch(role.getBranch());
         form.setExistingRoles(roles);
 
-        form.setExistingRepetitionTypes(Repetition.values());
+        LocalDate date = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(dateTmp);
+        form.setDate(date);
 
-        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(role.getCompany());
-        form.setExistingServiceTypes(serviceTypes);
+        form.setExistingRepetitionTypes(Repetition.values());
 
         DateTime fromDate = date.toDateTime(new LocalTime(0, 0));
         DateTime toDate = date.toDateTime(new LocalTime(23, 59));
@@ -220,7 +229,7 @@ public class ScheduleController {
         ServiceValidator validator = new ServiceValidator();
 
         validator.validate(form, result);
-        
+
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
         }

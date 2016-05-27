@@ -65,9 +65,15 @@ function setupListeners() {
         $.get("/service_form", {
             date : calendar.options.day
         }, function(data) {
-            var modalContainer = $('#modalForm');
-            $('.modal-content', modalContainer).html(data);
-            modalContainer.modal();
+            
+            if($(data).is("p")) {
+                messageModal($(data).text());
+                
+            } else if ($(data).is("form")) {
+                var modalContainer = $('#modalForm');
+                $('.modal-content', modalContainer).html(data);
+                modalContainer.modal();
+            }
         });
     });
 }
