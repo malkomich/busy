@@ -67,6 +67,11 @@ public class ServiceType implements Serializable {
         if (duration != null && duration <= 0) {
             throw new IllegalArgumentException("The service duration must be a positive number of minutes.");
         }
+        
+        if (duration != null && duration > 60*24) {
+            throw new IllegalArgumentException("The service duration cannot more than a day.");
+        }
+        
         this.duration = duration;
     }
 

@@ -249,7 +249,6 @@ public class CompanyController {
 
         eventPublisher.publishEvent(new OnRegisterCompany(role, request.getLocale(), request.getContextPath()));
 
-        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST, result);
         String message = messageSource.getMessage("notification.message.company_pending", null, locale).trim();
         redirectAttributes.addFlashAttribute(MESSAGE_REQUEST, message);
 
