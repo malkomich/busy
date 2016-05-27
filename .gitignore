@@ -1,14 +1,23 @@
-# compile files
+# Compilation & build files
 target/
 bin/
 build/
 dist/
+nbbuild/
+nbdist/
 gen/
+tmp/
 
-# eclipse 
+# Eclipse Java Development Tools
+.metadata
 .project
 .classpath
 .settings/
+.loadpath
+local.properties
+
+# Java annotation processor (APT)
+.factorypath
 
 # netbeans
 nbproject/
