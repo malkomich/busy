@@ -1,5 +1,7 @@
 package busy.bdd.company.create_services;
 
+import static org.junit.Assert.assertTrue;
+
 import org.fluentlenium.assertj.FluentLeniumAssertions;
 import org.fluentlenium.core.annotation.Page;
 
@@ -95,13 +97,13 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     @Then("^I should see a message to create at least one service type$")
     public void error_service_type_shown() throws Throwable {
 
-        branchPage.messageShown(BranchPage.MESSAGE_SERVICE_TYPE);
+        assertTrue(branchPage.messageShown(BranchPage.MESSAGE_SERVICE_TYPE));
     }
 
     @Then("^I should see a dialog to enter the data of the new service$")
     public void form_dialog_shown() throws Throwable {
 
-        branchPage.formIsShown(BranchPage.FORM_SERVICE);
+        assertTrue(branchPage.formIsShown(BranchPage.FORM_SERVICE));
     }
 
     @When("^I introduce the start time \"([^\"]*)\"$")
@@ -144,14 +146,14 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     @Then("^I should see an error message in the form$")
     public void form_error_shown() throws Throwable {
 
-        branchPage.errorShown(BranchPage.FORM_SERVICE);
+        assertTrue(branchPage.errorShown(BranchPage.FORM_SERVICE));
     }
 
     @Then("^I should see the service created on the day \"([^\"]*)\"$")
     public void service_created(String dayTmp) throws Throwable {
 
         int day = Integer.parseInt(dayTmp);
-        branchPage.serviceCreated(day);
+        assertTrue(branchPage.serviceCreated(day));
     }
 
     @Then("^I should see the service until \"([^\"]*)\" days after the day \"([^\"]*)\" with"
@@ -160,7 +162,7 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
 
         int daysAfter = Integer.parseInt(daysAfterTmp);
         int day = Integer.parseInt(dayTmp);
-        branchPage.serviceRepeated(day, repetition, daysAfter);
+        assertTrue(branchPage.serviceRepeated(day, repetition, daysAfter));
     }
 
 }
