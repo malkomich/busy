@@ -44,7 +44,7 @@ public class BranchPage extends BusyPage {
      * CSS Selectors
      */
     private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
-    private static final String DAY_CELL_SELECTOR = ".cal-month-day";
+    private static final String DAY_CELL_SELECTOR = ".cal-month-day span";
     private static final String DAY_EVENTS_DETAILED_SELECTOR = ".cal-event-list";
     private static final String DAY_EVENTS_SELECTOR = ".events-list";
     private static final String EVENT_SELECTOR = ".events";
@@ -73,6 +73,8 @@ public class BranchPage extends BusyPage {
 
     private static final String MESSAGE_SELECTOR = "#infoMessage";
     private static final String ERROR_SELECTOR = "span.error";
+    
+    private static final String DAY_CELL_DATE = "data-cal-date";
 
     @Override
     public String relativePath() {
@@ -92,15 +94,15 @@ public class BranchPage extends BusyPage {
         return findFirst(CALENDAR_MONTH_SELECTOR).isDisplayed();
     }
 
-    public BranchPage selectDayInCalendar(int day) {
+    public BranchPage selectDayInCalendar(String date) {
 
-        findFirst(DAY_CELL_SELECTOR, FilterConstructor.withText(String.valueOf(day))).click();
+        findFirst(DAY_CELL_SELECTOR, FilterConstructor.with(DAY_CELL_DATE).equalTo(date)).click();
         return this;
     }
 
-    public BranchPage dblClickDayCell(int day) {
+    public BranchPage dblClickDayCell(String date) {
 
-        findFirst(DAY_CELL_SELECTOR, FilterConstructor.withText(String.valueOf(day))).doubleClick();
+        findFirst(DAY_CELL_SELECTOR, FilterConstructor.with(DAY_CELL_DATE).equalTo(date)).doubleClick();
         waitForJSandJQueryToLoad();
         return this;
     }
