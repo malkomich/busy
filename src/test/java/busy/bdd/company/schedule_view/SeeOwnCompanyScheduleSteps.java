@@ -81,16 +81,18 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
     public void add_services_and_bookings() throws Throwable {
 
         DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        String query = INSERT_SERVICE + "VALUES('" + dtfOut.print(new DateTime()) + "',(SELECT id FROM service_type "
+        DateTime startTime1 = new DateTime();
+        DateTime startTime2 = startTime1.plusHours(2);
+        String query = INSERT_SERVICE + "VALUES('" + dtfOut.print(startTime1) + "',(SELECT id FROM service_type "
                 + "WHERE name='Engineer'),(SELECT id FROM role WHERE branch_id=(SELECT id FROM branch "
                 + "WHERE phone='902202122')));"
-                + INSERT_SERVICE + "VALUES('" + dtfOut.print(new DateTime().plusHours(2)) + "',(SELECT id FROM "
+                + INSERT_SERVICE + "VALUES('" + dtfOut.print(startTime2) + "',(SELECT id FROM "
                 + "service_type WHERE name='Engineer'),(SELECT id FROM role WHERE branch_id=(SELECT id FROM branch "
                 + "WHERE phone='902202122')));"
                 + INSERT_BOOKING + "VALUES((SELECT id FROM person WHERE email='user1@domain.com'), (SELECT id FROM "
-                + "service WHERE start_time='" + dtfOut.print(new DateTime()) + "'));"
+                + "service WHERE start_time='" + dtfOut.print(startTime1) + "'));"
                 + INSERT_BOOKING + "VALUES((SELECT id FROM person WHERE email='user2@domain.com'), "
-                + "(SELECT id FROM service WHERE start_time='" + dtfOut.print(new DateTime().plusHours(2)) + "'));";
+                + "(SELECT id FROM service WHERE start_time='" + dtfOut.print(startTime2) + "'));";
         template.execute(query);
     }
 
