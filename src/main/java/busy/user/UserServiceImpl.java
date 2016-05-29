@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
  *
  */
 @Service
-@Transactional
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -59,7 +58,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void confirmUser(User user) {
 
-        if (userDao.findByEmail(user.getEmail()) == null)
+        if (findUserByEmail(user.getEmail()) == null)
             throw new IllegalArgumentException("The user to confirm does not exist.");
 
         user.setActive(true);
