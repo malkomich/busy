@@ -8,6 +8,7 @@ import busy.company.Company;
 public class ServiceTypeTest {
 
     private static final String NAME = "Engineer";
+    private static final int MAX_DURATION = 1440; // 60min*24h
 
     private Company company;
 
@@ -34,6 +35,17 @@ public class ServiceTypeTest {
         serviceType.setCompany(company);
         serviceType.setDuration(0);
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void createWithHighDuration() {
+
+        ServiceType serviceType = new ServiceType();
+        serviceType.setName(NAME);
+        serviceType.setDescription("A description");
+        serviceType.setMaxBookingsPerRole(2);
+        serviceType.setDuration(MAX_DURATION + 1);
+        serviceType.setCompany(company);
+    }
 
     @Test
     public void createSuccessfully() {
@@ -42,7 +54,7 @@ public class ServiceTypeTest {
         serviceType.setName(NAME);
         serviceType.setDescription("A description");
         serviceType.setMaxBookingsPerRole(2);
-        serviceType.setDuration(7200);
+        serviceType.setDuration(MAX_DURATION);
         serviceType.setCompany(company);
     }
 
