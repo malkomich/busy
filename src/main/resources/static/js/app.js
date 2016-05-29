@@ -38,7 +38,6 @@ $(function() {
         var $this = $(this);
         $this.click(function() {
             calendar.navigate($this.data('calendar-nav'));
-            setupListeners();
         });
     });
 
@@ -47,7 +46,6 @@ $(function() {
         var $this = $(this);
         $this.click(function() {
             calendar.view($this.data('calendar-view'));
-            setupListeners();
         });
     });
 
