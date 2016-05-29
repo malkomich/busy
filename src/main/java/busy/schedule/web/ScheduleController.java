@@ -27,12 +27,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import busy.company.web.CompanyController;
 import busy.role.Role;
 import busy.role.RoleService;
-import busy.schedule.Schedule;
 import busy.schedule.ScheduleService;
 import busy.schedule.Service;
 import busy.schedule.Service.Repetition;
 import busy.schedule.ServiceType;
-import busy.user.User;
 
 /**
  * Controller for schedule operations.
@@ -125,35 +123,36 @@ public class ScheduleController {
         List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDateTime, toDateTime, role, null);
 
         JSONObject jsonResult = new JSONObject();
-        JSONArray jsonBookings = new JSONArray();
+        JSONArray jsonServices = new JSONArray();
 
         for (Service service : serviceList) {
 
             try {
-                for (Schedule schedule : service.getSchedules()) {
-                    for (User booking : schedule.getBookings()) {
-                        JSONObject bookingJSON = new JSONObject();
-                        bookingJSON.put("id", "u" + booking.getId() + "s" + service.getId());
-                        bookingJSON.put("title", booking.getFirstName() + " " + booking.getLastName());
-                        bookingJSON.put("url", "/localhost:8080");
-                        bookingJSON.put("class", "event-info");
+                JSONObject serviceJSON = new JSONObject();
 
-                        DateTime startTime = service.getStartTime();
-                        int minutes = service.getServiceType().getDuration();
-                        DateTime endTime = startTime.plus(minutes * 60 * 1000);
+                serviceJSON.put("id", service.getId());
 
-                        bookingJSON.put("start", String.valueOf(startTime.getMillis()));
-                        bookingJSON.put("end", String.valueOf(endTime.getMillis()));
+                DateTime startTime = service.getStartTime();
+                
+                serviceJSON.put("title", startTime.toString("HH:mm") + " [" + service.getServiceType().getName() + "]");
+                serviceJSON.put("url", "#");
+                serviceJSON.put("class", "event-info");
 
-                        jsonBookings.put(bookingJSON);
-                    }
-                }
+                int minutes = service.getServiceType().getDuration();
+                // Start time plus minutes converted to millis
+                DateTime endTime = startTime.plus(minutes * 60 * 1000);
+
+                serviceJSON.put("start", String.valueOf(startTime.getMillis()));
+                serviceJSON.put("end", String.valueOf(endTime.getMillis()));
+
+                jsonServices.put(serviceJSON);
+                
             } catch (JSONException jse) {
                 jse.printStackTrace();
             }
         }
 
-        jsonResult.put("result", jsonBookings);
+        jsonResult.put("result", jsonServices);
         jsonResult.put("success", 1);
 
         return jsonResult.toString();
