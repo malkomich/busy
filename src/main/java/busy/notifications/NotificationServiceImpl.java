@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import busy.notifications.Notification;
 import busy.notifications.NotificationDao;
@@ -31,6 +33,7 @@ public class NotificationServiceImpl implements NotificationService {
      * notifications.Notification)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void saveNotification(Notification notification) {
 
         notificationDao.save(notification);
@@ -41,6 +44,7 @@ public class NotificationServiceImpl implements NotificationService {
      * @see busy.notifications.NotificationService#findNotificationsByUser(busy.user. User)
      */
     @Override
+    @Transactional(readOnly = true)
     public List<Notification> findNotificationsByUser(User user) {
 
         return notificationDao.findByUser(user);

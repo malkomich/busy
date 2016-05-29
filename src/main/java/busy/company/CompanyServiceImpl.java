@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Company service logic implementation.
@@ -40,6 +42,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#saveCompany(busy.company.Company)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void saveCompany(Company company) {
 
         companyDao.save(company);
@@ -50,6 +53,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#findCategories()
      */
     @Override
+    @Transactional(readOnly = true)
     public List<Category> findCategories() {
 
         return categoryDao.findAll();
@@ -60,6 +64,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#findCategoryById(int)
      */
     @Override
+    @Transactional(readOnly = true)
     public Category findCategoryById(int categoryId) {
 
         return categoryDao.findById(categoryId);
@@ -70,6 +75,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#saveBranch(busy.company.Branch)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void saveBranch(Branch branch) {
 
         branchDao.save(branch);
@@ -80,6 +86,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#findBranchById(int)
      */
     @Override
+    @Transactional(readOnly = true)
     public Branch findBranchById(int id) {
 
         return branchDao.findById(id);
@@ -90,6 +97,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#allCompanies()
      */
     @Override
+    @Transactional(readOnly = true)
     public List<Company> findAllCompanies() {
 
         return companyDao.findAll();
@@ -100,6 +108,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#findCompanyById(int)
      */
     @Override
+    @Transactional(readOnly = true)
     public Company findCompanyById(int id) {
 
         return companyDao.findById(id);
@@ -110,6 +119,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#findCompanyByBusinessName(java.lang.String)
      */
     @Override
+    @Transactional(readOnly = true)
     public Company findCompanyByBusinessName(String businessName) {
 
         return companyDao.findByBusinessName(businessName);
@@ -120,6 +130,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#findCompanyByEmail(java.lang.String)
      */
     @Override
+    @Transactional(readOnly = true)
     public Company findCompanyByEmail(String email) {
 
         return companyDao.findByEmail(email);
@@ -130,6 +141,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#findCompanyByCif(java.lang.String)
      */
     @Override
+    @Transactional(readOnly = true)
     public Company findCompanyByCif(String cif) {
 
         return companyDao.findByCif(cif);
@@ -140,6 +152,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#findCompaniesByPartialName(java.lang.String)
      */
     @Override
+    @Transactional(readOnly = true)
     public List<Company> findActiveCompaniesByPartialName(String partialName) {
 
         return companyDao.findActivesByPartialName(partialName);
@@ -150,6 +163,7 @@ public class CompanyServiceImpl implements CompanyService {
      * @see busy.company.CompanyService#countAllCompanies()
      */
     @Override
+    @Transactional(readOnly = true)
     public int countAllCompanies() {
 
         return companyDao.countAll();

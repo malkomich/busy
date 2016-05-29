@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import busy.company.Company;
 import busy.role.Role;
@@ -27,14 +29,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     private ServiceTypeDao serviceTypeDao;
-    
+
     @Autowired
     private ServiceDao serviceDao;
 
     public void setServiceTypeDao(ServiceTypeDao serviceTypeDao) {
         this.serviceTypeDao = serviceTypeDao;
     }
-    
+
     public void setServiceDao(ServiceDao serviceDao) {
         this.serviceDao = serviceDao;
     }
@@ -44,6 +46,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#findServiceTypesByCompany(busy.company.Company)
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ServiceType> findServiceTypesByCompany(Company company) {
 
         return serviceTypeDao.findByCompany(company);
@@ -54,6 +57,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#deleteServiceTypeById(int)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public OperationResult deleteServiceType(ServiceType serviceType) {
 
         OperationResult result = serviceTypeDao.delete(serviceType);
@@ -72,6 +76,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#findServiceType(busy.company.Company, java.lang.String)
      */
     @Override
+    @Transactional(readOnly = true)
     public ServiceType findServiceType(Company company, String name) {
 
         return serviceTypeDao.findByCompanyAndName(company, name);
@@ -82,17 +87,21 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#saveServiceType(busy.schedule.ServiceType)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public ServiceType saveServiceType(ServiceType sType) {
 
         return serviceTypeDao.save(sType);
     }
 
-    /* (non-Javadoc)
-     * @see busy.schedule.ScheduleService#findServicesBetweenDays(org.joda.time.DateTime, org.joda.time.DateTime, busy.role.Role, busy.schedule.ServiceType)
+    /*
+     * (non-Javadoc)
+     * @see busy.schedule.ScheduleService#findServicesBetweenDays(org.joda.time.DateTime,
+     * org.joda.time.DateTime, busy.role.Role, busy.schedule.ServiceType)
      */
     @Override
+    @Transactional(readOnly = true)
     public List<busy.schedule.Service> findServicesBetweenDays(DateTime fromDateTime, DateTime toDateTime, Role role,
-            ServiceType serviceType) {
+        ServiceType serviceType) {
 
         return serviceDao.findBetweenDays(fromDateTime, toDateTime, role, serviceType);
     }
