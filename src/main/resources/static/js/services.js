@@ -1,15 +1,14 @@
-
 var selectors = {
-        'SERV_FORM': '.service-form',
-        'SERV_ROW': '.service-row',
-        'START_TIME_INPUT': '#service-start-time',
-        'END_TIME_INPUT': '#service-end-time',
-        'SERV_TYPE_SELECT': '#service-type',
-        'ROLE_CHECKBOX': '.role-item input:checkbox',
-        'ROLE_TIPS_LIST': '.service-roles-summary ul',
-        'REP_TYPE_SELECT': '#service-repetition-type',
-        'REP_DATE_INPUT': '#service-repetition-date',
-    };
+    'SERV_FORM' : '.service-form',
+    'SERV_ROW' : '.service-row',
+    'START_TIME_INPUT' : '#service-start-time',
+    'END_TIME_INPUT' : '#service-end-time',
+    'SERV_TYPE_SELECT' : '#service-type',
+    'ROLE_CHECKBOX' : '.role-item input:checkbox',
+    'ROLE_TIPS_LIST' : '.service-roles-summary ul',
+    'REP_TYPE_SELECT' : '#service-repetition-type',
+    'REP_DATE_INPUT' : '#service-repetition-date',
+};
 
 $(function() {
 
@@ -68,9 +67,7 @@ $(function() {
 function newService() {
     var form = $(selectors.SERV_FORM);
     var modalContainer = $('#modalForm');
-    $.get("/service_form/new", {
-        serviceForm : form.serialize()
-    }, function(data) {
+    $.post("/service_form/new", form.serialize(), function(data) {
         var modalContainer = $('#modalForm');
         $('.modal-content', modalContainer).html(data);
         modalContainer.modal();
@@ -123,7 +120,6 @@ function updateEndTime(row) {
  */
 function updateRepetitionDate(row) {
 
-    
     var repetitionType = $(selectors.REP_TYPE_SELECT, row).val();
     var repetitionDateInput = $(selectors.REP_DATE_INPUT, row);
 

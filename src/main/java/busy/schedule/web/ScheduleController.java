@@ -133,7 +133,7 @@ public class ScheduleController {
                 serviceJSON.put("id", service.getId());
 
                 DateTime startTime = service.getStartTime();
-                
+
                 serviceJSON.put("title", startTime.toString("HH:mm") + " [" + service.getServiceType().getName() + "]");
                 serviceJSON.put("url", "#");
                 serviceJSON.put("class", "event-info");
@@ -146,7 +146,7 @@ public class ScheduleController {
                 serviceJSON.put("end", String.valueOf(endTime.getMillis()));
 
                 jsonServices.put(serviceJSON);
-                
+
             } catch (JSONException jse) {
                 jse.printStackTrace();
             }
@@ -212,11 +212,20 @@ public class ScheduleController {
      *            Spring model instance
      * @return The service form dialog view with a new service row
      */
-    @RequestMapping(value = PATH_SERVICES_FORM_NEW, method = RequestMethod.GET)
-    public String newService(Model model) {
+    @RequestMapping(value = PATH_SERVICES_FORM_NEW, method = RequestMethod.POST)
+    public String newService(@ModelAttribute(SERVICE_FORM_SESSION) @Valid ServiceListForm form, BindingResult result,
+        Model model) {
 
-        ServiceListForm form = (ServiceListForm) model.asMap().get(SERVICE_FORM_SESSION);
+        ServiceValidator validator = new ServiceValidator();
+
+        validator.validate(form, result);
+
+        if (result.hasErrors()) {
+            return SERVICE_FORM_PAGE;
+        }
+
         form.addService(new ServiceForm());
+        model.addAttribute(SERVICE_FORM_SESSION, form);
 
         return SERVICE_FORM_PAGE;
     }
