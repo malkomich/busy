@@ -17,7 +17,7 @@ public class ServiceForm {
 
     private int id;
 
-    @NotNull(message = "{schedule.service.start_time.empty}")
+    @NotEmpty(message = "{schedule.service.start_time.empty}")
     private String startTime;
 
     @NotNull(message = "{schedule.service.service_type.empty}")
