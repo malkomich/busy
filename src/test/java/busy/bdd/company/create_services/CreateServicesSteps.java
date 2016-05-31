@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 import org.fluentlenium.assertj.FluentLeniumAssertions;
 import org.fluentlenium.core.annotation.Page;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import busy.AbstractFunctionalTest;
 import busy.company.web.BranchPage;
@@ -94,9 +92,8 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     public void double_click_day_cell(String dayTmp) throws Throwable {
 
         int day = Integer.parseInt(dayTmp);
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
         DateTime date = new DateTime().withDayOfMonth(day);
-        branchPage.dblClickDayCell(dtfOut.print(date));
+        branchPage.dblClickDayCell(date);
     }
 
     @Then("^I should see a message to create at least one service type$")
@@ -158,7 +155,8 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     public void service_created(String dayTmp) throws Throwable {
 
         int day = Integer.parseInt(dayTmp);
-        assertTrue(branchPage.serviceCreated(day));
+        DateTime date = new DateTime().withDayOfMonth(day);
+        assertTrue(branchPage.serviceCreated(date));
     }
 
     @Then("^I should see the service until \"([^\"]*)\" days after the day \"([^\"]*)\" with"

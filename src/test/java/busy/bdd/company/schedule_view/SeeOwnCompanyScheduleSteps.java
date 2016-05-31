@@ -122,9 +122,7 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
     @When("^I select the current day$")
     public void select_a_day() throws Throwable {
 
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
-        String date = dtfOut.print(new DateTime());
-        branchPage.selectDayInCalendar(date);
+        branchPage.selectDayInCalendar(new DateTime());
     }
 
     @Then("^I should see the bookings of this day in a more detailed way$")

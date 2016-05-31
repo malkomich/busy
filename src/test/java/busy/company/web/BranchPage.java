@@ -8,10 +8,13 @@ import java.util.List;
 import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.filter.FilterConstructor;
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -49,6 +52,9 @@ public class BranchPage extends BusyPage {
     private static final String DAY_EVENTS_SELECTOR = ".events-list";
     private static final String EVENT_SELECTOR = ".events";
 
+    private static final String FORM_SUBMIT_SELECTOR = "#submit";
+    private static final String FORM_ERROR_SELECTOR = "span.error";
+
     private static final String SERVICE_TYPE_LIST_SELECTOR = "#service-type-list";
     private static final String SERVICE_TYPE_ITEM_SELECTOR = ".service-type-item";
     private static final String[] SERVICE_TYPE_PARAMS_SELECTOR = {".name", ".description", ".bookings", ".duration"};
@@ -61,19 +67,19 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_TYPE_FORM_DESCRIPTION_SELECTOR = "#description";
     private static final String SERVICE_TYPE_FORM_BOOKINGS_SELECTOR = "#maxBookingsPerRole";
     private static final String SERVICE_TYPE_FORM_DURATION_SELECTOR = "#duration";
-    private static final String SERVICE_TYPE_FORM_SUBMIT_SELECTOR = "#submit";
-    private static final String SERVICE_TYPE_FORM_ERROR_SELECTOR = "span.error";
 
     private static final String SERVICE_FORM_SELECTOR = ".service-form";
     private static final String SERVICE_FORM_START_TIME = "#service-start-time";
-    private static final String SERVICE_FORM_ROLES = ".role-list";
+    private static final String SERVICE_FORM_ROLE_DROPDOWN = "#role-dropdown";
+    private static final String SERVICE_FORM_ROLE_LIST = ".role-list";
+    private static final String SERVICE_FORM_ROLE_ITEM = "li.role-item";
     private static final String SERVICE_FORM_STYPE = "#service-type";
     private static final String SERVICE_FORM_REPETITION_TYPE = "#service-repetition-type";
     private static final String SERVICE_FORM_REPETITION_DATE = "#service-repetition-date";
 
     private static final String MESSAGE_SELECTOR = "#infoMessage";
     private static final String ERROR_SELECTOR = "span.error";
-    
+
     private static final String DAY_CELL_DATE = "data-cal-date";
 
     @Override
@@ -94,15 +100,15 @@ public class BranchPage extends BusyPage {
         return findFirst(CALENDAR_MONTH_SELECTOR).isDisplayed();
     }
 
-    public BranchPage selectDayInCalendar(String date) {
+    public BranchPage selectDayInCalendar(DateTime day) {
 
-        findFirst(DAY_CELL_SELECTOR, FilterConstructor.with(DAY_CELL_DATE).equalTo(date)).click();
+        getDayCell(day).click();
         return this;
     }
 
-    public BranchPage dblClickDayCell(String date) {
+    public BranchPage dblClickDayCell(DateTime day) {
 
-        findFirst(DAY_CELL_SELECTOR, FilterConstructor.with(DAY_CELL_DATE).equalTo(date)).doubleClick();
+        getDayCell(day).doubleClick();
         waitForJSandJQueryToLoad();
         return this;
     }
@@ -166,8 +172,10 @@ public class BranchPage extends BusyPage {
     public boolean formIsShown(int formType) {
 
         String selector = null;
+
         if (formType == FORM_SERVICE_TYPE) {
             selector = SERVICE_TYPE_FORM_SELECTOR;
+
         } else if (formType == FORM_SERVICE) {
             selector = SERVICE_FORM_SELECTOR;
         }
@@ -206,14 +214,14 @@ public class BranchPage extends BusyPage {
 
     public BranchPage submitForm(int formType) {
 
-        submit(SERVICE_TYPE_FORM_SUBMIT_SELECTOR);
+        submit(FORM_SUBMIT_SELECTOR);
         waitForJSandJQueryToLoad();
         return this;
     }
 
     public boolean duplicateServiceTypeErrorShown() {
 
-        return !find(SERVICE_TYPE_FORM_ERROR_SELECTOR).isEmpty();
+        return !find(FORM_ERROR_SELECTOR).isEmpty();
     }
 
     public boolean messageShown(int messageType) {
@@ -231,7 +239,12 @@ public class BranchPage extends BusyPage {
 
         if (!serviceType.isEmpty()) {
             FluentWebElement select = findFirst(SERVICE_FORM_STYPE);
-            select.find("option", FilterConstructor.containingText(serviceType)).click();
+
+            FluentWebElement option = select.findFirst("option", FilterConstructor.containingText(serviceType));
+            if (!option.isDisplayed()) {
+                select.click();
+            }
+            option.click();
         }
 
         return this;
@@ -241,12 +254,19 @@ public class BranchPage extends BusyPage {
 
         if (!rolesTmp.isEmpty()) {
 
-            FluentWebElement list = findFirst(SERVICE_FORM_ROLES);
+            findFirst(SERVICE_FORM_ROLE_DROPDOWN).click();
+
+            FluentWebElement list = findFirst(SERVICE_FORM_ROLE_LIST);
 
             String[] roles = rolesTmp.split(",");
             for (String role : roles) {
-                FluentWebElement item = list.findFirst("li", FilterConstructor.containingText(role));
-                item.find("input[type=checkbox]").click();
+
+                for (FluentWebElement item : list.find(SERVICE_FORM_ROLE_ITEM)) {
+
+                    if (item.find("label").getText().contains(role)) {
+                        item.findFirst("input[type=checkbox]").click();
+                    }
+                }
             }
         }
 
@@ -263,6 +283,7 @@ public class BranchPage extends BusyPage {
             Select select = new Select(getDriver().findElement(By.cssSelector(SERVICE_FORM_REPETITION_TYPE)));
             select.selectByVisibleText(repetitionLabel);
         }
+        waitForJSandJQueryToLoad();
 
         return this;
     }
@@ -280,9 +301,9 @@ public class BranchPage extends BusyPage {
         return !find(ERROR_SELECTOR).isEmpty();
     }
 
-    public boolean serviceCreated(int day) {
+    public boolean serviceCreated(DateTime day) {
 
-        FluentWebElement dayCell = findFirst(DAY_CELL_SELECTOR, FilterConstructor.withText(String.valueOf(day)));
+        FluentWebElement dayCell = getDayCell(day);
 
         FluentWebElement eventList;
         try {
@@ -343,6 +364,12 @@ public class BranchPage extends BusyPage {
                 return Repetition.WEEKLY;
         }
         return null;
+    }
+
+    private FluentWebElement getDayCell(DateTime day) {
+
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
+        return findFirst(DAY_CELL_SELECTOR, FilterConstructor.with(DAY_CELL_DATE).equalTo(dtfOut.print(day)));
     }
 
 }
