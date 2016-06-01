@@ -23,6 +23,7 @@ $(function() {
         var repetitionTypeSelect = $(selectors.REP_TYPE_SELECT, this);
 
         // Init update
+        updateStartTime(row);
         updateEndTime(row);
         updateRepetitionDate(row);
 
@@ -88,6 +89,17 @@ function saveServices() {
             calendar.view();
         }
 
+    });
+}
+
+/*
+ * Update the format and behaviour of the start time input
+ */
+function updateStartTime(row) {
+    $('#service-start-time', row).timepicker({
+        template: false,
+        showInputs: false,
+        minuteStep: 5
     });
 }
 

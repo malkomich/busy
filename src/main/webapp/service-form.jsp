@@ -29,14 +29,14 @@
                     <div class="col-sm-8">
                         <div class="row">
                             <spring:message code="schedule.service.tooltip.start_time" var="startTimeTip" />
-                            <form:input path="services[${status.index}].startTime" id="service-start-time" type="time"
+                            <form:input path="services[${status.index}].startTime" id="service-start-time" type="text"
                                 tabindex="1" class="form-control" data-toggle="tooltip" data-placement="left"
                                 title="${startTimeTip}" />
                             <form:errors path="services[${status.index}].startTime" cssClass="error fs-xs" />
                         </div>
                         <div class="row">
                             <spring:message code="schedule.service.tooltip.end_time" var="endTimeTip" />
-                            <input id="service-end-time" type="time" tabindex="-1" class="form-control" readonly="true"
+                            <input id="service-end-time" type="text" tabindex="-1" class="form-control" readonly="true"
                                 data-toggle="tooltip" data-placement="left" title="${endTimeTip}" />
                         </div>
                     </div>
@@ -145,4 +145,5 @@
 
 <script type="text/javascript" src="/js/forms.js"></script>
 <script type="text/javascript" src="/js/moment.js"></script>
+<script type="text/javascript" src="/js/bootstrap-timepicker.js"></script>
 <script type="text/javascript" src="/js/services.js"></script>
