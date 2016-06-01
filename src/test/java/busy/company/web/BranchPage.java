@@ -27,9 +27,6 @@ import busy.schedule.Service.Repetition;
  */
 public class BranchPage extends BusyPage {
 
-    // Assures the maximum day for all possible months
-    private static final int MAX_DAY_OF_MONTH = 28;
-
     /**
      * Method flow modifiers
      */
@@ -47,7 +44,7 @@ public class BranchPage extends BusyPage {
     private static final String DAY_CELL_SELECTOR = ".cal-month-day span";
     private static final String DAY_EVENTS_DETAILED_SELECTOR = ".cal-event-list";
     private static final String DAY_EVENTS_SELECTOR = ".events-list";
-    private static final String EVENT_SELECTOR = ".events";
+    private static final String EVENT_SELECTOR = ".event";
 
     private static final String FORM_SUBMIT_SELECTOR = "#submit";
     private static final String FORM_ERROR_SELECTOR = "span.error";
@@ -287,7 +284,7 @@ public class BranchPage extends BusyPage {
 
     public BranchPage setRepetitionDate(DateTime date, MessageSource messageSource) {
 
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/MM/yyyy");
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MM/dd/yyyy");
         fill(SERVICE_FORM_REPETITION_DATE).with(dtfOut.print(date));
         return this;
     }
@@ -336,8 +333,9 @@ public class BranchPage extends BusyPage {
         FluentWebElement dayCell = null;
 
         FluentWebElement eventList = null;
+        DateTime date = new DateTime();
         for (int repeatedDay : repeatedDayList) {
-            dayCell = findFirst(DAY_CELL_SELECTOR, FilterConstructor.withText(String.valueOf(repeatedDay)));
+            dayCell = getDayCell(date.withDayOfMonth(repeatedDay));
             try {
                 eventList = dayCell.findFirst(DAY_EVENTS_SELECTOR);
                 if (eventList.find(EVENT_SELECTOR).isEmpty()) {
@@ -365,7 +363,8 @@ public class BranchPage extends BusyPage {
     private FluentWebElement getDayCell(DateTime day) {
 
         DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
-        return findFirst(DAY_CELL_SELECTOR, FilterConstructor.with(DAY_CELL_DATE).equalTo(dtfOut.print(day)));
+        return findFirst(DAY_CELL_SELECTOR, FilterConstructor.with(DAY_CELL_DATE).equalTo(dtfOut.print(day))).axes()
+            .parent();
     }
 
 }
