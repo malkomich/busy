@@ -14,10 +14,6 @@ $(function() {
 
     var service_form = $(selectors.SERV_FORM);
 
-    if (!$(selectors.SERV_ROW, service_form).length) {
-        newService();
-    }
-
     $(selectors.SERV_ROW, service_form).each(function() {
         var row = $(this);
         var startTimeInput = $(selectors.START_TIME_INPUT, this);

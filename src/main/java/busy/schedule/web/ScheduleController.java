@@ -200,6 +200,9 @@ public class ScheduleController {
             form.addService(serviceForm);
         }
 
+        if(form.getServices().isEmpty()) {
+            form.addService(new ServiceForm());
+        }
         model.addAttribute(SERVICE_FORM_SESSION, form);
 
         return SERVICE_FORM_PAGE;
