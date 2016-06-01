@@ -132,11 +132,12 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
         branchPage.selectRepetition(repetition, messageSource);
     }
 
-    @When("^I introduce the repetition date until \"([^\"]*)\" days after$")
-    public void select_repetition_days(String daysTmp) throws Throwable {
+    @When("^I introduce the repetition date \"([^\"]*)\"$")
+    public void select_repetition_days(String repetitionDate) throws Throwable {
 
-        int days = Integer.parseInt(daysTmp);
-        branchPage.setRepetitionDate(days, messageSource);
+        int day = Integer.parseInt(repetitionDate);
+        DateTime date = new DateTime().withDayOfMonth(day);
+        branchPage.setRepetitionDate(date, messageSource);
     }
 
     @When("^I click on 'Save'$")
@@ -159,13 +160,14 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
         assertTrue(branchPage.serviceCreated(date));
     }
 
-    @Then("^I should see the service until \"([^\"]*)\" days after the day \"([^\"]*)\" with"
-        + " repetition type \"([^\"]*)\"$")
-    public void service_repeated(String daysAfterTmp,String dayTmp, String repetition) throws Throwable {
+    @Then("^I should see the service of day \"([^\"]*)\" until \"([^\"]*)\" with repetition type \"([^\"]*)\"$")
+    public void service_repeated(String serviceDay, String repetitionDay, String repetition) throws Throwable {
 
-        int daysAfter = Integer.parseInt(daysAfterTmp);
-        int day = Integer.parseInt(dayTmp);
-        assertTrue(branchPage.serviceRepeated(day, repetition, daysAfter));
+        int servDay = Integer.parseInt(serviceDay);
+        DateTime sDate = new DateTime().withDayOfMonth(servDay);
+        int repDay = Integer.parseInt(repetitionDay);
+        DateTime rDate = new DateTime().withDayOfMonth(repDay);
+        assertTrue(branchPage.serviceRepeated(sDate, repetition, rDate));
     }
 
 }

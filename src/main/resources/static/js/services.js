@@ -99,6 +99,8 @@ function updateStartTime(row) {
     $('#service-start-time', row).timepicker({
         template: false,
         showInputs: false,
+        showMeridian: false,
+        defaultTime: false,
         minuteStep: 5
     });
 }
@@ -132,7 +134,7 @@ function updateRepetitionDate(row) {
     var repetitionDateInput = $(selectors.REP_DATE_INPUT, row);
 
     if (repetitionType != 'NONE') {
-        $(repetitionDateInput).css('visibility', 'visible');
+        $(repetitionDateInput).css('visibility', 'visible').datepicker();
         $('#rep-date-error').show();
     } else {
         $(repetitionDateInput).css('visibility', 'hidden');

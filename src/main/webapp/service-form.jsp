@@ -30,7 +30,7 @@
                         <div class="row">
                             <spring:message code="schedule.service.tooltip.start_time" var="startTimeTip" />
                             <form:input path="services[${status.index}].startTime" id="service-start-time" type="text"
-                                tabindex="1" class="form-control" data-toggle="tooltip" data-placement="left"
+                                tabindex="1" class="form-control" data-toggle="tooltip" data-placement="top"
                                 title="${startTimeTip}" />
                             <form:errors path="services[${status.index}].startTime" cssClass="error fs-xs" />
                         </div>
@@ -104,7 +104,7 @@
                             <div class="row">
                                 <spring:message code="schedule.service.tooltip.repetition_date" var="repDateTip" />
                                 <form:input path="services[${status.index}].repetitionDate" id="service-repetition-date"
-                                    type="date" tabindex="5" class="form-control" value="${service.repetitionDate}"
+                                    type="text" tabindex="5" class="form-control" value="${service.repetitionDate}"
                                     data-toggle="tooltip" data-placement="right" title="${repDateTip}" />
                                 <form:errors path="services[${status.index}].repetitionDate" cssClass="error fs-xs"
                                     id="rep-date-error" />
@@ -146,4 +146,5 @@
 <script type="text/javascript" src="/js/forms.js"></script>
 <script type="text/javascript" src="/js/moment.js"></script>
 <script type="text/javascript" src="/js/bootstrap-timepicker.js"></script>
+<script type="text/javascript" src="/js/bootstrap-datepicker.js"></script>
 <script type="text/javascript" src="/js/services.js"></script>

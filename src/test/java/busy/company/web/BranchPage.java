@@ -8,13 +8,10 @@ import java.util.List;
 import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.filter.FilterConstructor;
 import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -288,10 +285,9 @@ public class BranchPage extends BusyPage {
         return this;
     }
 
-    public BranchPage setRepetitionDate(int days, MessageSource messageSource) {
+    public BranchPage setRepetitionDate(DateTime date, MessageSource messageSource) {
 
-        DateTime date = new DateTime().plusDays(days);
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd-MM-yyyy");
+        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("dd/MM/yyyy");
         fill(SERVICE_FORM_REPETITION_DATE).with(dtfOut.print(date));
         return this;
     }
@@ -315,7 +311,7 @@ public class BranchPage extends BusyPage {
         return !eventList.find(EVENT_SELECTOR).isEmpty();
     }
 
-    public boolean serviceRepeated(int day, String repetitionTmp, int daysAfter) {
+    public boolean serviceRepeated(DateTime servDate, String repetitionTmp, DateTime repDate) {
 
         Repetition repetition = parseRepetition(repetitionTmp);
 
@@ -323,15 +319,15 @@ public class BranchPage extends BusyPage {
 
         switch (repetition) {
             case DAILY:
-                while (day < MAX_DAY_OF_MONTH) {
-                    repeatedDayList.add(day);
-                    day++;
+                while (servDate.isBefore(repDate)) {
+                    repeatedDayList.add(servDate.getDayOfMonth());
+                    servDate = servDate.plusDays(1);
                 }
                 break;
             case WEEKLY:
-                while (day < MAX_DAY_OF_MONTH) {
-                    repeatedDayList.add(day);
-                    day += 7;
+                while (servDate.isBefore(repDate)) {
+                    repeatedDayList.add(servDate.getDayOfMonth());
+                    servDate = servDate.plusDays(7);
                 }
             default:
                 break;

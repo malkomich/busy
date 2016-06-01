@@ -28,7 +28,7 @@ public class ServiceValidator implements Validator {
         for (ServiceForm serviceForm : serviceListForm.getServices()) {
             Repetition type = serviceForm.getRepetitionType();
             String dateString = serviceForm.getRepetitionDate();
-            String regex = "\\d{4}-\\d{2}-\\d{2}";
+            String regex = "\\d{2}/\\d{2}/\\d{4}";
 
             if (!Repetition.NONE.equals(type) && (dateString == null || !dateString.matches(regex))) {
                 errors.rejectValue("services[" + index + "].repetitionDate", "schedule.service.repetition_date.empty");
