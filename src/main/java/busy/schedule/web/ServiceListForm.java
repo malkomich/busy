@@ -167,7 +167,7 @@ public class ServiceListForm {
             DateTime date = service.getStartTime();
             long limitMillis = repetitionDate.toDateTime(date.toLocalTime()).getMillis();
 
-            while ((date = date.plusDays(intervalDays)).isBefore(limitMillis)) {
+            while (!(date = date.plusDays(intervalDays)).isAfter(limitMillis)) {
 
                 Service serviceCopy = new Service();
                 serviceCopy.setStartTime(date);
