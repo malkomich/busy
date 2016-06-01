@@ -133,7 +133,7 @@ public class ServiceListForm {
             if (intervalDays > 0) {
 
                 LocalDate repetitionDate =
-                    DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(form.getRepetitionDate());
+                    DateTimeFormat.forPattern("MM/dd/yyyy").parseLocalDate(form.getRepetitionDate());
                 List<Service> repeatedServices = getRepeatedServices(service, intervalDays, repetitionDate);
 
                 for (Service s : repeatedServices) {
