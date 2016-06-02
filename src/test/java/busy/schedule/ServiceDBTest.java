@@ -16,6 +16,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
+import busy.company.Branch;
 import busy.role.Role;
 import busy.util.SecureSetter;
 
@@ -49,8 +50,12 @@ public class ServiceDBTest extends AbstractDBTest {
         initDay = new DateTime(2016, 1, 1, 0, 0);
         endDay = new DateTime(2016, 2, 1, 0, 0);
 
+        Branch branch = new Branch();
         role = new Role();
         SecureSetter.setId(role, 1);
+        SecureSetter.setAttribute(role, "setManager", Boolean.class, true);
+        SecureSetter.setId(branch, 1);
+        role.setBranch(branch);
 
         serviceType = new ServiceType();
         SecureSetter.setId(serviceType, 1);
@@ -94,6 +99,7 @@ public class ServiceDBTest extends AbstractDBTest {
     @DatabaseSetup("../schedule/serviceSet.xml")
     public void findByInvalidRole() {
 
+        role = new Role();
         SecureSetter.setId(role, INVALID_ID);
 
         List<Service> services = repository.findBetweenDays(initDay, endDay, role, serviceType);

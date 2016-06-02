@@ -50,7 +50,7 @@ public class Role implements Serializable {
     }
 
     public Boolean isManager() {
-        return manager;
+        return (manager != null) ? manager: false;
     }
 
     @SuppressWarnings("unused")
