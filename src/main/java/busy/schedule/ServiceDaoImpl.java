@@ -5,34 +5,48 @@ import static busy.util.SQLUtil.ADDR1;
 import static busy.util.SQLUtil.ADDR2;
 import static busy.util.SQLUtil.ADMIN;
 import static busy.util.SQLUtil.ALIAS_ADDR_ID;
+import static busy.util.SQLUtil.ALIAS_BRANCH_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_NAME;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
+import static busy.util.SQLUtil.ALIAS_ROLE_ID;
+import static busy.util.SQLUtil.ALIAS_SCHEDULE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_ID;
 import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_NAME;
 import static busy.util.SQLUtil.ALIAS_USER_ID;
 import static busy.util.SQLUtil.BOOKINGS_PER_ROLE;
+import static busy.util.SQLUtil.BOOKING_USER_ACTIVE;
+import static busy.util.SQLUtil.BOOKING_USER_ADMIN;
+import static busy.util.SQLUtil.BOOKING_USER_EMAIL;
+import static busy.util.SQLUtil.BOOKING_USER_FIRSTNAME;
+import static busy.util.SQLUtil.BOOKING_USER_ID;
+import static busy.util.SQLUtil.BOOKING_USER_LASTNAME;
+import static busy.util.SQLUtil.BOOKING_USER_NIF;
+import static busy.util.SQLUtil.BOOKING_USER_PHONE;
 import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.CORRELATION;
 import static busy.util.SQLUtil.DESCRIPTION;
 import static busy.util.SQLUtil.DURATION;
 import static busy.util.SQLUtil.EMAIL;
 import static busy.util.SQLUtil.FIRSTNAME;
+import static busy.util.SQLUtil.ID;
+import static busy.util.SQLUtil.IS_MANAGER;
 import static busy.util.SQLUtil.LASTNAME;
 import static busy.util.SQLUtil.NIF;
-import static busy.util.SQLUtil.PASSWORD;
 import static busy.util.SQLUtil.PHONE;
-import static busy.util.SQLUtil.ROLE_ID;
-import static busy.util.SQLUtil.SERVICE_QUERY;
+import static busy.util.SQLUtil.SCHEDULE_QUERY;
 import static busy.util.SQLUtil.SERVICE_TYPE_ID;
 import static busy.util.SQLUtil.START_DATETIME;
+import static busy.util.SQLUtil.TABLE_SERVICE;
 import static busy.util.SQLUtil.ZIPCODE;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +59,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import busy.company.Branch;
 import busy.location.Address;
 import busy.location.City;
 import busy.location.Country;
@@ -64,16 +81,30 @@ import busy.util.SecureSetter;
 public class ServiceDaoImpl implements ServiceDao {
 
     private static final String SQL_SELECT_BETWEEN_DAYS =
-            SERVICE_QUERY + " WHERE ? <= " + START_DATETIME + " AND ? >= " + START_DATETIME + " AND " + ROLE_ID + "=?";
+        SCHEDULE_QUERY + " WHERE ? <= " + START_DATETIME + " AND ? >= " + START_DATETIME;
+
+    private static final String SQL_ROLE_FILTER = " AND " + ALIAS_ROLE_ID + "=?";
+
+    private static final String SQL_BRANCH_FILTER = " AND " + ALIAS_BRANCH_ID + "=?";
 
     private static final String SQL_SERVICE_TYPE_FILTER = " AND " + SERVICE_TYPE_ID + "=?";
 
+    private static final String SQL_UPDATE = "UPDATE " + TABLE_SERVICE + " SET " + START_DATETIME + "= ?,"
+        + SERVICE_TYPE_ID + "= ?," + CORRELATION + "= ?" + " WHERE " + ID + "= ?";
+
     private JdbcTemplate jdbcTemplate;
+
+    private SimpleJdbcInsert jdbcInsert;
 
     @Autowired
     public void setDataSource(@Qualifier("dataSource") DataSource dataSource) {
 
         jdbcTemplate = new JdbcTemplate(dataSource);
+
+        jdbcInsert = new SimpleJdbcInsert(dataSource);
+        jdbcInsert.withTableName(TABLE_SERVICE);
+        jdbcInsert.setGeneratedKeyName(ID);
+        jdbcInsert.setColumnNames(Arrays.asList(START_DATETIME, SERVICE_TYPE_ID, CORRELATION));
 
     }
 
@@ -88,19 +119,27 @@ public class ServiceDaoImpl implements ServiceDao {
         if (initDay == null || endDay == null) {
             throw new IllegalArgumentException("The days between which find the services cannot be null");
         }
-        
-        if(role == null) {
+
+        if (role == null) {
             throw new IllegalArgumentException("The role cannot be null");
         }
 
         ServiceSetExtractor resultSetExtractor = new ServiceSetExtractor();
-        resultSetExtractor.setRole(role);
+        resultSetExtractor.setBranch(role.getBranch());
 
         String query = SQL_SELECT_BETWEEN_DAYS;
         List<Object> params = new ArrayList<>();
         params.add(new Timestamp(initDay.getMillis()));
         params.add(new Timestamp(endDay.getMillis()));
-        params.add(role.getId());
+
+        if (role.isManager()) {
+            query += SQL_BRANCH_FILTER;
+            params.add(role.getBranchId());
+        } else {
+            query += SQL_ROLE_FILTER;
+            params.add(role.getId());
+            resultSetExtractor.setRole(role);
+        }
 
         if (serviceType != null) {
             query += SQL_SERVICE_TYPE_FILTER;
@@ -111,35 +150,71 @@ public class ServiceDaoImpl implements ServiceDao {
         return jdbcTemplate.query(query, resultSetExtractor, params.toArray());
     }
 
+    /*
+     * (non-Javadoc)
+     * @see busy.schedule.ServiceDao#save(busy.schedule.Service)
+     */
+    @Override
+    public void save(Service service) {
+
+        if (service.getId() > 0) {
+
+            jdbcTemplate.update(SQL_UPDATE, service.getStartTimestamp(), service.getServiceTypeId(),
+                service.getCorrelation(), service.getId());
+
+        } else {
+
+            Map<String, Object> parameters = new HashMap<String, Object>();
+            parameters.put(START_DATETIME, service.getStartTimestamp());
+            parameters.put(SERVICE_TYPE_ID, service.getServiceTypeId());
+            parameters.put(CORRELATION, service.getCorrelation());
+
+            Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+            if (key != null) {
+                SecureSetter.setId(service, key.intValue());
+            }
+
+        }
+
+    }
+
     private class ServiceSetExtractor implements ResultSetExtractor<List<Service>> {
 
         private Role role;
+        private Branch branch;
         private ServiceType serviceType;
 
         public void setRole(Role role) {
             this.role = role;
         }
 
+        public void setBranch(Branch branch) {
+            this.branch = branch;
+        }
+
         public void setServiceType(ServiceType serviceType) {
             this.serviceType = serviceType;
         }
-        
+
         @Override
         public List<Service> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
-            Map<Integer, Service> items = new HashMap<>();
+            boolean hasNext = rs.next();
 
-            while(rs.next()) {
+            Map<Integer, Service> serviceMap = new HashMap<>();
 
-                Service service = items.get(rs.getInt(ALIAS_SERVICE_ID));
+            while (hasNext) {
+
+                Service service = serviceMap.get(rs.getInt(ALIAS_SERVICE_ID));
 
                 if (service == null) {
-                    
+
                     service = new Service();
                     int id = rs.getInt(ALIAS_SERVICE_ID);
                     SecureSetter.setId(service, id);
-                    service.setRole(role);
-                    
+                    service.setCorrelation(rs.getInt(CORRELATION));
+
+                    ServiceType serviceType = this.serviceType;
                     if (serviceType == null) {
                         serviceType = new ServiceType();
                         SecureSetter.setId(serviceType, rs.getInt(ALIAS_SERVICE_TYPE_ID));
@@ -147,61 +222,94 @@ public class ServiceDaoImpl implements ServiceDao {
                         serviceType.setDescription(rs.getString(DESCRIPTION));
                         serviceType.setMaxBookingsPerRole(rs.getInt(BOOKINGS_PER_ROLE));
                         serviceType.setDuration(rs.getInt(DURATION));
-                        serviceType.setCompany(role.getCompany());
+                        serviceType.setCompany(branch.getCompany());
                     }
                     service.setServiceType(serviceType);
-                    
+
                     service.setStartTime(new DateTime(rs.getTimestamp(START_DATETIME)));
-                    
-                    items.put(id, service);
+
+                    serviceMap.put(id, service);
                 }
-                
-                Integer userId = rs.getInt(ALIAS_USER_ID);
-                if(userId != INVALID_ID) {
-                    User user = new User();
-                    SecureSetter.setId(user, userId);
-                    user.setFirstName(rs.getString(FIRSTNAME));
-                    user.setLastName(rs.getString(LASTNAME));
-                    user.setEmail(rs.getString(EMAIL));
-                    user.setPassword(rs.getString(PASSWORD));
-                    user.setNif(rs.getString(NIF));
-                    user.setPhone(rs.getString(PHONE));
-                    user.setActive(rs.getBoolean(ACTIVE));
-                    SecureSetter.setAttribute(user, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
-    
+
+                Schedule schedule = new Schedule();
+                SecureSetter.setId(schedule, rs.getInt(ALIAS_SCHEDULE_ID));
+
+                Role role = this.role;
+                if (role == null) {
+                    role = new Role();
+                    SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
+
+                    // Set User
+                    User roleUser = new User();
+                    SecureSetter.setId(roleUser, rs.getInt(ALIAS_USER_ID));
+                    roleUser.setFirstName(rs.getString(FIRSTNAME));
+                    roleUser.setLastName(rs.getString(LASTNAME));
+                    roleUser.setEmail(rs.getString(EMAIL));
+                    roleUser.setNif(rs.getString(NIF));
+                    roleUser.setPhone(rs.getString(PHONE));
+                    roleUser.setActive(rs.getBoolean(ACTIVE));
+                    SecureSetter.setAttribute(roleUser, "setAdmin", Boolean.class, rs.getBoolean(ADMIN));
+
                     Integer addressId = 0;
                     if ((addressId = rs.getInt(ALIAS_ADDR_ID)) > 0) {
-    
+
                         Address address = new Address();
-    
+
                         SecureSetter.setId(address, addressId);
                         address.setAddress1(rs.getString(ADDR1));
                         address.setAddress2(rs.getString(ADDR2));
                         address.setZipCode(rs.getString(ZIPCODE));
-    
+
                         City city = new City();
                         SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
                         city.setName(rs.getString(ALIAS_CITY_NAME));
-    
+
                         Country country = new Country();
                         SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
                         country.setName(rs.getString(ALIAS_COUNTRY_NAME));
                         country.setCode(rs.getString(CODE));
-    
+
                         city.setCountry(country);
-    
+
                         address.setCity(city);
-    
-                        user.setAddress(address);
+
+                        roleUser.setAddress(address);
                     }
-    
-                    service.addBooking(user);
+
+                    role.setUser(roleUser);
+
+                    role.setBranch(branch);
+
+                    SecureSetter.setAttribute(role, "setManager", Boolean.class, rs.getBoolean(IS_MANAGER));
                 }
+                schedule.setRole(role);
+
+                do {
+                    Integer userId = rs.getInt(BOOKING_USER_ID);
+                    if (userId != INVALID_ID) {
+                        User bookingUser = new User();
+                        SecureSetter.setId(bookingUser, userId);
+                        bookingUser.setFirstName(rs.getString(BOOKING_USER_FIRSTNAME));
+                        bookingUser.setLastName(rs.getString(BOOKING_USER_LASTNAME));
+                        bookingUser.setEmail(rs.getString(BOOKING_USER_EMAIL));
+                        bookingUser.setNif(rs.getString(BOOKING_USER_NIF));
+                        bookingUser.setPhone(rs.getString(BOOKING_USER_PHONE));
+                        bookingUser.setActive(rs.getBoolean(BOOKING_USER_ACTIVE));
+                        SecureSetter.setAttribute(bookingUser, "setAdmin", Boolean.class,
+                            rs.getBoolean(BOOKING_USER_ADMIN));
+
+                        schedule.addBooking(bookingUser);
+                    }
+                    hasNext = rs.next();
+                } while (hasNext && rs.getInt(ALIAS_SCHEDULE_ID) == schedule.getId());
+
+                service.addSchedule(schedule);
+
             }
 
-            return new ArrayList<Service>(items.values());
+            return new ArrayList<Service>(serviceMap.values());
         }
-        
+
     }
 
 }

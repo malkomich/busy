@@ -122,7 +122,7 @@ function showServiceTypeForm() {
         id : sTypeId
     }, function(data) {
         var modalContainer = $('#modalForm');
-        $('.modal-body', modalContainer).html(data);
+        $('.modal-content', modalContainer).html(data);
         modalContainer.modal();
     });
 }
@@ -130,8 +130,6 @@ function showServiceTypeForm() {
 function saveServiceType() {
     var form = $('#serviceTypeForm');
     $.post("/service-type/save", form.serialize(), function(data) {
-        var type = $.type(data);
-        
         var modalContainer = $('#modalForm');
         
         if ($(data).is("form")) {

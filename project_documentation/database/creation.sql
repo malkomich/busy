@@ -6,6 +6,8 @@
  */
 
 DROP TABLE IF EXISTS booking;
+DROP TABLE IF EXISTS schedule;
+DROP SEQUENCE IF EXISTS schedule_seq;
 DROP TABLE IF EXISTS service;
 DROP SEQUENCE IF EXISTS service_seq;
 DROP TABLE IF EXISTS service_type;
@@ -151,7 +153,7 @@ CREATE TABLE service_type(
     duration            integer             NOT NULL DEFAULT 60,
     company_id          integer             NOT NULL REFERENCES company(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-	UNIQUE (name, company_id)
+    UNIQUE (name, company_id)
 );
 
 CREATE SEQUENCE service_seq;
@@ -161,6 +163,15 @@ CREATE TABLE service(
     start_time          timestamp with time zone    NOT NULL,
     service_type_id     integer             NOT NULL REFERENCES service_type(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
+    correlation         integer             NOT NULL DEFAULT 0
+);
+
+CREATE SEQUENCE schedule_seq;
+
+CREATE TABLE schedule(
+    id                  integer             DEFAULT nextval('schedule_seq') NOT NULL PRIMARY KEY,
+    service_id          integer             NOT NULL REFERENCES service(id)
+        ON DELETE CASCADE ON UPDATE CASCADE,
     role_id             integer             NOT NULL REFERENCES role(id)
         ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -168,7 +179,7 @@ CREATE TABLE service(
 CREATE TABLE booking(
     person_id           integer             NOT NULL REFERENCES person(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    service_id          integer             NOT NULL REFERENCES service(id)
+    schedule_id          integer             NOT NULL REFERENCES schedule(id)
         ON DELETE NO ACTION ON UPDATE CASCADE,
-    PRIMARY KEY(person_id, service_id)
+    UNIQUE(person_id, schedule_id)
 );

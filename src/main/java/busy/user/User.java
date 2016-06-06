@@ -124,7 +124,7 @@ public class User implements Serializable {
 
     @Override
     public String toString() {
-        return firstName + " " + lastName + " (" + email + ")";
+        return lastName + ", " + firstName;
     }
 
     public Integer getAddressId() {

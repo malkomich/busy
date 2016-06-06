@@ -1,28 +1,55 @@
 package busy.schedule;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.joda.time.DateTime;
 
-import busy.role.Role;
-import busy.user.User;
-
+/**
+ * Service model.
+ * 
+ * @author malkomich
+ *
+ */
 public class Service implements Serializable {
 
     private static final long serialVersionUID = -811217121096779784L;
 
+    public enum Repetition {
+        NONE(0, "schedule.service.repetition.none"),
+        DAILY(1, "schedule.service.repetition.daily"),
+        WEEKLY(2, "schedule.service.repetition.weekly");
+
+        private int id;
+        private String msgCode;
+
+        private Repetition(int id, String msgCode) {
+            this.id = id;
+            this.msgCode = msgCode;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getMsgCode() {
+            return msgCode;
+        }
+    }
+
     private int id;
     private DateTime startTime;
     private ServiceType serviceType;
-    private Role role;
-    private List<User> bookings;
+    private int correlation;
+
+    private List<Schedule> schedules;
 
     public Service() {
-        bookings = new ArrayList<>();
+        schedules = new ArrayList<>();
     }
-    
+
     public DateTime getStartTime() {
         return startTime;
     }
@@ -39,12 +66,24 @@ public class Service implements Serializable {
         this.serviceType = serviceType;
     }
 
-    public Role getRole() {
-        return role;
+    public int getCorrelation() {
+        return correlation;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setCorrelation(int correlation) {
+        this.correlation = correlation;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> scheduleList) {
+        schedules = scheduleList;
+    }
+
+    public void addSchedule(Schedule schedule) {
+        schedules.add(schedule);
     }
 
     public int getId() {
@@ -56,16 +95,22 @@ public class Service implements Serializable {
         this.id = id;
     }
 
-    public List<User> getBookings() {
-        return bookings;
+    public Timestamp getStartTimestamp() {
+        return (startTime != null) ? new Timestamp(startTime.getMillis()) : null;
     }
 
-    public void setBookings(List<User> bookings) {
-        this.bookings = bookings;
+    public Integer getServiceTypeId() {
+        return (serviceType != null) ? serviceType.getId() : null;
     }
-    
-    public void addBooking(User user) {
-        bookings.add(user);
+
+    public List<Schedule> getScheduleReplications() {
+
+        List<Schedule> scheduleList = new ArrayList<>();
+        for (Schedule schedule : this.schedules) {
+            scheduleList.add(schedule.replicate());
+        }
+
+        return scheduleList;
     }
 
 }

@@ -1,6 +1,7 @@
 package busy.schedule;
 
 import java.util.List;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 
@@ -70,5 +71,15 @@ public interface ScheduleService {
      *            the type of services wanted
      * @return The resultant list of services
      */
-    List<Service> findServicesBetweenDays(DateTime fromDateTime, DateTime toDateTime, Role role, ServiceType serviceType);
+    List<Service> findServicesBetweenDays(DateTime fromDateTime, DateTime toDateTime, Role role,
+        ServiceType serviceType);
+
+    /**
+     * Saves or updates a map of service lists. The services are grouped by the correlation, which
+     * indicates that a list of services are result of a repetition of one of them.
+     * 
+     * @param services
+     *            the map of services to be saved
+     */
+    void saveServices(Map<Integer, List<Service>> services);
 }

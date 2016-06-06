@@ -2,6 +2,7 @@ package busy.schedule;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,19 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private ServiceDao serviceDao;
 
+    @Autowired
+    private ScheduleDao scheduleDao;
+
     public void setServiceTypeDao(ServiceTypeDao serviceTypeDao) {
         this.serviceTypeDao = serviceTypeDao;
     }
 
     public void setServiceDao(ServiceDao serviceDao) {
         this.serviceDao = serviceDao;
+    }
+
+    public void setSscheduleDao(ScheduleDao scheduleDao) {
+        this.scheduleDao = scheduleDao;
     }
 
     /*
@@ -104,6 +112,43 @@ public class ScheduleServiceImpl implements ScheduleService {
         ServiceType serviceType) {
 
         return serviceDao.findBetweenDays(fromDateTime, toDateTime, role, serviceType);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.schedule.ScheduleService#saveServices(java.util.List)
+     */
+    @Override
+    public void saveServices(Map<Integer, List<busy.schedule.Service>> serviceMap) {
+
+        for (List<busy.schedule.Service> serviceList : serviceMap.values()) {
+
+            busy.schedule.Service serviceReference = serviceList.get(0);
+            serviceDao.save(serviceReference);
+            int correlation = (serviceList.size() > 1) ? serviceReference.getId() : 0;
+
+            for (busy.schedule.Service service : serviceList) {
+
+                service.setCorrelation(correlation);
+
+                serviceDao.save(service);
+                saveSchedules(service.getSchedules(), service.getId());
+            }
+        }
+    }
+
+    /**
+     * Saves or updates a list of schedules.
+     * 
+     * @param scheduleList
+     *            the list of schedules to be saved
+     * @param serviceId
+     *            the unique id of the service to attach the schedules
+     */
+    private void saveSchedules(List<Schedule> scheduleList, int serviceId) {
+        for (Schedule schedule : scheduleList) {
+            scheduleDao.save(schedule, serviceId);
+        }
     }
 
 }

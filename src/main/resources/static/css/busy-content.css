@@ -135,7 +135,36 @@
 .bg-inactive {
     background: #FAF2F2;
 }
+
 .tip-text {
     font-size: x-small;
     color: #ccc;
+}
+
+/*
+ * Font size classes
+ */
+.fs-xs {
+    font-size: x-small;
+    line-height: 80%;
+}
+
+/*
+ * Position
+ */
+.center-v {
+    vertical-align: -webkit-baseline-middle;
+}
+
+/*
+ * Service form
+ */
+.service-roles-summary {
+    color: #ccc;
+}
+
+.service-roles-summary ul {
+    margin-left: 0px;
+    padding-left: 0px;
+    list-style-type: none;
 }

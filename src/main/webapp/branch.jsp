@@ -12,7 +12,8 @@
 
 <link rel="icon" href="/favicon.ico">
 
-<title><spring:message code="branch.page.title" arguments="${role.branch.company.tradeName}" argumentSeparator="¬" /></title>
+<title><spring:message code="branch.page.title" arguments="${role.branch.company.tradeName}"
+        argumentSeparator="¬" /></title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -20,7 +21,7 @@
 <link href="/css/busy-content.css" rel="stylesheet">
 <link href="/css/busy-components.css" rel="stylesheet">
 <link href="/css/calendar.min.css" rel="stylesheet">
-<link href="/css/signin.css" rel="stylesheet" type="text/css">
+<link href="/css/forms.css" rel="stylesheet">
 
 </head>
 <body>
@@ -41,7 +42,7 @@
                             <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text">${username}</span>
                             </a>
                             <c:forEach items="${roleList}" var="roleItem">
-                                <a href="/company/${roleItem.branch.company.id}/role/${roleItem.id}"
+                                <a href="/schedule/${roleItem.id}"
                                     class="role-select-menu-item"> <span class="role-select-menu-item-text">${roleItem.branch.company.tradeName}</span>
                                 </a>
                             </c:forEach>
@@ -53,8 +54,9 @@
                 <div class="col-xs-9 pull-right">
                     <div class="table-list-filters pull-right">
                         <div class="select-menu pull-left">
-                            <button id="service-types-button" class="btn btn-default btn-lg" href="#service-types-collapse"
-                                data-toggle="collapse" aria-expanded="false" aria-controls="service-types-collapse">
+                            <button id="service-types-button" class="btn btn-default btn-lg"
+                                href="#service-types-collapse" data-toggle="collapse" aria-expanded="false"
+                                aria-controls="service-types-collapse">
                                 <spring:message code="menu.filters.service-type.title" />
                                 <span class="glyphicon glyphicon-triangle-bottom" />
                             </button>
@@ -87,7 +89,7 @@
             <!-- .page-header -->
 
             <div class="row">
-				<div id="calendar"></div>
+                <div id="calendar"></div>
             </div>
             <!-- .row -->
 
@@ -116,8 +118,8 @@
     </div>
 
     <!-- Message Modal -->
-    <div class="modal fade bs-example-modal-lg" id="messageModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" id="infoMessage">
                 <div class="modal-body"></div>
             </div>
@@ -126,13 +128,9 @@
 
     <!-- Modal Form -->
     <div class="modal fade" id="modalForm" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg" role="document">
 
-            <div class="modal-content">
-
-                <div class="modal-body"></div>
-
-            </div>
+            <div class="modal-content"></div>
             <!-- .modal-content -->
         </div>
         <!-- .modal-dialog -->
