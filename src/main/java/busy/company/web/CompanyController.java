@@ -1,6 +1,5 @@
 package busy.company.web;
 
-import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -37,7 +36,6 @@ import busy.role.Role;
 import busy.role.RoleService;
 import busy.schedule.ScheduleService;
 import busy.schedule.ServiceType;
-import busy.schedule.YearSchedule;
 import busy.schedule.web.ServiceTypeForm;
 import busy.schedule.web.ServiceTypeValidator;
 import busy.user.User;
@@ -53,40 +51,41 @@ import busy.util.SecureSetter;
  */
 @Controller
 @Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.SCHEDULE_SESSION, CompanyController.BRANCH_SESSION,
-    CompanyController.SERVICE_TYPES_SESSION})
+@SessionAttributes(value = {CompanyController.ROLE_SESSION, CompanyController.SERVICE_TYPES_SESSION})
 public class CompanyController {
 
     /**
      * Spring Model Attributes.
      */
-    static final String USER_SESSION = "user";
-    public static final String SCHEDULE_SESSION = "schedule";
-    static final String BRANCH_SESSION = "branch";
+    public static final String ROLE_SESSION = "role";
     static final String SERVICE_TYPES_SESSION = "serviceTypes";
+    static final String USER_SESSION = "user";
 
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
     static final String COUNTRY_ITEMS_REQUEST = "countryItems";
     static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
     static final String MESSAGE_REQUEST = "messageFromController";
     static final String COMPANY_REQUEST = "company";
-    private static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
+    static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
     static final String SERVICE_TYPE_REQUEST = "serviceType";
 
     /**
      * URL Paths.
      */
+    public static final String PATH_SCHEDULE = "/schedule/";
+    
     private static final String PATH_ROOT = "/";
     private static final String PATH_REGISTER_COMPANY = "/new_company";
     private static final String PATH_COMPANIES_UPDATE = "/get_company_list";
     private static final String PATH_COMPANY_CHANGE_STATE = "/change_company_state";
     private static final String PATH_COMPANY_SEARCHES = "/get_company_searches";
     private static final String PATH_COMPANY_INFO = "/company/{id}";
-    private static final String PATH_BRANCH = "/company/{cId}/branch/{bId}";
     private static final String PATH_SERVICE_TYPE_DELETE = "/service-type/delete";
     private static final String PATH_SERVICE_TYPE_SAVE = "/service-type/save";
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
 
+    private static final String PATH_PARAM_ROLE = "{rId}";
+    
     /**
      * JSP's
      */
@@ -147,27 +146,20 @@ public class CompanyController {
     /**
      * Shows the calendar view of a specific branch.
      * 
-     * @param branchId
-     *            unique ID of the branch requested
+     * @param roleId
+     *            unique ID of the role requested
      * @param model
      *            Spring model instance
      * @return The page to register companies
      */
-    @RequestMapping(value = PATH_BRANCH, method = RequestMethod.GET)
-    public String showBranchPage(@PathVariable("bId") String branchId, Model model) {
+    @RequestMapping(value = PATH_SCHEDULE + PATH_PARAM_ROLE, method = RequestMethod.GET)
+    public String showBranchPage(@PathVariable("rId") String roleId, Model model) {
 
-        Branch branch = companyService.findBranchById(Integer.parseInt(branchId));
-        model.addAttribute(BRANCH_SESSION, branch);
-
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-
-        // Load 3 year to handle right the weeks between years.
-        YearSchedule[] schedule = {scheduleService.findScheduleByBranch(branch, year - 1),
-            scheduleService.findScheduleByBranch(branch, year), scheduleService.findScheduleByBranch(branch, year + 1)};
-        model.addAttribute(SCHEDULE_SESSION, schedule);
+        Role role = roleService.findRoleById(Integer.parseInt(roleId));
+        model.addAttribute(ROLE_SESSION, role);
 
         // Load the service types of the company
-        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(branch.getCompany());
+        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(role.getCompany());
         model.addAttribute(SERVICE_TYPES_SESSION, serviceTypes);
 
         return BRANCH_PAGE;
@@ -260,7 +252,6 @@ public class CompanyController {
 
         eventPublisher.publishEvent(new OnRegisterCompany(role, request.getLocale(), request.getContextPath()));
 
-        redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult." + MESSAGE_REQUEST, result);
         String message = messageSource.getMessage("notification.message.company_pending", null, locale).trim();
         redirectAttributes.addFlashAttribute(MESSAGE_REQUEST, message);
 
@@ -320,7 +311,7 @@ public class CompanyController {
      * 
      * @param id
      *            the unique id of an existing service type
-     * @param mav
+     * @param model
      *            Spring Model instance
      * @return The JSP view of the form
      */
@@ -362,7 +353,7 @@ public class CompanyController {
     public String saveServiceType(@ModelAttribute(SERVICE_TYPE_FORM_REQUEST) @Valid ServiceTypeForm sTypeForm,
             BindingResult result, Model model) {
 
-        Company company = ((Branch) model.asMap().get(BRANCH_SESSION)).getCompany();
+        Company company = ((Role) model.asMap().get(ROLE_SESSION)).getCompany();
 
         ServiceTypeValidator validator = new ServiceTypeValidator(scheduleService);
         validator.setCompany(company);

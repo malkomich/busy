@@ -1,17 +1,62 @@
 package busy.schedule;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
-import busy.role.Role;
+import org.joda.time.DateTime;
 
+/**
+ * Service model.
+ * 
+ * @author malkomich
+ *
+ */
 public class Service implements Serializable {
 
     private static final long serialVersionUID = -811217121096779784L;
 
+    public enum Repetition {
+        NONE(0, "schedule.service.repetition.none"),
+        DAILY(1, "schedule.service.repetition.daily"),
+        WEEKLY(2, "schedule.service.repetition.weekly");
+
+        private int id;
+        private String msgCode;
+
+        private Repetition(int id, String msgCode) {
+            this.id = id;
+            this.msgCode = msgCode;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getMsgCode() {
+            return msgCode;
+        }
+    }
+
     private int id;
+    private DateTime startTime;
     private ServiceType serviceType;
-    private HourSchedule hourSchedule;
-    private Role role;
+    private int correlation;
+
+    private List<Schedule> schedules;
+
+    public Service() {
+        schedules = new ArrayList<>();
+    }
+
+    public DateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(DateTime startTime) {
+        this.startTime = startTime;
+    }
 
     public ServiceType getServiceType() {
         return serviceType;
@@ -21,20 +66,24 @@ public class Service implements Serializable {
         this.serviceType = serviceType;
     }
 
-    public HourSchedule getHourSchedule() {
-        return hourSchedule;
+    public int getCorrelation() {
+        return correlation;
     }
 
-    public void setHourSchedule(HourSchedule hourSchedule) {
-        this.hourSchedule = hourSchedule;
+    public void setCorrelation(int correlation) {
+        this.correlation = correlation;
     }
 
-    public Role getRole() {
-        return role;
+    public List<Schedule> getSchedules() {
+        return schedules;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public void setSchedules(List<Schedule> scheduleList) {
+        schedules = scheduleList;
+    }
+
+    public void addSchedule(Schedule schedule) {
+        schedules.add(schedule);
     }
 
     public int getId() {
@@ -44,6 +93,24 @@ public class Service implements Serializable {
     @SuppressWarnings("unused")
     private void setId(Integer id) {
         this.id = id;
+    }
+
+    public Timestamp getStartTimestamp() {
+        return (startTime != null) ? new Timestamp(startTime.getMillis()) : null;
+    }
+
+    public Integer getServiceTypeId() {
+        return (serviceType != null) ? serviceType.getId() : null;
+    }
+
+    public List<Schedule> getScheduleReplications() {
+
+        List<Schedule> scheduleList = new ArrayList<>();
+        for (Schedule schedule : this.schedules) {
+            scheduleList.add(schedule.replicate());
+        }
+
+        return scheduleList;
     }
 
 }

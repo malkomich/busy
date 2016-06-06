@@ -3,6 +3,9 @@
  */
 $(function() {
 
+    // Initialize bootstrap tooltips
+    $('[data-toggle="tooltip"]').tooltip({delay: { "show": 500 }, trigger : 'hover'});
+
     // Loads the cities when page loads (country can be selected before) and
     // when the country changes.
     var countrySelectTag = $('select#country');

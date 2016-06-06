@@ -11,14 +11,13 @@ import static org.mockito.Mockito.when;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import busy.Application;
 
 /**
- * Test Case for the UserService class.
+ * Test Case for the UserService implementation class.
  * 
  * @author malkomich
  *
@@ -27,7 +26,6 @@ import busy.Application;
 @SpringApplicationConfiguration(classes = Application.class)
 public class UserServiceTest {
 
-    @Autowired
     private UserServiceImpl service;
 
     private UserDao userDao;
@@ -35,6 +33,9 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
+        
+        service = new UserServiceImpl();
+        
         userDao = mock(UserDao.class);
         service.setUserDao(userDao);
 

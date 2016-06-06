@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 <link href="/css/cover.css" rel="stylesheet" type="text/css">
 <link href="/css/signin.css" rel="stylesheet" type="text/css">
+<link href="/css/forms.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
@@ -168,6 +169,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="/js/signup.js"></script>
+    <script type="text/javascript" src="/js/forms.js"></script>
 </body>
 </html>

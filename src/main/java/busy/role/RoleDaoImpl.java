@@ -24,7 +24,6 @@ import static busy.util.SQLUtil.ID;
 import static busy.util.SQLUtil.IS_MANAGER;
 import static busy.util.SQLUtil.LASTNAME;
 import static busy.util.SQLUtil.NIF;
-import static busy.util.SQLUtil.PASSWORD;
 import static busy.util.SQLUtil.PHONE;
 import static busy.util.SQLUtil.ROLE_SELECT_QUERY;
 import static busy.util.SQLUtil.TABLE_ROLE;
@@ -72,6 +71,11 @@ public class RoleDaoImpl implements RoleDao {
     private static final String SQL_SELECT_MANAGER_BY_COMPANY_ID =
             ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_COMPANY_ID + "=?";
 
+    private static final String SQL_SELECT_BY_ID = ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + ID + "=?";
+
+    private static final String SQL_SELECT_BY_BRANCH =
+            ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + BRANCHID + "=?";
+
     private static final String SQL_UPDATE = "UPDATE " + TABLE_ROLE + " SET " + USERID + "= ?," + BRANCHID + "= ?,"
             + IS_MANAGER + "= ?" + " WHERE " + ID + "= ?";
 
@@ -99,8 +103,7 @@ public class RoleDaoImpl implements RoleDao {
 
         if (role.getId() > 0) {
 
-            jdbcTemplate.update(SQL_UPDATE, role.getUserId(), role.getBranchId(), role.isManager(),
-                    role.getId());
+            jdbcTemplate.update(SQL_UPDATE, role.getUserId(), role.getBranchId(), role.isManager(), role.getId());
 
         } else {
 
@@ -149,12 +152,52 @@ public class RoleDaoImpl implements RoleDao {
         } catch (EmptyResultDataAccessException e) {
 
             return null;
+
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.role.RoleDao#findById(int)
+     */
+    @Override
+    public Role findById(int id) {
+
+        try {
+
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new RoleRowMapper(), id);
+
+        } catch (EmptyResultDataAccessException e) {
+
+            return null;
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.role.RoleDao#findByBranch(busy.company.Branch)
+     */
+    @Override
+    public List<Role> findByBranch(Branch branch) {
+
+        RoleRowMapper rowMapper = new RoleRowMapper();
+        rowMapper.setBranch(branch);
+
+        return jdbcTemplate.query(SQL_SELECT_BY_BRANCH, rowMapper, branch.getId());
     }
 
     private class RoleRowMapper implements RowMapper<Role> {
 
         private User user;
+        private Branch branch;
+
+        public void setUser(User user) {
+            this.user = user;
+        }
+
+        public void setBranch(Branch branch) {
+            this.branch = branch;
+        }
 
         @Override
         public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -163,13 +206,13 @@ public class RoleDaoImpl implements RoleDao {
             SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
 
             // Set User
+            User user = this.user;
             if (user == null) {
                 user = new User();
                 SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
                 user.setFirstName(rs.getString(FIRSTNAME));
                 user.setLastName(rs.getString(LASTNAME));
                 user.setEmail(rs.getString(EMAIL));
-                user.setPassword(rs.getString(PASSWORD));
                 user.setNif(rs.getString(NIF));
                 user.setPhone(rs.getString(PHONE));
                 user.setActive(rs.getBoolean(ACTIVE));
@@ -204,40 +247,43 @@ public class RoleDaoImpl implements RoleDao {
 
             role.setUser(user);
 
-            Branch branch = new Branch();
-            SecureSetter.setId(branch, rs.getInt(ALIAS_BRANCH_ID));
+            Branch branch = this.branch;
+            if (branch == null) {
+                branch = new Branch();
+                SecureSetter.setId(branch, rs.getInt(ALIAS_BRANCH_ID));
 
-            // Set Address
-            Address address = new Address();
-            int addressId = rs.getInt(ALIAS_ADDR_ID);
-            SecureSetter.setId(address, addressId);
-            address.setAddress1(rs.getString(ADDR1));
-            address.setAddress2(rs.getString(ADDR2));
-            address.setZipCode(rs.getString(ZIPCODE));
+                // Set Address
+                Address address = new Address();
+                int addressId = rs.getInt(ALIAS_ADDR_ID);
+                SecureSetter.setId(address, addressId);
+                address.setAddress1(rs.getString(ADDR1));
+                address.setAddress2(rs.getString(ADDR2));
+                address.setZipCode(rs.getString(ZIPCODE));
 
-            City city = new City();
-            SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
-            city.setName(rs.getString(ALIAS_CITY_NAME));
+                City city = new City();
+                SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+                city.setName(rs.getString(ALIAS_CITY_NAME));
 
-            Country country = new Country();
-            SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
-            country.setName(rs.getString(ALIAS_COUNTRY_NAME));
-            country.setCode(rs.getString(CODE));
+                Country country = new Country();
+                SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+                country.setName(rs.getString(ALIAS_COUNTRY_NAME));
+                country.setCode(rs.getString(CODE));
 
-            city.setCountry(country);
+                city.setCountry(country);
 
-            address.setCity(city);
-            branch.setAddress(address);
+                address.setCity(city);
+                branch.setAddress(address);
 
-            // Set Company
-            Company company = new Company();
-            SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
-            company.setTradeName(rs.getString(TRADE_NAME));
-            company.setBusinessName(rs.getString(BUSINESS_NAME));
-            company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
-            branch.setCompany(company);
+                // Set Company
+                Company company = new Company();
+                SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
+                company.setTradeName(rs.getString(TRADE_NAME));
+                company.setBusinessName(rs.getString(BUSINESS_NAME));
+                company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
+                branch.setCompany(company);
 
-            branch.setPhone(rs.getString(PHONE));
+                branch.setPhone(rs.getString(PHONE));
+            }
 
             role.setBranch(branch);
 
@@ -246,9 +292,6 @@ public class RoleDaoImpl implements RoleDao {
             return role;
         }
 
-        public void setUser(User user) {
-            this.user = user;
-        }
     }
 
 }

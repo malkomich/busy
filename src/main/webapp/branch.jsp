@@ -12,7 +12,8 @@
 
 <link rel="icon" href="/favicon.ico">
 
-<title><spring:message code="branch.page.title" arguments="${branch.company.tradeName}" argumentSeparator="¬" /></title>
+<title><spring:message code="branch.page.title" arguments="${role.branch.company.tradeName}"
+        argumentSeparator="¬" /></title>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
@@ -20,7 +21,7 @@
 <link href="/css/busy-content.css" rel="stylesheet">
 <link href="/css/busy-components.css" rel="stylesheet">
 <link href="/css/calendar.min.css" rel="stylesheet">
-<link href="/css/signin.css" rel="stylesheet" type="text/css">
+<link href="/css/forms.css" rel="stylesheet">
 
 </head>
 <body>
@@ -40,9 +41,9 @@
                         <div class="role-select-menu-list">
                             <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text">${username}</span>
                             </a>
-                            <c:forEach items="${roles}" var="role">
-                                <a href="/company/${role.branch.company.id}/branch/${role.branch.id}"
-                                    class="role-select-menu-item"> <span class="role-select-menu-item-text">${role.branch.company.tradeName}</span>
+                            <c:forEach items="${roleList}" var="roleItem">
+                                <a href="/schedule/${roleItem.id}"
+                                    class="role-select-menu-item"> <span class="role-select-menu-item-text">${roleItem.branch.company.tradeName}</span>
                                 </a>
                             </c:forEach>
                         </div>
@@ -53,8 +54,9 @@
                 <div class="col-xs-9 pull-right">
                     <div class="table-list-filters pull-right">
                         <div class="select-menu pull-left">
-                            <button id="service-types-button" class="btn btn-default btn-lg" href="#service-types-collapse"
-                                data-toggle="collapse" aria-expanded="false" aria-controls="service-types-collapse">
+                            <button id="service-types-button" class="btn btn-default btn-lg"
+                                href="#service-types-collapse" data-toggle="collapse" aria-expanded="false"
+                                aria-controls="service-types-collapse">
                                 <spring:message code="menu.filters.service-type.title" />
                                 <span class="glyphicon glyphicon-triangle-bottom" />
                             </button>
@@ -80,11 +82,6 @@
                         <button class="btn calendar-nav" data-calendar-nav="today">Today</button>
                         <button class="btn btn-primary calendar-nav" data-calendar-nav="next">Next >></button>
                     </div>
-                    <div class="btn-group">
-                        <button class="btn btn-warning active" data-calendar-view="month">Month</button>
-                        <button class="btn btn-warning" data-calendar-view="week">Week</button>
-                        <button class="btn btn-warning" data-calendar-view="day">Day</button>
-                    </div>
                 </div>
 
                 <h3></h3>
@@ -92,11 +89,9 @@
             <!-- .page-header -->
 
             <div class="row">
-                <div class="span9">
-                    <div id="calendar"></div>
-                </div>
+                <div id="calendar"></div>
             </div>
-            <!-- .row-profile -->
+            <!-- .row -->
 
         </div>
         <!-- .content -->
@@ -123,8 +118,8 @@
     </div>
 
     <!-- Message Modal -->
-    <div class="modal fade bs-example-modal-lg" id="messageModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="messageModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" id="infoMessage">
                 <div class="modal-body"></div>
             </div>
@@ -133,13 +128,9 @@
 
     <!-- Modal Form -->
     <div class="modal fade" id="modalForm" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg" role="document">
 
-            <div class="modal-content">
-
-                <div class="modal-body"></div>
-
-            </div>
+            <div class="modal-content"></div>
             <!-- .modal-content -->
         </div>
         <!-- .modal-dialog -->
@@ -151,7 +142,7 @@
 
     <script type="text/javascript">
                     var message = '<c:out value="${messageFromController}"/>';
-                    var branchId = "${branch.id}";
+                    var roleId = "${role.id}";
                 </script>
     <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
     <script type="text/javascript" src="/js/busy-logic.js"></script>

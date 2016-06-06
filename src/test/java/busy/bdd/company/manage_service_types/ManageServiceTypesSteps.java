@@ -100,7 +100,7 @@ public class ManageServiceTypesSteps extends AbstractFunctionalTest {
     @Then("^I should see a window with a form to input the data$")
     public void form_shown() throws Throwable {
 
-        assertTrue(branchPage.formIsShown());
+        assertTrue(branchPage.formIsShown(BranchPage.FORM_SERVICE_TYPE));
     }
 
     @When("^I enter the name \"([^\"]*)\"$")
@@ -130,7 +130,7 @@ public class ManageServiceTypesSteps extends AbstractFunctionalTest {
     @When("^I click on Accept$")
     public void submit() throws Throwable {
 
-        branchPage.submitServiceType();
+        branchPage.submitForm(BranchPage.FORM_SERVICE_TYPE);
     }
 
     @Then("^I should see \"([^\"]*)\" in the list of services with the data \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\"$")

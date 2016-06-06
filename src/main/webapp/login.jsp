@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 <link href="/css/cover.css" rel="stylesheet" type="text/css">
 <link href="/css/signin.css" rel="stylesheet" type="text/css">
+<link href="/css/forms.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>

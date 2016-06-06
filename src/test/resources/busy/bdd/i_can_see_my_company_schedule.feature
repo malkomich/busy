@@ -9,7 +9,8 @@ Feature: The user will be able to see the schedule status of his company
         And I am on the main page
 
     Scenario: Organizational display of the company calendar successfully
-        When I select my company name 'Busy' in the dropdown
+        When I add some services with bookings for the current day
+        And I select my company name 'Busy' in the dropdown
         Then I should see a calendar with the bookings already made
-        When I select a day
+        When I select the current day
         Then I should see the bookings of this day in a more detailed way

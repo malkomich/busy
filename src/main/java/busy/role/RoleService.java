@@ -2,6 +2,7 @@ package busy.role;
 
 import java.util.List;
 
+import busy.company.Branch;
 import busy.company.Company;
 import busy.user.User;
 
@@ -40,5 +41,23 @@ public interface RoleService {
      * @return The resultant role
      */
     Role findCompanyManager(Company company);
+
+    /**
+     * Gets a role by his ID
+     * 
+     * @param id
+     *            unique ID of the role
+     * @return The resultant role
+     */
+    Role findRoleById(int id);
+
+    /**
+     * Gets all roles attached to the given branch.
+     * 
+     * @param branch
+     *            the company branch to find in
+     * @return The list of resultant roles
+     */
+    List<Role> findRolesByBranch(Branch branch);
 
 }

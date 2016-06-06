@@ -19,7 +19,7 @@
 <link href="/css/cover-logged.css" rel="stylesheet">
 <link href="/css/main.css" rel="stylesheet">
 
-<link href="/css/signin.css" rel="stylesheet" type="text/css">
+<link href="/css/forms.css" rel="stylesheet" type="text/css">
 
 </head>
 
@@ -38,7 +38,7 @@
                 <div class="inner cover">
 
                     <div class="form-box">
-                        <form:form class="form-signin" action="new_company" modelAttribute="companyForm"
+                        <form:form action="new_company" modelAttribute="companyForm"
                             commandName="companyForm" method="POST">
 
                             <div class="row">
@@ -190,7 +190,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="/js/signup.js"></script>
+    <script type="text/javascript" src="/js/forms.js"></script>
     <script type="text/javascript" src="/js/busy-logic.js"></script>
 
 </body>

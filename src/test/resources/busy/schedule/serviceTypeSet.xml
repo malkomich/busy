@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-    <service_type id="1" name="Engineer" company_id="1" />
+  <service_type id="1" name="Engineer" bookings_per_role="2" company_id="1" />
 </dataset>

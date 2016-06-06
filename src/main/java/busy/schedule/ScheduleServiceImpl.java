@@ -2,14 +2,18 @@ package busy.schedule;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import busy.company.Branch;
 import busy.company.Company;
+import busy.role.Role;
 import busy.util.OperationResult;
 
 /**
@@ -25,27 +29,24 @@ public class ScheduleServiceImpl implements ScheduleService {
     private MessageSource messageSource;
 
     @Autowired
-    private ScheduleDao scheduleDao;
-
-    @Autowired
     private ServiceTypeDao serviceTypeDao;
 
-    public void setScheduleDao(ScheduleDao scheduleDao) {
-        this.scheduleDao = scheduleDao;
-    }
+    @Autowired
+    private ServiceDao serviceDao;
+
+    @Autowired
+    private ScheduleDao scheduleDao;
 
     public void setServiceTypeDao(ServiceTypeDao serviceTypeDao) {
         this.serviceTypeDao = serviceTypeDao;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see busy.schedule.ScheduleService#findScheduleByBranch(busy.company.Branch)
-     */
-    @Override
-    public YearSchedule findScheduleByBranch(Branch branch, int year) {
+    public void setServiceDao(ServiceDao serviceDao) {
+        this.serviceDao = serviceDao;
+    }
 
-        return scheduleDao.findYearFromBranch(branch, year);
+    public void setSscheduleDao(ScheduleDao scheduleDao) {
+        this.scheduleDao = scheduleDao;
     }
 
     /*
@@ -53,6 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#findServiceTypesByCompany(busy.company.Company)
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ServiceType> findServiceTypesByCompany(Company company) {
 
         return serviceTypeDao.findByCompany(company);
@@ -63,6 +65,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#deleteServiceTypeById(int)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public OperationResult deleteServiceType(ServiceType serviceType) {
 
         OperationResult result = serviceTypeDao.delete(serviceType);
@@ -81,6 +84,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#findServiceType(busy.company.Company, java.lang.String)
      */
     @Override
+    @Transactional(readOnly = true)
     public ServiceType findServiceType(Company company, String name) {
 
         return serviceTypeDao.findByCompanyAndName(company, name);
@@ -91,9 +95,60 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#saveServiceType(busy.schedule.ServiceType)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public ServiceType saveServiceType(ServiceType sType) {
 
         return serviceTypeDao.save(sType);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.schedule.ScheduleService#findServicesBetweenDays(org.joda.time.DateTime,
+     * org.joda.time.DateTime, busy.role.Role, busy.schedule.ServiceType)
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<busy.schedule.Service> findServicesBetweenDays(DateTime fromDateTime, DateTime toDateTime, Role role,
+        ServiceType serviceType) {
+
+        return serviceDao.findBetweenDays(fromDateTime, toDateTime, role, serviceType);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.schedule.ScheduleService#saveServices(java.util.List)
+     */
+    @Override
+    public void saveServices(Map<Integer, List<busy.schedule.Service>> serviceMap) {
+
+        for (List<busy.schedule.Service> serviceList : serviceMap.values()) {
+
+            busy.schedule.Service serviceReference = serviceList.get(0);
+            serviceDao.save(serviceReference);
+            int correlation = (serviceList.size() > 1) ? serviceReference.getId() : 0;
+
+            for (busy.schedule.Service service : serviceList) {
+
+                service.setCorrelation(correlation);
+
+                serviceDao.save(service);
+                saveSchedules(service.getSchedules(), service.getId());
+            }
+        }
+    }
+
+    /**
+     * Saves or updates a list of schedules.
+     * 
+     * @param scheduleList
+     *            the list of schedules to be saved
+     * @param serviceId
+     *            the unique id of the service to attach the schedules
+     */
+    private void saveSchedules(List<Schedule> scheduleList, int serviceId) {
+        for (Schedule schedule : scheduleList) {
+            scheduleDao.save(schedule, serviceId);
+        }
     }
 
 }

@@ -25,7 +25,7 @@
     <div class="container">
         <div class="content">
             <div class="row">
-                <c:if test="${empty roles}">
+                <c:if test="${empty roleList}">
                     <a href="new_company" id="create-company">
                         <div class="col-sm-3 col-xs-3 block-button">
                             <spring:message code="new_company.block-button" var="newCompanyBlockButton" />
@@ -33,19 +33,20 @@
                         </div>
                     </a>
                 </c:if>
-                <c:if test="${not empty roles}">
+                <c:if test="${not empty roleList}">
                     <div class="col-sm-3 col-xs-3">
-                        <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button" data-toggle="collapse"
-                            data-target="#role-menu" aria-expanded="false" aria-controls="#role-menu">
+                        <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button"
+                            data-toggle="collapse" data-target="#role-menu" aria-expanded="false"
+                            aria-controls="#role-menu">
                             <span>${username}</span>
                         </button>
                         <div class="role-select-menu collapse" id="role-menu">
                             <div class="role-select-menu-list">
                                 <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text">${username}</span>
                                 </a>
-                                <c:forEach items="${roles}" var="role">
-                                    <a href="/company/${role.branch.company.id}/branch/${role.branch.id}" class="role-select-menu-item"> <span
-                                        class="role-select-menu-item-text">${role.branch.company.tradeName}</span>
+                                <c:forEach items="${roleList}" var="roleItem">
+                                    <a href="/schedule/${roleItem.id}"
+                                        class="role-select-menu-item"> <span class="role-select-menu-item-text">${roleItem.branch.company.tradeName}</span>
                                     </a>
                                 </c:forEach>
                             </div>

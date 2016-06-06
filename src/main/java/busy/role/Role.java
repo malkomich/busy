@@ -3,6 +3,7 @@ package busy.role;
 import java.io.Serializable;
 
 import busy.company.Branch;
+import busy.company.Company;
 import busy.user.User;
 
 /**
@@ -49,7 +50,7 @@ public class Role implements Serializable {
     }
 
     public Boolean isManager() {
-        return manager;
+        return (manager != null) ? manager: false;
     }
 
     @SuppressWarnings("unused")
@@ -69,4 +70,13 @@ public class Role implements Serializable {
         return (branch != null) ? branch.getId() : null;
     }
 
+    public Company getCompany() {
+        return (branch != null) ? branch.getCompany() : null;
+    }
+
+    @Override
+    public String toString() {
+        return (user != null) ? user.toString() : null;
+    }
+    
 }

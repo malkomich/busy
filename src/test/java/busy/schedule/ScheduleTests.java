@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ScheduleDBTest.class})
+@SuiteClasses({ServiceDBTest.class, ServiceTypeDBTest.class, ServiceTypeTest.class, ScheduleDBTest.class})
 public class ScheduleTests {
 
 }

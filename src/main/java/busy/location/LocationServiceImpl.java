@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Location service logic implementation.
@@ -40,6 +42,7 @@ public class LocationServiceImpl implements LocationService {
      * @see busy.location.LocationService#findCountries()
      */
     @Override
+    @Transactional(readOnly = true)
     public List<Country> findCountries() {
 
         return countryDao.findAll();
@@ -51,6 +54,7 @@ public class LocationServiceImpl implements LocationService {
      * @see busy.location.LocationService#findCitiesByCountry(busy.location.Country)
      */
     @Override
+    @Transactional(readOnly = true)
     public List<City> findCitiesByCountryCode(String countryCode) {
 
         return cityDao.findByCountryCode(countryCode);
@@ -62,6 +66,7 @@ public class LocationServiceImpl implements LocationService {
      * @see busy.location.LocationService#findCityById(int)
      */
     @Override
+    @Transactional(readOnly = true)
     public City findCityById(int parseInt) {
 
         return cityDao.findById(parseInt);
@@ -72,6 +77,7 @@ public class LocationServiceImpl implements LocationService {
      * @see busy.location.LocationService#saveAddress(busy.location.Address)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void saveAddress(Address address) {
 
         addressDao.save(address);

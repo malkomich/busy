@@ -36,7 +36,7 @@ public class MainController {
     static final String USER_SESSION = "user";
     static final String USERNAME_SESSION = "username";
     static final String NOTIFICATIONS_SESSION = "notifications";
-    static final String ROLES_SESSION = "roles";
+    static final String ROLES_SESSION = "roleList";
 
     static final String LOGIN_REQUEST = "loginForm";
     static final String MESSAGE_REQUEST = "messageFromController";

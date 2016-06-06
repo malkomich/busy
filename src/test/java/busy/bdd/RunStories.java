@@ -8,6 +8,7 @@ import busy.bdd.accounts.log_in.LogInTest;
 import busy.bdd.accounts.log_out.LogOutTest;
 import busy.bdd.accounts.sign_up.SignUpTest;
 import busy.bdd.admin.verify_company.ApproveCompanyTest;
+import busy.bdd.company.create_services.CreateServicesTest;
 import busy.bdd.company.register.RegisterCompanyTest;
 import busy.bdd.company.schedule_view.SeeOwnCompanyScheduleTest;
 import busy.bdd.company.search_by_name.SearchCompanyByNameTest;
@@ -20,7 +21,7 @@ import busy.bdd.company.search_by_name.SearchCompanyByNameTest;
  */
 @RunWith(Suite.class)
 @SuiteClasses({LogInTest.class, SignUpTest.class, LogOutTest.class, RegisterCompanyTest.class, ApproveCompanyTest.class,
-    SearchCompanyByNameTest.class, SeeOwnCompanyScheduleTest.class})
+    SearchCompanyByNameTest.class, SeeOwnCompanyScheduleTest.class, CreateServicesTest.class})
 public class RunStories {
 
 }
