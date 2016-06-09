@@ -11,13 +11,13 @@ import busy.user.User;
 public interface BookingDao {
 
     /**
-     * Persists a new booking or update an existing one.
+     * Persists a new booking.
      * 
-     * @param schedule
-     *            the schedule object to be booked
      * @param userBooking
      *            the user which will be assigned to the booking
+     * @param schedule
+     *            the schedule object to be booked
      */
-    void save(Schedule schedule, User userBooking);
+    void save(User userBooking, Schedule schedule);
 
 }

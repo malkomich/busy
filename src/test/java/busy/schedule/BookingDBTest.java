@@ -1,5 +1,8 @@
 package busy.schedule;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,7 +54,7 @@ public class BookingDBTest extends AbstractDBTest {
 
         SecureSetter.setId(schedule, INVALID_ID);
 
-        repository.save(schedule, userBooking);
+        repository.save(userBooking, schedule);
     }
     
     @Test(expected = DataIntegrityViolationException.class)
@@ -59,12 +62,16 @@ public class BookingDBTest extends AbstractDBTest {
 
         SecureSetter.setId(userBooking, INVALID_ID);
 
-        repository.save(schedule, userBooking);
+        repository.save(userBooking, schedule);
     }
     
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test
     public void insertSuccessfully() {
 
-        repository.save(schedule, userBooking);
+        assertTrue(schedule.getBookings().isEmpty());
+        
+        repository.save(userBooking, schedule);
+        
+        assertFalse(schedule.getBookings().isEmpty());
     }
 }
