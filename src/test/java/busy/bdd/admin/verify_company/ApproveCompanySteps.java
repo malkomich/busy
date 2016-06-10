@@ -40,7 +40,7 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
     @After
     public void rollback() {
 
-        String scriptPath = "classpath:database/approve_company-rollback.sql";
+        String scriptPath = "classpath:database/rollback.sql";
         template.execute(getSQLScript(scriptPath));
     }
 
