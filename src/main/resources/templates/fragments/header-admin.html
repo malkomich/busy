@@ -1,0 +1,75 @@
+<link th:href="@{/css/menu.css}" rel="stylesheet"></link>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+
+  <div class="container">
+
+    <div class="navbar-header">
+
+      <!-- Toggle navigation button for small devices -->
+      <button type="button" id="toggle-menu-button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+        aria-expanded="false" aria-controls="navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <!-- Application icon -->
+      <a class="navbar-brand" href="/">
+        <img th:src="@{/img/busy-logo_2.png}" height="150%"></img>
+      </a>
+
+    </div>
+
+    <!-- Navigation bar for big screens -->
+    <div id="navbar" class="collapse navbar-collapse">
+
+      <!-- Navigation bar sections -->
+      <ul class="nav navbar-nav navbar-right">
+
+        <!-- Notifications section -->
+        <li role="presentation" class="bar-li">
+          <a id="notifications-switch" role="button" class="dialog-switch" data-target="#notifications-content">
+            <span class="glyphicon glyphicon-bell"></span>
+            <span class="badge" th:text="${#lists.size(notifications)}"></span>
+          </a>
+          <div id="notifications-content" class="dialog">
+            <div class="notifications-title">
+              <h4 th:text="#{navbar.notifications.title}">
+                Notifications
+              </h4>
+            </div>
+            <div class="item-notification-content" th:each="item : ${notifications}">
+              <h5 th:text="#{${item + '.typeCode'}}"></h5>
+              <div class="item-notification-message" th:text="#{${item + '.messageCode'}}"></div>
+            </div>
+          </div>
+        </li>
+
+        <!-- User sections -->
+        <li class="bar-li">
+          <a href="#" data-toggle="dropdown" class="dropdown-toggle" id="userMenu" aria-haspopup="true" aria-expanded="true">
+            <span>
+            <img class="img-circle" height="30" width="30" th:src="@{/img/user.png}" alt="${user.firstName}"
+            title="${user.firstName}"></img>
+          </span>
+            <span id="span-username" th:text=" ${username}"></span>
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="userMenu">
+            <li>
+              <a href="#" th:text="#{navbar.profile}"></a>
+            </li>
+            <li>
+              <a id="logout-link" th:href="@{/logout}" th:text="#{navbar.logout}"></a>
+            </li>
+          </ul>
+        </li>
+        <!-- .bar-li -->
+
+      </ul>
+    </div>
+
+  </div>
+
+</nav>
