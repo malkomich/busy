@@ -36,15 +36,15 @@
               <div class="input-group">
                 <!-- User Icon -->
                 <span class="input-group-addon">
-                  <i class="glyphicon glyphicon-user"/>
+                  <i class="glyphicon glyphicon-user"></i>
                 </span>
                 <!-- Email Input -->
                 <input id="email" class="form-control" th:errorclass="has-error" th:placeholder="#{email.placeholder}" required="required"
-                  th:field="*{email}" tabindex="1" />
+                  th:field="*{email}" tabindex="1"></input>
                 <!-- Email errors -->
                 <label th:each="err : ${#fields.errors('email')}" for="inputEmail" class="form-validation-icon error">
-                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" />
-                  <span id="email.errors" class="error" th:text="${err}" />
+                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                  <span id="email.errors" class="error" th:text="${err}"></span>
                 </label>
               </div>
               <!-- .input-group -->
@@ -52,22 +52,22 @@
               <div class="input-group">
                 <!-- Password Icon -->
                 <span class="input-group-addon">
-                <i class="glyphicon glyphicon-lock"/>
+                <i class="glyphicon glyphicon-lock"></i>
               </span>
                 <!-- Password Input -->
                 <input type="password" id="password" class="form-control" th:errorclass="has-error" th:placeholder="#{password.placeholder}"
-                  required="required" size="50" th:field="*{password}" tabindex="2" />
+                  required="required" size="50" th:field="*{password}" tabindex="2"></input>
                 <!-- Password errors -->
                 <label th:each="err : ${#fields.errors('password')}" for="inputEmail" class="form-validation-icon error">
-                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" />
-                  <span id="email.errors" class="error" th:text="${err}" />
+                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                  <span id="email.errors" class="error" th:text="${err}"></span>
                 </label>
               </div>
               <!-- .input-group -->
 
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" value="remember-me" />
+                  <input type="checkbox" value="remember-me"></input>
                   <label th:text="#{remember.checkbox}">
                     Remember me
                   </label>
@@ -129,7 +129,7 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" />
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
       $(function() {
         var signedUp = /*[[${signedUp}]]*/ null;

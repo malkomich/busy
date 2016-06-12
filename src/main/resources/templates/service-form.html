@@ -1,145 +1,116 @@
-<form:form class="service-form" id="serviceForm" action="javascript:saveServices()" modelAttribute="serviceForm"
-    commandName="serviceForm" method="POST">
+<form class="service-form" id="serviceForm" action="javascript:saveServices()" th:object="${serviceForm}" method="POST">
 
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title">
-            <form:label path="date">
-                <joda:format value="${serviceForm.date}" pattern="dd/MM/yyyy" />
-            </form:label>
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    <h4 class="modal-title">
+            <label th:field="*{date}">
+                <span th:text="${#dates.format(serviceForm.date, 'dd MMMM yyyy')}" pattern="dd/MM/yyyy"></span>
+            </label>
         </h4>
-    </div>
+  </div>
 
-    <div class="modal-body">
+  <div class="modal-body">
 
-        <c:forEach items="${serviceForm.services}" var="service" varStatus="status">
-            <div class="row service-row">
+    <div class="row service-row" th:each="service, status : ${serviceForm.services}">
 
-                <div class="col-sm-3 form-group">
-                    <div class="col-sm-4">
-                        <span class="glyphicon glyphicon-time center-v"></span>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="row">
-                            <spring:message code="schedule.service.tooltip.start_time" var="startTimeTip" />
-                            <form:input path="services[${status.index}].startTime" id="service-start-time" type="text"
-                                tabindex="1" class="form-control" data-toggle="tooltip" data-placement="top"
-                                title="${startTimeTip}" />
-                            <form:errors path="services[${status.index}].startTime" cssClass="error fs-xs" />
-                        </div>
-                        <div class="row">
-                            <spring:message code="schedule.service.tooltip.end_time" var="endTimeTip" />
-                            <input id="service-end-time" type="text" tabindex="-1" class="form-control" readonly="true"
-                                data-toggle="tooltip" data-placement="left" title="${endTimeTip}" />
-                        </div>
-                    </div>
-                </div>
-                <!-- .form-group (TIME) -->
+      <div class="col-sm-3 form-group">
+        <div class="col-sm-4">
+          <span class="glyphicon glyphicon-time center-v"></span>
+        </div>
+        <div class="col-sm-8">
+          <div class="row">
+            <input th:field="*{services[${status.index}].startTime}" id="service-start-time" type="text" tabindex="1" class="form-control"
+              data-toggle="tooltip" data-placement="top" title="#{schedule.service.tooltip.start_time}"></input>
+            <label th:each="err : ${#fields.errors('services[${status.index}].startTime')}" class="error fs-xs" th:text="${err}"></label>
+          </div>
+          <div class="row">
+            <input id="service-end-time" type="text" tabindex="-1" class="form-control" readonly="true" data-toggle="tooltip" data-placement="left"
+              title="#{schedule.service.tooltip.end_time}"></input>
+          </div>
+        </div>
+      </div>
+      <!-- .form-group (TIME) -->
 
-                <div class="col-sm-3 form-group">
-                    <spring:message code="schedule.service.tooltip.service_type" var="sTypeTip" />
-                    <form:select path="services[${status.index}].serviceType" id="service-type" tabindex="2"
-                        class="form-control" data-toggle="tooltip" data-placement="top" title="${sTypeTip}">
-                        <spring:message code="schedule.service.service_type.select" var="serviceTypeSelect" />
-                        <form:option value="" label="${serviceTypeSelect}" />
-                        <c:forEach items="${serviceForm.existingServiceTypes}" var="sType">
-                            <form:option label="${sType.value}" value="${sType.key}" duration="${sType.value.duration}" />
-                        </c:forEach>
-                    </form:select>
-                    <form:errors path="services[${status.index}].serviceType" cssClass="error fs-xs" />
-                </div>
-                <!-- .form-group (SERVICE TYPE) -->
+      <div class="col-sm-3 form-group">
+        <select th:field="*{services[${status.index}].serviceType}" id="service-type" tabindex="2" class="form-control" data-toggle="tooltip"
+          data-placement="top" title="#{schedule.service.tooltip.service_type}">
+          <option value="" label="#{schedule.service.service_type.select}"></option>
+          <option th:each="sType : ${serviceForm.existingServiceTypes}" th:value="${sType.key}" th:text="${sType.value}" duration="${sType.value.duration}"></option>
+        </select>
+        <label th:each="err : ${#fields.errors('services[${status.index}].serviceType')}" class="error fs-xs" th:text="${err}"></label>
+      </div>
+      <!-- .form-group (SERVICE TYPE) -->
 
-                <div class="col-sm-3 form-group">
-                    <div class="row">
-                        <a id="role-dropdown" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"
-                            aria-expanded="false"><spring:message code="schedule.service.roles.dropdown" /> <b
-                            class="caret"></b></a>
-                        <ul class="dropdown-menu role-list" role="menu" aria-labelledby="role-dropdown">
-                            <c:forEach items="${serviceForm.existingRoles}" var="branchRole">
-                                <li class="role-item"><form:checkbox path="services[${status.index}].roles"
-                                        value="${branchRole.key}" label="${branchRole.value}" /></li>
-                            </c:forEach>
-                        </ul>
-                    </div>
-                    <div class="row service-roles-summary">
-                        <form:errors path="services[${status.index}].roles" cssClass="error fs-xs" />
-                        <ul>
-                            <c:forEach var="item" items="${service.roles}">
-                                <li id="${item}" class="fs-xs">${serviceForm.existingRoles[item]}</li>
-                            </c:forEach>
-                        </ul>
-                    </div>
-                </div>
-                <!-- .form-group (ROLES) -->
-
-                <div class="col-sm-3 form-group">
-                    <c:choose>
-                        <c:when test="${service.repeated}">
-                            <button type="button" class="btn btn-default" disabled="disabled">
-                                <spring:message code="schedule.service.repetition.repeated" />
-                            </button>
-                        </c:when>
-                        <c:otherwise>
-                            <div class="row">
-                                <spring:message code="schedule.service.tooltip.repetition_type" var="repTypeTip" />
-                                <form:select path="services[${status.index}].repetitionType"
-                                    id="service-repetition-type" tabindex="4" class="form-control" data-toggle="tooltip"
-                                    data-placement="right" title="${repTypeTip}">
-                                    <c:forEach items="${serviceForm.existingRepetitionTypes}" var="rType">
-                                        <form:option value="${rType}">
-                                            <spring:message code="${rType.msgCode}" />
-                                        </form:option>
-                                    </c:forEach>
-                                </form:select>
-                                <form:errors path="services[${status.index}].repetitionType" cssClass="error fs-xs" />
-                            </div>
-                            <div class="row">
-                                <spring:message code="schedule.service.tooltip.repetition_date" var="repDateTip" />
-                                <form:input path="services[${status.index}].repetitionDate" id="service-repetition-date"
-                                    type="text" tabindex="5" class="form-control" value="${service.repetitionDate}"
-                                    data-toggle="tooltip" data-placement="right" title="${repDateTip}" />
-                                <form:errors path="services[${status.index}].repetitionDate" cssClass="error fs-xs"
-                                    id="rep-date-error" />
-                            </div>
-                        </c:otherwise>
-                    </c:choose>
-
-                </div>
-                <!-- .form-group (REPETITION) -->
-
-            </div>
-            <!-- .service-row -->
-        </c:forEach>
-
+      <div class="col-sm-3 form-group">
         <div class="row">
-            <div class="col-sm-3 form-group">
-                <div class="col-sm-4">
-                    <span class="glyphicon glyphicon-time"></span>
-                </div>
-                <div class="col-sm-8">
-                    <a href="javascript:newService()"><span class="service-add glyphicon glyphicon-plus"></span></a>
-                </div>
-            </div>
+          <a id="role-dropdown" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" th:text="#{schedule.service.roles.dropdown}">
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu role-list" role="menu" aria-labelledby="role-dropdown">
+            <li th:each="branchRole : ${serviceForm.existingRoles}" class="role-item">
+              <checkbox th:field="*{services[${status.index}].roles}" th:value="${branchRole.key}" label="${branchRole.value}"></checkbox>
+            </li>
+          </ul>
+        </div>
+        <div class="row service-roles-summary">
+          <label th:each="err : ${#fields.errors('services[${status.index}].roles')}" class="error fs-xs" th:text="${err}"></label>
+          <ul>
+            <li th:each="item : ${service.roles}" id="${item}" class="fs-xs" th:text="${serviceForm.existingRoles[item]}"></li>
+          </ul>
+        </div>
+      </div>
+      <!-- .form-group (ROLES) -->
+
+      <div class="col-sm-3 form-group">
+        <button th:if="${service.repeated}" type="button" class="btn btn-default" disabled="disabled" th:text="#{schedule.service.repetition.repeated}"></button>
+
+        <div class="row" th:unless="${service.repeated}">
+          <select th:field="*{services[${status.index}].repetitionType}" id="service-repetition-type" tabindex="4" class="form-control"
+            data-toggle="tooltip" data-placement="right" title="#{schedule.service.tooltip.repetition_type}">
+            <option th:each="rType : ${serviceForm.existingRepetitionTypes}" th:value="${rType}" th:text="#{rType.msgCode}"></option>
+          </select>
+          <label id="rep-date-error" th:each="err : ${#fields.errors('services[${status.index}].repetitionType')}" class="error fs-xs"
+            th:text="${err}"></label>
+        </div>
+        <div class="row" th:unless="${service.repeated}">
+          <input th:field="*{services[${status.index}].repetitionDate}" id="service-repetition-date" type="text" tabindex="5" class="form-control"
+            th:value="${service.repetitionDate}" data-toggle="tooltip" data-placement="right" title="#{schedule.service.tooltip.repetition_date}"></input>
+          <label id="rep-date-error" th:each="err : ${#fields.errors('services[${status.index}].repetitionDate')}" class="error fs-xs"
+            th:text="${err}"></label>
         </div>
 
-    </div>
-    <!-- .modal-body -->
+      </div>
+      <!-- .form-group (REPETITION) -->
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
-            <spring:message code="modal.close" />
-        </button>
-        <button id="submit" type="submit" class="btn btn-primary" tabindex="6">
-            <spring:message code="form.save" />
-        </button>
     </div>
-</form:form>
+    <!-- .service-row -->
 
-<script type="text/javascript" src="/js/forms.js"></script>
-<script type="text/javascript" src="/js/moment.js"></script>
-<script type="text/javascript" src="/js/bootstrap-timepicker.js"></script>
-<script type="text/javascript" src="/js/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="/js/services.js"></script>
+    <div class="row">
+      <div class="col-sm-3 form-group">
+        <div class="col-sm-4">
+          <span class="glyphicon glyphicon-time"></span>
+        </div>
+        <div class="col-sm-8">
+          <a href="javascript:newService()">
+            <span class="service-add glyphicon glyphicon-plus"></span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- .modal-body -->
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
+    <button id="submit" type="submit" class="btn btn-primary" tabindex="6" th:text="#{form.save}"></button>
+  </div>
+</form>
+
+<script type="text/javascript" th:src="@{/js/forms.js}"></script>
+<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-timepicker.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-datepicker.js}"></script>
+<script type="text/javascript" th:src="@{/js/services.js}"></script>

@@ -5,7 +5,7 @@
     <title th:text="#{admin.page.title}">
       Admin - buSy
     </title>
-    
+
     <meta charset="utf-8"></meta>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
@@ -16,9 +16,9 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css"></link>
-    <link href="@{/css/cover-logged.css}" rel="stylesheet"></link>
-    <link href="@{/css/busy-content.css}" rel="stylesheet"></link>
-    <link href="@{/css/busy-components.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/cover-logged.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/busy-content.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/busy-components.css}" rel="stylesheet"></link>
 
   </head>
 
@@ -99,7 +99,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
       var message = /*[[${messageFromController}]]*/ null;
       /*]]>*/

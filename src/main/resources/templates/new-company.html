@@ -1,185 +1,163 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-<title th:text="#{new-company.page.title}">
-  buSy
-</title>
+  <head>
+    <title th:text="#{new-company.page.title}">
+      buSy
+    </title>
 
-<meta charset="utf-8"></meta>
-<meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
-<meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-<meta name="author" content="malkomich"></meta>
-<meta name="description" content="New company Page"></meta>
+    <meta charset="utf-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <meta name="author" content="malkomich"></meta>
+    <meta name="description" content="New company Page"></meta>
 
-<link rel="icon" th:href="@{/favicon.ico}"></link>
+    <link rel="icon" th:href="@{/favicon.ico}"></link>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
-<link th:href="@{/css/cover-logged.css}" rel="stylesheet"></link>
-<link th:href="@{/css/main.css}" rel="stylesheet"></link>
-<link th:href="@{/css/forms.css}" rel="stylesheet"></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+    <link th:href="@{/css/cover-logged.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/main.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/forms.css}" rel="stylesheet"></link>
 
-</head>
+  </head>
 
-<body>
+  <body>
     <div th:include="fragments/header"></div>
 
     <div class="site-wrapper">
 
-        <div class="site-wrapper-inner">
+      <div class="site-wrapper-inner">
 
-            <div class="cover-container">
+        <div class="cover-container">
 
-                <spring:message code="new_company.form.title" var="formTitle" />
-                <h2 class="text-center" th:text="${formTitle}"></h2>
+          <h2 class="text-center" th:text="${new_company.form.title}"></h2>
 
-                <div class="inner cover">
+          <div class="inner cover">
 
-                    <div class="form-box">
-                        <form th:action="@{new_company}" th:object="${companyForm}" method="POST">
+            <div class="form-box">
+              <form th:action="@{new_company}" th:object="${companyForm}" method="POST">
 
-                            <div class="row">
-                                <div class="form-group col-sm-12">
-                                    <spring:message code="companyTradeName.placeholder" var="tradeNamePlaceHolder" />
-                                    <form:input path="tradeName" autofocus="autofocus" id="tradeName" tabindex="1"
-                                        class="form-control" placeholder="${tradeNamePlaceHolder}" />
-                                    <form:errors path="tradeName" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-12">
-                                    <spring:message code="companyBusinessName.placeholder" var="businessNamePlaceHolder" />
-                                    <form:input path="businessName" autofocus="autofocus" id="businessName" tabindex="2"
-                                        class="form-control mandatory" placeholder="${businessNamePlaceHolder}" />
-                                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-                                    <form:errors path="businessName" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-12">
-                                    <spring:message code="companyEmail.placeholder" var="emailPlaceHolder" />
-                                    <form:input path="email" id="email" tabindex="3" class="form-control mandatory"
-                                        placeholder="${emailPlaceHolder}" />
-                                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-                                    <form:errors path="email" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-12">
-                                    <spring:message code="companyCif.placeholder" var="cifPlaceHolder" />
-                                    <form:input path="cif" id="cif" tabindex="4" class="form-control mandatory"
-                                        placeholder="${cifPlaceHolder}" />
-                                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-                                    <form:errors path="cif" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-6 form-group">
-                                    <spring:message code="country.label" var="countryLabel" />
-                                    <label for="country">${countryLabel}:</label>
-
-                                    <form:select path="countryCode" id="country" tabindex="5"
-                                        class="form-control mandatory">
-                                        <spring:message code="country.select.header" var="countrySelect" />
-                                        <form:option value="" label="${countrySelect}" />
-                                        <form:options items="${countryItems}" />
-                                    </form:select>
-                                    <form:errors path="countryCode" cssClass="error" />
-                                </div>
-                                <div class="col-sm-6 form-group">
-                                    <spring:message code="city.label" var="cityLabel" />
-                                    <label for="city">${cityLabel}:</label>
-
-                                    <form:select path="cityId" id="city" tabindex="6" class="form-control mandatory">
-
-                                        <spring:message code="city.options.empty" var="cityOptionsEmptyTag" />
-                                        <form:option id="cityEmptyHeader" style="display: none;" value=""
-                                            label="${cityOptionsEmptyTag}" />
-
-                                        <spring:message code="city.select.header" var="citySelect" />
-                                        <form:option id="cityNotEmptyHeader" style="display: none;" value=""
-                                            label="${citySelect}" />
-
-                                    </form:select>
-                                    <form:errors path="cityId" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-6 form-group">
-                                    <spring:message code="zipcode.placeholder" var="zipcodePlaceHolder" />
-                                    <form:input path="zipCode" id="zipcode" tabindex="7" type="tel" value=""
-                                        class="form-control" placeholder="${zipcodePlaceHolder}" />
-                                    <form:errors path="zipCode" cssClass="error" />
-                                </div>
-                                <div class="col-sm-6 form-group">
-                                    <spring:message code="phone.placeholder" var="phonePlaceHolder" />
-                                    <form:input path="phone" id="phone" tabindex="8" type="tel" value=""
-                                        class="form-control" placeholder="${phonePlaceHolder}" />
-                                    <form:errors path="phone" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-12">
-                                    <spring:message code="companyAddress1.placeholder" var="address1PlaceHolder" />
-                                    <form:input path="address1" id="address1" tabindex="9" class="form-control"
-                                        placeholder="${address1PlaceHolder}" />
-                                    <form:errors path="address1" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-12">
-                                    <spring:message code="companyAddress2.placeholder" var="address2PlaceHolder" />
-                                    <form:input path="address2" id="address2" tabindex="10" class="form-control"
-                                        placeholder="${address2PlaceHolder}" />
-                                    <form:errors path="address2" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-12">
-                                    <spring:message code="category.label" var="categoryLabel" />
-                                    <label for="category">${categoryLabel}:</label>
-
-                                    <form:select path="categoryId" id="category" tabindex="11" class="form-control">
-                                        <spring:message code="category.select.header" var="categorySelect" />
-                                        <form:option value="" label="${categorySelect}" />
-                                        <form:options items="${categoryItems}" />
-                                    </form:select>
-                                    <form:errors path="categoryId" cssClass="error" />
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="col-sm-3" style="float: right">
-                                        <spring:message code="new_company.submit" var="newCompanySubmit" />
-                                        <button id="submit" type="submit" class="btn btn-primary" tabindex="12">${newCompanySubmit}</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form:form>
-
-                    </div>
-                    <div class="footnote">
-                        <span class="glyphicon glyphicon-asterisk error"></span>
-                        <spring:message code="mandatory.info" var="mandatoryInfo" />
-                        <span class="error">${mandatoryInfo}</span>
-                    </div>
-
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{tradeName}" autofocus="autofocus" id="tradeName" tabindex="1" class="form-control" th:placeholder="#{companyTradeName.placeholder}"></input>
+                    <label th:each="err : ${#fields.errors('tradeName')}" class="error" th:text="${err}"></label>
+                  </div>
                 </div>
+                <!-- .row -->
 
-                <div th:include="fragments/footer"></div>
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{businessName}" autofocus="autofocus" id="businessName" tabindex="2" class="form-control mandatory" th:placeholder="#{companyBusinessName.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <label th:each="err : ${#fields.errors('businessName')}" class="error" th:text="${err}"></label>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{email}" id="email" tabindex="3" class="form-control mandatory" th:placeholder="#{companyEmail.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <label th:each="err : ${#fields.errors('email')}" class="error" th:text="${err}"></label>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{cif}" id="cif" tabindex="4" class="form-control mandatory" th:placeholder="#{companyCif.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <label th:each="err : ${#fields.errors('cif')}" class="error" th:text="${err}"></label>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-6 form-group">
+                    <label for="country" th:text="#{country.label} + ':'"></label>
+                    <select th:field="*{countryCode}" id="country" tabindex="5" class="form-control mandatory">
+                      <option value="" th:label="#{country.select.header}"></option>
+                      <options th:each="countryItem : ${countryItems}" th:value="${countryItem}">
+                        </option>
+                    </select>
+                    <label th:each="err : ${#fields.errors('countryCode')}" class="error" th:text="${err}"></label>
+                  </div>
+                  <div class="col-sm-6 form-group">
+                    <label for="city" th:text="#{city.label} + ':'"></label>
+                    <select th:field="*{cityId}" id="city" tabindex="6" class="form-control mandatory">
+                      <option id="cityEmptyHeader" style="display: none;" value="" th:label="#{city.options.empty}"></option>
+                      <option id="cityNotEmptyHeader" style="display: none;" value="" th:label="#{city.select.header}"></option>
+                    </select>
+                    <label th:each="err : ${#fields.errors('cityId')}" class="error" th:text="${err}"></label>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-6 form-group">
+                    <input th:field="*{zipCode}" id="zipcode" tabindex="7" type="tel" value="" class="form-control" th:placeholder="#{zipcode.placeHolder}"></input>
+                    <label th:each="err : ${#fields.errors('zipCode')}" class="error" th:text="${err}"></label>
+                  </div>
+                  <div class="col-sm-6 form-group">
+                    <input th:field="*{phone}" id="phone" tabindex="8" type="tel" value="" class="form-control" th:placeholder="#{phone.placeHolder}"></input>
+                    <label th:each="err : ${#fields.errors('phone')}" class="error" th:text="${err}"></label>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{address1}" id="address1" tabindex="9" class="form-control" th:placeholder="#{companyAddress1.placeHolder}"></input>
+                    <label th:each="err : ${#fields.errors('address1')}" class="error" th:text="${err}"></label>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{address2}" id="address2" tabindex="10" class="form-control" th:placeholder="#{companyAddress2.placeHolder}"></input>
+                    <label th:each="err : ${#fields.errors('address2')}" class="error" th:text="${err}"></label>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <label for="category" th:text="#{category.label} + ':'"></label>
+                    <select th:field="*{categoryId}" id="category" tabindex="11" class="form-control">
+                      <option value="" th:label="#{category.select.header}"></option>
+                      <option th:each="categoryItem : ${categoryItems}" th:value="${categoryItem}"></option>
+                    </select>
+                    <label th:each="err : ${#fields.errors('categoryId')}" class="error" th:text="${err}"></label>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="col-sm-3" style="float: right">
+                      <button id="submit" type="submit" class="btn btn-primary" tabindex="12" th:text="#{new_company.submit}"></button>
+                    </div>
+                  </div>
+                </div>
+                <!-- .row -->
+              </form>
 
             </div>
+            <!-- .form-box -->
+
+            <div class="footnote">
+              <span class="glyphicon glyphicon-asterisk error"></span>
+              <span class="error" th:text="#{mandatory.info}"></span>
+            </div>
+
+          </div>
+
+          <div th:include="fragments/footer"></div>
 
         </div>
+
+      </div>
     </div>
 
     <!-- Placed at the end of the document so the pages load faster -->
@@ -190,5 +168,6 @@
     <script type="text/javascript" th:src="@{/js/forms.js}"></script>
     <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>
 
-</body>
+  </body>
+
 </html>

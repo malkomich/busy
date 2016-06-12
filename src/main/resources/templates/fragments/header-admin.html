@@ -40,8 +40,8 @@
               </h4>
             </div>
             <div class="item-notification-content" th:each="item : ${notifications}">
-              <h5 th:text="#{${item + '.typeCode'}}"></h5>
-              <div class="item-notification-message" th:text="#{${item + '.messageCode'}}"></div>
+              <h5 th:text="#{${item.typeCode}}"></h5>
+              <div class="item-notification-message" th:text="#{${item.messageCode}}"></div>
             </div>
           </div>
         </li>

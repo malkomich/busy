@@ -1,43 +1,46 @@
 <div id="service-type-list">
-    <c:forEach items="${serviceTypes}" var="serviceType">
 
-        <div class="select-menu-item service-type-item">
+  <div class="select-menu-item service-type-item" th:each="serviceType : ${serviceTypes}">
+    <div class="row">
+      <div class="col-xs-8">
+        <a href="#">
+          <div class="select-menu-item-text">
             <div class="row">
-                <div class="col-xs-8">
-                    <a href="#">
-                        <div class="select-menu-item-text">
-                            <div class="row">
-                                <span class="name" data-toggle="tooltip" data-placement="left"
-                                    title="${serviceType.description}">${serviceType.name}</span>
-                            </div>
-                            <div class="row tip-text">
-                                <span class="info"> <span class="bookings"><spring:message
-                                            code="menu.filters.service-type.tip.bookings"
-                                            arguments="${serviceType.maxBookingsPerRole}" argumentSeparator="¬" /> </span><span
-                                    class="duration"><spring:message
-                                            code="menu.filters.service-type.tip.duration"
-                                            arguments="${serviceType.duration}" argumentSeparator="¬" /></span>
-                                </span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-xs-2">
-                    <a href="#" sTypeId="${serviceType.id}" class="glyphicon glyphicon-pencil service-type_modify"></a>
-                </div>
-                <div class="col-xs-2">
-                    <a href="#" sTypeId="${serviceType.id}" class="glyphicon glyphicon-remove service-type_delete"></a>
-                </div>
+              <span class="name" data-toggle="tooltip" data-placement="left" title="${serviceType.description}" th:text="${serviceType.name}"></span>
             </div>
-        </div>
+            <div class="row tip-text">
+              <span class="info">
+                <span class="bookings" th:text="#{menu.filters.service-type.tip.bookings(${serviceType.maxBookingsPerRole})}"></span>
+                <span class="duration" th:text="#{menu.filters.service-type.tip.duration(${serviceType.duration})}"></span>
+              </span>
+            </div>
+          </div>
+          <!-- .select-menu-item-text -->
+        </a>
+      </div>
+      <!-- .col -->
 
-    </c:forEach>
+      <div class="col-xs-2">
+        <a href="#" sTypeId="${serviceType.id}" class="glyphicon glyphicon-pencil service-type_modify"></a>
+      </div>
+      <!-- .col -->
 
-    <a href="#" class="select-menu-item service-type_add">
-        <div class="select-menu-item-text">
-            <span class="glyphicon glyphicon-plus"></span> <span><spring:message
-                    code="menu.filters.service-type.add" /></span>
-        </div>
-    </a>
+      <div class="col-xs-2">
+        <a href="#" sTypeId="${serviceType.id}" class="glyphicon glyphicon-remove service-type_delete"></a>
+      </div>
+      <!-- .col -->
+
+    </div>
+    <!-- .row -->
+  </div>
+  <!-- .select-menu-item -->
+
+
+  <a href="#" class="select-menu-item service-type_add">
+    <div class="select-menu-item-text">
+      <span class="glyphicon glyphicon-plus"></span>
+      <span th:text="#{menu.filters.service-type.add}"></span>
+    </div>
+  </a>
 
 </div>

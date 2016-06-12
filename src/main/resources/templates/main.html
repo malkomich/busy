@@ -37,9 +37,11 @@
               <div class="role-select-menu-list">
                 <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text" th:text="${username}"></span>
                 </a>
-                <a href="/schedule/${roleItem.id}" class="role-select-menu-item" th:each="roleItem : ${roleList}">
-                  <span class="role-select-menu-item-text" th:text="${roleItem.branch.company.tradeName}"></span>
-                </a>
+                <div th:each="roleItem : ${roleList}">
+                  <a th:href="@{/schedule/{id}(id=${roleItem.id})}" class="role-select-menu-item">
+                    <span class="role-select-menu-item-text" th:text="${roleItem.branch.company.tradeName}"></span>
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -65,11 +67,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
       var message = /*[[${messageFromController}]]*/ null;
       /*]]>*/
-
     </script>
     <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>

@@ -1,4 +1,4 @@
-<link href="@{/css/menu.css}" rel="stylesheet"></link>
+<link th:href="@{/css/menu.css}" rel="stylesheet"></link>
 
 <nav class="navbar navbar-inverse navbar-fixed-top">
 
@@ -7,10 +7,10 @@
     <div class="navbar-header">
       <!-- Toggle navigation button for small devices -->
       <button type="button" id="toggle-menu-button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-        aria-expanded="false" aria-controls="navbar"></button>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
-      <span class="icon-bar"></span>
+        aria-expanded="false" aria-controls="navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
       </button>
       <!-- Application icon -->
       <a class="navbar-brand" href="/">
@@ -48,8 +48,8 @@
               </h4>
             </div>
             <div class="item-notification-content" th:each="item : ${notifications}">
-              <h5 th:text="#{${item + '.typeCode'}}"></h5>
-              <div class="item-notification-message" th:text="#{${item + '.messageCode'}}"></div>
+              <h5 th:text="#{${item.typeCode}}"></h5>
+              <div class="item-notification-message" th:text="#{${item.messageCode}}"></div>
             </div>
           </div>
         </li>
@@ -62,7 +62,7 @@
             <img class="img-circle" height="30" width="30" th:src="@{/img/user.png}" alt="${user.firstName}"
             title="${user.firstName}"></img>
           </span>
-            <span id="span-username" th:text=" ${username}"></span>
+            <span id="span-username" th:text="${username}"></span>
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu" aria-labelledby="userMenu">

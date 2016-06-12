@@ -12,14 +12,14 @@
     <meta name="author" content="malkomich"></meta>
     <meta name="description" content="Branch Page"></meta>
 
-    <link rel="icon" href="/favicon.ico"></link>
+    <link rel="icon" th:href="@{/favicon.ico}"></link>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
     <link th:href="@{/css/cover-logged.css}" rel="stylesheet"></link>
-    <link href="@{/css/busy-content.css}" rel="stylesheet"></link>
-    <link href="@{/css/busy-components.css}" rel="stylesheet"></link>
-    <link href="@{/css/calendar.min.css}" rel="stylesheet"></link>
-    <link href="@{/css/forms.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/busy-content.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/busy-components.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/calendar.min.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/forms.css}" rel="stylesheet"></link>
 
   </head>
 
@@ -40,9 +40,11 @@
               <div class="role-select-menu-list">
                 <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text" th:text="${username}"></span>
                 </a>
-                <a href="/schedule/${roleItem.id}" class="role-select-menu-item" th:each="roleItem : ${roleList}">
-                  <span class="role-select-menu-item-text" th:text="${roleItem.branch.company.tradeName}"></span>
-                </a>
+                <div th:each="roleItem : ${roleList}">
+                  <a th:href="@{/schedule/{id}(id=${roleItem.id})}" class="role-select-menu-item">
+                    <span class="role-select-menu-item-text" th:text="${roleItem.branch.company.tradeName}"></span>
+                  </a>
+                </div>
               </div>
             </div>
             <!-- .role-select-menu -->
@@ -73,10 +75,9 @@
 
           <div class="pull-right form-inline">
             <div class="btn-group">
-              <button class="btn btn-primary calendar-nav" data-calendar-nav="prev">
-                << Prev</button>
-                  <button class="btn calendar-nav" data-calendar-nav="today">Today</button>
-                  <button class="btn btn-primary calendar-nav" data-calendar-nav="next">Next >></button>
+              <button class="btn btn-primary calendar-nav" data-calendar-nav="prev" th:text="#{calendar.prev}"></button>
+              <button class="btn calendar-nav" data-calendar-nav="today" th:text="#{calendar.today}"></button>
+              <button class="btn btn-primary calendar-nav" data-calendar-nav="next" th:text="#{calendar.next}"></button>
             </div>
           </div>
 
@@ -105,7 +106,7 @@
           </div>
           <div class="modal-body" style="height: 400px"></div>
           <div class="modal-footer">
-            <a href="#" data-dismiss="modal" class="btn">Close</a>
+            <a href="#" data-dismiss="modal" class="btn" th:text="#{modal.close}"></a>
           </div>
         </div>
       </div>
@@ -134,12 +135,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
       /*<![CDATA[*/
       var message = /*[[${messageFromController}]]*/ null;
       var roleId = /*[[${role.id}]]*/ null;
       /*]]>*/
-
     </script>
     <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>
