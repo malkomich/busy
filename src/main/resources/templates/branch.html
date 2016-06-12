@@ -2,6 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
   <head>
+    <title th:text="#{branch.page.title(${role.branch.company.tradeName})}">
+      buSy
+    </title>
+
     <meta charset="utf-8"></meta>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
@@ -10,22 +14,17 @@
 
     <link rel="icon" href="/favicon.ico"></link>
 
-    <title th>
-      <spring:message code="branch.page.title" arguments="${role.branch.company.tradeName}" argumentSeparator="¬" />
-    </title>
-
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
-
-    <link href="/css/cover-logged.css" rel="stylesheet"></link>
-    <link href="/css/busy-content.css" rel="stylesheet"></link>
-    <link href="/css/busy-components.css" rel="stylesheet"></link>
-    <link href="/css/calendar.min.css" rel="stylesheet"></link>
-    <link href="/css/forms.css" rel="stylesheet"></link>
+    <link th:href="@{/css/cover-logged.css}" rel="stylesheet"></link>
+    <link href="@{/css/busy-content.css}" rel="stylesheet"></link>
+    <link href="@{/css/busy-components.css}" rel="stylesheet"></link>
+    <link href="@{/css/calendar.min.css}" rel="stylesheet"></link>
+    <link href="@{/css/forms.css}" rel="stylesheet"></link>
 
   </head>
 
   <body>
-    <jsp:include page="include/header.jsp" />
+    <div th:include="fragments/header"></div>
 
     <div class="container">
       <div class="content">
@@ -53,12 +52,11 @@
             <div class="table-list-filters pull-right">
               <div class="select-menu pull-left">
                 <button id="service-types-button" class="btn btn-default btn-lg" href="#service-types-collapse" data-toggle="collapse" aria-expanded="false"
-                  aria-controls="service-types-collapse">
-                  <spring:message code="menu.filters.service-type.title" />
-                  <span class="glyphicon glyphicon-triangle-bottom" />
+                  aria-controls="service-types-collapse" th:text="#{menu.filters.service-type.title}">
+                  <span class="glyphicon glyphicon-triangle-bottom"></span>
                 </button>
                 <div class="collapse select-menu-modal" id="service-types-collapse">
-                  <jsp:include page="service-types.jsp" />
+                  <div th:include="service-types"></div>
                 </div>
                 <!-- .select-menu-modal -->
               </div>
@@ -93,9 +91,7 @@
 
       </div>
       <!-- .content -->
-
-      <jsp:include page="include/footer.jsp" />
-
+      <div th:include="fragments/footer"></div>
     </div>
     <!-- container -->
 
@@ -139,16 +135,19 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
-      var message = '<c:out value="${messageFromController}"/>';
-      var roleId = "${role.id}";
+      /*<![CDATA[*/
+      var message = /*[[${messageFromController}]]*/ null;
+      var roleId = /*[[${role.id}]]*/ null;
+      /*]]>*/
+
     </script>
-    <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="/js/busy-logic.js"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script type="text/javascript" src="/js/calendar.js"></script>
-    <script type="text/javascript" src="/js/language/es-ES.js"></script>
-    <script type="text/javascript" src="/js/date.js"></script>
-    <script type="text/javascript" src="/js/app.js"></script>
+    <script type="text/javascript" th:src="@{/js/calendar.js}"></script>
+    <script type="text/javascript" th:src="@{/js/language/es-ES.js}"></script>
+    <script type="text/javascript" th:src="@{/js/date.js}"></script>
+    <script type="text/javascript" th:src="@{/js/app.js}"></script>
 
   </body>
 

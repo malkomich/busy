@@ -2,7 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-<title><spring:message code="new-company.page.title" /></title>
+<title th:text="#{new-company.page.title}">
+  buSy
+</title>
 
 <meta charset="utf-8"></meta>
 <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
@@ -10,17 +12,17 @@
 <meta name="author" content="malkomich"></meta>
 <meta name="description" content="New company Page"></meta>
 
-<link rel="icon" href="/favicon.ico"></link>
+<link rel="icon" th:href="@{/favicon.ico}"></link>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
-<link href="/css/cover-logged.css" rel="stylesheet"></link>
-<link href="/css/main.css" rel="stylesheet"></link>
-<link href="/css/forms.css" rel="stylesheet" type="text/css"></link>
+<link th:href="@{/css/cover-logged.css}" rel="stylesheet"></link>
+<link th:href="@{/css/main.css}" rel="stylesheet"></link>
+<link th:href="@{/css/forms.css}" rel="stylesheet"></link>
 
 </head>
 
 <body>
-    <jsp:include page="include/header.jsp" />
+    <div th:include="fragments/header"></div>
 
     <div class="site-wrapper">
 
@@ -29,13 +31,12 @@
             <div class="cover-container">
 
                 <spring:message code="new_company.form.title" var="formTitle" />
-                <h2 class="text-center">${formTitle}</h2>
+                <h2 class="text-center" th:text="${formTitle}"></h2>
 
                 <div class="inner cover">
 
                     <div class="form-box">
-                        <form:form action="new_company" modelAttribute="companyForm"
-                            commandName="companyForm" method="POST">
+                        <form th:action="@{new_company}" th:object="${companyForm}" method="POST">
 
                             <div class="row">
                                 <div class="form-group col-sm-12">
@@ -174,7 +175,7 @@
 
                 </div>
 
-                <jsp:include page="include/footer.jsp" />
+                <div th:include="fragments/footer"></div>
 
             </div>
 
@@ -185,9 +186,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-    <script type="text/javascript" src="/js/jquery.autocomplete.min.js"></script>
-    <script type="text/javascript" src="/js/forms.js"></script>
-    <script type="text/javascript" src="/js/busy-logic.js"></script>
+    <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/forms.js}"></script>
+    <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>
 
 </body>
 </html>
