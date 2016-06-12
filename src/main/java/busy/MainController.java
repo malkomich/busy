@@ -26,20 +26,7 @@ import busy.user.web.LoginForm;
  *
  */
 @Controller
-@Scope(value="singleton")
-@SessionAttributes(value = {MainController.NOTIFICATIONS_SESSION, MainController.ROLES_SESSION, MainController.USERNAME_SESSION})
-public class MainController {
-
-    /**
-     * Spring Model Attributes.
-     */
-    static final String USER_SESSION = "user";
-    static final String USERNAME_SESSION = "username";
-    public static final String NOTIFICATIONS_SESSION = "notifications";
-    static final String ROLES_SESSION = "roleList";
-
-    static final String LOGIN_REQUEST = "loginForm";
-    static final String MESSAGE_REQUEST = "messageFromController";
+public class MainController extends BusyController {
 
     /**
      * URL Paths.
@@ -71,8 +58,6 @@ public class MainController {
      */
     @RequestMapping(value = PATH_ROOT, method = RequestMethod.GET)
     public String index(Model model, HttpSession session) {
-
-        model.addAttribute(USER_SESSION, session.getAttribute(USER_SESSION));
 
         if (model.containsAttribute(USER_SESSION) && ((User) model.asMap().get(USER_SESSION) != null)) {
 

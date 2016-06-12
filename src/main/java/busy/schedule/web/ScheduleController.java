@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,8 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import busy.BusyController;
 import busy.company.web.CompanyController;
 import busy.role.Role;
 import busy.role.RoleService;
@@ -39,15 +39,11 @@ import busy.schedule.ServiceType;
  *
  */
 @Controller
-@Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.ROLE_SESSION, ScheduleController.SERVICE_FORM_SESSION})
-public class ScheduleController {
+public class ScheduleController extends BusyController {
 
     /**
      * Spring Model Attributes.
      */
-    static final String SERVICE_FORM_SESSION = "serviceForm";
-
     static final String MESSAGE_CODE_REQUEST = "msgCode";
 
     /**
@@ -79,14 +75,17 @@ public class ScheduleController {
     private RoleService roleService;
 
     /**
-     * Request to get all bookings made between the given dates in the specific branch
+     * Request to get all bookings made between the given dates in the specific
+     * branch
      * 
      * @param roleIdTmp
      *            the role attached to the requested bookings
      * @param fromTmp
-     *            the initial instant in milliseconds of the period in which find bookings
+     *            the initial instant in milliseconds of the period in which
+     *            find bookings
      * @param toTmp
-     *            the final instant in milliseconds of the period in which find bookings
+     *            the final instant in milliseconds of the period in which find
+     *            bookings
      * @param offSetMinutesTmp
      *            the offset from UTC in milliseconds of the dates received
      * @param model
@@ -95,10 +94,10 @@ public class ScheduleController {
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
     public @ResponseBody String getMonthBookings(@RequestParam(value = "role", required = true) String roleIdTmp,
-        @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
-        @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
-        @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
-        @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
+            @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
+            @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
+            @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
+            @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
 
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
@@ -200,7 +199,7 @@ public class ScheduleController {
             form.addService(serviceForm);
         }
 
-        if(form.getServices().isEmpty()) {
+        if (form.getServices().isEmpty()) {
             form.addService(new ServiceForm());
         }
         model.addAttribute(SERVICE_FORM_SESSION, form);
@@ -217,7 +216,7 @@ public class ScheduleController {
      */
     @RequestMapping(value = PATH_SERVICES_FORM_NEW, method = RequestMethod.POST)
     public String newService(@ModelAttribute(SERVICE_FORM_SESSION) @Valid ServiceListForm form, BindingResult result,
-        Model model) {
+            Model model) {
 
         ServiceValidator validator = new ServiceValidator();
 
@@ -235,7 +234,7 @@ public class ScheduleController {
 
     @RequestMapping(value = PATH_SERVICES_FORM_SAVE, method = RequestMethod.POST)
     public String saveServices(@ModelAttribute(SERVICE_FORM_SESSION) @Valid ServiceListForm form, BindingResult result,
-        Model model) {
+            RedirectAttributes redirectAttributes, Model model) {
 
         ServiceValidator validator = new ServiceValidator();
 

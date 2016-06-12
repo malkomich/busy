@@ -1,13 +1,11 @@
 package busy.user.web;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,13 +13,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import busy.BusyController;
 import busy.location.Address;
-import busy.location.Country;
 import busy.location.LocationService;
 import busy.user.User;
 import busy.user.UserService;
@@ -34,20 +31,16 @@ import busy.user.Verification;
  *
  */
 @Controller
-@Scope(value="singleton")
-@SessionAttributes(value = { UserController.USER_SESSION })
-public class UserController {
+public class UserController extends BusyController {
 
     /**
      * Spring Model Attributes.
      */
-    static final String USER_SESSION = "user";
-    static final String LOGIN_REQUEST = "loginForm";
-    static final String SIGNUP_REQUEST = "signupForm";
+    private static final String SIGNUP_REQUEST = "signupForm";
 
-    static final String COUNTRY_ITEMS_REQUEST = "countryItems";
-    static final String SIGNED_UP_REQUEST = "signedUp";
-    static final String VALIDATION_MSG_REQUEST = "tokenValid";
+    private static final String COUNTRY_ITEMS_REQUEST = "countryItems";
+    private static final String SIGNED_UP_REQUEST = "signedUp";
+    private static final String VALIDATION_MSG_REQUEST = "tokenValid";
 
     /**
      * URL Paths.
@@ -86,7 +79,6 @@ public class UserController {
 
         LoginForm loginForm = new LoginForm();
         model.addAttribute(LOGIN_REQUEST, loginForm);
-
         return LOGIN_PAGE;
     }
 
@@ -137,12 +129,7 @@ public class UserController {
         if (!model.containsAttribute(SIGNUP_REQUEST))
             model.addAttribute(SIGNUP_REQUEST, new SignupForm());
 
-        // Add input selection items to the model.
-        Map<String, String> countryItems = new LinkedHashMap<String, String>();
-        for (Country country : locationService.findCountries()) {
-            countryItems.put(country.getCode(), country.getName());
-        }
-        model.addAttribute(COUNTRY_ITEMS_REQUEST, countryItems);
+        model.addAttribute(COUNTRY_ITEMS_REQUEST, locationService.findCountries());
 
         return SIGNUP_PAGE;
     }

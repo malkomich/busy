@@ -6,7 +6,7 @@
       <div class="col-sm-12 form-group">
         <input th:field="*{name}" id="name" tabindex="1" class="form-control mandatory" th:placeholder="#{name.placeholder}"></input>
         <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-        <label th:each="err : ${#fields.errors('name')}" class="error" th:text="${err}"></label>
+        <span th:each="err : ${#fields.errors('name')}" class="error" th:text="${err}"></span>
       </div>
     </div>
     <!-- .row -->
@@ -20,12 +20,12 @@
 
     <div class="row">
       <div class="col-sm-6 form-group">
-        <label for="maxBookingsPerRole" th:text="#{bookings_per_role.placeholder}:"></label>
+        <label for="maxBookingsPerRole" th:text="#{bookings_per_role.placeholder} + ':'"></label>
         <input th:field="*{maxBookingsPerRole}" id="maxBookingsPerRole" tabindex="3" type="number" min="1" step="1" class="form-control"
           th:placeholder="#{bookings_per_role.placeholder}"></input>
       </div>
       <div class="col-sm-6 form-group">
-        <label for="duration" th:text="#{duration.placeholder}:"></label>
+        <label for="duration" th:text="#{duration.placeholder} + ':'"></label>
         <input th:field="*{duration}" id="duration" tabindex="4" type="number" min="5" step="1" class="form-control" th:placeholder="#{duration.placeholder}"></input>
       </div>
     </div>

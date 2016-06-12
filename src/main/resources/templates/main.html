@@ -25,7 +25,8 @@
         <div class="row">
           <a href="new_company" id="create-company" th:if="${#lists.isEmpty(roleList)}">
             <div class="col-sm-3 col-xs-3 block-button">
-              <i class="glyphicon glyphicon-plus"></i> [[#{new_company.block-button}]]
+              <i class="glyphicon glyphicon-plus"></i>
+              <span th:text="#{new_company.block-button}"></span>
             </div>
           </a>
           <div class="col-sm-3 col-xs-3" th:unless="${#lists.isEmpty(roleList)}">
