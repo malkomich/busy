@@ -1,9 +1,7 @@
 package busy.company.web;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -11,7 +9,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,16 +18,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import busy.BusyController;
 import busy.company.Branch;
-import busy.company.Category;
 import busy.company.Company;
 import busy.company.CompanyService;
 import busy.location.Address;
-import busy.location.Country;
 import busy.location.LocationService;
 import busy.role.Role;
 import busy.role.RoleService;
@@ -50,17 +45,11 @@ import busy.util.SecureSetter;
  *
  */
 @Controller
-@Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.ROLE_SESSION, CompanyController.SERVICE_TYPES_SESSION})
-public class CompanyController {
+public class CompanyController extends BusyController {
 
     /**
      * Spring Model Attributes.
      */
-    public static final String ROLE_SESSION = "role";
-    static final String SERVICE_TYPES_SESSION = "serviceTypes";
-    static final String USER_SESSION = "user";
-
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
     static final String COUNTRY_ITEMS_REQUEST = "countryItems";
     static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
@@ -72,8 +61,6 @@ public class CompanyController {
     /**
      * URL Paths.
      */
-    public static final String PATH_SCHEDULE = "/schedule/";
-    
     private static final String PATH_ROOT = "/";
     private static final String PATH_REGISTER_COMPANY = "/new_company";
     private static final String PATH_COMPANIES_UPDATE = "/get_company_list";
@@ -84,14 +71,11 @@ public class CompanyController {
     private static final String PATH_SERVICE_TYPE_SAVE = "/service-type/save";
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
 
-    private static final String PATH_PARAM_ROLE = "{rId}";
-    
     /**
      * JSP's
      */
     private static final String REGISTER_COMPANY_PAGE = "new-company";
     private static final String COMPANY_INFO_PAGE = "company-info";
-    private static final String BRANCH_PAGE = "branch";
 
     private static final String SERVICE_TYPE_FORM_PAGE = "service-type-form";
 
@@ -126,43 +110,10 @@ public class CompanyController {
         if (!model.containsAttribute(REGISTER_COMPANY_REQUEST))
             model.addAttribute(REGISTER_COMPANY_REQUEST, new CompanyForm());
 
-        // Add input selection items to the model.
-        Map<String, String> countryItems = new LinkedHashMap<String, String>();
-        for (Country country : locationService.findCountries()) {
-            countryItems.put(country.getCode(), country.getName());
-        }
-        model.addAttribute(COUNTRY_ITEMS_REQUEST, countryItems);
-
-        // Add input selection items to the model.
-        Map<Integer, String> categoryItems = new LinkedHashMap<Integer, String>();
-        for (Category category : companyService.findCategories()) {
-            categoryItems.put(category.getId(), category.getName());
-        }
-        model.addAttribute(CATEGORY_ITEMS_REQUEST, categoryItems);
+        model.addAttribute(COUNTRY_ITEMS_REQUEST, locationService.findCountries());
+        model.addAttribute(CATEGORY_ITEMS_REQUEST, companyService.findCategories());
 
         return REGISTER_COMPANY_PAGE;
-    }
-
-    /**
-     * Shows the calendar view of a specific branch.
-     * 
-     * @param roleId
-     *            unique ID of the role requested
-     * @param model
-     *            Spring model instance
-     * @return The page to register companies
-     */
-    @RequestMapping(value = PATH_SCHEDULE + PATH_PARAM_ROLE, method = RequestMethod.GET)
-    public String showBranchPage(@PathVariable("rId") String roleId, Model model) {
-
-        Role role = roleService.findRoleById(Integer.parseInt(roleId));
-        model.addAttribute(ROLE_SESSION, role);
-
-        // Load the service types of the company
-        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(role.getCompany());
-        model.addAttribute(SERVICE_TYPES_SESSION, serviceTypes);
-
-        return BRANCH_PAGE;
     }
 
     /**
@@ -252,9 +203,9 @@ public class CompanyController {
 
         eventPublisher.publishEvent(new OnRegisterCompany(role, request.getLocale(), request.getContextPath()));
 
-        String message = messageSource.getMessage("notification.message.company_pending", null, locale).trim();
-        redirectAttributes.addFlashAttribute(MESSAGE_REQUEST, message);
-
+        String message = messageSource.getMessage("notification.message.company.pending", null, locale).trim();
+        model.addAttribute(MESSAGE_REQUEST, message);
+        
         return "redirect:" + PATH_ROOT;
     }
 

@@ -37,7 +37,7 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     @After
     public void rollback() {
 
-        String scriptPath = "classpath:database/create_services-rollback.sql";
+        String scriptPath = "classpath:database/rollback.sql";
         template.execute(getSQLScript(scriptPath));
     }
 

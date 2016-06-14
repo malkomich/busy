@@ -22,7 +22,8 @@ import busy.user.User;
  * @author malkomich
  */
 @Controller
-@SessionAttributes(value = { AdminController.NOTIFICATIONS_SESSION })
+@SessionAttributes(value = { AdminController.NOTIFICATIONS_SESSION, AdminController.USER_SESSION,
+    AdminController.USERNAME_SESSION })
 public class AdminController {
 
     /**
@@ -53,8 +54,8 @@ public class AdminController {
     private NotificationService notificationService;
 
     /**
-     * Shows the admin page in case of the user has log in as admin, or does a redirect request to
-     * root path in other case
+     * Shows the admin page in case of the user has log in as admin, or does a
+     * redirect request to root path in other case
      * 
      * @param model
      *            Spring model instance
@@ -64,8 +65,6 @@ public class AdminController {
      */
     @RequestMapping(value = PATH_ADMIN, method = RequestMethod.GET)
     public String admin(Model model, HttpSession session) {
-
-        model.addAttribute(USER_SESSION, session.getAttribute(USER_SESSION));
 
         if (model.containsAttribute(USER_SESSION) && ((User) model.asMap().get(USER_SESSION) != null)) {
 

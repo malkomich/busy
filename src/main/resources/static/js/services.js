@@ -44,7 +44,7 @@ $(function() {
             var exists = $(roleTipItem).attr('id') === roleId;
 
             if ($(this).is(':checked') && !exists) {
-                var roleLabel = $(this).next('label').text();
+                var roleLabel = $(this).parent().find('label').text();
                 $(list).append('<li id="' + roleId + '" class="fs-xs">' + roleLabel + '</li>')
             } else {
                 $(roleTipItem).remove();

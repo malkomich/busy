@@ -18,10 +18,6 @@ public class ServiceType implements Serializable {
     private Integer duration;
     private Company company;
 
-    public ServiceType() {
-
-    }
-
     public String getName() {
         return name;
     }
@@ -88,6 +84,7 @@ public class ServiceType implements Serializable {
 
     @Override
     public String toString() {
+        
         LocalTime durationTime = new LocalTime(duration / 60, duration % 60);
         String output = DateTimeFormat.forPattern("HH:mm").print(durationTime);
         return name + " [" + output + "]";

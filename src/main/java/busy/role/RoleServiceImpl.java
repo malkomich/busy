@@ -63,7 +63,16 @@ public class RoleServiceImpl implements RoleService {
     @Transactional(readOnly = true)
     public Role findRoleById(int id) {
 
-        return roleDao.findById(id);
+        return roleDao.findById(id).get(0);
+    }
+    
+    /* (non-Javadoc)
+     * @see busy.role.RoleService#findRolesById(java.lang.Object[])
+     */
+    @Override
+    public List<Role> findRolesById(Integer[] roleIds) {
+        
+        return roleDao.findById(roleIds);
     }
 
     /* (non-Javadoc)

@@ -1,7 +1,7 @@
 /* Busy 
  * Author: Juan Carlos González Cabrero 
  *
- * Database prepare for the feature about management of service types
+ * Database prepare for the feature about creating services
  */
 
 INSERT INTO person(first_name, last_name, email, password, active, admin_role) VALUES('Jessy', 'Pinkman', 'busy.validation@gmail.com', 'pass', true, false);

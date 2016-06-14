@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title th:text="#{login.page.title}">
+      Login - buSy
+    </title>
+
+    <meta charset="utf-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <meta name="author" content="malkomich"></meta>
+    <meta name="description" content="Login Page"></meta>
+
+    <link th:href="@{/favicon.ico}" rel="icon"></link>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet"></link>
+    <link th:href="@{/css/cover.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/signin.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/forms.css}" rel="stylesheet"></link>
+  </head>
+
+  <body>
+    <div class="site-wrapper">
+      <div class="site-wrapper-inner">
+        <div class="cover-container">
+          <div th:include="fragments/header-index"></div>
+          <div class="inner cover">
+            <form class="form-signin reduce" th:action="@{/login}" method="POST" th:object="${loginForm}">
+
+              <!-- Form title -->
+              <h2 class="form-signin-heading" th:text="#{login.form.title}">
+                Welcome to buSy!
+              </h2>
+
+              <div class="input-group">
+                <!-- User Icon -->
+                <span class="input-group-addon">
+                  <i class="glyphicon glyphicon-user"></i>
+                </span>
+                <!-- Email Input -->
+                <input id="email" class="form-control" th:errorclass="has-error" th:placeholder="#{email.placeholder}" required="required"
+                  th:field="*{email}" tabindex="1"></input>
+                <!-- Email errors -->
+                <label th:each="err : ${#fields.errors('email')}" for="inputEmail" class="form-validation-icon error">
+                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                  <span id="email.errors" class="error" th:text="${err}"></span>
+                </label>
+              </div>
+              <!-- .input-group -->
+
+              <div class="input-group">
+                <!-- Password Icon -->
+                <span class="input-group-addon">
+                <i class="glyphicon glyphicon-lock"></i>
+              </span>
+                <!-- Password Input -->
+                <input type="password" id="password" class="form-control" th:errorclass="has-error" th:placeholder="#{password.placeholder}"
+                  required="required" size="50" th:field="*{password}" tabindex="2"></input>
+                <!-- Password errors -->
+                <label th:each="err : ${#fields.errors('password')}" for="inputEmail" class="form-validation-icon error">
+                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                  <span id="email.errors" class="error" th:text="${err}"></span>
+                </label>
+              </div>
+              <!-- .input-group -->
+
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" value="remember-me"></input>
+                  <label th:text="#{remember.checkbox}">
+                    Remember me
+                  </label>
+                </label>
+              </div>
+              <!-- .checkbox -->
+
+              <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.submit}">
+                Sign In
+              </button>
+
+            </form>
+          </div>
+          <!-- .inner cover -->
+        </div>
+        <!-- .cover-container -->
+        <div th:include="fragments/footer"></div>
+      </div>
+      <!-- .site-wrapper-inner -->
+    </div>
+    <!-- .site-wrapper -->
+
+    <!-- SignUp Modal -->
+    <div class="modal fade bs-example-modal-lg" id="signedUpModal" tabindex="-1" role="dialog" aria-labelledby="signedUpModalLabel">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="signupConfirmation">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="signedUpModalLabel" th:text="#{signup_success.modal.title}">
+              Sign up successfully!
+            </h4>
+          </div>
+          <div class="modal-body" th:text="#{signup_success.modal.content}">
+            Thanks for join us. Please, check your inbox to confirm your email.
+          </div>
+        </div>
+        <!-- .modal-content -->
+      </div>
+      <!-- .modal-dialog -->
+    </div>
+    <!-- .modal -->
+
+    <!-- Validation Modal -->
+    <div class="modal fade bs-example-modal-lg" id="validationModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="validationMessage">
+          <div class="modal-body" th:text="#{auth.message.validToken}">
+            Thanks for validate your buSy account.
+          </div>
+        </div>
+        <!-- .modal-content -->
+      </div>
+      <!-- .modal-dialog -->
+    </div>
+    <!-- .modal -->
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js" />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" />
+    <script type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+      $(function() {
+        var signedUp = /*[[${signedUp}]]*/ null;
+        if (signedUp == true) {
+          $("#signedUpModal").modal();
+        }
+
+        var tokenValid = /*[[${tokenValid}]]*/ null;
+        if (tokenValid == true) {
+          $("#validationModal").modal();
+        }
+      });
+      /*]]>*/
+    </script>
+  </body>
+
+</html>
