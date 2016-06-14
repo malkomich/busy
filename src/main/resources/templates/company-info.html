@@ -31,7 +31,7 @@
               <div class="profile-info col-md-12 col-xs-4">
 
                 <div class="profile-pic">
-                  <img th:src="@{/img/user.png}" class="img-responsive" alt="">
+                  <img th:src="@{/img/user.png}" class="img-responsive" alt=""></img>
                 </div>
 
                 <div class="profile-main">
@@ -86,29 +86,29 @@
               <table class="table table-user-information">
                 <tbody>
                   <tr>
-                    <td th:text="#{company.info.trade_name}:"></td>
+                    <td th:text="#{company.info.trade_name} + ':'"></td>
                     <td th:text="${company.tradeName}"></td>
                   </tr>
                   <tr>
-                    <td th:text="#{company.info.business_name}:"></td>
+                    <td th:text="#{company.info.business_name} + ':'"></td>
                     <td th:text="${company.businessName}"></td>
                   </tr>
                   <tr>
-                    <td th:text="#{company.info.email}:"></td>
+                    <td th:text="#{company.info.email} + ':'"></td>
                     <td>
                       <a href="mailto:${company.email}" th:text="${company.email}"></a>
                     </td>
                   </tr>
                   <tr>
-                    <td th:text="#{company.info.cif}:"></td>
+                    <td th:text="#{company.info.cif} + ':'"></td>
                     <td th:text="${company.cif}"></td>
                   </tr>
                   <tr>
-                    <td th:text="#{company.info.create_date}:"></td>
+                    <td th:text="#{company.info.create_date} + ':'"></td>
                     <td th:text="${#dates.format(company.createDate.toDate(), 'dd MMMM yyyy')}"></td>
                   </tr>
                   <tr>
-                    <td th:text="#{company.info.category}:"></td>
+                    <td th:text="#{company.info.category} + ':'"></td>
                     <td th:text="${company.category.name}"></td>
                   </tr>
                 </tbody>

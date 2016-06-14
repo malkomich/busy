@@ -6,7 +6,7 @@
         <a href="#">
           <div class="select-menu-item-text">
             <div class="row">
-              <span class="name" data-toggle="tooltip" data-placement="left" title="${serviceType.description}" th:text="${serviceType.name}"></span>
+              <span class="name" data-toggle="tooltip" data-placement="left" th:title="${serviceType.description}" th:text="${serviceType.name}"></span>
             </div>
             <div class="row tip-text">
               <span class="info">
@@ -21,12 +21,12 @@
       <!-- .col -->
 
       <div class="col-xs-2">
-        <a href="#" sTypeId="${serviceType.id}" class="glyphicon glyphicon-pencil service-type_modify"></a>
+        <a href="#" th:attr="sTypeId=${serviceType.id}" class="glyphicon glyphicon-pencil service-type_modify"></a>
       </div>
       <!-- .col -->
 
       <div class="col-xs-2">
-        <a href="#" sTypeId="${serviceType.id}" class="glyphicon glyphicon-remove service-type_delete"></a>
+        <a href="#" th:attr="sTypeId=${serviceType.id}" class="glyphicon glyphicon-remove service-type_delete"></a>
       </div>
       <!-- .col -->
 

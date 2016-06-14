@@ -234,7 +234,7 @@ public class BranchPage extends BusyPage {
         if (!serviceType.isEmpty()) {
             FluentWebElement select = findFirst(SERVICE_FORM_STYPE);
 
-            FluentWebElement option = select.findFirst("option", FilterConstructor.containingText(serviceType));
+            FluentWebElement option = select.findFirst("option", FilterConstructor.withText().contains(serviceType));
             if (!option.isDisplayed()) {
                 select.click();
             }

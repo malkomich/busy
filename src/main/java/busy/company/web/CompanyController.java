@@ -61,8 +61,6 @@ public class CompanyController extends BusyController {
     /**
      * URL Paths.
      */
-    public static final String PATH_SCHEDULE = "/schedule/";
-    
     private static final String PATH_ROOT = "/";
     private static final String PATH_REGISTER_COMPANY = "/new_company";
     private static final String PATH_COMPANIES_UPDATE = "/get_company_list";
@@ -73,14 +71,11 @@ public class CompanyController extends BusyController {
     private static final String PATH_SERVICE_TYPE_SAVE = "/service-type/save";
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
 
-    private static final String PATH_PARAM_ROLE = "{rId}";
-    
     /**
      * JSP's
      */
     private static final String REGISTER_COMPANY_PAGE = "new-company";
     private static final String COMPANY_INFO_PAGE = "company-info";
-    private static final String BRANCH_PAGE = "branch";
 
     private static final String SERVICE_TYPE_FORM_PAGE = "service-type-form";
 
@@ -119,28 +114,6 @@ public class CompanyController extends BusyController {
         model.addAttribute(CATEGORY_ITEMS_REQUEST, companyService.findCategories());
 
         return REGISTER_COMPANY_PAGE;
-    }
-
-    /**
-     * Shows the calendar view of a specific branch.
-     * 
-     * @param roleId
-     *            unique ID of the role requested
-     * @param model
-     *            Spring model instance
-     * @return The page to register companies
-     */
-    @RequestMapping(value = PATH_SCHEDULE + PATH_PARAM_ROLE, method = RequestMethod.GET)
-    public String showBranchPage(@PathVariable("rId") String roleId, Model model) {
-
-        Role role = roleService.findRoleById(Integer.parseInt(roleId));
-        model.addAttribute(ROLE_SESSION, role);
-
-        // Load the service types of the company
-        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(role.getCompany());
-        model.addAttribute(SERVICE_TYPES_SESSION, serviceTypes);
-
-        return BRANCH_PAGE;
     }
 
     /**

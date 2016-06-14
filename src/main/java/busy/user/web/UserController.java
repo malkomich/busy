@@ -1,7 +1,5 @@
 package busy.user.web;
 
-import java.util.Map.Entry;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;

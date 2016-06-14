@@ -41,7 +41,7 @@
                 <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text" th:text="${username}"></span>
                 </a>
                 <div th:each="roleItem : ${roleList}">
-                  <a th:href="@{/schedule/{id}(id=${roleItem.id})}" class="role-select-menu-item">
+                  <a th:href="@{/schedule/{roleId}(roleId=${roleItem.id})}" class="role-select-menu-item">
                     <span class="role-select-menu-item-text" th:text="${roleItem.branch.company.tradeName}"></span>
                   </a>
                 </div>

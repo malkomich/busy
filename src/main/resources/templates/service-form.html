@@ -5,10 +5,9 @@
       <span aria-hidden="true">&times;</span>
     </button>
     <h4 class="modal-title">
-            <label th:field="*{date}">
-                <span th:text="${#dates.format(serviceForm.date, 'dd MMMM yyyy')}"></span>
-            </label>
-        </h4>
+        <input type="hidden" th:field="*{date}"></input>
+        <label th:text="${#dates.format(serviceForm.date, 'dd MMMM yyyy')}"></label>
+    </h4>
   </div>
 
   <div class="modal-body">
@@ -37,7 +36,7 @@
         <select th:field="*{services[__${status.index}__].serviceType}" id="service-type" tabindex="2" class="form-control" data-toggle="tooltip"
           data-placement="top" th:title="#{schedule.service.tooltip.service_type}">
           <option value="" th:label="#{schedule.service.service_type.select}"></option>
-          <option th:each="sType : ${serviceForm.existingServiceTypes}" th:value="${sType.key}" th:text="${sType.value}" duration="${sType.value.duration}"></option>
+          <option th:each="sType : ${serviceTypes}" th:value="${sType.id}" th:text="${sType}" th:attr="duration=${sType.duration}"></option>
         </select>
         <span th:each="err : ${#fields.errors('services[__${status.index}__].serviceType')}" class="error fs-xs" th:text="${err}"></span>
       </div>
@@ -50,15 +49,16 @@
             <b class="caret"> </b>
           </a>
           <ul class="dropdown-menu role-list" role="menu" aria-labelledby="role-dropdown">
-            <li th:each="branchRole : ${serviceForm.existingRoles}" class="role-item">
-              <input type="checkbox" th:field="*{services[__${status.index}__].roles}" th:value="${branchRole.key}" th:text="${branchRole.value}"></input>
+            <li th:each="branchRole : ${branchRoles}" class="role-item">
+              <input type="checkbox" th:field="*{services[__${status.index}__].roles}" th:value="${branchRole.key}"></input>
+              <label th:text="${branchRole.value}"></label>
             </li>
           </ul>
         </div>
         <div class="row service-roles-summary">
           <span th:each="err : ${#fields.errors('services[__${status.index}__].roles')}" class="error fs-xs" th:text="${err}"></span>
           <ul>
-            <li th:each="item : ${service.roles}" id="${item}" class="fs-xs" th:text="${serviceForm.existingRoles[item]}"></li>
+            <li th:each="item : ${service.roles}" th:id="${item}" class="fs-xs" th:text="${branchRoles[__${item}__]}"></li>
           </ul>
         </div>
       </div>
@@ -70,7 +70,7 @@
         <div class="row" th:unless="${service.repeated}">
           <select th:field="*{services[__${status.index}__].repetitionType}" id="service-repetition-type" tabindex="4" class="form-control"
             data-toggle="tooltip" data-placement="right" th:title="#{schedule.service.tooltip.repetition_type}">
-            <option th:each="rType : ${serviceForm.existingRepetitionTypes}" th:value="${rType}" th:text="#{${rType.msgCode}}"></option>
+            <option th:each="rType : ${repetitionTypes}" th:value="${rType}" th:text="#{${rType.msgCode}}"></option>
           </select>
           <span id="rep-date-error" th:each="err : ${#fields.errors('services[__${status.index}__].repetitionType')}" class="error fs-xs"
             th:text="${err}"></span>
