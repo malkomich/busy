@@ -9,27 +9,27 @@
         <span th:each="err : ${#fields.errors('name')}" class="error" th:text="${err}"></span>
       </div>
     </div>
-    <!-- .row -->
+    <!-- .row (NAME) -->
 
     <div class="row">
       <div class="form-group col-sm-12">
         <input th:field="*{description}" id="description" tabindex="2" class="form-control" th:placeholder="#{description.placeholder}"></input>
       </div>
     </div>
-    <!-- .row -->
+    <!-- .row (DESCRIPTION) -->
 
     <div class="row">
       <div class="col-sm-6 form-group">
-        <label for="maxBookingsPerRole" th:text="#{bookings_per_role.placeholder} + ':'"></label>
+        <label for="maxBookingsPerRole" th:text="#{bookings_per_role.label} + ':'"></label>
         <input th:field="*{maxBookingsPerRole}" id="maxBookingsPerRole" tabindex="3" type="number" min="1" step="1" class="form-control"
           th:placeholder="#{bookings_per_role.placeholder}"></input>
       </div>
       <div class="col-sm-6 form-group">
-        <label for="duration" th:text="#{duration.placeholder} + ':'"></label>
+        <label for="duration" th:text="#{duration.label} + ':'"></label>
         <input th:field="*{duration}" id="duration" tabindex="4" type="number" min="5" step="1" class="form-control" th:placeholder="#{duration.placeholder}"></input>
       </div>
     </div>
-    <!-- .row -->
+    <!-- .row (MAX. BOOKINGS & DURATION) -->
 
     <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
     <button id="submit" type="submit" class="btn btn-primary" tabindex="5" th:text="#{form.save}"></button>
