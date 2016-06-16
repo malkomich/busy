@@ -170,14 +170,17 @@ to {
     margin-left: -2px;
 }
 
-.profile-content {
+/*
+ * Sections style
+ */
+.section {
     padding: 50px;
     background: #fff;
-    min-height: 460px;
+    display: none;
 }
 
 @media screen and (max-width: 991px) {
-    .profile-content {
+    .section {
         margin-top: 30px;
     }
 }
