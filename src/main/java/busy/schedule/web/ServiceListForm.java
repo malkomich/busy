@@ -1,7 +1,6 @@
 package busy.schedule.web;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,28 +13,18 @@ import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 
 import busy.role.Role;
+import busy.role.RoleService;
 import busy.schedule.Schedule;
 import busy.schedule.Service;
-import busy.schedule.Service.Repetition;
 import busy.schedule.ServiceType;
 import busy.util.SecureSetter;
 
 public class ServiceListForm {
 
     private LocalDate date;
-    private Map<Integer, ServiceType> existingServiceTypes;
-    private Map<Integer, Role> existingRoles;
-    private List<Repetition> existingRepetitionTypes;
 
     @Valid
-    private List<ServiceForm> services;
-
-    public ServiceListForm() {
-        services = new ArrayList<>();
-        existingServiceTypes = new HashMap<>();
-        existingRoles = new HashMap<>();
-        existingRepetitionTypes = new ArrayList<>();
-    }
+    private List<ServiceForm> services = new ArrayList<>();
 
     public LocalDate getDate() {
         return date;
@@ -43,38 +32,6 @@ public class ServiceListForm {
 
     public void setDate(LocalDate date) {
         this.date = date;
-    }
-
-    public Map<Integer, ServiceType> getExistingServiceTypes() {
-        return existingServiceTypes;
-    }
-
-    public void setExistingServiceTypes(List<ServiceType> serviceTypeList) {
-        for (ServiceType sType : serviceTypeList) {
-            existingServiceTypes.put(sType.getId(), sType);
-        }
-    }
-
-    public Map<Integer, Role> getExistingRoles() {
-        return existingRoles;
-    }
-
-    public void setExistingRoles(List<Role> roleList) {
-        for (Role role : roleList) {
-            existingRoles.put(role.getId(), role);
-        }
-    }
-
-    public List<Repetition> getExistingRepetitionTypes() {
-        return existingRepetitionTypes;
-    }
-
-    public void setExistingRepetitionTypes(List<Repetition> repetitionList) {
-        existingRepetitionTypes = repetitionList;
-    }
-
-    public void setExistingRepetitionTypes(Repetition[] repetitionArray) {
-        setExistingRepetitionTypes(Arrays.asList(repetitionArray));
     }
 
     public List<ServiceForm> getServices() {
@@ -95,7 +52,7 @@ public class ServiceListForm {
      * 
      * @return
      */
-    public Map<Integer, List<Service>> toServices() {
+    public Map<Integer, List<Service>> toServices(List<ServiceType> sTypes, RoleService roleService) {
 
         Map<Integer, List<Service>> serviceMap = new HashMap<>();
         int iteration = 0;
@@ -104,11 +61,18 @@ public class ServiceListForm {
             SecureSetter.setId(service, form.getId());
             LocalTime startTime = DateTimeFormat.forPattern("HH:mm").parseLocalTime(form.getStartTime());
             service.setStartTime(date.toDateTime(startTime));
-            service.setServiceType(existingServiceTypes.get(form.getServiceType()));
 
-            for (Integer roleId : form.getRoles()) {
+            for (ServiceType sType : sTypes) {
+                if (sType.getId() == form.getServiceType()) {
+                    service.setServiceType(sType);
+                }
+            }
+
+            List<Role> roleList =
+                roleService.findRolesById(form.getRoles().toArray(new Integer[form.getRoles().size()]));
+            for (Role role : roleList) {
                 Schedule schedule = new Schedule();
-                schedule.setRole(existingRoles.get(roleId));
+                schedule.setRole(role);
                 service.addSchedule(schedule);
             }
 

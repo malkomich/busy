@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title th:text="#{new_company.page.title}">
+      buSy
+    </title>
+
+    <meta charset="utf-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <meta name="author" content="malkomich"></meta>
+    <meta name="description" content="New company Page"></meta>
+
+    <link rel="icon" th:href="@{/favicon.ico}"></link>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+    <link th:href="@{/css/cover-logged.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/main.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/forms.css}" rel="stylesheet"></link>
+
+  </head>
+
+  <body>
+    <div th:include="fragments/header"></div>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <h2 class="text-center" th:text="#{new_company.form.title}"></h2>
+
+          <div class="inner cover">
+
+            <div class="form-box">
+              <form th:action="@{new_company}" th:object="${companyForm}" method="POST">
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{tradeName}" autofocus="autofocus" id="tradeName" tabindex="1" class="form-control" th:placeholder="#{companyTradeName.placeholder}"></input>
+                    <span th:each="err : ${#fields.errors('tradeName')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{businessName}" autofocus="autofocus" id="businessName" tabindex="2" class="form-control mandatory" th:placeholder="#{companyBusinessName.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <span th:each="err : ${#fields.errors('businessName')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{email}" id="email" tabindex="3" class="form-control mandatory" th:placeholder="#{companyEmail.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <span th:each="err : ${#fields.errors('email')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{cif}" id="cif" tabindex="4" class="form-control mandatory" th:placeholder="#{companyCif.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <span th:each="err : ${#fields.errors('cif')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-6 form-group">
+                    <label for="country" th:text="#{country.label} + ':'"></label>
+                    <select th:field="*{countryCode}" id="country" tabindex="5" class="form-control mandatory">
+                      <option value="" th:label="#{country.select.header}"></option>
+                      <option th:each="countryItem : ${countryItems}" th:value="${countryItem.code}" th:text="${countryItem.name}"></option>
+                    </select>
+                    <span th:each="err : ${#fields.errors('countryCode')}" class="error" th:text="${err}"></span>
+                  </div>
+                  <div class="col-sm-6 form-group">
+                    <label for="city" th:text="#{city.label} + ':'"></label>
+                    <select th:field="*{cityId}" id="city" tabindex="6" class="form-control mandatory">
+                      <option id="cityEmptyHeader" style="display: none;" value="" th:label="#{city.options.empty}"></option>
+                      <option id="cityNotEmptyHeader" style="display: none;" value="" th:label="#{city.select.header}"></option>
+                    </select>
+                    <span th:each="err : ${#fields.errors('cityId')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-6 form-group">
+                    <input th:field="*{zipCode}" id="zipcode" tabindex="7" type="tel" value="" class="form-control" th:placeholder="#{zipcode.placeholder}"></input>
+                    <span th:each="err : ${#fields.errors('zipCode')}" class="error" th:text="${err}"></span>
+                  </div>
+                  <div class="col-sm-6 form-group">
+                    <input th:field="*{phone}" id="phone" tabindex="8" type="tel" value="" class="form-control" th:placeholder="#{phone.placeholder}"></input>
+                    <span th:each="err : ${#fields.errors('phone')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{address1}" id="address1" tabindex="9" class="form-control" th:placeholder="#{companyAddress1.placeholder}"></input>
+                    <span th:each="err : ${#fields.errors('address1')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{address2}" id="address2" tabindex="10" class="form-control" th:placeholder="#{companyAddress2.placeholder}"></input>
+                    <span th:each="err : ${#fields.errors('address2')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <label for="category" th:text="#{category.label} + ':'"></label>
+                    <select th:field="*{categoryId}" id="category" tabindex="11" class="form-control">
+                      <option value="" th:label="#{category.select.header}"></option>
+                      <option th:each="categoryItem : ${categoryItems}" th:value="${categoryItem.id}" th:text="${categoryItem.name}"></option>
+                    </select>
+                    <span th:each="err : ${#fields.errors('categoryId')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="col-sm-3" style="float: right">
+                      <button id="submit" type="submit" class="btn btn-primary" tabindex="12" th:text="#{new_company.submit}"></button>
+                    </div>
+                  </div>
+                </div>
+                <!-- .row -->
+              </form>
+
+            </div>
+            <!-- .form-box -->
+
+            <div class="footnote">
+              <span class="glyphicon glyphicon-asterisk error"></span>
+              <span class="error" th:text="#{mandatory.info}"></span>
+            </div>
+
+          </div>
+
+          <div th:include="fragments/footer"></div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/forms.js}"></script>
+    <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>
+
+  </body>
+
+</html>

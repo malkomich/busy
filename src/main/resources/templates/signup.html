@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title th:text="#{signup.page.title}">
+      Signup - buSy
+    </title>
+
+    <meta charset="utf-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <meta name="author" content="malkomich"></meta>
+    <meta name="description" content="Signup Page"></meta>
+
+    <link rel="icon" th:href="@{/favicon.ico}"></link>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"></link>
+    <link th:href="@{/css/cover.css}" rel="stylesheet" type="text/css"></link>
+    <link th:href="@{/css/signin.css}" rel="stylesheet" type="text/css"></link>
+    <link th:href="@{/css/forms.css}" rel="stylesheet" type="text/css"></link>
+  </head>
+
+  <body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <h2 class="text-center" th:utext="#{signup.form.title}"></h2>
+
+          <div class="inner cover">
+
+            <div class="form-box">
+              <form class="form-signin" th:action="@{signup}" th:object="${signupForm}" method="POST">
+
+                <div class="row">
+                  <div class="col-sm-6 form-group">
+                    <input th:field="*{firstName}" autofocus="autofocus" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{firstname.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <span th:each="err : ${#fields.errors('firstName')}" class="error" th:text="${err}"></span>
+                  </div>
+                  <div class="col-sm-6 form-group">
+                    <input th:field="*{lastName}" id="lastname" tabindex="2" class="form-control mandatory" th:placeholder="#{lastname.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <span th:each="err : ${#fields.errors('lastName')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{email}" id="email" tabindex="3" class="form-control mandatory" th:placeholder="#{email.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <span th:each="err : ${#fields.errors('email')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-6 form-group">
+                    <label for="country" th:text="#{country.label} + ':'"></label>
+
+                    <select th:field="*{countryCode}" id="country" tabindex="4" class="form-control">
+                      <option value="" th:label="#{country.select.header}"></option>
+                      <option th:each="countryItem : ${countryItems}" th:value="${countryItem.code}" th:text="${countryItem.name}"></option>
+                    </select>
+                    <span th:each="err : ${#fields.errors('countryCode')}" class="error" th:text="${err}"></span>
+                  </div>
+                  <div class="col-sm-6 form-group">
+                    <label for="city" th:text="#{city.label} + ':'"></label>
+
+                    <select th:field="*{cityId}" id="city" tabindex="5" class="form-control">
+                      <option id="cityEmptyHeader" style="display: none;" value="" th:label="#{city.options.empty}"></option>
+                      <option id="cityNotEmptyHeader" style="display: none;" value="" th:label="#{city.select.header}"></option>
+                    </select>
+                    <span th:each="err : ${#fields.errors('cityId')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-6 form-group">
+                    <input th:field="*{zipCode}" id="zipcode" tabindex="6" type="tel" value="" class="form-control" th:placeholder="#{zipcode.placeholder}"
+                    />
+                    <label th:each="err : ${#fields.errors('zipCode')}" class="error" th:text="${err}"></label>
+                  </div>
+                  <div class="col-sm-6 form-group">
+                    <input th:field="*{phone}" id="phone" tabindex="7" type="tel" value="" class="form-control" th:placeholder="#{phone.placeholder}"></input>
+                    <span th:each="err : ${#fields.errors('phone')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{password}" id="password" tabindex="8" type="password" class="form-control mandatory" th:placeholder="#{password.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <span th:each="err : ${#fields.errors('password')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="form-group col-sm-12">
+                    <input th:field="*{confirmedPassword}" id="confirmedPassword" tabindex="9" type="password" class="form-control mandatory"
+                      th:placeholder="#{passwordConfirm.placeholder}"></input>
+                    <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+                    <span th:each="err : ${#fields.errors('confirmedPassword')}" class="error" th:text="${err}"></span>
+                  </div>
+                </div>
+                <!-- .row -->
+
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="col-sm-8">
+                      <p th:utext="#{signup.info}"></p>
+                    </div>
+                    <div class="col-sm-3" style="float: right">
+                      <button id="submit" type="submit" class="btn btn-primary" tabindex="10" th:text="#{signup.submit}"></button>
+                    </div>
+                  </div>
+                </div>
+                <!-- .row -->
+
+              </form>
+
+            </div>
+            <div class="footnote">
+              <span class="glyphicon glyphicon-asterisk error"></span>
+              <span class="error" th:text="#{mandatory.info}"></span>
+            </div>
+
+          </div>
+          <spring:message code="signup.logintip.label" var="loginLabel" />
+          <div class="login-tip" style="border-top: 1px solid #888;">
+            <span th:text="#{signup.logintip.label}"></span>
+            <a th:href="@{/login}">
+              <b th:text="#{signup.logintip.link}"></b>
+            </a>
+          </div>
+
+          <div th:include="fragments/footer"></div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" th:src="@{/js/forms.js}"></script>
+  </body>
+
+</html>

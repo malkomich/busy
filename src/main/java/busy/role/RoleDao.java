@@ -40,13 +40,13 @@ public interface RoleDao {
     Role findManagerByCompany(Company company);
 
     /**
-     * Gets the role object by his ID.
+     * Gets the list of role objects by their IDs.
      * 
      * @param id
-     *            unique ID of the role
-     * @return The resultant role object
+     *            unique IDs of the roles
+     * @return The resultant list of role objects
      */
-    Role findById(int id);
+    List<Role> findById(Integer... ids);
 
     /**
      * Gets all roles attached to the given branch.

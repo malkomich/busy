@@ -52,6 +52,15 @@ public interface RoleService {
     Role findRoleById(int id);
 
     /**
+     * Gets a list of roles by their ID
+     * 
+     * @param id
+     *            unique IDs of the roles
+     * @return The list of resultant roles
+     */
+    List<Role> findRolesById(Integer[] roleIds);
+
+    /**
      * Gets all roles attached to the given branch.
      * 
      * @param branch

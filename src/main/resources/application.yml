@@ -49,6 +49,8 @@ spring:
     properties:
       mail:
         debug: false
+  thymeleaf:
+    cache: true
 server:
   error:
     whitelabel:
@@ -64,6 +66,8 @@ spring:
     properties:
       mail:
         debug: true
+  thymeleaf:
+    cache: false
 server:
   error:
     whitelabel:
@@ -79,6 +83,8 @@ spring:
     properties:
       mail:
         debug: true
+  thymeleaf:
+    cache: false
 server:
   error:
     whitelabel:

@@ -47,7 +47,7 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
     @After
     public void rollback() {
 
-        String scriptPath = "classpath:database/see_my_company_schedule-rollback.sql";
+        String scriptPath = "classpath:database/rollback.sql";
         template.execute(getSQLScript(scriptPath));
     }
 

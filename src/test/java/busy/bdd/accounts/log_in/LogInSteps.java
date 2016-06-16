@@ -37,13 +37,12 @@ public class LogInSteps extends AbstractFunctionalTest {
 
         String scriptPath = "classpath:database/login-prepare.sql";
         template.execute(getSQLScript(scriptPath));
-
     }
 
     @After
     public void rollback() {
 
-        String scriptPath = "classpath:database/login-rollback.sql";
+        String scriptPath = "classpath:database/rollback.sql";
         template.execute(getSQLScript(scriptPath));
     }
 

@@ -1,6 +1,8 @@
 package busy.schedule.web;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -13,17 +15,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import busy.BusyController;
+import busy.company.Company;
 import busy.company.web.CompanyController;
 import busy.role.Role;
 import busy.role.RoleService;
@@ -38,17 +42,19 @@ import busy.schedule.ServiceType;
  * @author malkomich
  *
  */
+/**
+ * @author malkomich
+ *
+ */
 @Controller
-@Scope(value = "singleton")
-@SessionAttributes(value = {CompanyController.ROLE_SESSION, ScheduleController.SERVICE_FORM_SESSION})
-public class ScheduleController {
+public class ScheduleController extends BusyController {
 
     /**
      * Spring Model Attributes.
      */
-    static final String SERVICE_FORM_SESSION = "serviceForm";
-
-    static final String MESSAGE_CODE_REQUEST = "msgCode";
+    private static final String SERVICE_FORM_REQUEST = "serviceForm";
+    private static final String REPETITION_TYPES_REQUEST = "repetitionTypes";
+    private static final String MESSAGE_CODE_REQUEST = "msgCode";
 
     /**
      * URL Paths.
@@ -57,12 +63,14 @@ public class ScheduleController {
     private static final String PATH_SERVICES_FORM = "/service_form";
     private static final String PATH_SERVICES_FORM_NEW = "/service_form/new";
     private static final String PATH_SERVICES_FORM_SAVE = "/service_form/save";
+    private static final String PATH_SCHEDULE = "/schedule/";
 
     /**
      * JSP's
      */
     private static final String SERVICE_FORM_PAGE = "service-form";
     private static final String MESSAGE_VIEW = "message";
+    private static final String BRANCH_PAGE = "branch";
 
     /**
      * HTTP params.
@@ -71,12 +79,18 @@ public class ScheduleController {
     private static final String PARAM_DATE_TO = "to";
     private static final String PARAM_DATE_OFFSET_FROM = "utc_offset_from";
     private static final String PARAM_DATE_OFFSET_TO = "utc_offset_to";
+    private static final String PARAM_ROLE = "roleId";
 
     @Autowired
     private ScheduleService scheduleService;
 
     @Autowired
     private RoleService roleService;
+
+    @ModelAttribute(REPETITION_TYPES_REQUEST)
+    public Repetition[] loadRepetitions() {
+        return Repetition.values();
+    }
 
     /**
      * Request to get all bookings made between the given dates in the specific branch
@@ -159,6 +173,26 @@ public class ScheduleController {
     }
 
     /**
+     * Shows the calendar view of a specific branch.
+     * 
+     * @param roleId
+     *            unique ID of the role requested
+     * @param model
+     *            Spring model instance
+     * @return The page to register companies
+     */
+    @RequestMapping(value = PATH_SCHEDULE + "{" + PARAM_ROLE + "}", method = RequestMethod.GET)
+    public String showBranchPage(@PathVariable(PARAM_ROLE) String roleId, Model model) {
+
+        Role role = roleService.findRoleById(Integer.parseInt(roleId));
+        model.addAttribute(ROLE_SESSION, role);
+
+        updateServiceTypes(role.getCompany(), model);
+
+        return BRANCH_PAGE;
+    }
+
+    /**
      * Shows the form to save a service type.
      * 
      * @param dateTmp
@@ -181,15 +215,17 @@ public class ScheduleController {
             model.addAttribute(MESSAGE_CODE_REQUEST, "modal.messages.service-type.left");
             return MESSAGE_VIEW;
         }
-        form.setExistingServiceTypes(serviceTypes);
-
-        List<Role> roles = roleService.findRolesByBranch(role.getBranch());
-        form.setExistingRoles(roles);
+        
+        updateServiceTypes(role.getCompany(), model);
+        
+        Map<Integer, Role> roles = new HashMap<>();
+        for (Role roleItem : roleService.findRolesByBranch(role.getBranch())) {
+            roles.put(roleItem.getId(), roleItem);
+        }
+        model.addAttribute(BRANCH_ROLES_SESSION, roles);
 
         LocalDate date = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(dateTmp);
         form.setDate(date);
-
-        form.setExistingRepetitionTypes(Repetition.values());
 
         DateTime fromDate = date.toDateTime(new LocalTime(0, 0));
         DateTime toDate = date.toDateTime(new LocalTime(23, 59));
@@ -200,10 +236,10 @@ public class ScheduleController {
             form.addService(serviceForm);
         }
 
-        if(form.getServices().isEmpty()) {
+        if (form.getServices().isEmpty()) {
             form.addService(new ServiceForm());
         }
-        model.addAttribute(SERVICE_FORM_SESSION, form);
+        model.addAttribute(SERVICE_FORM_REQUEST, form);
 
         return SERVICE_FORM_PAGE;
     }
@@ -216,7 +252,7 @@ public class ScheduleController {
      * @return The service form dialog view with a new service row
      */
     @RequestMapping(value = PATH_SERVICES_FORM_NEW, method = RequestMethod.POST)
-    public String newService(@ModelAttribute(SERVICE_FORM_SESSION) @Valid ServiceListForm form, BindingResult result,
+    public String newService(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
         Model model) {
 
         ServiceValidator validator = new ServiceValidator();
@@ -228,14 +264,14 @@ public class ScheduleController {
         }
 
         form.addService(new ServiceForm());
-        model.addAttribute(SERVICE_FORM_SESSION, form);
+        model.addAttribute(SERVICE_FORM_REQUEST, form);
 
         return SERVICE_FORM_PAGE;
     }
 
     @RequestMapping(value = PATH_SERVICES_FORM_SAVE, method = RequestMethod.POST)
-    public String saveServices(@ModelAttribute(SERVICE_FORM_SESSION) @Valid ServiceListForm form, BindingResult result,
-        Model model) {
+    public String saveServices(List<Role> roles, @ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form,
+        BindingResult result, RedirectAttributes redirectAttributes, Model model) {
 
         ServiceValidator validator = new ServiceValidator();
 
@@ -245,10 +281,26 @@ public class ScheduleController {
             return SERVICE_FORM_PAGE;
         }
 
-        scheduleService.saveServices(form.toServices());
+        @SuppressWarnings("unchecked")
+        List<ServiceType> serviceTypes = (List<ServiceType>) model.asMap().get(SERVICE_TYPES_SESSION);
+        scheduleService.saveServices(form.toServices(serviceTypes, roleService));
 
         Role role = (Role) model.asMap().get(CompanyController.ROLE_SESSION);
 
-        return "redirect:" + CompanyController.PATH_SCHEDULE + role.getId();
+        return "redirect:" + PATH_SCHEDULE + role.getId();
+    }
+    
+    /**
+     * Load the service types of the company
+     * 
+     * @param company
+     *            the company which types will be loaded
+     * @param model
+     *            Spring model instance
+     */
+    private void updateServiceTypes(Company company, Model model) {
+
+        List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(company);
+        model.addAttribute(SERVICE_TYPES_SESSION, serviceTypes);
     }
 }

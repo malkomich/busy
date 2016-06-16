@@ -69,15 +69,15 @@ public class RoleDaoImpl implements RoleDao {
     private static final String SQL_SELECT_BY_USERID = ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + USERID + "=?";
 
     private static final String SQL_SELECT_MANAGER_BY_COMPANY_ID =
-            ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_COMPANY_ID + "=?";
+        ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_COMPANY_ID + "=?";
 
-    private static final String SQL_SELECT_BY_ID = ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + ID + "=?";
+    private static final String SQL_SELECT_BY_ID = ROLE_SELECT_QUERY + " WHERE ";
 
     private static final String SQL_SELECT_BY_BRANCH =
-            ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + BRANCHID + "=?";
+        ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + BRANCHID + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_ROLE + " SET " + USERID + "= ?," + BRANCHID + "= ?,"
-            + IS_MANAGER + "= ?" + " WHERE " + ID + "= ?";
+        + IS_MANAGER + "= ?" + " WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -161,11 +161,19 @@ public class RoleDaoImpl implements RoleDao {
      * @see busy.role.RoleDao#findById(int)
      */
     @Override
-    public Role findById(int id) {
+    public List<Role> findById(Integer... ids) {
+
+        String query = SQL_SELECT_BY_ID;
+        for (int i = 0; i < ids.length; i++) {
+            query += TABLE_ROLE + "." + ID + "=?";
+            if (i != (ids.length - 1)) {
+                query += " OR ";
+            }
+        }
 
         try {
 
-            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new RoleRowMapper(), id);
+            return jdbcTemplate.query(query, new RoleRowMapper(), (Object[]) ids);
 
         } catch (EmptyResultDataAccessException e) {
 

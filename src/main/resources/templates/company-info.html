@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head>
+    <title th:text="#{company.page.title(${company.tradeName})}">
+      buSy
+    </title>
+
+    <meta charset="utf-8"></meta>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
+    <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
+    <meta name="author" content="malkomich"></meta>
+    <meta name="description" content="Company Page"></meta>
+
+    <link rel="icon" th:href="@{/favicon.ico}"></link>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"></link>
+    <link th:href="@{/css/cover-logged.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/busy-content.css}" rel="stylesheet"></link>
+    <link th:href="@{/css/busy-components.css}" rel="stylesheet"></link>
+
+  </head>
+
+  <body>
+    <div th:include="fragments/header"></div>
+    <div class="container">
+      <div class="content">
+        <div class="row profile">
+          <div class="col-md-3 col-xs-12">
+            <div class="profile-sidebar col-xs-12">
+              <div class="profile-info col-md-12 col-xs-4">
+
+                <div class="profile-pic">
+                  <img th:src="@{/img/user.png}" class="img-responsive" alt=""></img>
+                </div>
+
+                <div class="profile-main">
+                  <div class="profile-main-title" th:text="${company.tradeName}"></div>
+                  <div class="profile-main-subtitle" th:text="${company.category.name}"></div>
+                </div>
+
+                <div class="profile-actions">
+                  <button type="button" class="btn btn-success btn-sm" th:text="#{company.follow.action}"></button>
+                  <button type="button" class="btn btn-danger btn-sm" th:text="#{company.contact.action}"></button>
+                </div>
+
+              </div>
+              <!-- .profile-info -->
+
+              <div class="profile-menu col-md-12 col-xs-8">
+                <ul class="nav">
+                  <li class="active">
+                    <a href="#">
+                      <i class="glyphicon glyphicon-eye-open"></i>
+                      <span th:text="#{company.info.nav}"></span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="glyphicon glyphicon-calendar"></i>
+                      <span th:text="#{company.schedule.nav}"></span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="glyphicon glyphicon-map-marker"></i>
+                      <span th:text="#{company.map.nav}"></span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="glyphicon glyphicon-user"></i>
+                      <span th:text="#{company.workers.nav}"></span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <!-- profile-menu -->
+
+            </div>
+            <!-- .profile-sidebar -->
+          </div>
+          <!-- .col -->
+          <div class="col-md-9 col-xs-12">
+            <div class="profile-content">
+              <table class="table table-user-information">
+                <tbody>
+                  <tr>
+                    <td th:text="#{company.info.trade_name} + ':'"></td>
+                    <td th:text="${company.tradeName}"></td>
+                  </tr>
+                  <tr>
+                    <td th:text="#{company.info.business_name} + ':'"></td>
+                    <td th:text="${company.businessName}"></td>
+                  </tr>
+                  <tr>
+                    <td th:text="#{company.info.email} + ':'"></td>
+                    <td>
+                      <a href="mailto:${company.email}" th:text="${company.email}"></a>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td th:text="#{company.info.cif} + ':'"></td>
+                    <td th:text="${company.cif}"></td>
+                  </tr>
+                  <tr>
+                    <td th:text="#{company.info.create_date} + ':'"></td>
+                    <td th:text="${#dates.format(company.createDate.toDate(), 'dd MMMM yyyy')}"></td>
+                  </tr>
+                  <tr>
+                    <td th:text="#{company.info.category} + ':'"></td>
+                    <td th:text="${company.category.name}"></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <!-- profile-content -->
+          </div>
+          <!-- .col -->
+        </div>
+        <!-- .row-profile -->
+      </div>
+      <!-- .content -->
+
+      <div th:include="fragments/footer"></div>
+
+    </div>
+    <!-- container -->
+
+    <!-- Message Modal -->
+    <div class="modal fade bs-example-modal-lg" id="messageModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content" id="infoMessage">
+          <div class="modal-body"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" th:inline="javascript">
+      /*<![CDATA[*/
+      var message = /*[[${messageFromController}]]*/ null;
+      /*]]>*/
+
+    </script>
+    <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>
+
+  </body>
+
+</html>

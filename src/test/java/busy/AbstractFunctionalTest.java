@@ -11,9 +11,6 @@ import org.fluentlenium.adapter.FluentTest;
 import org.fluentlenium.core.FluentPage;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.remote.DriverCommand;
-import org.openqa.selenium.remote.RemoteExecuteMethod;
-import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationContextLoader;
@@ -51,10 +48,10 @@ public class AbstractFunctionalTest extends FluentTest {
 
     @Autowired
     private ApplicationContext context;
-    
+
     @Autowired
     private Environment env;
-    
+
     /*
      * (non-Javadoc)
      * @see org.fluentlenium.core.Fluent#goTo(org.fluentlenium.core.FluentPage)
@@ -66,17 +63,34 @@ public class AbstractFunctionalTest extends FluentTest {
         return super.goTo(page);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.fluentlenium.adapter.FluentAdapter#init()
+     */
     @PostConstruct
-    public void setUp() {
+    @Override
+    public void init() {
         initFluent(new BusyDriver(true));
-        this.init();
+        super.init();
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.fluentlenium.core.Fluent#quit()
+     */
     @PreDestroy
-    public void tearDown() {
-        this.quit();
+    @Override
+    public void quit() {
+        super.quit();
     }
 
+    /**
+     * Gets the SQL script from a path of a file containing it.
+     * 
+     * @param path
+     *            file path
+     * @return The SQL script
+     */
     protected String getSQLScript(String path) {
 
         Resource resource = context.getResource(path);
@@ -100,12 +114,6 @@ public class AbstractFunctionalTest extends FluentTest {
         }
         return stBuilder.toString();
     }
-
-    protected String getCurrentContextHandle() {
-        RemoteExecuteMethod executeMethod = new RemoteExecuteMethod((RemoteWebDriver) getDriver());
-        String context = (String) executeMethod.execute(DriverCommand.GET_CURRENT_CONTEXT_HANDLE, null);
-        return context;
-    }
 }
 
 class BusyDriver extends HtmlUnitDriver {
@@ -118,6 +126,12 @@ class BusyDriver extends HtmlUnitDriver {
         super(enableJavascript);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see
+     * org.openqa.selenium.htmlunit.HtmlUnitDriver#modifyWebClient(com.gargoylesoftware.htmlunit.
+     * WebClient)
+     */
     @Override
     protected WebClient modifyWebClient(WebClient client) {
         super.modifyWebClient(client);

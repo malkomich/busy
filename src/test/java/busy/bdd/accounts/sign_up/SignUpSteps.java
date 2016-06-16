@@ -45,7 +45,7 @@ public class SignUpSteps extends AbstractFunctionalTest {
     @PreDestroy
     public void rollback() {
 
-        String scriptPath = "classpath:database/signup-rollback.sql";
+        String scriptPath = "classpath:database/rollback.sql";
         template.execute(getSQLScript(scriptPath));
     }
 

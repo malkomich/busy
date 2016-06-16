@@ -20,7 +20,6 @@ import busy.location.LocationService;
  *
  */
 @Controller
-@Scope(value="singleton")
 public class LocationController {
 
     /**
