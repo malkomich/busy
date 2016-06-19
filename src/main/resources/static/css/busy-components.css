@@ -1,5 +1,5 @@
 /*
- * Switch Button 
+ * Switch Button
  */
 .onoffswitch {
     position: relative;
@@ -63,7 +63,7 @@
 
 @
 -webkit-keyframes spin2 {from { -webkit-transform:rotate(0deg);
-    
+
 }
 
 to {
@@ -181,6 +181,7 @@ to {
         margin-top: 30px;
     }
 }
+
 /*
  * Service Types menu
  */
@@ -216,4 +217,22 @@ to {
 
 .service-type_modify, .service-type_delete {
     vertical-align: -webkit-baseline-middle;
+}
+
+/*
+ * Quantity control
+ */
+.quantity-control a.reduce {
+    color: crimson;
+    cursor: pointer;
+}
+
+.quantity-control a.add {
+    color: darkseagreen;
+    cursor: pointer;
+}
+
+.quantity-control .total {
+    font-size: large;
+    font-weight: bold;
 }

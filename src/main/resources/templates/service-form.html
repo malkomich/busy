@@ -44,9 +44,20 @@
           <span th:each="err : ${#fields.errors('services[__${status.index}__].serviceType')}" class="error fs-xs" th:text="${err}"></span>
         </div>
 
-        <div class="row text-center">
-          <button th:text="#{schedule.service.clone}"
-          type="button" th:onclick="'javascript:cloneService(' + ${status.index} + ');'" class="btn btn-primary btn-xs center-v"></button>
+        <div id="service-count" class="row input-sm quantity-control">
+          <div class="col-xs-4">
+            <a class="reduce center-v">
+              <span class="glyphicon glyphicon-minus"></span>
+            </a>
+          </div>
+          <div class="col-xs-4">
+            <span class="total"></span>
+          </div>
+          <div class="col-xs-4">
+            <a class="add center-v">
+              <span class="glyphicon glyphicon-plus"></span>
+            </a>
+          </div>
         </div>
 
       </div>

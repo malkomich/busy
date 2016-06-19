@@ -100,18 +100,33 @@ function updateStartTime(row) {
  */
 function updateEndTime(row) {
     var endInput = $(selectors.END_TIME_INPUT, row);
+    var servicesCount = $('#service-count', row);
 
     var startTime = $(selectors.START_TIME_INPUT, row).val();
     var duration = $(selectors.SERV_TYPE_SELECT + ' option:selected', row).attr('duration');
 
     if (startTime && duration) {
-
         var endTime = moment(startTime, "HH:mm").add(duration, 'minutes');
-        $(endInput).val(endTime.format('HH:mm')).css('visibility', 'visible');
-
+        $(endInput).val(endTime.format('HH:mm')).parent().css('visibility', 'visible');
+        $('.total', servicesCount).text('1');
+        $(servicesCount).css('visibility', 'visible');
+        $('.add', servicesCount).click(function() {
+          var endTime = moment($(endInput).val(), "HH:mm").add(duration, 'minutes');
+          $(endInput).val(endTime.format('HH:mm'));
+          var count = parseInt($('.total').text());
+          $('.total').text(count + 1);
+        });
+        $('.reduce', servicesCount).click(function() {
+          var count = parseInt($('.total').text());
+          if(count > 1) {
+            var endTime = moment($(endInput).val(), "HH:mm").subtract(duration, 'minutes');
+            $(endInput).val(endTime.format('HH:mm'));
+            $('.total').text(count - 1);
+          }
+        });
     } else {
-
-        $(selectors.END_TIME_INPUT, row).css('visibility', 'hidden');
+        $(endInput).parent().css('visibility', 'hidden');
+        $(servicesCount).css('visibility', 'hidden');
     }
 }
 
