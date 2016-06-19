@@ -4,6 +4,7 @@ var selectors = {
     'START_TIME_INPUT' : '#service-start-time',
     'END_TIME_INPUT' : '#service-end-time',
     'SERV_TYPE_SELECT' : '#service-type',
+    'ROLE_SELECT' : '#roles-select',
     'ROLE_CHECKBOX' : '.role-item input:checkbox',
     'ROLE_TIPS_LIST' : '.service-roles-summary ul',
     'REP_TYPE_SELECT' : '#service-repetition-type',
@@ -15,6 +16,7 @@ $(function() {
     var service_form = $(selectors.SERV_FORM);
 
     $(selectors.SERV_ROW, service_form).each(function() {
+
         var row = $(this);
         var startTimeInput = $(selectors.START_TIME_INPUT, this);
 
@@ -36,20 +38,7 @@ $(function() {
             updateEndTime(row);
         });
 
-        $(roleCheckboxes).change(function() {
-            var list = $(selectors.ROLE_TIPS_LIST, row);
-            var roleId = $(this).val();
-
-            var roleTipItem = $('#' + roleId, list);
-            var exists = $(roleTipItem).attr('id') === roleId;
-
-            if ($(this).is(':checked') && !exists) {
-                var roleLabel = $(this).parent().find('label').text();
-                $(list).append('<li id="' + roleId + '" class="fs-xs">' + roleLabel + '</li>')
-            } else {
-                $(roleTipItem).remove();
-            }
-        });
+        enableMultiSelect(row);
 
         $(repetitionTypeSelect).change(function() {
             updateRepetitionDate(row);
@@ -67,6 +56,7 @@ function newService() {
     $.post("/service_form/new", form.serialize(), function(data) {
         var modalContainer = $('#modalForm');
         $('.modal-content', modalContainer).html(data);
+        enableMultiSelect($(selectors.SERV_ROW, form).last());
         modalContainer.modal();
     });
 }
@@ -140,4 +130,32 @@ function updateRepetitionDate(row) {
         $(repetitionDateInput).css('visibility', 'hidden');
         $('#rep-date-error').hide();
     }
+}
+
+/*
+ * Set the behaviour and custom style for each multiSelect field in the given row.
+ */
+function enableMultiSelect(row) {
+
+    $(selectors.ROLE_SELECT, row).multipleSelect({
+      placeholder: placeholder,
+      selectAll: false,
+      filter: true,
+      width: '100%',
+      selectAllText: txtSelectAll,
+      allSelected: txtSelectedAll,
+      onClick: function(view) {
+        var list = $(selectors.ROLE_TIPS_LIST, row);
+        var roleId = view.value;
+        var roleTipItem = $('#' + roleId, list);
+        var exists = $(roleTipItem).attr('id') === roleId;
+
+        if (view.checked && !exists) {
+            var roleLabel = view.label;
+            $(list).append('<li id="' + roleId + '" class="fs-xs">' + roleLabel + '</li>')
+        } else {
+            $(roleTipItem).remove();
+        }
+      }
+    });
 }

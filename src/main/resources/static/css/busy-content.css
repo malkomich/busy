@@ -166,5 +166,10 @@
 .service-roles-summary ul {
     margin-left: 0px;
     padding-left: 0px;
+    margin-top: 5px;
     list-style-type: none;
+}
+
+.no-padding {
+    padding: 0px !important;
 }
