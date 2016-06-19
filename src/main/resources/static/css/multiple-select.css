@@ -11,14 +11,15 @@
 .ms-choice {
     display: block;
     width: 100%;
-    height: 26px;
+    min-height: 30px;
+    height: 100%;
     padding: 0;
     overflow: hidden;
     cursor: default;
     border: 1px solid #aaa;
     text-align: left;
     white-space: nowrap;
-    line-height: 26px;
+    line-height: 30px;
     color: #444;
     text-decoration: none;
     -webkit-border-radius: 4px;
@@ -176,6 +177,7 @@
     font-weight: normal;
     display: block;
     white-space: nowrap;
+    cursor: pointer;
 }
 
 .ms-drop ul > li label.optgroup {
@@ -184,6 +186,8 @@
 
 .ms-drop input[type="checkbox"] {
     vertical-align: middle;
+    margin-bottom: 5px;
+    margin-right: 2px;
 }
 
 .ms-drop .ms-no-results {
