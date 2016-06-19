@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import busy.BusyController;
 import busy.company.Company;
@@ -38,7 +37,7 @@ import busy.schedule.ServiceType;
 
 /**
  * Controller for schedule operations.
- * 
+ *
  * @author malkomich
  *
  */
@@ -94,7 +93,7 @@ public class ScheduleController extends BusyController {
 
     /**
      * Request to get all bookings made between the given dates in the specific branch
-     * 
+     *
      * @param roleIdTmp
      *            the role attached to the requested bookings
      * @param fromTmp
@@ -174,7 +173,7 @@ public class ScheduleController extends BusyController {
 
     /**
      * Shows the calendar view of a specific branch.
-     * 
+     *
      * @param roleId
      *            unique ID of the role requested
      * @param model
@@ -194,7 +193,7 @@ public class ScheduleController extends BusyController {
 
     /**
      * Shows the form to save a service type.
-     * 
+     *
      * @param dateTmp
      *            the date of the services to modify or create
      * @param model
@@ -215,9 +214,9 @@ public class ScheduleController extends BusyController {
             model.addAttribute(MESSAGE_CODE_REQUEST, "modal.messages.service-type.left");
             return MESSAGE_VIEW;
         }
-        
+
         updateServiceTypes(role.getCompany(), model);
-        
+
         Map<Integer, Role> roles = new HashMap<>();
         for (Role roleItem : roleService.findRolesByBranch(role.getBranch())) {
             roles.put(roleItem.getId(), roleItem);
@@ -246,7 +245,13 @@ public class ScheduleController extends BusyController {
 
     /**
      * Adds a new service item to the services form
-     * 
+     *
+     * @param form
+     *            form with the services data
+     * @param index
+     *            index of the service to clone
+     * @param result
+     *            state of the parsed form
      * @param model
      *            Spring model instance
      * @return The service form dialog view with a new service row
@@ -269,9 +274,20 @@ public class ScheduleController extends BusyController {
         return SERVICE_FORM_PAGE;
     }
 
+    /**
+     * Tries to save the services from the input form values, validating them previously.
+     * 
+     * @param form
+     *            form with the services to save
+     * @param result
+     *            state of the parsed form
+     * @param model
+     *            Spring model instance
+     * @return Redirect to the calendar view, or to the same form on error.
+     */
     @RequestMapping(value = PATH_SERVICES_FORM_SAVE, method = RequestMethod.POST)
-    public String saveServices(List<Role> roles, @ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form,
-        BindingResult result, RedirectAttributes redirectAttributes, Model model) {
+    public String saveServices(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
+        Model model) {
 
         ServiceValidator validator = new ServiceValidator();
 
@@ -289,10 +305,10 @@ public class ScheduleController extends BusyController {
 
         return "redirect:" + PATH_SCHEDULE + role.getId();
     }
-    
+
     /**
      * Load the service types of the company
-     * 
+     *
      * @param company
      *            the company which types will be loaded
      * @param model
