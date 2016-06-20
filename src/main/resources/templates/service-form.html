@@ -25,7 +25,7 @@
                 data-toggle="tooltip" data-placement="top" th:title="#{schedule.service.tooltip.start_time}" th:placeholder="#{schedule.service.start_time.placeholder}"></input>
               <span th:each="err : ${#fields.errors('services[__${status.index}__].startTime')}" class="error fs-xs" th:text="${err}"></span>
             </div>
-            <div class="row">
+            <div class="row invisible">
               <input id="service-end-time" type="text" tabindex="-1" class="form-control input-sm" readonly="true" data-toggle="tooltip" data-placement="left"
                 th:title="#{schedule.service.tooltip.end_time}"></input>
             </div>
@@ -44,7 +44,7 @@
           <span th:each="err : ${#fields.errors('services[__${status.index}__].serviceType')}" class="error fs-xs" th:text="${err}"></span>
         </div>
 
-        <div id="service-count" class="row input-sm quantity-control">
+        <div id="service-count" class="row input-sm quantity-control invisible">
           <div class="col-xs-4">
             <a class="reduce center-v">
               <span class="glyphicon glyphicon-minus"></span>
@@ -90,7 +90,7 @@
             th:text="${err}"></span>
         </div>
         <div class="row" th:unless="${service.repeated}">
-          <input th:field="*{services[__${status.index}__].repetitionDate}" id="service-repetition-date" type="text" tabindex="5" class="form-control input-sm"
+          <input th:field="*{services[__${status.index}__].repetitionDate}" id="service-repetition-date" type="text" tabindex="5" class="form-control input-sm invisible"
             th:placeholder="#{schedule.service.repetition_date.placeholder}" th:value="${service.repetitionDate}" data-toggle="tooltip"
             data-placement="right" th:title="#{schedule.service.tooltip.repetition_date}"></input>
           <span id="rep-date-error" th:each="err : ${#fields.errors('services[__${status.index}__].repetitionDate')}" class="error fs-xs"

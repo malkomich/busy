@@ -18,31 +18,12 @@ $(function() {
     $(selectors.SERV_ROW, service_form).each(function() {
 
         var row = $(this);
-        var startTimeInput = $(selectors.START_TIME_INPUT, this);
 
-        var typeSelect = $(selectors.SERV_TYPE_SELECT, this);
-        var roleCheckboxes = $(selectors.ROLE_CHECKBOX, this);
-        var repetitionTypeSelect = $(selectors.REP_TYPE_SELECT, this);
-
-        // Init update
-        updateStartTime(row);
-        updateEndTime(row);
-        updateRepetitionDate(row);
-
-        // Set up event listeners
-        $(startTimeInput).change(function() {
-            updateEndTime(row);
-        });
-
-        $(typeSelect).change(function() {
-            updateEndTime(row);
-        });
-
-        enableMultiSelect(row);
-
-        $(repetitionTypeSelect).change(function() {
-            updateRepetitionDate(row);
-        });
+        // Init setup
+        setUpStartTime(row);
+        setUpMultiSelect(row);
+        setUpInputListeners(row);
+        setUpButtonListeners(row);
 
     });
 });
@@ -56,7 +37,7 @@ function newService() {
     $.post("/service_form/new", form.serialize(), function(data) {
         var modalContainer = $('#modalForm');
         $('.modal-content', modalContainer).html(data);
-        enableMultiSelect($(selectors.SERV_ROW, form).last());
+        setUpMultiSelect($(selectors.SERV_ROW, form).last());
         modalContainer.modal();
     });
 }
@@ -85,7 +66,7 @@ function saveServices() {
 /*
  * Update the format and behaviour of the start time input
  */
-function updateStartTime(row) {
+function setUpStartTime(row) {
     $('#service-start-time', row).timepicker({
         template: false,
         showInputs: false,
@@ -110,20 +91,6 @@ function updateEndTime(row) {
         $(endInput).val(endTime.format('HH:mm')).parent().css('visibility', 'visible');
         $('.total', servicesCount).text('1');
         $(servicesCount).css('visibility', 'visible');
-        $('.add', servicesCount).click(function() {
-          var endTime = moment($(endInput).val(), "HH:mm").add(duration, 'minutes');
-          $(endInput).val(endTime.format('HH:mm'));
-          var count = parseInt($('.total').text());
-          $('.total').text(count + 1);
-        });
-        $('.reduce', servicesCount).click(function() {
-          var count = parseInt($('.total').text());
-          if(count > 1) {
-            var endTime = moment($(endInput).val(), "HH:mm").subtract(duration, 'minutes');
-            $(endInput).val(endTime.format('HH:mm'));
-            $('.total').text(count - 1);
-          }
-        });
     } else {
         $(endInput).parent().css('visibility', 'hidden');
         $(servicesCount).css('visibility', 'hidden');
@@ -150,7 +117,7 @@ function updateRepetitionDate(row) {
 /*
  * Set the behaviour and custom style for each multiSelect field in the given row.
  */
-function enableMultiSelect(row) {
+function setUpMultiSelect(row) {
 
     $(selectors.ROLE_SELECT, row).multipleSelect({
       placeholder: placeholder,
@@ -171,6 +138,49 @@ function enableMultiSelect(row) {
         } else {
             $(roleTipItem).remove();
         }
+      }
+    });
+}
+
+function setUpInputListeners(row) {
+
+    var startTimeInput = $(selectors.START_TIME_INPUT, row);
+    var typeSelect = $(selectors.SERV_TYPE_SELECT, row);
+    var repetitionTypeSelect = $(selectors.REP_TYPE_SELECT, row);
+
+    $(startTimeInput).change(function() {
+        updateEndTime(row);
+    });
+
+    $(typeSelect).change(function() {
+        updateEndTime(row);
+    });
+
+    $(repetitionTypeSelect).change(function() {
+        updateRepetitionDate(row);
+    });
+
+
+}
+
+function setUpButtonListeners(row) {
+
+    var endInput = $(selectors.END_TIME_INPUT, row);
+    var servicesCount = $('#service-count', row);
+    var duration = $(selectors.SERV_TYPE_SELECT + ' option:selected', row).attr('duration');
+
+    $('.add', servicesCount).click(function() {
+      var endTime = moment($(endInput).val(), "HH:mm").add(duration, 'minutes');
+      $(endInput).val(endTime.format('HH:mm'));
+      var count = parseInt($('.total').text());
+      $('.total').text(count + 1);
+    });
+    $('.reduce', servicesCount).click(function() {
+      var count = parseInt($('.total').text());
+      if(count > 1) {
+        var endTime = moment($(endInput).val(), "HH:mm").subtract(duration, 'minutes');
+        $(endInput).val(endTime.format('HH:mm'));
+        $('.total').text(count - 1);
       }
     });
 }
