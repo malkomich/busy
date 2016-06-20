@@ -19,6 +19,8 @@ public class ServiceForm {
 
     @NotEmpty(message = "{schedule.service.start_time.empty}")
     private String startTime;
+    
+    private String endTime;
 
     @NotNull(message = "{schedule.service.service_type.empty}")
     private Integer serviceType;
@@ -63,6 +65,14 @@ public class ServiceForm {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+    
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public Integer getServiceType() {
