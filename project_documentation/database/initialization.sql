@@ -34,12 +34,15 @@ INSERT INTO notification(person_id, notif_type, message, read, create_date) VALU
 
 INSERT INTO service_type(name, description, bookings_per_role, company_id) VALUES('Engineer', NULL, 2, (SELECT id FROM company WHERE cif='B12345679'));
 
-INSERT INTO service(start_time, service_type_id, correlation) VALUES('2016-01-12 23:00:00', (SELECT id FROM service_type WHERE name='Engineer'), 0);
-INSERT INTO service(start_time, service_type_id, correlation) VALUES('2016-01-25 12:00:00', (SELECT id FROM service_type WHERE name='Engineer'), 0);
+INSERT INTO service(day, service_type_id, correlation) VALUES('2016-01-12', (SELECT id FROM service_type WHERE name='Engineer'), 0);
+INSERT INTO service(day, service_type_id, correlation) VALUES('2016-01-25', (SELECT id FROM service_type WHERE name='Engineer'), 0);
 
-INSERT INTO schedule(service_id, role_id) VALUES((SELECT id FROM service WHERE start_time='2016-01-12 23:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
-INSERT INTO schedule(service_id, role_id) VALUES((SELECT id FROM service WHERE start_time='2016-01-25 12:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
+INSERT INTO time_slot(start_time, service_id) VALUES('2016-01-12 23:00:00', (SELECT id FROM service WHERE day='2016-01-12'));
+INSERT INTO time_slot(start_time, service_id) VALUES('2016-01-25 12:00:00', (SELECT id FROM service WHERE day='2016-01-25'));
 
-INSERT INTO booking(person_id, schedule_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM schedule WHERE service_id=(SELECT id FROM service WHERE start_time='2016-01-12 23:00:00')));
-INSERT INTO booking(person_id, schedule_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM schedule WHERE service_id=(SELECT id FROM service WHERE start_time='2016-01-25 12:00:00')));
-INSERT INTO booking(person_id, schedule_id) VALUES((SELECT id FROM person WHERE email='user2@domain.x'), (SELECT id FROM schedule WHERE service_id=(SELECT id FROM service WHERE start_time='2016-01-25 12:00:00')));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-01-12 23:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-01-25 12:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202123')));
+
+INSERT INTO booking(person_id, schedule_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM schedule WHERE time_slot_id=(SELECT id FROM time_slot WHERE start_time='2016-01-12 23:00:00')));
+INSERT INTO booking(person_id, schedule_id) VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT id FROM schedule WHERE time_slot_id=(SELECT id FROM time_slot WHERE start_time='2016-01-25 12:00:00')));
+INSERT INTO booking(person_id, schedule_id) VALUES((SELECT id FROM person WHERE email='user2@domain.x'), (SELECT id FROM schedule WHERE time_slot_id=(SELECT id FROM time_slot WHERE start_time='2016-01-25 12:00:00')));
