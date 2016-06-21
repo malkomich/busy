@@ -162,10 +162,9 @@ CREATE SEQUENCE service_seq;
 
 CREATE TABLE service(
     id                  integer             DEFAULT nextval('service_seq') NOT NULL PRIMARY KEY,
-    day                 date                NOT NULL,
     service_type_id     integer             NOT NULL REFERENCES service_type(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    correlation         integer             NOT NULL DEFAULT 0
+    repetition_type     integer             NOT NULL DEFAULT 0
 );
 
 CREATE SEQUENCE time_slot_seq;
