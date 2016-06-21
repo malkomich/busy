@@ -1,7 +1,6 @@
 package busy.schedule;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -91,8 +90,11 @@ public class ServiceDBTest extends AbstractDBTest {
 
         List<Service> services = repository.findBetweenDays(initDay, endDay, role, null);
 
-        assertFalse(services.isEmpty());
-        assertEquals(4, services.size());
+        assertEquals(1, services.size());
+
+        List<TimeSlot> timeSlots = services.get(0).getTimeSlots();
+
+        assertEquals(4, timeSlots.size());
     }
 
     @Test
@@ -145,8 +147,11 @@ public class ServiceDBTest extends AbstractDBTest {
 
         List<Service> services = repository.findBetweenDays(initDay, endDay, role, serviceType);
 
-        assertFalse(services.isEmpty());
-        assertEquals(4, services.size());
+        assertEquals(1, services.size());
+        
+        List<TimeSlot> timeSlots = services.get(0).getTimeSlots();
+
+        assertEquals(4, timeSlots.size());
     }
 
     @Test
@@ -157,8 +162,10 @@ public class ServiceDBTest extends AbstractDBTest {
 
         int bookings = 0;
         for (Service service : services) {
-            for(Schedule schedule : service.getSchedules()) {
-                bookings += schedule.getBookings().size();
+            for (TimeSlot timeSlot : service.getTimeSlots()) {
+                for (Schedule schedule : timeSlot.getSchedules()) {
+                    bookings += schedule.getBookings().size();
+                }
             }
         }
 
@@ -174,8 +181,10 @@ public class ServiceDBTest extends AbstractDBTest {
 
         int bookings = 0;
         for (Service service : services) {
-            for(Schedule schedule : service.getSchedules()) {
-                bookings += schedule.getBookings().size();
+            for (TimeSlot timeSlot : service.getTimeSlots()) {
+                for (Schedule schedule : timeSlot.getSchedules()) {
+                    bookings += schedule.getBookings().size();
+                }
             }
         }
 
@@ -183,41 +192,29 @@ public class ServiceDBTest extends AbstractDBTest {
     }
 
     @Test(expected = DataIntegrityViolationException.class)
-    public void insertWithStartTimeNull() {
-
-        Service service = new Service();
-        service.setServiceType(serviceType);
-        
-        repository.save(service);
-    }
-    
-    @Test(expected = DataIntegrityViolationException.class)
     public void insertWithServiceTypeNull() {
 
         Service service = new Service();
-        service.setStartTime(new DateTime());
-        
+
         repository.save(service);
     }
-    
+
     @Test(expected = DataIntegrityViolationException.class)
     public void insertWithServiceTypeInvalid() {
 
         Service service = new Service();
-        service.setStartTime(new DateTime());
         SecureSetter.setId(serviceType, INVALID_ID);
         service.setServiceType(serviceType);
-        
+
         repository.save(service);
     }
-    
+
     @Test
     public void insertSuccessfully() {
 
         Service service = new Service();
-        service.setStartTime(new DateTime());
         service.setServiceType(serviceType);
-        
+
         repository.save(service);
     }
 

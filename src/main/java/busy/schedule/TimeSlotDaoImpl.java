@@ -1,9 +1,9 @@
 package busy.schedule;
 
 import static busy.util.SQLUtil.ID;
-import static busy.util.SQLUtil.ROLE_ID;
-import static busy.util.SQLUtil.TABLE_SCHEDULE;
-import static busy.util.SQLUtil.TIME_SLOT_ID;
+import static busy.util.SQLUtil.SERVICE_ID;
+import static busy.util.SQLUtil.START_TIME;
+import static busy.util.SQLUtil.TABLE_TIME_SLOT;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,17 +20,11 @@ import org.springframework.stereotype.Repository;
 
 import busy.util.SecureSetter;
 
-/**
- * Schedule persistence implementation for Database storing.
- * 
- * @author malkomich
- *
- */
 @Repository
-public class ScheduleDaoImpl implements ScheduleDao {
+public class TimeSlotDaoImpl implements TimeSlotDao {
 
     private static final String SQL_UPDATE =
-            "UPDATE " + TABLE_SCHEDULE + " SET " + TIME_SLOT_ID + "= ?," + ROLE_ID + "= ?" + " WHERE " + ID + "= ?";
+        "UPDATE " + TABLE_TIME_SLOT + " SET " + START_TIME + "= ?," + SERVICE_ID + "= ?" + " WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -42,32 +36,28 @@ public class ScheduleDaoImpl implements ScheduleDao {
         jdbcTemplate = new JdbcTemplate(dataSource);
 
         jdbcInsert = new SimpleJdbcInsert(dataSource);
-        jdbcInsert.withTableName(TABLE_SCHEDULE);
+        jdbcInsert.withTableName(TABLE_TIME_SLOT);
         jdbcInsert.setGeneratedKeyName(ID);
-        jdbcInsert.setColumnNames(Arrays.asList(TIME_SLOT_ID, ROLE_ID));
+        jdbcInsert.setColumnNames(Arrays.asList(START_TIME, SERVICE_ID));
 
     }
 
-    /*
-     * (non-Javadoc)
-     * @see busy.schedule.ScheduleDao#save(busy.schedule.Schedule)
-     */
     @Override
-    public void save(Schedule schedule, int timeSlot) {
+    public void save(TimeSlot timeSlot, int serviceId) {
 
-        if (schedule.getId() > 0) {
+        if (timeSlot.getId() > 0) {
 
-            jdbcTemplate.update(SQL_UPDATE, timeSlot, schedule.getRoleId(), schedule.getId());
+            jdbcTemplate.update(SQL_UPDATE, timeSlot.getStartTimestamp(), serviceId, timeSlot.getId());
 
         } else {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
-            parameters.put(TIME_SLOT_ID, timeSlot);
-            parameters.put(ROLE_ID, schedule.getRoleId());
+            parameters.put(START_TIME, timeSlot.getStartTimestamp());
+            parameters.put(SERVICE_ID, serviceId);
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
-                SecureSetter.setId(schedule, key.intValue());
+                SecureSetter.setId(timeSlot, key.intValue());
             }
 
         }
