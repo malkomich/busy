@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.joda.time.LocalTime;
 
 /**
@@ -52,9 +55,11 @@ public class Service implements Serializable {
     }
 
     private int id;
+    @NotNull(message = "{schedule.service.service_type.empty}")
     private ServiceType serviceType;
     private Repetition repetition;
 
+    @Valid
     private List<TimeSlot> timeSlots;
 
     public Service() {
@@ -116,7 +121,8 @@ public class Service implements Serializable {
     
     public LocalTime getEndTime() {
         
-        LocalTime time = (timeSlots.size() > 1) ? timeSlots.get(-1).getStartTime() : getStartTime();
+        int size = timeSlots.size();
+        LocalTime time = (size > 1) ? timeSlots.get(size - 1).getStartTime() : getStartTime();
         int minutes = serviceType.getDuration();
         
         return time.plusMillis(minutes * 60 * 1000); 

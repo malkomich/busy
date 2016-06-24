@@ -1,7 +1,6 @@
 package busy.schedule;
 
 import java.util.List;
-import java.util.Map;
 
 import org.joda.time.DateTime;
 
@@ -81,5 +80,14 @@ public interface ScheduleService {
      * @param services
      *            the map of services to be saved
      */
-    void saveServices(Map<Integer, List<Service>> services);
+    void saveServices(List<Service> services);
+
+    /**
+     * Gets a specific service type given an ID.
+     * 
+     * @param parseInt
+     *            unique id of the service type
+     * @return The resultant service type
+     */
+    ServiceType findServiceTypeById(int id);
 }

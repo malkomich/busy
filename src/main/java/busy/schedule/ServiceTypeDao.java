@@ -51,4 +51,13 @@ public interface ServiceTypeDao {
      */
     ServiceType findByCompanyAndName(Company company, String name);
 
+    /**
+     * Gets a service type by ID
+     * 
+     * @param id
+     *            unique ID of the service type
+     * @return The resultant service type
+     */
+    ServiceType findById(int id);
+
 }

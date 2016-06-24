@@ -5,6 +5,9 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalTime;
 
 public class TimeSlot implements Serializable {
@@ -12,9 +15,12 @@ public class TimeSlot implements Serializable {
     private static final long serialVersionUID = 5941480462690666125L;
 
     private int id;
+    
+    @NotNull(message = "{schedule.service.start_time.empty}")
     private LocalTime startTime;
     private Service service;
-
+    
+    @NotEmpty(message= "{schedule.service.roles.empty}")
     private List<Schedule> schedules;
 
     public TimeSlot() {

@@ -2,7 +2,6 @@ package busy.schedule;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +33,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Autowired
     private ServiceDao serviceDao;
 
+    @Autowired
+    private TimeSlotDao timeSlotDao;
+    
     @Autowired
     private ScheduleDao scheduleDao;
 
@@ -119,36 +121,50 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#saveServices(java.util.List)
      */
     @Override
-    public void saveServices(Map<Integer, List<busy.schedule.Service>> serviceMap) {
+    public void saveServices(List<busy.schedule.Service> serviceList) {
 
-        for (List<busy.schedule.Service> serviceList : serviceMap.values()) {
+        for (busy.schedule.Service service : serviceList) {
 
-            busy.schedule.Service serviceReference = serviceList.get(0);
-            serviceDao.save(serviceReference);
-            int correlation = (serviceList.size() > 1) ? serviceReference.getId() : 0;
-
-            for (busy.schedule.Service service : serviceList) {
-
-                service.setCorrelation(correlation);
-
-                serviceDao.save(service);
-                saveSchedules(service.getSchedules(), service.getId());
-            }
+            serviceDao.save(service);
+            saveTimeSlots(service.getTimeSlots(), service.getId());
         }
     }
 
+    /**
+     * Saves or updates a list of time slots.
+     * 
+     * @param timeSlotList
+     *            the list of time slots to be saved
+     * @param serviceId
+     *            the unique id of the service to attach the time slots
+     */
+    private void saveTimeSlots(List<TimeSlot> timeSlotList, int serviceId) {
+        for (TimeSlot timeSlot : timeSlotList) {
+            timeSlotDao.save(timeSlot, serviceId);
+            saveSchedules(timeSlot.getSchedules(), timeSlot.getId());
+        }
+    }
+    
     /**
      * Saves or updates a list of schedules.
      * 
      * @param scheduleList
      *            the list of schedules to be saved
-     * @param serviceId
-     *            the unique id of the service to attach the schedules
+     * @param timeSlotId
+     *            the unique id of the time slot to attach the schedules
      */
-    private void saveSchedules(List<Schedule> scheduleList, int serviceId) {
-        for (Schedule schedule : scheduleList) {
-            scheduleDao.save(schedule, serviceId);
+    private void saveSchedules(List<Schedule> schedules, int timeSlotId) {
+        for (Schedule schedule : schedules) {
+            scheduleDao.save(schedule, timeSlotId);
         }
+    }
+
+    /* (non-Javadoc)
+     * @see busy.schedule.ScheduleService#findServiceTypeById(int)
+     */
+    @Override
+    public ServiceType findServiceTypeById(int id) {
+        return serviceTypeDao.findById(id);
     }
 
 }

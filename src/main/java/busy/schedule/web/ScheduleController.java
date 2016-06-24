@@ -34,6 +34,7 @@ import busy.schedule.ScheduleService;
 import busy.schedule.Service;
 import busy.schedule.Service.Repetition;
 import busy.schedule.ServiceType;
+import busy.schedule.TimeSlot;
 
 /**
  * Controller for schedule operations.
@@ -62,6 +63,7 @@ public class ScheduleController extends BusyController {
     private static final String PATH_SERVICES_FORM = "/service_form";
     private static final String PATH_SERVICES_FORM_NEW = "/service_form/new";
     private static final String PATH_SERVICES_FORM_SAVE = "/service_form/save";
+    private static final String PATH_SERVICES_FORM_ADD_TIMESLOT = "/service_form/add_timeslot";
     private static final String PATH_SCHEDULE = "/schedule/";
 
     /**
@@ -145,18 +147,14 @@ public class ScheduleController extends BusyController {
 
                 serviceJSON.put("id", service.getId());
 
-                DateTime startTime = service.getStartTime();
-
-                serviceJSON.put("title", startTime.toString("HH:mm") + " [" + service.getServiceType().getName() + "]");
+                serviceJSON.put("title", service.getServiceType().getName());
                 serviceJSON.put("url", "#");
                 serviceJSON.put("class", "event-info");
 
-                int minutes = service.getServiceType().getDuration();
-                // Start time plus minutes converted to millis
-                DateTime endTime = startTime.plus(minutes * 60 * 1000);
+                LocalTime endTime = service.getEndTime();
 
-                serviceJSON.put("start", String.valueOf(startTime.getMillis()));
-                serviceJSON.put("end", String.valueOf(endTime.getMillis()));
+                serviceJSON.put("start", String.valueOf(service.getStartTime().getMillisOfSecond()));
+                serviceJSON.put("end", String.valueOf(endTime.getMillisOfSecond()));
 
                 jsonServices.put(serviceJSON);
 
@@ -230,13 +228,12 @@ public class ScheduleController extends BusyController {
         DateTime toDate = date.toDateTime(new LocalTime(23, 59));
         List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDate, toDate, role, null);
 
-        for (Service service : serviceList) {
-            ServiceForm serviceForm = new ServiceForm(service);
-            form.addService(serviceForm);
-        }
+        form.setServices(serviceList);
 
         if (form.getServices().isEmpty()) {
-            form.addService(new ServiceForm());
+            Service service = new Service();
+            service.addTimeSlot(new TimeSlot());
+            form.addService(service);
         }
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
@@ -260,15 +257,13 @@ public class ScheduleController extends BusyController {
     public String newService(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
         Model model) {
 
-        ServiceValidator validator = new ServiceValidator();
-
-        validator.validate(form, result);
-
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
         }
 
-        form.addService(new ServiceForm());
+        Service service = new Service();
+        service.addTimeSlot(new TimeSlot());
+        form.addService(service);
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
         return SERVICE_FORM_PAGE;
@@ -289,21 +284,30 @@ public class ScheduleController extends BusyController {
     public String saveServices(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
         Model model) {
 
-        ServiceValidator validator = new ServiceValidator();
+        if (result.hasErrors()) {
+            return SERVICE_FORM_PAGE;
+        }
 
-        validator.validate(form, result);
+        scheduleService.saveServices(form.getServices());
+
+        Role role = (Role) model.asMap().get(CompanyController.ROLE_SESSION);
+
+        return "redirect:" + PATH_SCHEDULE + role.getId();
+    }
+
+    @RequestMapping(value = PATH_SERVICES_FORM_ADD_TIMESLOT, method = RequestMethod.POST)
+    public String addTimeslot(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
+        Model model) {
 
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
         }
 
-        @SuppressWarnings("unchecked")
-        List<ServiceType> serviceTypes = (List<ServiceType>) model.asMap().get(SERVICE_TYPES_SESSION);
-        scheduleService.saveServices(form.toServices(serviceTypes, roleService));
+        int size = form.getServices().size();
+        form.getServices().get(size - 1).addTimeSlot(new TimeSlot());
+        model.addAttribute(SERVICE_FORM_REQUEST, form);
 
-        Role role = (Role) model.asMap().get(CompanyController.ROLE_SESSION);
-
-        return "redirect:" + PATH_SCHEDULE + role.getId();
+        return SERVICE_FORM_PAGE;
     }
 
     /**
