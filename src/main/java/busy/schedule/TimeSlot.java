@@ -45,8 +45,8 @@ public class TimeSlot implements Serializable {
     }
 
     public void setStartTime(LocalTime startTime) {
-        if (startTime != null) {
-            LocalDate date = (service != null) ? service.getDate() : new LocalDate();
+        if (startTime != null && service != null) {
+            LocalDate date = (service.getDate() != null) ? service.getDate() : new LocalDate();
             this.startTime = date.toDateTime(startTime);
         }
     }
