@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -154,7 +155,7 @@ public class ScheduleController extends BusyController {
                 serviceJSON.put("url", "#");
                 serviceJSON.put("class", "event-info");
 
-                LocalTime endTime = service.getEndTime();
+                DateTime endTime = service.getEndTime();
 
                 serviceJSON.put("start", String.valueOf(service.getStartTime().getMillisOfSecond()));
                 serviceJSON.put("end", String.valueOf(endTime.getMillisOfSecond()));
@@ -311,8 +312,7 @@ public class ScheduleController extends BusyController {
         int duration = form.getLastService().getServiceType().getDuration();
         
         TimeSlot newTimeSlot = new TimeSlot();
-        newTimeSlot.setService(lastTimeSlot.getService());
-        newTimeSlot.setStartTime(lastTimeSlot.getStartTime().plusMinutes(duration));
+        newTimeSlot.setStartTime(lastTimeSlot.getStartDateTime().plusMinutes(duration));
         newTimeSlot.setSchedules(lastTimeSlot.getSchedules());
         
         form.getLastService().addTimeSlot(newTimeSlot);

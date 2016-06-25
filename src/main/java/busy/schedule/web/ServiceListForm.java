@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.joda.time.LocalDate;
 
@@ -21,6 +22,10 @@ public class ServiceListForm {
     }
 
     public void setDate(LocalDate date) {
+        for(Service s :getServices()) {
+            s.setDate(date);
+            s.updateTimeSlots();
+        }
         this.date = date;
     }
 

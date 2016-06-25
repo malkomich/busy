@@ -25,9 +25,8 @@ $(function() {
         setUpInputListeners(row, index);
         setUpButtonListeners(row, index);
         setUpMultiSelect(row);
-        $(selectors.TIMESLOT_ROW, row).each(function() {
-//            setUpMultiSelect($(this));
 
+        $(selectors.TIMESLOT_ROW, row).each(function() {
             // Update for initial visibility of end_time input
             updateEndTime($(this));
         });
@@ -44,7 +43,7 @@ function newService() {
     $.post("/service_form/new", form.serialize(), function(data) {
         $('.modal-content', modalContainer).html(data);
         setUpMultiSelect($(selectors.SERV_ROW, form).last());
-        modalContainer.modal();
+        modalContainer.modal('show');
     });
 }
 
@@ -55,7 +54,7 @@ function saveServices() {
     var form = $(selectors.SERV_FORM);
     $.post("/service_form/save", form.serialize(), function(data) {
 
-        var modalContainer = $('selectors.MODAL');
+        var modalContainer = $(selectors.MODAL);
 
         if ($(data).is("form")) {
             $('.modal-content', modalContainer).html(data);
@@ -132,8 +131,9 @@ function setUpInputListeners(row, index) {
     });
 
     $(typeSelect).change(function() {
-        var timeSlotRow = $(this).closest(selectors.TIMESLOT_ROW);
-        updateEndTime(timeSlotRow);
+        $(this).closest(selectors.SERV_ROW).find(selectors.TIMESLOT_ROW).each(function() {
+            updateEndTime($(this));
+        });
     });
 
 }
@@ -148,7 +148,7 @@ function setUpButtonListeners(row, index) {
             $('.modal-content', modalContainer).html(data);
             var newRow = $(selectors.SERV_ROW, form).find(selectors.TIMESLOT_ROW).get(index + 1);
             setUpMultiSelect(row);
-            modalContainer.modal();
+            modalContainer.modal('show');
         });
 
     });

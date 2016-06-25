@@ -1,6 +1,7 @@
 package busy.schedule.web;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -12,35 +13,36 @@ import busy.role.Role;
 import busy.role.RoleService;
 
 @Component
-public class RoleFormatter  implements Formatter<List<Role>>{
+public class RoleFormatter implements Formatter<List<Role>> {
 
     @Autowired
-    private RoleService  roleService;
+    private RoleService roleService;
 
     @Override
     public String print(List<Role> objects, Locale locale) {
 
         StringBuilder stb = new StringBuilder();
-        for(Role role: objects) {
+        for (Role role : objects) {
             stb.append(role.getId() + " ");
         }
-        
+
         return stb.toString().trim().replace(" ", ",");
     }
 
     @Override
     public List<Role> parse(String text, Locale locale) throws ParseException {
-        
+
         String[] values = text.split(",");
         Integer[] ids = new Integer[values.length];
-        
-        for(int i=0; i < values.length; i++) {
+
+        for (int i = 0; i < values.length; i++) {
             try {
                 ids[i] = Integer.parseInt(values[i]);
-            } catch (NumberFormatException e) { };
+            } catch (NumberFormatException e) {
+            }
         }
-        
-        return roleService.findRolesById(ids);
+
+        return (ids.length > 0) ? roleService.findRolesById(ids) : new ArrayList<>();
     }
-    
+
 }

@@ -7,7 +7,8 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-import org.joda.time.LocalTime;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 /**
  * Service model.
@@ -36,16 +37,16 @@ public class Service implements Serializable {
                     return null;
             }
         }
-        
-        public int getType() {
+
+        public Integer getType() {
             return type;
         }
 
         public String getMsgCode() {
             return msgCode;
         }
-        
-        private int type;
+
+        private Integer type;
         private String msgCode;
 
         private Repetition(int type, String msgCode) {
@@ -55,12 +56,31 @@ public class Service implements Serializable {
     }
 
     private int id;
-    @NotNull(message = "{schedule.service.service_type.empty}")
+    private LocalDate date;
+
     private ServiceType serviceType;
     private Repetition repetition;
 
     @Valid
     private List<TimeSlot> timeSlots;
+
+    public int getId() {
+        return id;
+    }
+
+    @SuppressWarnings("unused")
+    private void setId(Integer id) {
+        this.id = id;
+    }
+
+    @NotNull
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
 
     public ServiceType getServiceType() {
         return serviceType;
@@ -73,7 +93,7 @@ public class Service implements Serializable {
     public Repetition getRepetition() {
         return repetition;
     }
-    
+
     public Integer getRepetitionType() {
         return (repetition != null) ? repetition.getType() : null;
     }
@@ -81,13 +101,13 @@ public class Service implements Serializable {
     public void setRepetition(Repetition repetition) {
         this.repetition = repetition;
     }
-    
+
     public void setRepetition(int type) {
         this.repetition = Repetition.fromInt(type);
     }
 
     public List<TimeSlot> getTimeSlots() {
-        if(timeSlots == null) {
+        if (timeSlots == null) {
             timeSlots = new ArrayList<>();
         }
         return timeSlots;
@@ -101,34 +121,32 @@ public class Service implements Serializable {
         getTimeSlots().add(timeSlot);
     }
 
-    public int getId() {
-        return id;
-    }
-
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
-        this.id = id;
-    }
-
     public Integer getServiceTypeId() {
         return (serviceType != null) ? serviceType.getId() : null;
     }
 
-    public LocalTime getStartTime() {
-        return timeSlots.get(0).getStartTime();
+    public DateTime getStartTime() {
+        return timeSlots.get(0).getStartDateTime();
     }
-    
-    public LocalTime getEndTime() {
-        
+
+    public DateTime getEndTime() {
+
         int size = timeSlots.size();
-        LocalTime time = (size > 1) ? timeSlots.get(size - 1).getStartTime() : getStartTime();
+        DateTime time = (size > 1) ? timeSlots.get(size - 1).getStartDateTime() : getStartTime();
         int minutes = serviceType.getDuration();
-        
-        return time.plusMillis(minutes * 60 * 1000); 
+
+        return time.plusMillis(minutes * 60 * 1000);
     }
 
     public TimeSlot getLastTimeSlot() {
         return (timeSlots.isEmpty()) ? null : timeSlots.get(timeSlots.size() - 1);
+    }
+
+    public void updateTimeSlots() {
+
+        for(TimeSlot timeSlot : timeSlots) {
+            timeSlot.setService(this);
+        }
     }
 
 }
