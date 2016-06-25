@@ -80,7 +80,7 @@
 
         <div class="row">
           <div class="col-xs-1">
-            <a href="#">
+            <a href="#" data-toggle="tooltip" data-placement="right" th:title="#{schedule.service.button.new_timeslot}">
               <span class="glyphicon glyphicon-plus darkseagreen add_timeslot"></span>
             </a>
           </div>
@@ -93,9 +93,10 @@
 
     <div class="row">
       <div class="col-xs-3 form-group">
-        <a href="javascript:newService()">
-          <span class="service-add glyphicon glyphicon-plus"></span>
-        </a>
+        <button href="javascript:newService()" class="btn btn-primary service-add">
+          <span class="glyphicon glyphicon-plus"></span>
+          <span th:text="#{schedule.service.button.new_service}"></span>
+        </button>
       </div>
     </div>
 
