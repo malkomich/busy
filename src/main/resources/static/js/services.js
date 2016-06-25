@@ -125,7 +125,6 @@ function setUpInputListeners(row, index) {
 
     var startTimeInput = $(selectors.START_TIME_INPUT, row);
     var typeSelect = $(selectors.SERV_TYPE_SELECT, row);
-    var repetitionTypeSelect = $(selectors.REP_TYPE_SELECT, row);
 
     $(startTimeInput).change(function() {
         var timeSlotRow = $(this).closest(selectors.TIMESLOT_ROW);

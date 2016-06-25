@@ -28,12 +28,10 @@
             <!-- .row (SERVICE TYPE) -->
 
             <div class="row">
-              <select th:field="*{services[__${status.index}__].repetitionType}" tabindex="4" class="form-control input-sm service-repetition-type"
+              <select th:field="*{services[__${status.index}__].repetition}" tabindex="4" class="form-control input-sm service-repetition-type"
                 data-toggle="tooltip" data-placement="left" th:title="#{schedule.service.tooltip.repetition_type}">
-                <option th:each="rType : ${repetitionTypes}" th:value="${rType}" th:text="#{${rType.msgCode}}"></option>
+                <option th:each="rType : ${repetitionTypes}" th:value="${rType.type}" th:text="#{${rType.msgCode}}"></option>
               </select>
-              <span id="rep-date-error" th:each="err : ${#fields.errors('services[__${status.index}__].repetitionType')}" class="error fs-xs"
-                th:text="${err}"></span>
             </div>
             <!-- .row (REPETITION) -->
           </div>
