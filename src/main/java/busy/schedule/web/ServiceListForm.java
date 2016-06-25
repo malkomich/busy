@@ -39,4 +39,8 @@ public class ServiceListForm {
         services.add(service);
     }
 
+    public Service getLastService() {
+        return (services.isEmpty()) ? null : services.get(services.size() - 1);
+    }
+
 }

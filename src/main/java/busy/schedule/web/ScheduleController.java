@@ -307,10 +307,15 @@ public class ScheduleController extends BusyController {
             return SERVICE_FORM_PAGE;
         }
 
-        int size = form.getServices().size();
+        TimeSlot lastTimeSlot = form.getLastService().getLastTimeSlot();
+        int duration = form.getLastService().getServiceType().getDuration();
+        
         TimeSlot newTimeSlot = new TimeSlot();
-        // Fill time slot data
-        form.getServices().get(size - 1).addTimeSlot(newTimeSlot);
+        newTimeSlot.setService(lastTimeSlot.getService());
+        newTimeSlot.setStartTime(lastTimeSlot.getStartTime().plusMinutes(duration));
+        newTimeSlot.setSchedules(lastTimeSlot.getSchedules());
+        
+        form.getLastService().addTimeSlot(newTimeSlot);
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
         return SERVICE_FORM_PAGE;

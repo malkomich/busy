@@ -127,4 +127,8 @@ public class Service implements Serializable {
         return time.plusMillis(minutes * 60 * 1000); 
     }
 
+    public TimeSlot getLastTimeSlot() {
+        return (timeSlots.isEmpty()) ? null : timeSlots.get(timeSlots.size() - 1);
+    }
+
 }
