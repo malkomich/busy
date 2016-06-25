@@ -14,7 +14,7 @@ public class ServiceListForm {
     private LocalDate date;
 
     @Valid
-    private List<Service> services = new ArrayList<>();
+    private List<Service> services;
 
     public LocalDate getDate() {
         return date;
@@ -25,6 +25,9 @@ public class ServiceListForm {
     }
 
     public List<Service> getServices() {
+        if(services == null) {
+            services = new ArrayList<>();
+        }
         return services;
     }
 

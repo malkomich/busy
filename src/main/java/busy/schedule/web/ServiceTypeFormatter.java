@@ -11,7 +11,7 @@ import busy.schedule.ScheduleService;
 import busy.schedule.ServiceType;
 
 @Component
-public class ServiceTypeFormatter  implements Formatter<ServiceType>{
+public class ServiceTypeFormatter implements Formatter<ServiceType> {
 
     @Autowired
     private ScheduleService scheduleService;
@@ -19,13 +19,13 @@ public class ServiceTypeFormatter  implements Formatter<ServiceType>{
     @Override
     public String print(ServiceType object, Locale locale) {
 
-        return (object != null) ? object.getId().toString() : "";
+        return (object != null) ? object.getId().toString() : null;
     }
 
     @Override
     public ServiceType parse(String text, Locale locale) throws ParseException {
-        
+
         return scheduleService.findServiceTypeById(Integer.valueOf(text));
     }
-    
+
 }

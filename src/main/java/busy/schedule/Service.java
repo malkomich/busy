@@ -62,10 +62,6 @@ public class Service implements Serializable {
     @Valid
     private List<TimeSlot> timeSlots;
 
-    public Service() {
-        timeSlots = new ArrayList<>();
-    }
-
     public ServiceType getServiceType() {
         return serviceType;
     }
@@ -91,6 +87,9 @@ public class Service implements Serializable {
     }
 
     public List<TimeSlot> getTimeSlots() {
+        if(timeSlots == null) {
+            timeSlots = new ArrayList<>();
+        }
         return timeSlots;
     }
 
@@ -99,7 +98,7 @@ public class Service implements Serializable {
     }
 
     public void addTimeSlot(TimeSlot timeSlot) {
-        timeSlots.add(timeSlot);
+        getTimeSlots().add(timeSlot);
     }
 
     public int getId() {

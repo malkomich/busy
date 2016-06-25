@@ -23,10 +23,6 @@ public class TimeSlot implements Serializable {
     @NotEmpty(message= "{schedule.service.roles.empty}")
     private List<Schedule> schedules;
 
-    public TimeSlot() {
-        schedules = new ArrayList<>();
-    }
-
     public int getId() {
         return id;
     }
@@ -52,6 +48,9 @@ public class TimeSlot implements Serializable {
     }
 
     public List<Schedule> getSchedules() {
+        if(schedules == null) {
+            schedules = new ArrayList<>();
+        }
         return schedules;
     }
 
@@ -60,7 +59,7 @@ public class TimeSlot implements Serializable {
     }
 
     public void addSchedule(Schedule schedule) {
-        schedules.add(schedule);
+        getSchedules().add(schedule);
     }
 
     public Object getStartTimestamp() {

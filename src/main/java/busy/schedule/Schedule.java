@@ -23,10 +23,6 @@ public class Schedule implements Serializable, Replicable<Schedule> {
 
     private List<User> bookings;
 
-    public Schedule() {
-        bookings = new ArrayList<>();
-    }
-
     public int getId() {
         return id;
     }
@@ -45,11 +41,18 @@ public class Schedule implements Serializable, Replicable<Schedule> {
     }
 
     public List<User> getBookings() {
+        if(bookings == null) {
+            bookings = new ArrayList<>();
+        }
         return bookings;
+    }
+    
+    public void setBookings(List<User> bookings) {
+        this.bookings = bookings;
     }
 
     public void addBooking(User user) {
-        bookings.add(user);
+        getBookings().add(user);
     }
 
     public Integer getRoleId() {

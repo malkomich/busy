@@ -24,9 +24,9 @@ $(function() {
         setUpStartTime(row);
         setUpInputListeners(row, index);
         setUpButtonListeners(row, index);
-
+        setUpMultiSelect(row);
         $(selectors.TIMESLOT_ROW, row).each(function() {
-            setUpMultiSelect($(this));
+//            setUpMultiSelect($(this));
 
             // Update for initial visibility of end_time input
             updateEndTime($(this));
@@ -35,14 +35,15 @@ $(function() {
 });
 
 /*
- * Request the updated form, with a new blank service created, to the controller.
+ * Request the updated form, with a new blank service created, to the
+ * controller.
  */
 function newService() {
     var form = $(selectors.SERV_FORM);
-    var modalContainer = $('selectors.MODAL');
+    var modalContainer = $(selectors.MODAL);
     $.post("/service_form/new", form.serialize(), function(data) {
         $('.modal-content', modalContainer).html(data);
-        setUpMultiSelect($(selectors.SERV_ROW, form).last().find(selectors.TIMESLOT_ROW).last());
+        setUpMultiSelect($(selectors.SERV_ROW, form).last());
         modalContainer.modal();
     });
 }
@@ -72,18 +73,19 @@ function saveServices() {
  */
 function setUpStartTime(row) {
     $(selectors.START_TIME_INPUT, row).each(function() {
-      $(this).timepicker({
-          template: false,
-          showInputs: false,
-          showMeridian: false,
-          defaultTime: false,
-          minuteStep: 5
-      });
+        $(this).timepicker({
+            template : false,
+            showInputs : false,
+            showMeridian : false,
+            defaultTime : false,
+            minuteStep : 5
+        });
     });
 }
 
 /*
- * Update the end time input of a specific row according to start time and service type values.
+ * Update the end time input of a specific row according to start time and
+ * service type values.
  */
 function updateEndTime(row) {
 
@@ -102,17 +104,20 @@ function updateEndTime(row) {
 }
 
 /*
- * Set the behaviour and custom style for each multiSelect field in the given row.
+ * Set the behaviour and custom style for each multiSelect field in the given
+ * row.
  */
 function setUpMultiSelect(row) {
 
-    $(selectors.ROLE_SELECT, row).multipleSelect({
-        placeholder: placeholder,
-        selectAll: false,
-        filter: true,
-        width: '100%',
-        selectAllText: txtSelectAll,
-        allSelected: txtSelectedAll
+    $(selectors.ROLE_SELECT, row).each(function() {
+        $(this).multipleSelect({
+            placeholder : placeholder,
+            selectAll : false,
+            filter : true,
+            width : '100%',
+            selectAllText : txtSelectAll,
+            allSelected : txtSelectedAll
+        });
     });
 }
 
@@ -135,20 +140,17 @@ function setUpInputListeners(row, index) {
 }
 
 function setUpButtonListeners(row, index) {
-
+    
     var form = $(selectors.SERV_FORM);
-    var modalContainer = $('selectors.MODAL');
-
+    var modalContainer = $(selectors.MODAL);
+    
     $('.add_timeslot', row).click(function() {
+        $.post("/service_form/add_timeslot", form.serialize(), function(data) {
+            $('.modal-content', modalContainer).html(data);
+            var newRow = $(selectors.SERV_ROW, form).find(selectors.TIMESLOT_ROW).get(index + 1);
+            setUpMultiSelect(row);
+            modalContainer.modal();
+        });
 
-      $.post("/service_form/add_timeslot", form.serialize(), function(data) {
-
-          $('.modal-content', modalContainer).html(data);
-          var newRow = $(selectors.SERV_ROW, form).find(selectors.TIMESLOT_ROW)[index + 1];
-          alert($(selectors.TIMESLOT_ROW, newRow).last().html());
-          setUpMultiSelect($(selectors.TIMESLOT_ROW, newRow).last());
-          modalContainer.modal();
-
-      });
     });
 }
