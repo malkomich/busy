@@ -65,7 +65,7 @@ public class Service implements Serializable {
     @Valid
     private List<TimeSlot> timeSlots;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

@@ -1,9 +1,12 @@
 package busy.schedule;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -13,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import busy.company.Company;
 import busy.role.Role;
+import busy.schedule.Service.Repetition;
 import busy.util.OperationResult;
 
 /**
@@ -167,6 +171,23 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Transactional(readOnly = true)
     public ServiceType findServiceTypeById(int id) {
         return serviceTypeDao.findById(id);
+    }
+
+    @Override
+    public List<busy.schedule.Service> findServicesByDay(LocalDate date, Role role, ServiceType serviceType) {
+
+        DateTime fromDate = date.toDateTime(new LocalTime(0, 0));
+        DateTime toDate = date.toDateTime(new LocalTime(23, 59));
+        
+        List<busy.schedule.Service> services = findServicesBetweenDays(fromDate, toDate, role, serviceType);
+        List<busy.schedule.Service> servicesToRemove = new ArrayList<>();
+        for(busy.schedule.Service service : services) {
+            if(Repetition.WEEKLY.equals(service.getRepetition()) && service.getStartTime().getDayOfWeek() != date.getDayOfWeek()) {
+                servicesToRemove.add(service);
+            }
+        }
+        services.removeAll(servicesToRemove);
+        return services;
     }
 
 }

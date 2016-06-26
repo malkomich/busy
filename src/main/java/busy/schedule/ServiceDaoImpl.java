@@ -54,7 +54,6 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.joda.time.DateTime;
-import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -80,7 +79,7 @@ import busy.util.SecureSetter;
 public class ServiceDaoImpl implements ServiceDao {
 
     private static final String SQL_SELECT_BETWEEN_DAYS =
-        SCHEDULE_QUERY + " WHERE ? <= " + START_TIME + " AND ? >= " + START_TIME;
+        SCHEDULE_QUERY + " WHERE (? <= " + START_TIME + " AND ? >= " + START_TIME + ") OR " + REPETITION_TYPE + "<> 0";
 
     private static final String SQL_ROLE_FILTER = " AND " + ALIAS_ROLE_ID + "=?";
 

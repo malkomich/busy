@@ -9,10 +9,8 @@ import javax.validation.Valid;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -144,22 +142,42 @@ public class ScheduleController extends BusyController {
 
         for (Service service : serviceList) {
 
-            try {
-                JSONObject serviceJSON = new JSONObject();
+            Repetition repetitionType = service.getRepetition();
+            JSONObject serviceJSON;
 
-                serviceJSON.put("id", service.getId());
+            if (Repetition.NONE.equals(repetitionType)) {
 
-                serviceJSON.put("title", service.getServiceType().getName());
-                serviceJSON.put("url", "#");
-                serviceJSON.put("class", "event-info");
-
-                serviceJSON.put("start", String.valueOf(service.getStartTime().getMillis()));
-                serviceJSON.put("end", String.valueOf(service.getEndTime().getMillis()));
-
+                serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
+                    "event-info", service.getStartTime().getMillis(), service.getEndTime().getMillis());
                 jsonServices.put(serviceJSON);
 
-            } catch (JSONException jse) {
-                jse.printStackTrace();
+            } else if (Repetition.DAILY.equals(repetitionType)) {
+
+                DateTime dateTime = fromDateTime;
+
+                while (dateTime.isBefore(toDateTime)) {
+                    serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
+                        "event-warning", service.getStartTime().withDate(dateTime.toLocalDate()).getMillis(),
+                        service.getEndTime().withDate(dateTime.toLocalDate()).getMillis());
+                    jsonServices.put(serviceJSON);
+
+                    dateTime = dateTime.plusDays(1);
+                }
+
+            } else if (Repetition.WEEKLY.equals(repetitionType)) {
+
+                int dayOfWeek = service.getStartTime().getDayOfWeek();
+                DateTime dateTime = fromDateTime.withDayOfWeek(dayOfWeek);
+
+                while (dateTime.isBefore(toDateTime)) {
+                    serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
+                        "event-warning", service.getStartTime().withDate(dateTime.toLocalDate()).getMillis(),
+                        service.getEndTime().withDate(dateTime.toLocalDate()).getMillis());
+                    jsonServices.put(serviceJSON);
+
+                    dateTime = dateTime.plusWeeks(1);
+                }
+
             }
         }
 
@@ -167,6 +185,23 @@ public class ScheduleController extends BusyController {
         jsonResult.put("success", 1);
 
         return jsonResult.toString();
+    }
+
+    private JSONObject getEvent(String id, String name, String url, String eventClass, long startMillis,
+        long endMillis) {
+
+        JSONObject serviceJSON = new JSONObject();
+
+        serviceJSON.put("id", name);
+
+        serviceJSON.put("title", name);
+        serviceJSON.put("url", url);
+        serviceJSON.put("class", eventClass);
+
+        serviceJSON.put("start", String.valueOf(startMillis));
+        serviceJSON.put("end", String.valueOf(endMillis));
+
+        return serviceJSON;
     }
 
     /**
@@ -222,9 +257,7 @@ public class ScheduleController extends BusyController {
         LocalDate date = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(dateTmp);
         form.setDate(date);
 
-        DateTime fromDate = date.toDateTime(new LocalTime(0, 0));
-        DateTime toDate = date.toDateTime(new LocalTime(23, 59));
-        List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDate, toDate, role, null);
+        List<Service> serviceList = scheduleService.findServicesByDay(date, role, null);
 
         form.setServices(serviceList);
 
@@ -303,8 +336,8 @@ public class ScheduleController extends BusyController {
      * @return The service form dialog view with a new time slot row
      */
     @RequestMapping(value = PATH_SERVICES_FORM_ADD_TIMESLOT, method = RequestMethod.POST)
-    public String addTimeslot(@PathVariable("index") Integer serviceIndex, @ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
-        Model model) {
+    public String addTimeslot(@PathVariable("index") Integer serviceIndex,
+        @ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
