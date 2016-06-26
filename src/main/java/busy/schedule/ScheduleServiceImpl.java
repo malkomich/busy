@@ -121,6 +121,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#saveServices(java.util.List)
      */
     @Override
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
     public void saveServices(List<busy.schedule.Service> serviceList) {
 
         for (busy.schedule.Service service : serviceList) {
@@ -163,6 +164,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      * @see busy.schedule.ScheduleService#findServiceTypeById(int)
      */
     @Override
+    @Transactional(readOnly = true)
     public ServiceType findServiceTypeById(int id) {
         return serviceTypeDao.findById(id);
     }
