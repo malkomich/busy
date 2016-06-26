@@ -39,8 +39,8 @@ public class ServiceListForm {
         services.add(service);
     }
 
-    public Service getLastService() {
-        return (services.isEmpty()) ? null : services.get(services.size() - 1);
+    public Service getService(int index) {
+        return (services.isEmpty()) ? null : services.get(index);
     }
 
     private void updateServices() {

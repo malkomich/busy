@@ -9,7 +9,9 @@ var selectors = {
     'ROLE_CHECKBOX' : '.role-item input:checkbox',
     'ROLE_TIPS_LIST' : '.service-roles-summary ul',
     'REP_TYPE_SELECT' : '.service-repetition-type',
-    'TIMESLOT_ROW' : '.time-slot'
+    'TIMESLOT_ROW' : '.time-slot',
+    'TIMESLOT_ADD_BUTTON' : '.add_timeslot',
+    'SERV_ADD_BUTTON' : '.service-add'
 };
 
 $(function() {
@@ -32,20 +34,6 @@ $(function() {
         });
     });
 });
-
-/*
- * Request the updated form, with a new blank service created, to the
- * controller.
- */
-function newService() {
-    var form = $(selectors.SERV_FORM);
-    var modalContainer = $(selectors.MODAL);
-    $.post("/service_form/new", form.serialize(), function(data) {
-        $('.modal-content', modalContainer).html(data);
-        setUpMultiSelect($(selectors.SERV_ROW, form).last());
-        modalContainer.modal('show');
-    });
-}
 
 /*
  * Submit the service form to create the list of services.
@@ -83,8 +71,7 @@ function setUpStartTime(row) {
 }
 
 /*
- * Update the end time input of a specific row according to start time and
- * service type values.
+ * Update the end time input of a specific row according to start time and service type values.
  */
 function updateEndTime(row) {
 
@@ -103,8 +90,7 @@ function updateEndTime(row) {
 }
 
 /*
- * Set the behaviour and custom style for each multiSelect field in the given
- * row.
+ * Set the behaviour and custom style for each multiSelect field in the given row.
  */
 function setUpMultiSelect(row) {
 
@@ -139,17 +125,31 @@ function setUpInputListeners(row, index) {
 }
 
 function setUpButtonListeners(row, index) {
-    
+
     var form = $(selectors.SERV_FORM);
     var modalContainer = $(selectors.MODAL);
-    
-    $('.add_timeslot', row).click(function() {
-        $.post("/service_form/add_timeslot", form.serialize(), function(data) {
+
+    /*
+     * Request the updated form, with a new time slot, to the controller.
+     */
+    $(selectors.TIMESLOT_ADD_BUTTON, row).click(function() {
+        $.post("/service_form/" + index + "/add_timeslot", form.serialize(), function(data) {
             $('.modal-content', modalContainer).html(data);
             var newRow = $(selectors.SERV_ROW, form).find(selectors.TIMESLOT_ROW).get(index + 1);
             setUpMultiSelect(row);
             modalContainer.modal('show');
         });
-
     });
+
+        /*
+         * Request the updated form, with a new blank service created, to the controller.
+         */
+    $(selectors.SERV_ADD_BUTTON, form).click(function() {
+        $.post("/service_form/new", form.serialize(), function(data) {
+            $('.modal-content', modalContainer).html(data);
+            setUpMultiSelect($(selectors.SERV_ROW, form).last());
+            modalContainer.modal('show');
+        });
+    });
+
 }

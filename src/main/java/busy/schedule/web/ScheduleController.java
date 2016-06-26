@@ -63,7 +63,7 @@ public class ScheduleController extends BusyController {
     private static final String PATH_SERVICES_FORM = "/service_form";
     private static final String PATH_SERVICES_FORM_NEW = "/service_form/new";
     private static final String PATH_SERVICES_FORM_SAVE = "/service_form/save";
-    private static final String PATH_SERVICES_FORM_ADD_TIMESLOT = "/service_form/add_timeslot";
+    private static final String PATH_SERVICES_FORM_ADD_TIMESLOT = "/service_form/{index}/add_timeslot";
     private static final String PATH_SCHEDULE = "/schedule/";
 
     /**
@@ -303,21 +303,22 @@ public class ScheduleController extends BusyController {
      * @return The service form dialog view with a new time slot row
      */
     @RequestMapping(value = PATH_SERVICES_FORM_ADD_TIMESLOT, method = RequestMethod.POST)
-    public String addTimeslot(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
+    public String addTimeslot(@PathVariable("index") Integer serviceIndex, @ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
         Model model) {
 
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
         }
 
-        TimeSlot lastTimeSlot = form.getLastService().getLastTimeSlot();
-        int duration = form.getLastService().getServiceType().getDuration();
+        Service service = form.getService(serviceIndex);
+        TimeSlot lastTimeSlot = service.getLastTimeSlot();
+        int duration = service.getServiceType().getDuration();
 
         TimeSlot newTimeSlot = new TimeSlot();
         newTimeSlot.setStartTime(lastTimeSlot.getStartDateTime().plusMinutes(duration));
         newTimeSlot.setSchedules(lastTimeSlot.getSchedules());
 
-        form.getLastService().addTimeSlot(newTimeSlot);
+        service.addTimeSlot(newTimeSlot);
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
         return SERVICE_FORM_PAGE;
