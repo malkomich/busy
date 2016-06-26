@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -155,10 +154,8 @@ public class ScheduleController extends BusyController {
                 serviceJSON.put("url", "#");
                 serviceJSON.put("class", "event-info");
 
-                DateTime endTime = service.getEndTime();
-
-                serviceJSON.put("start", String.valueOf(service.getStartTime().getMillisOfSecond()));
-                serviceJSON.put("end", String.valueOf(endTime.getMillisOfSecond()));
+                serviceJSON.put("start", String.valueOf(service.getStartTime().getMillis()));
+                serviceJSON.put("end", String.valueOf(service.getEndTime().getMillis()));
 
                 jsonServices.put(serviceJSON);
 

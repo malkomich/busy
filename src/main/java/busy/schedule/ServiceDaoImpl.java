@@ -242,7 +242,7 @@ public class ServiceDaoImpl implements ServiceDao {
                 SecureSetter.setId(timeSlot, rs.getInt(ALIAS_TIME_SLOT_ID));
 
                 timeSlot.setService(service);
-                timeSlot.setStartTime(new LocalTime(rs.getTimestamp(START_TIME)));
+                timeSlot.setStartTime(new DateTime(rs.getTimestamp(START_TIME)));
 
                 do {
                     Schedule schedule = new Schedule();

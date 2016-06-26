@@ -57,6 +57,9 @@ public class TimeSlot implements Serializable {
 
     public void setService(Service service) {
         this.service = service;
+        if(startTime != null) {
+            startTime = startTime.withDate(service.getDate());
+        }
     }
 
     public List<Schedule> getSchedules() {
