@@ -9,10 +9,8 @@ import javax.validation.Valid;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +32,7 @@ import busy.schedule.ScheduleService;
 import busy.schedule.Service;
 import busy.schedule.Service.Repetition;
 import busy.schedule.ServiceType;
+import busy.schedule.TimeSlot;
 
 /**
  * Controller for schedule operations.
@@ -62,6 +61,7 @@ public class ScheduleController extends BusyController {
     private static final String PATH_SERVICES_FORM = "/service_form";
     private static final String PATH_SERVICES_FORM_NEW = "/service_form/new";
     private static final String PATH_SERVICES_FORM_SAVE = "/service_form/save";
+    private static final String PATH_SERVICES_FORM_ADD_TIMESLOT = "/service_form/{index}/add_timeslot";
     private static final String PATH_SCHEDULE = "/schedule/";
 
     /**
@@ -100,8 +100,10 @@ public class ScheduleController extends BusyController {
      *            the initial instant in milliseconds of the period in which find bookings
      * @param toTmp
      *            the final instant in milliseconds of the period in which find bookings
-     * @param offSetMinutesTmp
-     *            the offset from UTC in milliseconds of the dates received
+     * @param offSetFromTmp
+     *            the offset from UTC in milliseconds of the initial instant
+     * @param offSetToTmp
+     *            the offset from UTC in milliseconds of the final instant
      * @param model
      *            Spring model instance
      * @return The list of resultant bookings in JSON format
@@ -140,28 +142,42 @@ public class ScheduleController extends BusyController {
 
         for (Service service : serviceList) {
 
-            try {
-                JSONObject serviceJSON = new JSONObject();
+            Repetition repetitionType = service.getRepetition();
+            JSONObject serviceJSON;
 
-                serviceJSON.put("id", service.getId());
+            if (Repetition.NONE.equals(repetitionType)) {
 
-                DateTime startTime = service.getStartTime();
-
-                serviceJSON.put("title", startTime.toString("HH:mm") + " [" + service.getServiceType().getName() + "]");
-                serviceJSON.put("url", "#");
-                serviceJSON.put("class", "event-info");
-
-                int minutes = service.getServiceType().getDuration();
-                // Start time plus minutes converted to millis
-                DateTime endTime = startTime.plus(minutes * 60 * 1000);
-
-                serviceJSON.put("start", String.valueOf(startTime.getMillis()));
-                serviceJSON.put("end", String.valueOf(endTime.getMillis()));
-
+                serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
+                    "event-info", service.getStartTime().getMillis(), service.getEndTime().getMillis());
                 jsonServices.put(serviceJSON);
 
-            } catch (JSONException jse) {
-                jse.printStackTrace();
+            } else if (Repetition.DAILY.equals(repetitionType)) {
+
+                DateTime dateTime = fromDateTime;
+
+                while (dateTime.isBefore(toDateTime)) {
+                    serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
+                        "event-warning", service.getStartTime().withDate(dateTime.toLocalDate()).getMillis(),
+                        service.getEndTime().withDate(dateTime.toLocalDate()).getMillis());
+                    jsonServices.put(serviceJSON);
+
+                    dateTime = dateTime.plusDays(1);
+                }
+
+            } else if (Repetition.WEEKLY.equals(repetitionType)) {
+
+                int dayOfWeek = service.getStartTime().getDayOfWeek();
+                DateTime dateTime = fromDateTime.withDayOfWeek(dayOfWeek);
+
+                while (dateTime.isBefore(toDateTime)) {
+                    serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
+                        "event-warning", service.getStartTime().withDate(dateTime.toLocalDate()).getMillis(),
+                        service.getEndTime().withDate(dateTime.toLocalDate()).getMillis());
+                    jsonServices.put(serviceJSON);
+
+                    dateTime = dateTime.plusWeeks(1);
+                }
+
             }
         }
 
@@ -169,6 +185,23 @@ public class ScheduleController extends BusyController {
         jsonResult.put("success", 1);
 
         return jsonResult.toString();
+    }
+
+    private JSONObject getEvent(String id, String name, String url, String eventClass, long startMillis,
+        long endMillis) {
+
+        JSONObject serviceJSON = new JSONObject();
+
+        serviceJSON.put("id", name);
+
+        serviceJSON.put("title", name);
+        serviceJSON.put("url", url);
+        serviceJSON.put("class", eventClass);
+
+        serviceJSON.put("start", String.valueOf(startMillis));
+        serviceJSON.put("end", String.valueOf(endMillis));
+
+        return serviceJSON;
     }
 
     /**
@@ -198,8 +231,6 @@ public class ScheduleController extends BusyController {
      *            the date of the services to modify or create
      * @param model
      *            Spring Model instance
-     * @param locale
-     *            current locale of the browser
      * @return The JSP view of the dialog form
      */
     @RequestMapping(value = PATH_SERVICES_FORM, method = RequestMethod.GET)
@@ -226,17 +257,14 @@ public class ScheduleController extends BusyController {
         LocalDate date = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(dateTmp);
         form.setDate(date);
 
-        DateTime fromDate = date.toDateTime(new LocalTime(0, 0));
-        DateTime toDate = date.toDateTime(new LocalTime(23, 59));
-        List<Service> serviceList = scheduleService.findServicesBetweenDays(fromDate, toDate, role, null);
+        List<Service> serviceList = scheduleService.findServicesByDay(date, role, null);
 
-        for (Service service : serviceList) {
-            ServiceForm serviceForm = new ServiceForm(service);
-            form.addService(serviceForm);
-        }
+        form.setServices(serviceList);
 
         if (form.getServices().isEmpty()) {
-            form.addService(new ServiceForm());
+            Service service = new Service();
+            service.addTimeSlot(new TimeSlot());
+            form.addService(service);
         }
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
@@ -248,8 +276,6 @@ public class ScheduleController extends BusyController {
      *
      * @param form
      *            form with the services data
-     * @param index
-     *            index of the service to clone
      * @param result
      *            state of the parsed form
      * @param model
@@ -260,15 +286,13 @@ public class ScheduleController extends BusyController {
     public String newService(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
         Model model) {
 
-        ServiceValidator validator = new ServiceValidator();
-
-        validator.validate(form, result);
-
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
         }
 
-        form.addService(new ServiceForm());
+        Service service = new Service();
+        service.addTimeSlot(new TimeSlot());
+        form.addService(service);
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
         return SERVICE_FORM_PAGE;
@@ -289,21 +313,48 @@ public class ScheduleController extends BusyController {
     public String saveServices(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
         Model model) {
 
-        ServiceValidator validator = new ServiceValidator();
+        if (result.hasErrors()) {
+            return SERVICE_FORM_PAGE;
+        }
 
-        validator.validate(form, result);
+        scheduleService.saveServices(form.getServices());
+
+        Role role = (Role) model.asMap().get(CompanyController.ROLE_SESSION);
+
+        return "redirect:" + PATH_SCHEDULE + role.getId();
+    }
+
+    /**
+     * Adds a new time slot item to the services form
+     * 
+     * @param form
+     *            form with the services data
+     * @param result
+     *            state of the parsed form
+     * @param model
+     *            Spring model instance
+     * @return The service form dialog view with a new time slot row
+     */
+    @RequestMapping(value = PATH_SERVICES_FORM_ADD_TIMESLOT, method = RequestMethod.POST)
+    public String addTimeslot(@PathVariable("index") Integer serviceIndex,
+        @ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
         }
 
-        @SuppressWarnings("unchecked")
-        List<ServiceType> serviceTypes = (List<ServiceType>) model.asMap().get(SERVICE_TYPES_SESSION);
-        scheduleService.saveServices(form.toServices(serviceTypes, roleService));
+        Service service = form.getService(serviceIndex);
+        TimeSlot lastTimeSlot = service.getLastTimeSlot();
+        int duration = service.getServiceType().getDuration();
 
-        Role role = (Role) model.asMap().get(CompanyController.ROLE_SESSION);
+        TimeSlot newTimeSlot = new TimeSlot();
+        newTimeSlot.setStartTime(lastTimeSlot.getStartDateTime().plusMinutes(duration));
+        newTimeSlot.setSchedules(lastTimeSlot.getSchedules());
 
-        return "redirect:" + PATH_SCHEDULE + role.getId();
+        service.addTimeSlot(newTimeSlot);
+        model.addAttribute(SERVICE_FORM_REQUEST, form);
+
+        return SERVICE_FORM_PAGE;
     }
 
     /**

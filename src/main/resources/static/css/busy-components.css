@@ -220,19 +220,9 @@ to {
 }
 
 /*
- * Quantity control
+ * Colors
  */
-.quantity-control a.reduce {
-    color: crimson;
-    cursor: pointer;
-}
 
-.quantity-control a.add {
+.darkseagreen {
     color: darkseagreen;
-    cursor: pointer;
-}
-
-.quantity-control .total {
-    font-size: large;
-    font-weight: bold;
 }

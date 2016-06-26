@@ -1,9 +1,9 @@
 package busy.schedule;
 
 import java.util.List;
-import java.util.Map;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import busy.company.Company;
 import busy.role.Role;
@@ -81,5 +81,29 @@ public interface ScheduleService {
      * @param services
      *            the map of services to be saved
      */
-    void saveServices(Map<Integer, List<Service>> services);
+    void saveServices(List<Service> services);
+
+    /**
+     * Gets a specific service type given an ID.
+     * 
+     * @param parseInt
+     *            unique id of the service type
+     * @return The resultant service type
+     */
+    ServiceType findServiceTypeById(int id);
+
+    /**
+     * Gets the list of the scheduled services in a specific day, for a given role, and of a given
+     * service type. If the role or the service type are null, the services will be found for all
+     * roles or of all service types, respectively.
+     * 
+     * @param date
+     *            day which services scheduled are requested
+     * @param role
+     *            the role attached to the requested services
+     * @param serviceType
+     *            the type of services wanted
+     * @return The resultant list of services
+     */
+    List<Service> findServicesByDay(LocalDate date, Role role, ServiceType serviceType);
 }

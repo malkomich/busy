@@ -1,11 +1,14 @@
 package busy.schedule;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 /**
  * Service model.
@@ -22,40 +25,62 @@ public class Service implements Serializable {
         DAILY(1, "schedule.service.repetition.daily"),
         WEEKLY(2, "schedule.service.repetition.weekly");
 
-        private int id;
-        private String msgCode;
-
-        private Repetition(int id, String msgCode) {
-            this.id = id;
-            this.msgCode = msgCode;
+        public static Repetition fromInt(int type) {
+            switch (type) {
+                case 0:
+                    return NONE;
+                case 1:
+                    return DAILY;
+                case 2:
+                    return WEEKLY;
+                default:
+                    return null;
+            }
         }
 
-        public int getId() {
-            return id;
+        public Integer getType() {
+            return type;
         }
 
         public String getMsgCode() {
             return msgCode;
         }
+
+        private Integer type;
+        private String msgCode;
+
+        private Repetition(int type, String msgCode) {
+            this.type = type;
+            this.msgCode = msgCode;
+        }
     }
 
     private int id;
-    private DateTime startTime;
+    private LocalDate date;
+
+    @NotNull(message = "{schedule.service.service_type.empty}")
     private ServiceType serviceType;
-    private int correlation;
+    private Repetition repetition;
 
-    private List<Schedule> schedules;
+    @Valid
+    private List<TimeSlot> timeSlots;
 
-    public Service() {
-        schedules = new ArrayList<>();
+    public Integer getId() {
+        return id;
     }
 
-    public DateTime getStartTime() {
-        return startTime;
+    @SuppressWarnings("unused")
+    private void setId(Integer id) {
+        this.id = id;
     }
 
-    public void setStartTime(DateTime startTime) {
-        this.startTime = startTime;
+    @NotNull
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 
     public ServiceType getServiceType() {
@@ -66,51 +91,63 @@ public class Service implements Serializable {
         this.serviceType = serviceType;
     }
 
-    public int getCorrelation() {
-        return correlation;
+    public Repetition getRepetition() {
+        return repetition;
     }
 
-    public void setCorrelation(int correlation) {
-        this.correlation = correlation;
+    public Integer getRepetitionType() {
+        return (repetition != null) ? repetition.getType() : null;
     }
 
-    public List<Schedule> getSchedules() {
-        return schedules;
+    public void setRepetition(Repetition repetition) {
+        this.repetition = repetition;
     }
 
-    public void setSchedules(List<Schedule> scheduleList) {
-        schedules = scheduleList;
+    public void setRepetition(int type) {
+        this.repetition = Repetition.fromInt(type);
     }
 
-    public void addSchedule(Schedule schedule) {
-        schedules.add(schedule);
+    public List<TimeSlot> getTimeSlots() {
+        if (timeSlots == null) {
+            timeSlots = new ArrayList<>();
+        }
+        return timeSlots;
     }
 
-    public int getId() {
-        return id;
+    public void setTimeSlots(List<TimeSlot> timeSlots) {
+        this.timeSlots = timeSlots;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Timestamp getStartTimestamp() {
-        return (startTime != null) ? new Timestamp(startTime.getMillis()) : null;
+    public void addTimeSlot(TimeSlot timeSlot) {
+        getTimeSlots().add(timeSlot);
     }
 
     public Integer getServiceTypeId() {
         return (serviceType != null) ? serviceType.getId() : null;
     }
 
-    public List<Schedule> getScheduleReplications() {
+    public DateTime getStartTime() {
+        return timeSlots.get(0).getStartDateTime();
+    }
 
-        List<Schedule> scheduleList = new ArrayList<>();
-        for (Schedule schedule : this.schedules) {
-            scheduleList.add(schedule.replicate());
+    public DateTime getEndTime() {
+
+        int size = timeSlots.size();
+        DateTime time = (size > 1) ? timeSlots.get(size - 1).getStartDateTime() : getStartTime();
+        int minutes = serviceType.getDuration();
+
+        return time.plusMillis(minutes * 60 * 1000);
+    }
+
+    public TimeSlot getLastTimeSlot() {
+        return (timeSlots.isEmpty()) ? null : timeSlots.get(timeSlots.size() - 1);
+    }
+
+    public void updateTimeSlots() {
+
+        for(TimeSlot timeSlot : timeSlots) {
+            timeSlot.setService(this);
         }
-
-        return scheduleList;
     }
 
 }

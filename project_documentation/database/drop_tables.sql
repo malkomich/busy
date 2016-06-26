@@ -10,19 +10,11 @@ DROP TABLE IF EXISTS booking;
 DROP TABLE IF EXISTS schedule;
 DROP SEQUENCE IF EXISTS schedule_seq;
 
+DROP TABLE IF EXISTS time_slot;
+DROP SEQUENCE IF EXISTS time_slot_seq;
+
 DROP TABLE IF EXISTS service;
 DROP SEQUENCE IF EXISTS service_seq;
-
-/* Deprecated */
-DROP TABLE IF EXISTS hour_schedule;
-DROP SEQUENCE IF EXISTS hour_schedule_seq;
-DROP TABLE IF EXISTS day_schedule;
-DROP SEQUENCE IF EXISTS day_schedule_seq;
-DROP TABLE IF EXISTS week_schedule;
-DROP SEQUENCE IF EXISTS week_schedule_seq;
-DROP TABLE IF EXISTS year_schedule;
-DROP SEQUENCE IF EXISTS year_schedule_seq;
-/* --- */
 
 DROP TABLE IF EXISTS service_type;
 DROP SEQUENCE IF EXISTS service_type_seq;

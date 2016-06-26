@@ -53,7 +53,7 @@ public class ServiceType implements Serializable {
         this.company = company;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

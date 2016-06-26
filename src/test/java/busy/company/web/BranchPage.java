@@ -64,12 +64,11 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_TYPE_FORM_DURATION_SELECTOR = "#duration";
 
     private static final String SERVICE_FORM_SELECTOR = ".service-form";
-    private static final String SERVICE_FORM_START_TIME = "#service-start-time";
-    private static final String SERVICE_FORM_ROLE_DROPDOWN = "#roles-select + .ms-parent > button.ms-choice";
+    private static final String SERVICE_FORM_START_TIME = ".service-start-time";
+    private static final String SERVICE_FORM_ROLE_DROPDOWN = ".roles-select + .ms-parent > button.ms-choice";
     private static final String SERVICE_FORM_ROLE_LIST = ".ms-drop > ul";
-    private static final String SERVICE_FORM_STYPE = "#service-type";
-    private static final String SERVICE_FORM_REPETITION_TYPE = "#service-repetition-type";
-    private static final String SERVICE_FORM_REPETITION_DATE = "#service-repetition-date";
+    private static final String SERVICE_FORM_STYPE = ".service-type";
+    private static final String SERVICE_FORM_REPETITION_TYPE = ".service-repetition-type";
 
     private static final String MESSAGE_SELECTOR = "#infoMessage";
     private static final String ERROR_SELECTOR = "span.error";
@@ -292,13 +291,6 @@ public class BranchPage extends BusyPage {
         return this;
     }
 
-    public BranchPage setRepetitionDate(DateTime date, MessageSource messageSource) {
-
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MM/dd/yyyy");
-        fill(SERVICE_FORM_REPETITION_DATE).with(dtfOut.print(date));
-        return this;
-    }
-
     public boolean errorShown(int formType) {
 
         return !find(ERROR_SELECTOR).isEmpty();
@@ -318,21 +310,23 @@ public class BranchPage extends BusyPage {
         return !eventList.find(EVENT_SELECTOR).isEmpty();
     }
 
-    public boolean serviceRepeated(DateTime servDate, String repetitionTmp, DateTime repDate) {
+    public boolean serviceRepeated(DateTime servDate, String repetitionTmp) {
 
         Repetition repetition = parseRepetition(repetitionTmp);
 
         List<Integer> repeatedDayList = new ArrayList<>();
+        
+        DateTime lastDayOfMonth = servDate.dayOfMonth().withMaximumValue();
 
         switch (repetition) {
             case DAILY:
-                while (servDate.isBefore(repDate)) {
+                while (servDate.isBefore(lastDayOfMonth)) {
                     repeatedDayList.add(servDate.getDayOfMonth());
                     servDate = servDate.plusDays(1);
                 }
                 break;
             case WEEKLY:
-                while (servDate.isBefore(repDate)) {
+                while (servDate.isBefore(lastDayOfMonth)) {
                     repeatedDayList.add(servDate.getDayOfMonth());
                     servDate = servDate.plusDays(7);
                 }
