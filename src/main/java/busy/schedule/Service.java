@@ -58,6 +58,7 @@ public class Service implements Serializable {
     private int id;
     private LocalDate date;
 
+    @NotNull(message = "{schedule.service.service_type.empty}")
     private ServiceType serviceType;
     private Repetition repetition;
 

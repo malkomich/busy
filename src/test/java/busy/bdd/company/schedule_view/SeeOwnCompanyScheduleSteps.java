@@ -24,8 +24,9 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
 
     final Logger log = LoggerFactory.getLogger(SeeOwnCompanyScheduleSteps.class);
 
-    private static final String INSERT_SERVICE = "INSERT INTO service(start_time, service_type_id) ";
-    private static final String INSERT_SCHEDULE = "INSERT INTO schedule(service_id, role_id) ";
+    private static final String INSERT_SERVICE = "INSERT INTO service(service_type_id, repetition_type) ";
+    private static final String INSERT_TIMESLOT = "INSERT INTO time_slot(start_time, service_id) ";
+    private static final String INSERT_SCHEDULE = "INSERT INTO schedule(time_slot_id, role_id) ";
     private static final String INSERT_BOOKING = "INSERT INTO booking(person_id, schedule_id) ";
 
     @Page
@@ -86,22 +87,25 @@ public class SeeOwnCompanyScheduleSteps extends AbstractFunctionalTest {
         String date1 = dtfOut.print(now);
         String date2 = dtfOut.print(now.plusHours(2));
 
-        String query =
-            INSERT_SERVICE + "VALUES('" + date1 + "',(SELECT id FROM service_type " + "WHERE name='Engineer'));"
+        String query = INSERT_SERVICE + "VALUES((SELECT id FROM service_type WHERE name='Engineer'), 0);"
 
-                + INSERT_SERVICE + "VALUES('" + date2 + "',(SELECT id FROM service_type WHERE name='Engineer'));"
+            + INSERT_TIMESLOT + "VALUES('" + date1
+            + "', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Engineer')));"
+            
+            + INSERT_TIMESLOT + "VALUES('" + date2
+            + "', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Engineer')));"
 
-                + INSERT_SCHEDULE + "VALUES((SELECT id FROM service WHERE start_time='" + date1 + "'),"
-                + "(SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));"
+            + INSERT_SCHEDULE + "VALUES((SELECT id FROM time_slot WHERE start_time='" + date1 + "'),"
+            + "(SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));"
 
-                + INSERT_SCHEDULE + "VALUES((SELECT id FROM service WHERE start_time='" + date2 + "'),"
-                + "(SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));"
+            + INSERT_SCHEDULE + "VALUES((SELECT id FROM time_slot WHERE start_time='" + date2 + "'),"
+            + "(SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));"
 
-                + INSERT_BOOKING + "VALUES((SELECT id FROM person WHERE email='user1@domain.com'), (SELECT "
-                + "id FROM schedule WHERE service_id=(SELECT id FROM service WHERE start_time='" + date1 + "')));"
+            + INSERT_BOOKING + "VALUES((SELECT id FROM person WHERE email='user1@domain.com'), (SELECT "
+            + "id FROM schedule WHERE time_slot_id=(SELECT id FROM time_slot WHERE start_time='" + date1 + "')));"
 
-                + INSERT_BOOKING + "VALUES((SELECT id FROM person WHERE email='user2@domain.com'), (SELECT "
-                + "id FROM schedule WHERE service_id=(SELECT id FROM service WHERE start_time='" + date2 + "')));";
+            + INSERT_BOOKING + "VALUES((SELECT id FROM person WHERE email='user2@domain.com'), (SELECT "
+            + "id FROM schedule WHERE time_slot_id=(SELECT id FROM time_slot WHERE start_time='" + date2 + "')));";
 
         template.execute(query);
     }
