@@ -94,29 +94,28 @@ public class ScheduleController extends BusyController {
     }
 
     /**
-     * Request to get all bookings made between the given dates in the specific
-     * branch
+     * Request to get all bookings made between the given dates in the specific branch
      *
      * @param roleIdTmp
      *            the role attached to the requested bookings
      * @param fromTmp
-     *            the initial instant in milliseconds of the period in which
-     *            find bookings
+     *            the initial instant in milliseconds of the period in which find bookings
      * @param toTmp
-     *            the final instant in milliseconds of the period in which find
-     *            bookings
-     * @param offSetMinutesTmp
-     *            the offset from UTC in milliseconds of the dates received
+     *            the final instant in milliseconds of the period in which find bookings
+     * @param offSetFromTmp
+     *            the offset from UTC in milliseconds of the initial instant
+     * @param offSetToTmp
+     *            the offset from UTC in milliseconds of the final instant
      * @param model
      *            Spring model instance
      * @return The list of resultant bookings in JSON format
      */
     @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
     public @ResponseBody String getMonthBookings(@RequestParam(value = "role", required = true) String roleIdTmp,
-            @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
-            @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
-            @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
-            @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
+        @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
+        @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
+        @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
+        @RequestParam(value = PARAM_DATE_OFFSET_TO, required = true) String offSetToTmp, Model model) {
 
         long from = Long.parseLong(fromTmp);
         long to = Long.parseLong(toTmp);
@@ -197,8 +196,6 @@ public class ScheduleController extends BusyController {
      *            the date of the services to modify or create
      * @param model
      *            Spring Model instance
-     * @param locale
-     *            current locale of the browser
      * @return The JSP view of the dialog form
      */
     @RequestMapping(value = PATH_SERVICES_FORM, method = RequestMethod.GET)
@@ -246,8 +243,6 @@ public class ScheduleController extends BusyController {
      *
      * @param form
      *            form with the services data
-     * @param index
-     *            index of the service to clone
      * @param result
      *            state of the parsed form
      * @param model
@@ -256,7 +251,7 @@ public class ScheduleController extends BusyController {
      */
     @RequestMapping(value = PATH_SERVICES_FORM_NEW, method = RequestMethod.POST)
     public String newService(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
-            Model model) {
+        Model model) {
 
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
@@ -271,8 +266,7 @@ public class ScheduleController extends BusyController {
     }
 
     /**
-     * Tries to save the services from the input form values, validating them
-     * previously.
+     * Tries to save the services from the input form values, validating them previously.
      * 
      * @param form
      *            form with the services to save
@@ -284,7 +278,7 @@ public class ScheduleController extends BusyController {
      */
     @RequestMapping(value = PATH_SERVICES_FORM_SAVE, method = RequestMethod.POST)
     public String saveServices(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
-            Model model) {
+        Model model) {
 
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
@@ -297,9 +291,20 @@ public class ScheduleController extends BusyController {
         return "redirect:" + PATH_SCHEDULE + role.getId();
     }
 
+    /**
+     * Adds a new time slot item to the services form
+     * 
+     * @param form
+     *            form with the services data
+     * @param result
+     *            state of the parsed form
+     * @param model
+     *            Spring model instance
+     * @return The service form dialog view with a new time slot row
+     */
     @RequestMapping(value = PATH_SERVICES_FORM_ADD_TIMESLOT, method = RequestMethod.POST)
     public String addTimeslot(@ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result,
-            Model model) {
+        Model model) {
 
         if (result.hasErrors()) {
             return SERVICE_FORM_PAGE;
@@ -307,11 +312,11 @@ public class ScheduleController extends BusyController {
 
         TimeSlot lastTimeSlot = form.getLastService().getLastTimeSlot();
         int duration = form.getLastService().getServiceType().getDuration();
-        
+
         TimeSlot newTimeSlot = new TimeSlot();
         newTimeSlot.setStartTime(lastTimeSlot.getStartDateTime().plusMinutes(duration));
         newTimeSlot.setSchedules(lastTimeSlot.getSchedules());
-        
+
         form.getLastService().addTimeSlot(newTimeSlot);
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
