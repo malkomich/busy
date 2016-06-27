@@ -45,28 +45,28 @@ import busy.util.SecureSetter;
 @Repository
 public class CompanyDaoImpl implements CompanyDao {
 
-    private static final String SQL_SELECT =
-            "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID + "," + TRADE_NAME + "," + BUSINESS_NAME
-                    + "," + EMAIL + "," + CIF + "," + CREATE_DATE + "," + ACTIVE + "," + TABLE_CATEGORY + "." + ID
-                    + " AS " + ALIAS_CATEGORY_ID + "," + NAME + " FROM " + TABLE_COMPANY + " LEFT JOIN "
-                    + TABLE_CATEGORY + " ON " + TABLE_COMPANY + "." + CATEGORYID + "=" + TABLE_CATEGORY + "." + ID;
+    private static final String SQL_SELECT = "SELECT " + TABLE_COMPANY + "." + ID + " AS " + ALIAS_COMPANY_ID + ","
+        + TRADE_NAME + "," + BUSINESS_NAME + "," + EMAIL + "," + CIF + "," + CREATE_DATE + "," + ACTIVE + ","
+        + TABLE_CATEGORY + "." + ID + " AS " + ALIAS_CATEGORY_ID + "," + NAME + " FROM " + TABLE_COMPANY + " LEFT JOIN "
+        + TABLE_CATEGORY + " ON " + TABLE_COMPANY + "." + CATEGORYID + "=" + TABLE_CATEGORY + "." + ID;
 
     private static final String SQL_SELECT_ALL = SQL_SELECT + " ORDER BY " + CREATE_DATE;
 
     private static final String SQL_SELECT_BY_ID = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + ID + "= ?";
 
     private static final String SQL_SELECT_BY_BUSINESS_NAME =
-            SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + BUSINESS_NAME + "= ?";
+        SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + BUSINESS_NAME + "= ?";
 
     private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + EMAIL + "= ?";
 
     private static final String SQL_SELECT_BY_CIF = SQL_SELECT + " WHERE " + TABLE_COMPANY + "." + CIF + "= ?";
 
-    private static final String SQL_SELECT_ACTIVE_BY_PARTIAL_NAME = SQL_SELECT + " WHERE " + ACTIVE + "=true AND "
-            + TABLE_COMPANY + "." + TRADE_NAME + " LIKE ? OR " + TABLE_COMPANY + "." + BUSINESS_NAME + " LIKE ?";
+    private static final String SQL_SELECT_ACTIVE_BY_PARTIAL_NAME =
+        SQL_SELECT + " WHERE " + ACTIVE + "=true AND ( UPPER(" + TABLE_COMPANY + "." + TRADE_NAME
+            + ") LIKE UPPER(?) OR UPPER(" + TABLE_COMPANY + "." + BUSINESS_NAME + ") LIKE UPPER(?))";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_COMPANY + " SET " + TRADE_NAME + "= ?," + BUSINESS_NAME
-            + "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
+        + "= ?," + EMAIL + "= ?, " + CIF + "= ?," + ACTIVE + "= ?," + CATEGORYID + "= ? " + "WHERE " + ID + "= ?";
 
     private static final String SQL_COUNT_ALL = "SELECT COUNT(*) FROM (" + SQL_SELECT + ") AS countTable";
 
@@ -95,7 +95,7 @@ public class CompanyDaoImpl implements CompanyDao {
         if (company.getId() > 0) {
 
             jdbcTemplate.update(SQL_UPDATE, company.getTradeName(), company.getBusinessName(), company.getEmail(),
-                    company.getCif(), company.isActive(), company.getCategoryId(), company.getId());
+                company.getCif(), company.isActive(), company.getCategoryId(), company.getId());
 
         } else {
 
@@ -199,8 +199,8 @@ public class CompanyDaoImpl implements CompanyDao {
     @Override
     public List<Company> findActivesByPartialName(String partialName) {
 
-        return jdbcTemplate.query(SQL_SELECT_ACTIVE_BY_PARTIAL_NAME, new CompanyRowMapper(), partialName + "%",
-                partialName + "%");
+        return jdbcTemplate.query(SQL_SELECT_ACTIVE_BY_PARTIAL_NAME, new CompanyRowMapper(), "%" + partialName + "%",
+            "%" + partialName + "%");
     }
 
     /*
