@@ -30,16 +30,19 @@
     <div class="container">
       <div class="content">
 
-        <!-- Section selector -->
         <div class="row">
+
+          <!-- Section selector -->
           <div class="col-sm-3 col-xs-3">
             <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button" data-toggle="collapse" data-target="#role-menu"
               aria-expanded="false" aria-controls="#role-menu">
-              <span th:text="${username}"></span>
+              <span th:unless="${role}" th:text="${username}"></span>
+              <span th:if="${role}" th:text="${role.branch.company.tradeName}"></span>
             </button>
             <div class="role-select-menu collapse" id="role-menu">
               <div class="role-select-menu-list">
-                <a href="#" class="role-select-menu-item"> <span class="role-select-menu-item-text" th:text="${username}"></span>
+                <a href="/" class="role-select-menu-item">
+                  <span class="role-select-menu-item-text" th:text="${username}"></span>
                 </a>
                 <div th:each="roleItem : ${roleList}">
                   <a th:href="@{/schedule/{roleId}(roleId=${roleItem.id})}" class="role-select-menu-item">
@@ -50,6 +53,7 @@
             </div>
             <!-- .role-select-menu -->
           </div>
+
           <!-- .col -->
           <div class="col-xs-9 pull-right">
             <div class="table-list-filters pull-right">

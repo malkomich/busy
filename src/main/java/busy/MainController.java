@@ -57,6 +57,12 @@ public class MainController extends BusyController {
     @RequestMapping(value = PATH_ROOT, method = RequestMethod.GET)
     public String index(Model model, HttpSession session) {
 
+        // Assures that no role is selected
+        if(model.containsAttribute(ROLE_SESSION)) {
+
+            model.asMap().remove(ROLE_SESSION);
+        }
+
         if (model.containsAttribute(USER_SESSION) && ((User) model.asMap().get(USER_SESSION) != null)) {
 
             User user = (User) model.asMap().get(USER_SESSION);
