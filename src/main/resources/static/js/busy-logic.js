@@ -97,8 +97,21 @@ $(function() {
     $('.search-bar').click(function() {
         $('.search-bar-text', this).focus();
     });
-    
+
     setServiceTypesListeners();
+
+    $('.profile-menu').find('li').each(function() {
+      $(this).click(function() {
+
+        // Update menu items style
+        $('.profile-menu').find('li').removeClass('active');
+        $(this).addClass('active');
+
+        // Show section
+        $('.section').hide();
+        $($(this).find('a').attr('data-content')).fadeIn();
+      })
+    });
 
 });
 
@@ -117,7 +130,7 @@ function setServiceTypesListeners() {
 function showServiceTypeForm() {
 
     var sTypeId = $(this).attr('sTypeId');
-    
+
     $.get("/service-type/save", {
         id : sTypeId
     }, function(data) {
@@ -131,27 +144,27 @@ function saveServiceType() {
     var form = $('#serviceTypeForm');
     $.post("/service-type/save", form.serialize(), function(data) {
         var modalContainer = $('#modalForm');
-        
+
         if ($(data).is("form")) {
             $('.modal-body', modalContainer).html(data);
             modalContainer.modal('show');
         }
-        
+
         if($(data).is("div")) {
-            var collapseContainer = $('#service-types-collapse'); 
+            var collapseContainer = $('#service-types-collapse');
             collapseContainer.html(data);
             collapseContainer.collapse('show');
             setServiceTypesListeners();
             modalContainer.modal('hide')
         }
-        
+
     });
 }
 
 function deleteServiceType() {
 
     var sTypeId = $(this).attr('sTypeId');
-    
+
     var menuItem = $(this).closest('.select-menu-item');
     $.post("/service-type/delete", {
         id : sTypeId

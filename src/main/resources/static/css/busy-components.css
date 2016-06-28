@@ -179,6 +179,10 @@ to {
     display: none;
 }
 
+.section.active {
+    display: block;
+}
+
 @media screen and (max-width: 991px) {
     .section {
         margin-top: 30px;

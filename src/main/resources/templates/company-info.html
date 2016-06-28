@@ -36,7 +36,8 @@
 
                 <div class="profile-main">
                   <div class="profile-main-title" th:text="${company.tradeName}"></div>
-                  <div class="profile-main-subtitle" th:text="${company.category.name}"></div>
+                  <div class="profile-main-subtitle" th:text="${company.category.name}" th:if="${company.category}"></div>
+                  <div class="profile-main-subtitle" th:utext="#{company.category.default}" th:unless="${company.category}"></div>
                 </div>
 
                 <div class="profile-actions">
@@ -50,13 +51,13 @@
               <div class="profile-menu col-md-12 col-xs-8">
                 <ul class="nav">
                   <li class="active">
-                    <a href="#">
+                    <a href="#content" th:attr="data-content='#profile-content'">
                       <i class="glyphicon glyphicon-eye-open"></i>
                       <span th:text="#{company.info.nav}"></span>
                     </a>
                   </li>
                   <li>
-                    <a href="#">
+                    <a href="#content" th:attr="data-content='#calendar-content'">
                       <i class="glyphicon glyphicon-calendar"></i>
                       <span th:text="#{company.schedule.nav}"></span>
                     </a>
@@ -81,40 +82,18 @@
             <!-- .profile-sidebar -->
           </div>
           <!-- .col -->
-          <div class="col-md-9 col-xs-12">
-            <div class="profile-content">
-              <table class="table table-user-information">
-                <tbody>
-                  <tr>
-                    <td th:text="#{company.info.trade_name} + ':'"></td>
-                    <td th:text="${company.tradeName}"></td>
-                  </tr>
-                  <tr>
-                    <td th:text="#{company.info.business_name} + ':'"></td>
-                    <td th:text="${company.businessName}"></td>
-                  </tr>
-                  <tr>
-                    <td th:text="#{company.info.email} + ':'"></td>
-                    <td>
-                      <a href="mailto:${company.email}" th:text="${company.email}"></a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td th:text="#{company.info.cif} + ':'"></td>
-                    <td th:text="${company.cif}"></td>
-                  </tr>
-                  <tr>
-                    <td th:text="#{company.info.create_date} + ':'"></td>
-                    <td th:text="${#dates.format(company.createDate.toDate(), 'dd MMMM yyyy')}"></td>
-                  </tr>
-                  <tr>
-                    <td th:text="#{company.info.category} + ':'"></td>
-                    <td th:text="${company.category.name}"></td>
-                  </tr>
-                </tbody>
-              </table>
+          <div class="col-md-9 col-xs-12" id="content">
+
+            <div class="section active" id="profile-content">
+              <div th:include="profile"></div>
             </div>
-            <!-- profile-content -->
+            <!-- .section -->
+
+            <div class="section" id="calendar-content">
+              <div th:include="calendar"></div>
+            </div>
+            <!-- .section -->
+
           </div>
           <!-- .col -->
         </div>
