@@ -32,6 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
@@ -63,7 +64,7 @@ public class BranchDaoImpl implements BranchDao {
     private static final String SQL_SELECT_BY_ID = BRANCH_SELECT_QUERY + " WHERE " + TABLE_BRANCH + "." + ID + "=?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_BRANCH + " SET " + COMPANYID + "= ?," + ADDRID + "= ?,"
-            + HEADQUARTERS + "= ?, " + PHONE + "= ? " + "WHERE " + ID + "= ?";
+        + HEADQUARTERS + "= ?, " + PHONE + "= ? " + "WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -90,7 +91,7 @@ public class BranchDaoImpl implements BranchDao {
         if (branch.getId() > 0) {
 
             jdbcTemplate.update(SQL_UPDATE, branch.getCompanyId(), branch.getAddressId(), branch.isHeadquarters(),
-                    branch.getPhone(), branch.getId());
+                branch.getPhone(), branch.getId());
 
         } else {
 
@@ -180,6 +181,16 @@ public class BranchDaoImpl implements BranchDao {
             return branch;
         }
 
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.company.BranchDao#findByCompany(busy.company.Company)
+     */
+    @Override
+    public List<Branch> findByCompany(Company company) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

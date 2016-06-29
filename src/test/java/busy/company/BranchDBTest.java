@@ -1,5 +1,10 @@
 package busy.company;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
+import java.util.List;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +44,8 @@ public class BranchDBTest extends AbstractDBTest {
         company = new Company();
         SecureSetter.setId(company, 1);
     }
+
+    // Write operation tests
 
     @Test(expected = DataIntegrityViolationException.class)
     public void insertWithCompanyNull() {
@@ -132,5 +139,30 @@ public class BranchDBTest extends AbstractDBTest {
         branch.setAddress(address);
 
         repository.save(branch);
+    }
+
+    // Read operation tests
+
+    @Test(expected = IllegalArgumentException.class)
+    public void findByNullCompany() {
+
+        repository.findByCompany(null);
+    }
+
+    @Test
+    public void findByInvalidCompany() {
+
+        SecureSetter.setId(company, INVALID_ID);
+        List<Branch> branches = repository.findByCompany(company);
+
+        assertEquals(2, branches.size());
+    }
+
+    @Test
+    public void findByCompanySuccessfully() {
+
+        List<Branch> branches = repository.findByCompany(company);
+
+        assertFalse(branches.isEmpty());
     }
 }
