@@ -1,5 +1,3 @@
-const
-BOOKINGS_PATH = "/get_month_bookings";
 
 var calendar;
 
@@ -8,7 +6,7 @@ $(function() {
     var date = new Date();
 
     options = {
-        events_source : BOOKINGS_PATH + "?role=" + roleId,
+        events_source : EVENTS_PATH + "?role=" + roleId,
         view : 'month',
         tmpl_path : '/tmpls/',
         tmpl_cache : false,
@@ -72,19 +70,21 @@ function setupListeners() {
  */
 function openServiceForm(date) {
 
-    calendar.options.day = date;
+  calendar.options.day = date;
 
-    $.get("/service_form", {
-        date : calendar.options.day
+  if(DBL_CLICK_PATH) {
+    $.get(DBL_CLICK_PATH, {
+      date : calendar.options.day
     }, function(data) {
 
-        if ($(data).is("p")) {
-            messageModal($(data).text());
+      if ($(data).is("p")) {
+        messageModal($(data).text());
 
-        } else if ($(data).is("form")) {
-            var modalContainer = $('#modalForm');
-            $('.modal-content', modalContainer).html(data);
-            modalContainer.modal();
-        }
+      } else if ($(data).is("form")) {
+        var modalContainer = $('#modalForm');
+        $('.modal-content', modalContainer).html(data);
+        modalContainer.modal();
+      }
     });
+  }
 }

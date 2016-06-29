@@ -57,7 +57,7 @@ public class ScheduleController extends BusyController {
     /**
      * URL Paths.
      */
-    private static final String PATH_BOOKINGS_OF_MONTH = "/get_month_bookings";
+    private static final String PATH_BOOKINGS_OF_MONTH = "/get_month_services";
     private static final String PATH_SERVICES_FORM = "/service_form";
     private static final String PATH_SERVICES_FORM_NEW = "/service_form/new";
     private static final String PATH_SERVICES_FORM_SAVE = "/service_form/save";

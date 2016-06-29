@@ -22,6 +22,8 @@
     <link th:href="@{/css/forms.css}" rel="stylesheet"></link>
     <link th:href="@{/css/multiple-select.css}" rel="stylesheet"/>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
   </head>
 
   <body>
@@ -30,9 +32,8 @@
     <div class="container">
       <div class="content">
 
+        <!-- Section selector -->
         <div class="row">
-
-          <!-- Section selector -->
           <div class="col-sm-3 col-xs-3">
             <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button" data-toggle="collapse" data-target="#role-menu"
               aria-expanded="false" aria-controls="#role-menu">
@@ -53,7 +54,6 @@
             </div>
             <!-- .role-select-menu -->
           </div>
-
           <!-- .col -->
           <div class="col-xs-9 pull-right">
             <div class="table-list-filters pull-right">
@@ -120,10 +120,12 @@
     </div>
 
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
     <script type="text/javascript" th:inline="javascript">
+      const
+        EVENTS_PATH = "/get_month_services",
+        DBL_CLICK_PATH = "/service_form";
+
       /*<![CDATA[*/
       var message = /*[[${messageFromController}]]*/ null;
       var roleId = /*[[${role.id}]]*/ null;
@@ -132,10 +134,6 @@
     <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script type="text/javascript" th:src="@{/js/calendar.js}"></script>
-    <script type="text/javascript" th:src="@{/js/language/es-ES.js}"></script>
-    <script type="text/javascript" th:src="@{/js/date.js}"></script>
-    <script type="text/javascript" th:src="@{/js/app.js}"></script>
   </body>
 
 </html>

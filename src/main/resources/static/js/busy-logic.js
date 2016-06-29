@@ -100,19 +100,6 @@ $(function() {
 
     setServiceTypesListeners();
 
-    $('.profile-menu').find('li').each(function() {
-      $(this).click(function() {
-
-        // Update menu items style
-        $('.profile-menu').find('li').removeClass('active');
-        $(this).addClass('active');
-
-        // Show section
-        $('.section').hide();
-        $($(this).find('a').attr('data-content')).fadeIn();
-      })
-    });
-
 });
 
 function messageModal(message) {

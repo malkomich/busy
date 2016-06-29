@@ -1,0 +1,15 @@
+<div>
+  <div class="row">
+    <div class="col-sm-4">
+      <a href="#" th:each="branch : ${branches}">
+        <div class="thumbnail">
+          <img th:src="@{/img/branch_default}">
+          <div class="caption">
+            <p th:text="${branch.address}"></p>
+            <p th:text="${branch.phone}"></p>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
