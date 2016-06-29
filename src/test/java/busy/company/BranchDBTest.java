@@ -1,7 +1,7 @@
 package busy.company;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
@@ -143,26 +144,29 @@ public class BranchDBTest extends AbstractDBTest {
 
     // Read operation tests
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidDataAccessApiUsageException.class)
+    @DatabaseSetup("../company/branchSet.xml")
     public void findByNullCompany() {
 
         repository.findByCompany(null);
     }
 
     @Test
+    @DatabaseSetup("../company/branchSet.xml")
     public void findByInvalidCompany() {
 
         SecureSetter.setId(company, INVALID_ID);
         List<Branch> branches = repository.findByCompany(company);
 
-        assertEquals(2, branches.size());
+        assertTrue(branches.isEmpty());
     }
 
     @Test
+    @DatabaseSetup("../company/branchSet.xml")
     public void findByCompanySuccessfully() {
 
         List<Branch> branches = repository.findByCompany(company);
 
-        assertFalse(branches.isEmpty());
+        assertEquals(2, branches.size());
     }
 }

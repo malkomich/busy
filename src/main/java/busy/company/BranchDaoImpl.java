@@ -63,6 +63,8 @@ public class BranchDaoImpl implements BranchDao {
 
     private static final String SQL_SELECT_BY_ID = BRANCH_SELECT_QUERY + " WHERE " + TABLE_BRANCH + "." + ID + "=?";
 
+    private static final String SQL_SELECT_BY_COMPANY = BRANCH_SELECT_QUERY + " WHERE " + ALIAS_COMPANY_ID + "=?";
+
     private static final String SQL_UPDATE = "UPDATE " + TABLE_BRANCH + " SET " + COMPANYID + "= ?," + ADDRID + "= ?,"
         + HEADQUARTERS + "= ?, " + PHONE + "= ? " + "WHERE " + ID + "= ?";
 
@@ -123,6 +125,12 @@ public class BranchDaoImpl implements BranchDao {
 
     private class BranchRowMapper implements RowMapper<Branch> {
 
+        private Company company;
+
+        public void setCompany(Company company) {
+            this.company = company;
+        }
+
         @Override
         public Branch mapRow(ResultSet rs, int rowNum) throws SQLException {
 
@@ -130,24 +138,26 @@ public class BranchDaoImpl implements BranchDao {
             SecureSetter.setId(branch, rs.getInt(ALIAS_BRANCH_ID));
 
             // Parse company
-            Company company = new Company();
-            SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
-            company.setTradeName(rs.getString(TRADE_NAME));
-            company.setBusinessName(rs.getString(BUSINESS_NAME));
-            company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
-            company.setCif(rs.getString(CIF));
-            SecureSetter.setAttribute(company, "setActive", Boolean.class, rs.getBoolean(ACTIVE));
-            DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
-            company.setCreateDate(createDate);
+            if (company == null) {
+                company = new Company();
+                SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
+                company.setTradeName(rs.getString(TRADE_NAME));
+                company.setBusinessName(rs.getString(BUSINESS_NAME));
+                company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
+                company.setCif(rs.getString(CIF));
+                SecureSetter.setAttribute(company, "setActive", Boolean.class, rs.getBoolean(ACTIVE));
+                DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
+                company.setCreateDate(createDate);
 
-            Integer categoryId = 0;
-            if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
+                Integer categoryId = 0;
+                if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
 
-                Category category = new Category();
-                SecureSetter.setId(category, categoryId);
-                category.setName(rs.getString(ALIAS_CATEGORY_NAME));
+                    Category category = new Category();
+                    SecureSetter.setId(category, categoryId);
+                    category.setName(rs.getString(ALIAS_CATEGORY_NAME));
 
-                company.setCategory(category);
+                    company.setCategory(category);
+                }
             }
 
             branch.setCompany(company);
@@ -189,8 +199,15 @@ public class BranchDaoImpl implements BranchDao {
      */
     @Override
     public List<Branch> findByCompany(Company company) {
-        // TODO Auto-generated method stub
-        return null;
+
+        if (company == null) {
+            throw new IllegalArgumentException("The company cannot be null");
+        }
+
+        BranchRowMapper rowMapper = new BranchRowMapper();
+        rowMapper.setCompany(company);
+
+        return jdbcTemplate.query(SQL_SELECT_BY_COMPANY, new BranchRowMapper(), company.getId());
     }
 
 }
