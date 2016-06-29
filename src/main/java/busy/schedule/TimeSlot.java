@@ -23,7 +23,7 @@ public class TimeSlot implements Serializable {
     private Service service;
     private List<Schedule> schedules;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 

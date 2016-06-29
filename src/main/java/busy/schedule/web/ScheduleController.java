@@ -143,41 +143,49 @@ public class ScheduleController extends BusyController {
         for (Service service : serviceList) {
 
             Repetition repetitionType = service.getRepetition();
-            JSONObject serviceJSON;
+            ServiceType sType = service.getServiceType();
 
-            if (Repetition.NONE.equals(repetitionType)) {
+            for (TimeSlot timeSlot : service.getTimeSlots()) {
 
-                serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
-                    "event-info", service.getStartTime().getMillis(), service.getEndTime().getMillis());
-                jsonServices.put(serviceJSON);
+                JSONObject serviceJSON;
+                String id = timeSlot.getId().toString();
+                String name = sType.getName();
+                DateTime startTime = timeSlot.getStartDateTime();
+                DateTime endTime = startTime.plusMinutes(sType.getDuration());
 
-            } else if (Repetition.DAILY.equals(repetitionType)) {
+                if (Repetition.NONE.equals(repetitionType)) {
 
-                DateTime dateTime = fromDateTime;
-
-                while (dateTime.isBefore(toDateTime)) {
-                    serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
-                        "event-warning", service.getStartTime().withDate(dateTime.toLocalDate()).getMillis(),
-                        service.getEndTime().withDate(dateTime.toLocalDate()).getMillis());
+                    serviceJSON = getEvent(id, name, null, "event-info", startTime.getMillis(), endTime.getMillis());
                     jsonServices.put(serviceJSON);
 
-                    dateTime = dateTime.plusDays(1);
+                } else if (Repetition.DAILY.equals(repetitionType)) {
+
+                    DateTime dateTime = fromDateTime;
+
+                    while (dateTime.isBefore(toDateTime)) {
+                        serviceJSON = getEvent(id, name, null, "event-warning",
+                            startTime.withDate(dateTime.toLocalDate()).getMillis(),
+                            endTime.withDate(dateTime.toLocalDate()).getMillis());
+                        jsonServices.put(serviceJSON);
+
+                        dateTime = dateTime.plusDays(1);
+                    }
+
+                } else if (Repetition.WEEKLY.equals(repetitionType)) {
+
+                    int dayOfWeek = startTime.getDayOfWeek();
+                    DateTime dateTime = fromDateTime.withDayOfWeek(dayOfWeek);
+
+                    while (dateTime.isBefore(toDateTime)) {
+                        serviceJSON = getEvent(id, name, null, "event-warning",
+                            startTime.withDate(dateTime.toLocalDate()).getMillis(),
+                            endTime.withDate(dateTime.toLocalDate()).getMillis());
+                        jsonServices.put(serviceJSON);
+
+                        dateTime = dateTime.plusWeeks(1);
+                    }
+
                 }
-
-            } else if (Repetition.WEEKLY.equals(repetitionType)) {
-
-                int dayOfWeek = service.getStartTime().getDayOfWeek();
-                DateTime dateTime = fromDateTime.withDayOfWeek(dayOfWeek);
-
-                while (dateTime.isBefore(toDateTime)) {
-                    serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
-                        "event-warning", service.getStartTime().withDate(dateTime.toLocalDate()).getMillis(),
-                        service.getEndTime().withDate(dateTime.toLocalDate()).getMillis());
-                    jsonServices.put(serviceJSON);
-
-                    dateTime = dateTime.plusWeeks(1);
-                }
-
             }
         }
 
