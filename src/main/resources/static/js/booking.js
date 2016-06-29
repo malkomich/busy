@@ -38,7 +38,8 @@ function updateSection(section) {
       $.get(BRANCHES_PATH, {
         company_id : companyId
       }, function(data) {
-        $(section).html(data);
+        $('#loading-content').hide();
+        $(section).html(data).fadeIn();
       });
       break;
     default:

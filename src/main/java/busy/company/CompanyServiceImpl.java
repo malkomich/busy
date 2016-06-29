@@ -169,4 +169,12 @@ public class CompanyServiceImpl implements CompanyService {
         return companyDao.countAll();
     }
 
+    @Override
+    public List<Branch> findBranchesByCompanyId(int companyId) {
+
+        Company company = companyDao.findById(companyId);
+
+        return branchDao.findByCompany(company);
+    }
+
 }

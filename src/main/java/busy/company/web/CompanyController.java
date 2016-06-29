@@ -57,6 +57,7 @@ public class CompanyController extends BusyController {
     static final String COMPANY_REQUEST = "company";
     static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
     static final String SERVICE_TYPE_REQUEST = "serviceType";
+    static final String BRANCHES_REQUEST = "branches";
 
     /**
      * URL Paths.
@@ -70,6 +71,7 @@ public class CompanyController extends BusyController {
     private static final String PATH_SERVICE_TYPE_DELETE = "/service-type/delete";
     private static final String PATH_SERVICE_TYPE_SAVE = "/service-type/save";
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
+    private static final String PATH_GET_BRANCHES = "/get_branches";
 
     /**
      * JSP's
@@ -78,6 +80,7 @@ public class CompanyController extends BusyController {
     private static final String COMPANY_INFO_PAGE = "company-info";
 
     private static final String SERVICE_TYPE_FORM_PAGE = "service-type-form";
+    private static final String BRANCHES_FRAGMENT = "branches";
 
     @Autowired
     private CompanyService companyService;
@@ -155,8 +158,8 @@ public class CompanyController extends BusyController {
      */
     @RequestMapping(value = PATH_REGISTER_COMPANY, method = RequestMethod.POST)
     public String registerCompany(@ModelAttribute(REGISTER_COMPANY_REQUEST) @Valid CompanyForm form,
-            BindingResult result, RedirectAttributes redirectAttributes, WebRequest request, Model model, Locale locale,
-            HttpSession session) {
+        BindingResult result, RedirectAttributes redirectAttributes, WebRequest request, Model model, Locale locale,
+        HttpSession session) {
 
         RegisterCompanyValidator validator = new RegisterCompanyValidator(companyService);
 
@@ -205,7 +208,7 @@ public class CompanyController extends BusyController {
 
         String message = messageSource.getMessage("notification.message.company.pending", null, locale).trim();
         model.addAttribute(MESSAGE_REQUEST, message);
-        
+
         return "redirect:" + PATH_ROOT;
     }
 
@@ -232,7 +235,7 @@ public class CompanyController extends BusyController {
      */
     @RequestMapping(value = PATH_COMPANY_CHANGE_STATE, method = RequestMethod.POST)
     public void updateState(@RequestParam(value = "id", required = true) String companyId,
-            @RequestParam(value = "active", required = true) boolean active, WebRequest request) {
+        @RequestParam(value = "active", required = true) boolean active, WebRequest request) {
 
         Company company = companyService.findCompanyById(Integer.parseInt(companyId));
         SecureSetter.setAttribute(company, "setActive", Boolean.class, active);
@@ -240,7 +243,7 @@ public class CompanyController extends BusyController {
 
         Role manager = roleService.findCompanyManager(company);
         eventPublisher.publishEvent(
-                new OnUpdateCompanyStatus(company, manager.getUser(), request.getLocale(), request.getContextPath()));
+            new OnUpdateCompanyStatus(company, manager.getUser(), request.getLocale(), request.getContextPath()));
     }
 
     /**
@@ -252,7 +255,7 @@ public class CompanyController extends BusyController {
      */
     @RequestMapping(value = PATH_COMPANY_SEARCHES, method = RequestMethod.GET)
     public @ResponseBody List<Company>
-            getCompanySearches(@RequestParam(value = "partialName", required = true) String partialName) {
+        getCompanySearches(@RequestParam(value = "partialName", required = true) String partialName) {
 
         return companyService.findActiveCompaniesByPartialName(partialName);
     }
@@ -302,7 +305,7 @@ public class CompanyController extends BusyController {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = PATH_SERVICE_TYPE_SAVE, method = RequestMethod.POST)
     public String saveServiceType(@ModelAttribute(SERVICE_TYPE_FORM_REQUEST) @Valid ServiceTypeForm sTypeForm,
-            BindingResult result, Model model) {
+        BindingResult result, Model model) {
 
         Company company = ((Role) model.asMap().get(ROLE_SESSION)).getCompany();
 
@@ -318,7 +321,7 @@ public class CompanyController extends BusyController {
         }
 
         ServiceType sType =
-                (sTypeForm.getId() > 0) ? getServiceTypeFromModel(sTypeForm.getId(), model) : new ServiceType();
+            (sTypeForm.getId() > 0) ? getServiceTypeFromModel(sTypeForm.getId(), model) : new ServiceType();
 
         sType.setName(sTypeForm.getName());
         sType.setDescription(sTypeForm.getDescription());
@@ -348,7 +351,7 @@ public class CompanyController extends BusyController {
     @SuppressWarnings("unchecked")
     @RequestMapping(value = PATH_SERVICE_TYPE_DELETE, method = RequestMethod.POST)
     public @ResponseBody OperationResult deleteServiceType(@RequestParam(value = "id", required = true) String idTmp,
-            Model model) {
+        Model model) {
 
         int id = Integer.parseInt(idTmp);
         ServiceType sType = getServiceTypeFromModel(id, model);
@@ -389,6 +392,26 @@ public class CompanyController extends BusyController {
     public @ResponseBody <T> T returnModelObject(Model model, String objectKey) {
         T object = (T) model.asMap().get(SERVICE_TYPE_REQUEST);
         return object;
+    }
+
+    /**
+     * [GET] Branches view. It shows a list of branch offices of the company which ID is given in
+     * the HTTP request.
+     * 
+     * @param companyIdTmp
+     *            unique ID of the company
+     * @param model
+     *            Spring model instance
+     * @return The page with all branches for the company
+     */
+    @RequestMapping(value = PATH_GET_BRANCHES, method = RequestMethod.GET)
+    public String getBranches(@RequestParam("company_id") String companyIdTmp, Model model) {
+
+        int companyId = Integer.parseInt(companyIdTmp);
+        List<Branch> branches = companyService.findBranchesByCompanyId(companyId);
+        model.addAttribute(BRANCHES_REQUEST, branches);
+
+        return BRANCHES_FRAGMENT;
     }
 
 }

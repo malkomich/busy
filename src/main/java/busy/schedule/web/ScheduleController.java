@@ -57,7 +57,7 @@ public class ScheduleController extends BusyController {
     /**
      * URL Paths.
      */
-    private static final String PATH_BOOKINGS_OF_MONTH = "/get_month_services";
+    private static final String PATH_SERVICES_OF_MONTH = "/get_month_services";
     private static final String PATH_SERVICES_FORM = "/service_form";
     private static final String PATH_SERVICES_FORM_NEW = "/service_form/new";
     private static final String PATH_SERVICES_FORM_SAVE = "/service_form/save";
@@ -108,8 +108,8 @@ public class ScheduleController extends BusyController {
      *            Spring model instance
      * @return The list of resultant bookings in JSON format
      */
-    @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
-    public @ResponseBody String getMonthBookings(@RequestParam(value = "role", required = true) String roleIdTmp,
+    @RequestMapping(value = PATH_SERVICES_OF_MONTH, method = RequestMethod.GET)
+    public @ResponseBody String getMonthServices(@RequestParam(value = "role", required = true) String roleIdTmp,
         @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
         @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
         @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
