@@ -68,8 +68,8 @@ public class RoleDaoImpl implements RoleDao {
 
     private static final String SQL_SELECT_BY_USERID = ROLE_SELECT_QUERY + " WHERE " + TABLE_ROLE + "." + USERID + "=?";
 
-    private static final String SQL_SELECT_MANAGER_BY_COMPANY_ID =
-        ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_COMPANY_ID + "=?";
+    private static final String SQL_SELECT_MANAGER_BY_BRANCH_ID =
+        ROLE_SELECT_QUERY + " WHERE " + IS_MANAGER + "=true AND " + ALIAS_BRANCH_ID + "=?";
 
     private static final String SQL_SELECT_BY_ID = ROLE_SELECT_QUERY + " WHERE ";
 
@@ -143,11 +143,11 @@ public class RoleDaoImpl implements RoleDao {
      * @see busy.role.RoleDao#findManagerByCompany(busy.company.Company)
      */
     @Override
-    public Role findManagerByCompany(Company company) {
+    public Role findManagerOfBranch(Branch branch) {
 
         try {
 
-            return jdbcTemplate.queryForObject(SQL_SELECT_MANAGER_BY_COMPANY_ID, new RoleRowMapper(), company.getId());
+            return jdbcTemplate.queryForObject(SQL_SELECT_MANAGER_BY_BRANCH_ID, new RoleRowMapper(), branch.getId());
 
         } catch (EmptyResultDataAccessException e) {
 

@@ -35,4 +35,13 @@ public interface BranchDao {
      */
     List<Branch> findByCompany(Company company);
 
+    /**
+     * Gets the headquarters office of a given company.
+     * 
+     * @param company
+     *            company which headquarters is requested
+     * @return The resultant headquarters
+     */
+    Branch findHeadQuarters(Company company);
+
 }

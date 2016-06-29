@@ -58,6 +58,7 @@ public class CompanyController extends BusyController {
     static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
     static final String SERVICE_TYPE_REQUEST = "serviceType";
     static final String BRANCHES_REQUEST = "branches";
+    static final String SECTION_REQUEST = "companySection";
 
     /**
      * URL Paths.
@@ -72,6 +73,7 @@ public class CompanyController extends BusyController {
     private static final String PATH_SERVICE_TYPE_SAVE = "/service-type/save";
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
     private static final String PATH_GET_BRANCHES = "/get_branches";
+    private static final String PATH_BRANCH_DATA = "/get_branch_data";
 
     /**
      * JSP's
@@ -81,6 +83,7 @@ public class CompanyController extends BusyController {
 
     private static final String SERVICE_TYPE_FORM_PAGE = "service-type-form";
     private static final String BRANCHES_FRAGMENT = "branches";
+    private static final String CALENDAR_FRAGMENT = "calendar";
 
     @Autowired
     private CompanyService companyService;
@@ -400,18 +403,52 @@ public class CompanyController extends BusyController {
      * 
      * @param companyIdTmp
      *            unique ID of the company
+     * @param section
+     *            identifier of the section which are being requested
      * @param model
      *            Spring model instance
      * @return The page with all branches for the company
      */
     @RequestMapping(value = PATH_GET_BRANCHES, method = RequestMethod.GET)
-    public String getBranches(@RequestParam("company_id") String companyIdTmp, Model model) {
+    public String getBranches(@RequestParam("company_id") String companyIdTmp, @RequestParam("section") String section,
+        Model model) {
 
         int companyId = Integer.parseInt(companyIdTmp);
         List<Branch> branches = companyService.findBranchesByCompanyId(companyId);
         model.addAttribute(BRANCHES_REQUEST, branches);
+        model.addAttribute(SECTION_REQUEST, section);
 
         return BRANCHES_FRAGMENT;
+    }
+
+    /**
+     * [GET] Branch data view. It shows a different fragment of data from the requested branch
+     * office, depending the section which is being requested by the user.
+     * 
+     * @param branchIdTmp
+     *            unique ID of the branch
+     * @param section
+     *            identifier of the section which are being requested
+     * @param model
+     *            Spring model instance
+     * @return The page with the requested data of the branch office
+     */
+    @RequestMapping(value = PATH_BRANCH_DATA, method = RequestMethod.GET)
+    public String getBranchData(@RequestParam("branch_id") String branchIdTmp, @RequestParam("section") String section,
+        Model model) {
+
+        int branchId = Integer.parseInt(branchIdTmp);
+
+        Branch branch = companyService.findBranchById(branchId);
+
+        if (section.equals("booking")) {
+            Role role = roleService.findManagerOfBranch(branch);
+            model.addAttribute(ROLE_SESSION, role);
+
+            return CALENDAR_FRAGMENT;
+        }
+
+        return null;
     }
 
 }

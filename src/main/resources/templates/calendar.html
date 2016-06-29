@@ -18,6 +18,11 @@
 </div>
 <!-- .row -->
 
+<script type="text/javascript" th:inline="javascript">
+  /*<![CDATA[*/
+  var roleId = /*[[${role.id}]]*/ null;
+  /*]]>*/
+</script>
 <script type="text/javascript" th:src="@{/js/calendar.js}"></script>
 <script type="text/javascript" th:src="@{/js/language/es-ES.js}"></script>
 <script type="text/javascript" th:src="@{/js/date.js}"></script>

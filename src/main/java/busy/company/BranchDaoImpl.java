@@ -65,6 +65,8 @@ public class BranchDaoImpl implements BranchDao {
 
     private static final String SQL_SELECT_BY_COMPANY = BRANCH_SELECT_QUERY + " WHERE " + ALIAS_COMPANY_ID + "=?";
 
+    private static final String SQL_SELECT_HEADQUARTERS = SQL_SELECT_BY_COMPANY + " AND " + HEADQUARTERS + "='true'";
+
     private static final String SQL_UPDATE = "UPDATE " + TABLE_BRANCH + " SET " + COMPANYID + "= ?," + ADDRID + "= ?,"
         + HEADQUARTERS + "= ?, " + PHONE + "= ? " + "WHERE " + ID + "= ?";
 
@@ -119,6 +121,44 @@ public class BranchDaoImpl implements BranchDao {
 
         } catch (EmptyResultDataAccessException e) {
 
+            return null;
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.company.BranchDao#findByCompany(busy.company.Company)
+     */
+    @Override
+    public List<Branch> findByCompany(Company company) {
+
+        if (company == null) {
+            throw new IllegalArgumentException("The company cannot be null");
+        }
+
+        BranchRowMapper rowMapper = new BranchRowMapper();
+        rowMapper.setCompany(company);
+
+        return jdbcTemplate.query(SQL_SELECT_BY_COMPANY, new BranchRowMapper(), company.getId());
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.company.BranchDao#findHeadQuarters(busy.company.Company)
+     */
+    @Override
+    public Branch findHeadQuarters(Company company) {
+
+        if (company == null) {
+            throw new IllegalArgumentException("The company cannot be null");
+        }
+
+        BranchRowMapper rowMapper = new BranchRowMapper();
+        rowMapper.setCompany(company);
+
+        try {
+            return jdbcTemplate.queryForObject(SQL_SELECT_HEADQUARTERS, new BranchRowMapper(), company.getId());
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
@@ -191,23 +231,6 @@ public class BranchDaoImpl implements BranchDao {
             return branch;
         }
 
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see busy.company.BranchDao#findByCompany(busy.company.Company)
-     */
-    @Override
-    public List<Branch> findByCompany(Company company) {
-
-        if (company == null) {
-            throw new IllegalArgumentException("The company cannot be null");
-        }
-
-        BranchRowMapper rowMapper = new BranchRowMapper();
-        rowMapper.setCompany(company);
-
-        return jdbcTemplate.query(SQL_SELECT_BY_COMPANY, new BranchRowMapper(), company.getId());
     }
 
 }
