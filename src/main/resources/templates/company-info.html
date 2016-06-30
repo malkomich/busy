@@ -136,11 +136,22 @@
       </div>
     </div>
 
+    <!-- Modal Form -->
+    <div class="modal fade" id="modalForm" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg" role="document">
+
+        <div class="modal-content"></div>
+        <!-- .modal-content -->
+      </div>
+      <!-- .modal-dialog -->
+    </div>
+
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <script type="text/javascript" th:inline="javascript">
       const
-        EVENTS_PATH = "/get_month_services";
+        EVENTS_PATH = "/get_month_services",
+        DBL_CLICK_PATH = "/booking_form";
 
       /*<![CDATA[*/
       var message = /*[[${messageFromController}]]*/ null;

@@ -1,0 +1,36 @@
+<form class="booking-form" id="bookingForm" action="javascript:saveBooking()" th:object="${bookingForm}"
+  method="POST">
+
+  <div class="row">
+
+    <div class="col-sm-6 form-group">
+      <label for="role" th:text="#{role.label} + ':'"></label>
+      <select th:field="*{role}" id="role" tabindex="1" class="form-control"
+        th:errorclass="has-error">
+        <option value="" th:label="#{schedule.booking.role.select}"></option>
+        <option th:each="roleItem : ${roleList}" th:value="${roleItem.id}" th:text="${roleItem}"></option>
+      </select>
+    </div>
+    <!-- .col (ROLE) -->
+
+    <div class="col-sm-6 form-group">
+      <label for="time" th:text="#{time.label} + ':'"></label>
+      <select th:field="*{time}" id="time" tabindex="2" class="form-control"
+        th:errorclass="has-error">
+        <option value="" th:label="#{schedule.booking.time.select}"></option>
+        <option th:each="timeItem : ${timeList}" th:value="${timeItem.id}" th:text="${timeItem}"></option>
+      </select>
+    </div>
+    <!-- .col (TIMESLOT) -->
+
+  </div>
+  <!-- .row (ROLE & TIMESLOT) -->
+
+  <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
+  <button id="submit" type="submit" class="btn btn-primary" tabindex="3" th:text="#{form.save}"></button>
+
+  <input th:field="*{id}" hidden="true" />
+</form>
+<!-- .modal-body -->
+
+<script type="text/javascript" th:src="@{/js/forms.js}"></script>
