@@ -26,8 +26,7 @@ public class Schedule implements Serializable {
         return id;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

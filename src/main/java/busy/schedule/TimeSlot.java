@@ -23,11 +23,11 @@ public class TimeSlot implements Serializable {
     private Service service;
     private List<Schedule> schedules;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -57,7 +57,7 @@ public class TimeSlot implements Serializable {
 
     public void setService(Service service) {
         this.service = service;
-        if(startTime != null) {
+        if (startTime != null) {
             startTime = startTime.withDate(service.getDate());
         }
     }

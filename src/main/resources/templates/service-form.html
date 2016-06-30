@@ -14,6 +14,8 @@
 
     <div class="row service-row" th:each="service, status : ${serviceForm.services}">
 
+      <input type="hidden" th:field="*{services[__${status.index}__].id}"></input>
+
       <div class="col-sm-3 form-group">
         <div class="row">
 
@@ -42,6 +44,8 @@
 
       <div class="col-sm-9 form-group">
         <div class="row time-slot" th:each="timeSlot, timeStatus : ${service.timeSlots}">
+
+          <input type="hidden" th:field="*{services[__${status.index}__].timeSlots[__${timeStatus.index}__].id}"></input>
 
           <div class="col-xs-1">
             <span class="glyphicon glyphicon-time center-v"></span>
