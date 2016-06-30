@@ -11,6 +11,11 @@ sections.map = "#map-content";
 sections.workers = "#workers-content";
 sections.branch = "#branch-content";
 
+var selectors = {
+    'MODAL' : '#modalForm',
+    'BOOKING_FORM' : '#bookingForm'
+};
+
 /*
  * JQuery execute this abstract function when page is totally loaded.
  */
@@ -63,6 +68,9 @@ function updateSection(section) {
 
 }
 
+/*
+ * Set the click event listener on the branch items.
+ */
 function updateBranchItems() {
   $('.branch-item').click(function() {
     // Show section
@@ -72,4 +80,24 @@ function updateBranchItems() {
     $(sections.branch).attr('section', $(this).attr('section'));
     updateSection(sections.branch);
   });
+}
+
+/*
+ * Submit the booking form.
+ */
+function saveBooking() {
+    var form = $(selectors.BOOKING_FORM);
+    $.post("/booking_form/save", form.serialize(), function(data) {
+
+        var modalContainer = $(selectors.MODAL);
+
+        if ($(data).is("form")) {
+            $('.modal-content', modalContainer).html(data);
+            modalContainer.modal('show');
+        } else {
+            modalContainer.modal('hide');
+            calendar.view();
+        }
+
+    });
 }

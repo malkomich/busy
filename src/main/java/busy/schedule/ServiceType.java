@@ -53,12 +53,11 @@ public class ServiceType implements Serializable {
         this.company = company;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

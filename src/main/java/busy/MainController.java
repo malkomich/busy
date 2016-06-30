@@ -29,7 +29,6 @@ public class MainController extends BusyController {
     /**
      * URL Paths.
      */
-    private static final String PATH_ROOT = "/";
     private static final String PATH_LOGIN = "/login";
     private static final String PATH_ADMIN = "/admin";
 

@@ -10,7 +10,6 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import busy.AbstractDBTest;
 import busy.notifications.messages.CompanyMsg;
 import busy.user.User;
-import busy.util.SecureSetter;
 
 @DatabaseSetup("../user/userSet.xml")
 public class NotificationDBTest extends AbstractDBTest {
@@ -24,7 +23,7 @@ public class NotificationDBTest extends AbstractDBTest {
     public void setUp() {
 
         user = new User();
-        SecureSetter.setId(user, 1);
+        user.setId(1);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -41,7 +40,7 @@ public class NotificationDBTest extends AbstractDBTest {
         Notification notification = new Notification();
 
         User user = new User();
-        SecureSetter.setId(user, INVALID_ID);
+        user.setId(INVALID_ID);
         notification.setUser(user);
 
         notification.setType(Notification.Type.COMPANY);

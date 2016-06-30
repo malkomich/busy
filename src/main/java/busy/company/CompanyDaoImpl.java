@@ -109,7 +109,7 @@ public class CompanyDaoImpl implements CompanyDao {
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
-                SecureSetter.setId(company, key.intValue());
+                company.setId(key.intValue());
             }
         }
     }
@@ -231,7 +231,7 @@ public class CompanyDaoImpl implements CompanyDao {
         public Company mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             Company company = new Company();
-            SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
+            company.setId(rs.getInt(ALIAS_COMPANY_ID));
             company.setTradeName(rs.getString(TRADE_NAME));
             company.setBusinessName(rs.getString(BUSINESS_NAME));
             company.setEmail(rs.getString(EMAIL));
@@ -244,7 +244,7 @@ public class CompanyDaoImpl implements CompanyDao {
             if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
 
                 Category category = new Category();
-                SecureSetter.setId(category, categoryId);
+                category.setId(categoryId);
                 category.setName(rs.getString(NAME));
 
                 company.setCategory(category);

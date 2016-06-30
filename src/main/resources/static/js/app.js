@@ -6,7 +6,7 @@ $(function() {
     var date = new Date();
 
     options = {
-        events_source : EVENTS_PATH + "?role=" + roleId,
+        events_source : EVENTS_PATH + "?role=" + roleId + "&is_booking=" + isBooking,
         view : 'month',
         tmpl_path : '/tmpls/',
         tmpl_cache : false,
@@ -55,13 +55,29 @@ $(function() {
 function setupListeners() {
 
     // Day cells
-    $('.cal-cell').dblclick(function() {
-        var date = $('[data-cal-date]', this).data('cal-date');
-        openServiceForm(date);
+    $('.cal-cell').dblclick(function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var date = $('[data-cal-date]', this).data('cal-date');
+      openServiceForm(date);
     });
-    $('*[data-cal-date]').click(function() {
-        var date = $(this).data('cal-date');
-        openServiceForm(date);
+    $('*[data-cal-date]').click(function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      var date = $(this).data('cal-date');
+      openServiceForm(date);
+    });
+
+    $('a[data-event-id]').on('click', function(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      if (isBooking) {
+        var timeSlotId = $(this).data('event-id');
+        openBookingForm(timeSlotId);
+      }
     });
 }
 
@@ -72,7 +88,7 @@ function openServiceForm(date) {
 
   calendar.options.day = date;
 
-  if(DBL_CLICK_PATH) {
+  if(DBL_CLICK_PATH != undefined) {
     $.get(DBL_CLICK_PATH, {
       date : calendar.options.day
     }, function(data) {
@@ -87,4 +103,15 @@ function openServiceForm(date) {
       }
     });
   }
+}
+
+function openBookingForm(timeSlotId) {
+  $.get("/booking_form", {
+    time_slot_id : timeSlotId
+  }, function(data) {
+
+    var modalContainer = $('#modalForm');
+    $('.modal-content', modalContainer).html(data);
+    modalContainer.modal();
+  });
 }

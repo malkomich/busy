@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import busy.company.Company;
 import busy.role.Role;
 import busy.schedule.Service.Repetition;
+import busy.user.User;
 import busy.util.OperationResult;
 
 /**
@@ -42,6 +43,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     
     @Autowired
     private ScheduleDao scheduleDao;
+    
+    @Autowired
+    private BookingDao bookingDao;
 
     public void setServiceTypeDao(ServiceTypeDao serviceTypeDao) {
         this.serviceTypeDao = serviceTypeDao;
@@ -144,6 +148,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      *            the unique id of the service to attach the time slots
      */
     private void saveTimeSlots(List<TimeSlot> timeSlotList, int serviceId) {
+        
         for (TimeSlot timeSlot : timeSlotList) {
             timeSlotDao.save(timeSlot, serviceId);
             saveSchedules(timeSlot.getSchedules(), timeSlot.getId());
@@ -159,6 +164,7 @@ public class ScheduleServiceImpl implements ScheduleService {
      *            the unique id of the time slot to attach the schedules
      */
     private void saveSchedules(List<Schedule> schedules, int timeSlotId) {
+        
         for (Schedule schedule : schedules) {
             scheduleDao.save(schedule, timeSlotId);
         }
@@ -173,6 +179,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         return serviceTypeDao.findById(id);
     }
 
+    /* (non-Javadoc)
+     * @see busy.schedule.ScheduleService#findServicesByDay(org.joda.time.LocalDate, busy.role.Role, busy.schedule.ServiceType)
+     */
     @Override
     public List<busy.schedule.Service> findServicesByDay(LocalDate date, Role role, ServiceType serviceType) {
 
@@ -188,6 +197,33 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
         services.removeAll(servicesToRemove);
         return services;
+    }
+
+    /* (non-Javadoc)
+     * @see busy.schedule.ScheduleService#findTimeSlotById(int)
+     */
+    @Override
+    public TimeSlot findTimeSlotById(int id) {
+
+        return timeSlotDao.findById(id);
+    }
+
+    /* (non-Javadoc)
+     * @see busy.schedule.ScheduleService#findScheduleById(java.lang.Integer)
+     */
+    @Override
+    public Schedule findScheduleById(Integer id) {
+
+        return scheduleDao.findById(id);
+    }
+
+    /* (non-Javadoc)
+     * @see busy.schedule.ScheduleService#saveBooking(busy.user.User, busy.schedule.Schedule)
+     */
+    @Override
+    public void saveBooking(User user, Schedule schedule) {
+
+        bookingDao.save(user, schedule);
     }
 
 }

@@ -1,5 +1,10 @@
 package busy.location;
 
+import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.ID;
+import static busy.util.SQLUtil.NAME;
+import static busy.util.SQLUtil.TABLE_COUNTRY;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -13,10 +18,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
-import busy.util.SecureSetter;
-
-import static busy.util.SQLUtil.*;
 
 /**
  * Country persistence implementation for Database storing.
@@ -85,7 +86,7 @@ public class CountryDaoImpl implements CountryDao {
         public Country mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             Country country = new Country();
-            SecureSetter.setId(country, rs.getInt(ID));
+            country.setId(rs.getInt(ID));
             country.setName(rs.getString(NAME));
             country.setCode(rs.getString(CODE));
 

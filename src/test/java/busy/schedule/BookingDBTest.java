@@ -12,7 +12,6 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
 import busy.user.User;
-import busy.util.SecureSetter;
 
 /**
  * Test Cases for the BookingDao implementation class.
@@ -42,17 +41,17 @@ public class BookingDBTest extends AbstractDBTest {
     public void setUp() {
 
         schedule = new Schedule();
-        SecureSetter.setId(schedule, 1);
+        schedule.setId(1);
         
         userBooking = new User();
-        SecureSetter.setId(userBooking, 1);
+        userBooking.setId(1);
 
     }
     
     @Test(expected = DataIntegrityViolationException.class)
     public void insertWithScheduleInvalid() {
 
-        SecureSetter.setId(schedule, INVALID_ID);
+        schedule.setId(INVALID_ID);
 
         repository.save(userBooking, schedule);
     }
@@ -60,7 +59,7 @@ public class BookingDBTest extends AbstractDBTest {
     @Test(expected = DataIntegrityViolationException.class)
     public void insertWithUserInvalid() {
 
-        SecureSetter.setId(userBooking, INVALID_ID);
+        userBooking.setId(INVALID_ID);
 
         repository.save(userBooking, schedule);
     }

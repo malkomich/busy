@@ -39,17 +39,17 @@ public class ScheduleDBTest extends AbstractDBTest {
     public void setUp() {
 
         service = new Service();
-        SecureSetter.setId(service, 1);
+        service.setId(1);
 
         role = new Role();
-        SecureSetter.setId(role, 1);
+        role.setId(1);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
     public void insertWithServiceInvalid() {
 
         Schedule schedule = new Schedule();
-        SecureSetter.setId(service, INVALID_ID);
+        service.setId(INVALID_ID);
         schedule.setRole(role);
 
         repository.save(schedule, service.getId());
@@ -67,7 +67,7 @@ public class ScheduleDBTest extends AbstractDBTest {
     public void insertWithRoleInvalid() {
 
         Schedule schedule = new Schedule();
-        SecureSetter.setId(role, INVALID_ID);
+        role.setId(INVALID_ID);
         schedule.setRole(role);
 
         repository.save(schedule, service.getId());

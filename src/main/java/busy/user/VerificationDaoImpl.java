@@ -1,6 +1,27 @@
 package busy.user;
 
-import static busy.util.SQLUtil.*;
+import static busy.util.SQLUtil.ACTIVE;
+import static busy.util.SQLUtil.ADDR1;
+import static busy.util.SQLUtil.ADDR2;
+import static busy.util.SQLUtil.ADMIN;
+import static busy.util.SQLUtil.ALIAS_ADDR_ID;
+import static busy.util.SQLUtil.ALIAS_CITY_ID;
+import static busy.util.SQLUtil.ALIAS_CITY_NAME;
+import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
+import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
+import static busy.util.SQLUtil.ALIAS_USER_ID;
+import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.EMAIL;
+import static busy.util.SQLUtil.FIRSTNAME;
+import static busy.util.SQLUtil.LASTNAME;
+import static busy.util.SQLUtil.NIF;
+import static busy.util.SQLUtil.PASSWORD;
+import static busy.util.SQLUtil.PHONE;
+import static busy.util.SQLUtil.TABLE_REGISTRY;
+import static busy.util.SQLUtil.TOKEN;
+import static busy.util.SQLUtil.USERID;
+import static busy.util.SQLUtil.USER_SELECT_QUERY;
+import static busy.util.SQLUtil.ZIPCODE;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -101,7 +122,7 @@ public class VerificationDaoImpl implements VerificationDao {
         public Verification mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             User user = new User();
-            SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
+            user.setId(rs.getInt(ALIAS_USER_ID));
             user.setFirstName(rs.getString(FIRSTNAME));
             user.setLastName(rs.getString(LASTNAME));
             user.setEmail(rs.getString(EMAIL));
@@ -116,17 +137,17 @@ public class VerificationDaoImpl implements VerificationDao {
 
                 Address address = new Address();
 
-                SecureSetter.setId(address, addressId);
+                address.setId(addressId);
                 address.setAddress1(rs.getString(ADDR1));
                 address.setAddress2(rs.getString(ADDR2));
                 address.setZipCode(rs.getString(ZIPCODE));
 
                 City city = new City();
-                SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+                city.setId(rs.getInt(ALIAS_CITY_ID));
                 city.setName(rs.getString(ALIAS_CITY_NAME));
 
                 Country country = new Country();
-                SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+                country.setId(rs.getInt(ALIAS_COUNTRY_ID));
                 country.setName(rs.getString(ALIAS_COUNTRY_NAME));
                 country.setCode(rs.getString(CODE));
 

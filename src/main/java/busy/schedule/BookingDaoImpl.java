@@ -50,8 +50,6 @@ public class BookingDaoImpl implements BookingDao {
 
         jdbcInsert.execute(new MapSqlParameterSource(parameters));
         
-        System.out.println("OK");
-        
         schedule.addBooking(userBooking);
     }
 

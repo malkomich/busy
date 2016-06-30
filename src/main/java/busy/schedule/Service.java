@@ -65,12 +65,11 @@ public class Service implements Serializable {
     @Valid
     private List<TimeSlot> timeSlots;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -145,7 +144,7 @@ public class Service implements Serializable {
 
     public void updateTimeSlots() {
 
-        for(TimeSlot timeSlot : timeSlots) {
+        for(TimeSlot timeSlot : getTimeSlots()) {
             timeSlot.setService(this);
         }
     }

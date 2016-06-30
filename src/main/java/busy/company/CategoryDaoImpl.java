@@ -22,8 +22,6 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import busy.util.SecureSetter;
-
 /**
  * Category persistence implementation for Database storing.
  * 
@@ -72,7 +70,7 @@ public class CategoryDaoImpl implements CategoryDao {
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
-                SecureSetter.setId(category, key.intValue());
+                category.setId(key.intValue());
             }
         }
     }
@@ -110,7 +108,7 @@ public class CategoryDaoImpl implements CategoryDao {
         public Category mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             Category category = new Category();
-            SecureSetter.setId(category, rs.getInt(ID));
+            category.setId(rs.getInt(ID));
             category.setName(rs.getString(NAME));
 
             return category;

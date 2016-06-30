@@ -107,7 +107,7 @@ public class BranchDaoImpl implements BranchDao {
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
-                SecureSetter.setId(branch, key.intValue());
+                branch.setId(key.intValue());
             }
         }
     }
@@ -175,12 +175,12 @@ public class BranchDaoImpl implements BranchDao {
         public Branch mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             Branch branch = new Branch();
-            SecureSetter.setId(branch, rs.getInt(ALIAS_BRANCH_ID));
+            branch.setId(rs.getInt(ALIAS_BRANCH_ID));
 
             // Parse company
             if (company == null) {
                 company = new Company();
-                SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
+                company.setId(rs.getInt(ALIAS_COMPANY_ID));
                 company.setTradeName(rs.getString(TRADE_NAME));
                 company.setBusinessName(rs.getString(BUSINESS_NAME));
                 company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));
@@ -193,7 +193,7 @@ public class BranchDaoImpl implements BranchDao {
                 if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
 
                     Category category = new Category();
-                    SecureSetter.setId(category, categoryId);
+                    category.setId(categoryId);
                     category.setName(rs.getString(ALIAS_CATEGORY_NAME));
 
                     company.setCategory(category);
@@ -204,17 +204,17 @@ public class BranchDaoImpl implements BranchDao {
 
             // Parse address
             Address address = new Address();
-            SecureSetter.setId(address, rs.getInt(ALIAS_ADDR_ID));
+            address.setId(rs.getInt(ALIAS_ADDR_ID));
             address.setAddress1(rs.getString(ADDR1));
             address.setAddress2(rs.getString(ADDR2));
             address.setZipCode(rs.getString(ZIPCODE));
 
             City city = new City();
-            SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+            city.setId(rs.getInt(ALIAS_CITY_ID));
             city.setName(rs.getString(ALIAS_CITY_NAME));
 
             Country country = new Country();
-            SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+            country.setId(rs.getInt(ALIAS_COUNTRY_ID));
             country.setName(rs.getString(ALIAS_COUNTRY_NAME));
             country.setCode(rs.getString(CODE));
 

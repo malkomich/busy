@@ -114,7 +114,7 @@ public class RoleDaoImpl implements RoleDao {
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
-                SecureSetter.setId(role, key.intValue());
+                role.setId(key.intValue());
             }
         }
     }
@@ -211,13 +211,13 @@ public class RoleDaoImpl implements RoleDao {
         public Role mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             Role role = new Role();
-            SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
+            role.setId(rs.getInt(ALIAS_ROLE_ID));
 
             // Set User
             User user = this.user;
             if (user == null) {
                 user = new User();
-                SecureSetter.setId(user, rs.getInt(ALIAS_USER_ID));
+                user.setId(rs.getInt(ALIAS_USER_ID));
                 user.setFirstName(rs.getString(FIRSTNAME));
                 user.setLastName(rs.getString(LASTNAME));
                 user.setEmail(rs.getString(EMAIL));
@@ -231,17 +231,17 @@ public class RoleDaoImpl implements RoleDao {
 
                     Address address = new Address();
 
-                    SecureSetter.setId(address, addressId);
+                    address.setId(addressId);
                     address.setAddress1(rs.getString(ADDR1));
                     address.setAddress2(rs.getString(ADDR2));
                     address.setZipCode(rs.getString(ZIPCODE));
 
                     City city = new City();
-                    SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+                    city.setId(rs.getInt(ALIAS_CITY_ID));
                     city.setName(rs.getString(ALIAS_CITY_NAME));
 
                     Country country = new Country();
-                    SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+                    country.setId(rs.getInt(ALIAS_COUNTRY_ID));
                     country.setName(rs.getString(ALIAS_COUNTRY_NAME));
                     country.setCode(rs.getString(CODE));
 
@@ -258,22 +258,22 @@ public class RoleDaoImpl implements RoleDao {
             Branch branch = this.branch;
             if (branch == null) {
                 branch = new Branch();
-                SecureSetter.setId(branch, rs.getInt(ALIAS_BRANCH_ID));
+                branch.setId(rs.getInt(ALIAS_BRANCH_ID));
 
                 // Set Address
                 Address address = new Address();
                 int addressId = rs.getInt(ALIAS_ADDR_ID);
-                SecureSetter.setId(address, addressId);
+                address.setId(addressId);
                 address.setAddress1(rs.getString(ADDR1));
                 address.setAddress2(rs.getString(ADDR2));
                 address.setZipCode(rs.getString(ZIPCODE));
 
                 City city = new City();
-                SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+                city.setId(rs.getInt(ALIAS_CITY_ID));
                 city.setName(rs.getString(ALIAS_CITY_NAME));
 
                 Country country = new Country();
-                SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+                country.setId(rs.getInt(ALIAS_COUNTRY_ID));
                 country.setName(rs.getString(ALIAS_COUNTRY_NAME));
                 country.setCode(rs.getString(CODE));
 
@@ -284,7 +284,7 @@ public class RoleDaoImpl implements RoleDao {
 
                 // Set Company
                 Company company = new Company();
-                SecureSetter.setId(company, rs.getInt(ALIAS_COMPANY_ID));
+                company.setId(rs.getInt(ALIAS_COMPANY_ID));
                 company.setTradeName(rs.getString(TRADE_NAME));
                 company.setBusinessName(rs.getString(BUSINESS_NAME));
                 company.setEmail(rs.getString(ALIAS_COMPANY_EMAIL));

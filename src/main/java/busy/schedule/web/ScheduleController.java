@@ -33,6 +33,7 @@ import busy.schedule.Service;
 import busy.schedule.Service.Repetition;
 import busy.schedule.ServiceType;
 import busy.schedule.TimeSlot;
+import busy.user.User;
 
 /**
  * Controller for schedule operations.
@@ -52,6 +53,10 @@ public class ScheduleController extends BusyController {
      */
     private static final String SERVICE_FORM_REQUEST = "serviceForm";
     private static final String REPETITION_TYPES_REQUEST = "repetitionTypes";
+    
+    private static final String BOOKING_FORM_REQUEST = "bookingForm";
+    private static final String BOOKING_ROLES_REQUEST = "bookingSchedules";
+    
     private static final String MESSAGE_CODE_REQUEST = "msgCode";
 
     /**
@@ -63,6 +68,8 @@ public class ScheduleController extends BusyController {
     private static final String PATH_SERVICES_FORM_SAVE = "/service_form/save";
     private static final String PATH_SERVICES_FORM_ADD_TIMESLOT = "/service_form/{index}/add_timeslot";
     private static final String PATH_SCHEDULE = "/schedule/";
+    private static final String PATH_BOOKING_SERVICE = "/booking_form";
+    private static final String PATH_BOOKINGS_FORM_SAVE = "/booking_form/save";
 
     /**
      * JSP's
@@ -70,6 +77,7 @@ public class ScheduleController extends BusyController {
     private static final String SERVICE_FORM_PAGE = "service-form";
     private static final String MESSAGE_VIEW = "message";
     private static final String BRANCH_PAGE = "branch";
+    private static final String BOOKING_FORM_PAGE = "booking-form";
 
     /**
      * HTTP params.
@@ -109,7 +117,8 @@ public class ScheduleController extends BusyController {
      * @return The list of resultant bookings in JSON format
      */
     @RequestMapping(value = PATH_SERVICES_OF_MONTH, method = RequestMethod.GET)
-    public @ResponseBody String getMonthServices(@RequestParam(value = "role", required = true) String roleIdTmp,
+    public @ResponseBody String getMonthServices(
+        @RequestParam(value = "role", required = true) String roleIdTmp,
         @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
         @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
         @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
@@ -148,14 +157,15 @@ public class ScheduleController extends BusyController {
             for (TimeSlot timeSlot : service.getTimeSlots()) {
 
                 JSONObject serviceJSON;
-                String id = timeSlot.getId().toString();
+                String id = String.valueOf(timeSlot.getId());
                 String name = sType.getName();
+                
                 DateTime startTime = timeSlot.getStartDateTime();
                 DateTime endTime = startTime.plusMinutes(sType.getDuration());
 
                 if (Repetition.NONE.equals(repetitionType)) {
 
-                    serviceJSON = getEvent(id, name, null, "event-info", startTime.getMillis(), endTime.getMillis());
+                    serviceJSON = getEvent(id, name, "event-info", startTime.getMillis(), endTime.getMillis());
                     jsonServices.put(serviceJSON);
 
                 } else if (Repetition.DAILY.equals(repetitionType)) {
@@ -163,7 +173,7 @@ public class ScheduleController extends BusyController {
                     DateTime dateTime = fromDateTime;
 
                     while (dateTime.isBefore(toDateTime)) {
-                        serviceJSON = getEvent(id, name, null, "event-warning",
+                        serviceJSON = getEvent(id, name, "event-warning",
                             startTime.withDate(dateTime.toLocalDate()).getMillis(),
                             endTime.withDate(dateTime.toLocalDate()).getMillis());
                         jsonServices.put(serviceJSON);
@@ -177,7 +187,7 @@ public class ScheduleController extends BusyController {
                     DateTime dateTime = fromDateTime.withDayOfWeek(dayOfWeek);
 
                     while (dateTime.isBefore(toDateTime)) {
-                        serviceJSON = getEvent(id, name, null, "event-warning",
+                        serviceJSON = getEvent(id, name, "event-warning",
                             startTime.withDate(dateTime.toLocalDate()).getMillis(),
                             endTime.withDate(dateTime.toLocalDate()).getMillis());
                         jsonServices.put(serviceJSON);
@@ -195,15 +205,14 @@ public class ScheduleController extends BusyController {
         return jsonResult.toString();
     }
 
-    private JSONObject getEvent(String id, String name, String url, String eventClass, long startMillis,
+    private JSONObject getEvent(String id, String name, String eventClass, long startMillis,
         long endMillis) {
 
         JSONObject serviceJSON = new JSONObject();
 
-        serviceJSON.put("id", name);
+        serviceJSON.put("id", id);
 
         serviceJSON.put("title", name);
-        serviceJSON.put("url", url);
         serviceJSON.put("class", eventClass);
 
         serviceJSON.put("start", String.valueOf(startMillis));
@@ -331,7 +340,7 @@ public class ScheduleController extends BusyController {
 
         return "redirect:" + PATH_SCHEDULE + role.getId();
     }
-
+    
     /**
      * Adds a new time slot item to the services form
      * 
@@ -363,6 +372,39 @@ public class ScheduleController extends BusyController {
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
         return SERVICE_FORM_PAGE;
+    }
+
+    @RequestMapping(value = PATH_BOOKING_SERVICE, method = RequestMethod.GET)
+    public String requestBooking(@RequestParam("time_slot_id") String timeSlotId, Model model) {
+
+        BookingForm form = new BookingForm();
+
+        TimeSlot timeSlot = scheduleService.findTimeSlotById(Integer.parseInt(timeSlotId));
+        
+        form.setTimeSlotId(timeSlot.getId());
+        form.setDateTime(timeSlot.getStartDateTime());
+        model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getSchedules());
+        
+        model.addAttribute(BOOKING_FORM_REQUEST, form);
+
+        return BOOKING_FORM_PAGE;
+    }
+    
+    @RequestMapping(value = PATH_BOOKINGS_FORM_SAVE, method = RequestMethod.POST)
+    public String saveBooking(@ModelAttribute(BOOKING_FORM_REQUEST) @Valid BookingForm form, BindingResult result,
+        Model model) {
+
+        TimeSlot timeSlot = scheduleService.findTimeSlotById(form.getTimeSlotId());
+        
+        if (result.hasErrors()) {
+            model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getSchedules());
+            return BOOKING_FORM_PAGE;
+        }
+
+        User user = (User) model.asMap().get(USER_SESSION);
+        scheduleService.saveBooking(user, form.getSchedule());
+
+        return "redirect:" + PATH_ROOT;
     }
 
     /**

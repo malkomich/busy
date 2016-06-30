@@ -43,7 +43,6 @@ public class UserController extends BusyController {
     /**
      * URL Paths.
      */
-    private static final String PATH_ROOT = "/";
     private static final String PATH_LOGIN = "/login";
     private static final String PATH_SIGNUP = "/signup";
     private static final String PATH_EMAIL_CONFIRM = "/verificate_email";

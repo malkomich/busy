@@ -18,7 +18,6 @@ import busy.AbstractDBTest;
 import busy.company.Company;
 import busy.util.OperationResult;
 import busy.util.OperationResult.ResultCode;
-import busy.util.SecureSetter;
 
 /**
  * Test Cases for the ServiceTypeDao implementation class.
@@ -41,7 +40,7 @@ public class ServiceTypeDBTest extends AbstractDBTest {
     public void setUp() {
 
         company = new Company();
-        SecureSetter.setId(company, 1);
+        company.setId(1);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -96,7 +95,7 @@ public class ServiceTypeDBTest extends AbstractDBTest {
     @DatabaseSetup("../schedule/serviceTypeSet.xml")
     public void findByInvalidCompany() {
 
-        SecureSetter.setId(company, INVALID_ID);
+        company.setId(INVALID_ID);
 
         List<ServiceType> serviceTypes = repository.findByCompany(company);
 
@@ -117,7 +116,7 @@ public class ServiceTypeDBTest extends AbstractDBTest {
     public void deleteNotExisting() {
 
         ServiceType serviceType = new ServiceType();
-        SecureSetter.setId(serviceType, INVALID_ID);
+        serviceType.setId(INVALID_ID);
 
         OperationResult deleted = repository.delete(serviceType);
 
@@ -137,7 +136,7 @@ public class ServiceTypeDBTest extends AbstractDBTest {
     public void deleteWithBookings() {
 
         ServiceType serviceType = new ServiceType();
-        SecureSetter.setId(serviceType, 1);
+        serviceType.setId(1);
 
         OperationResult deleted = repository.delete(serviceType);
 
@@ -149,7 +148,7 @@ public class ServiceTypeDBTest extends AbstractDBTest {
     public void deleteSuccessfully() {
 
         ServiceType serviceType = new ServiceType();
-        SecureSetter.setId(serviceType, 1);
+        serviceType.setId(1);
 
         OperationResult deleted = repository.delete(serviceType);
 

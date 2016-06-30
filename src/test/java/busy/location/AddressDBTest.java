@@ -14,7 +14,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
-import busy.util.SecureSetter;
 
 /**
  * Test Case for the AddressDao interface.
@@ -34,7 +33,7 @@ public class AddressDBTest extends AbstractDBTest {
     @BeforeClass
     public static void initialize() {
         city = new City();
-        SecureSetter.setId(city, 1);
+        city.setId(1);
     }
 
     @Test(expected = DataIntegrityViolationException.class)

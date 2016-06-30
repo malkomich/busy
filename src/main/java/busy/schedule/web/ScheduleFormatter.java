@@ -7,25 +7,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.Formatter;
 import org.springframework.stereotype.Component;
 
+import busy.schedule.Schedule;
 import busy.schedule.ScheduleService;
-import busy.schedule.ServiceType;
 
 @Component
-public class ServiceTypeFormatter implements Formatter<ServiceType> {
+public class ScheduleFormatter implements Formatter<Schedule> {
 
     @Autowired
     private ScheduleService scheduleService;
 
     @Override
-    public String print(ServiceType object, Locale locale) {
+    public String print(Schedule object, Locale locale) {
 
         return (object != null) ? String.valueOf(object.getId()) : null;
     }
 
     @Override
-    public ServiceType parse(String text, Locale locale) throws ParseException {
+    public Schedule parse(String text, Locale locale) throws ParseException {
 
-        return scheduleService.findServiceTypeById(Integer.valueOf(text));
+        return scheduleService.findScheduleById(Integer.valueOf(text));
     }
 
 }

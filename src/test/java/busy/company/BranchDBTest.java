@@ -40,10 +40,10 @@ public class BranchDBTest extends AbstractDBTest {
     public void setUp() {
 
         address = new Address();
-        SecureSetter.setId(address, 1);
+        address.setId(1);
 
         company = new Company();
-        SecureSetter.setId(company, 1);
+        company.setId(1);
     }
 
     // Write operation tests
@@ -63,7 +63,7 @@ public class BranchDBTest extends AbstractDBTest {
         Branch branch = new Branch();
 
         Company invalidCompany = new Company();
-        SecureSetter.setId(invalidCompany, INVALID_ID);
+        invalidCompany.setId(INVALID_ID);
         branch.setCompany(invalidCompany);
 
         branch.setAddress(address);
@@ -87,7 +87,7 @@ public class BranchDBTest extends AbstractDBTest {
         branch.setCompany(company);
 
         Address invalidAddress = new Address();
-        SecureSetter.setId(invalidAddress, INVALID_ID);
+        invalidAddress.setId(INVALID_ID);
         branch.setAddress(invalidAddress);
 
         repository.save(branch);
@@ -124,7 +124,7 @@ public class BranchDBTest extends AbstractDBTest {
         repository.save(branch1);
 
         Address address2 = new Address();
-        SecureSetter.setId(address2, 2);
+        address2.setId(2);
         Branch branch2 = new Branch(company, address2, "654987123");
         SecureSetter.setAttribute(branch2, "setHeadquarters", Boolean.class, true);
         repository.save(branch2);
@@ -155,7 +155,7 @@ public class BranchDBTest extends AbstractDBTest {
     @DatabaseSetup("../company/branchSet.xml")
     public void findByInvalidCompany() {
 
-        SecureSetter.setId(company, INVALID_ID);
+        company.setId(INVALID_ID);
         List<Branch> branches = repository.findByCompany(company);
 
         assertTrue(branches.isEmpty());

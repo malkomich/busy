@@ -84,22 +84,6 @@
     </div>
     <!-- container -->
 
-    <!-- Calendar Events Modal -->
-    <div class="modal fade" id="events-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Event</h3>
-          </div>
-          <div class="modal-body" style="height: 400px"></div>
-          <div class="modal-footer">
-            <a href="#" data-dismiss="modal" class="btn" th:text="#{modal.close}"></a>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- Message Modal -->
     <div class="modal fade" id="messageModal" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-lg" role="document">
@@ -128,6 +112,7 @@
 
       /*<![CDATA[*/
       var message = /*[[${messageFromController}]]*/ null;
+      var isBooking = false;
       /*]]>*/
     </script>
     <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>

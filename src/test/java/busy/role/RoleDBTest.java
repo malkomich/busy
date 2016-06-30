@@ -10,7 +10,6 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import busy.AbstractDBTest;
 import busy.company.Branch;
 import busy.user.User;
-import busy.util.SecureSetter;
 
 /**
  * Test Case for the RolDao implementation class.
@@ -37,10 +36,10 @@ public class RoleDBTest extends AbstractDBTest {
     public void setUp() {
 
         user = new User();
-        SecureSetter.setId(user, 1);
+        user.setId(1);
 
         branch = new Branch();
-        SecureSetter.setId(branch, 1);
+        branch.setId(1);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -49,7 +48,7 @@ public class RoleDBTest extends AbstractDBTest {
         Role role = new Role();
 
         User userInvalid = new User();
-        SecureSetter.setId(userInvalid, INVALID_ID);
+        userInvalid.setId(INVALID_ID);
         role.setUser(userInvalid);
 
         role.setBranch(branch);
@@ -72,7 +71,7 @@ public class RoleDBTest extends AbstractDBTest {
         Role role = new Role();
         role.setUser(user);
         Branch branchInvalid = new Branch();
-        SecureSetter.setId(branchInvalid, INVALID_ID);
+        branchInvalid.setId(INVALID_ID);
         role.setBranch(branchInvalid);
 
         repository.save(role);

@@ -169,7 +169,7 @@ public class ServiceDaoImpl implements ServiceDao {
 
             Integer id = jdbcTemplate.queryForObject(query, parameters.values().toArray(), Integer.class);
             if (id != null) {
-                SecureSetter.setId(service, id.intValue());
+                service.setId(id.intValue());
             }
         }
     }
@@ -230,7 +230,7 @@ public class ServiceDaoImpl implements ServiceDao {
                     ServiceType serviceType = this.serviceType;
                     if (serviceType == null) {
                         serviceType = new ServiceType();
-                        SecureSetter.setId(serviceType, rs.getInt(ALIAS_SERVICE_TYPE_ID));
+                        serviceType.setId(rs.getInt(ALIAS_SERVICE_TYPE_ID));
                         serviceType.setName(rs.getString(ALIAS_SERVICE_TYPE_NAME));
                         serviceType.setDescription(rs.getString(DESCRIPTION));
                         serviceType.setMaxBookingsPerRole(rs.getInt(BOOKINGS_PER_ROLE));
@@ -254,11 +254,11 @@ public class ServiceDaoImpl implements ServiceDao {
                     Role role = this.role;
                     if (role == null) {
                         role = new Role();
-                        SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
+                        role.setId(rs.getInt(ALIAS_ROLE_ID));
 
                         // Set User
                         User roleUser = new User();
-                        SecureSetter.setId(roleUser, rs.getInt(ALIAS_USER_ID));
+                        roleUser.setId(rs.getInt(ALIAS_USER_ID));
                         roleUser.setFirstName(rs.getString(FIRSTNAME));
                         roleUser.setLastName(rs.getString(LASTNAME));
                         roleUser.setEmail(rs.getString(EMAIL));
@@ -272,17 +272,17 @@ public class ServiceDaoImpl implements ServiceDao {
 
                             Address address = new Address();
 
-                            SecureSetter.setId(address, addressId);
+                            address.setId(addressId);
                             address.setAddress1(rs.getString(ADDR1));
                             address.setAddress2(rs.getString(ADDR2));
                             address.setZipCode(rs.getString(ZIPCODE));
 
                             City city = new City();
-                            SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+                            city.setId(rs.getInt(ALIAS_CITY_ID));
                             city.setName(rs.getString(ALIAS_CITY_NAME));
 
                             Country country = new Country();
-                            SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+                            country.setId(rs.getInt(ALIAS_COUNTRY_ID));
                             country.setName(rs.getString(ALIAS_COUNTRY_NAME));
                             country.setCode(rs.getString(CODE));
 
@@ -305,7 +305,7 @@ public class ServiceDaoImpl implements ServiceDao {
                         Integer userId = rs.getInt(BOOKING_USER_ID);
                         if (userId != INVALID_ID) {
                             User bookingUser = new User();
-                            SecureSetter.setId(bookingUser, userId);
+                            bookingUser.setId(userId);
                             bookingUser.setFirstName(rs.getString(BOOKING_USER_FIRSTNAME));
                             bookingUser.setLastName(rs.getString(BOOKING_USER_LASTNAME));
                             bookingUser.setEmail(rs.getString(BOOKING_USER_EMAIL));

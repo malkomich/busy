@@ -1,5 +1,16 @@
 package busy.location;
 
+import static busy.util.SQLUtil.ALIAS_CITY_ID;
+import static busy.util.SQLUtil.ALIAS_CITY_NAME;
+import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
+import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
+import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.COUNTRYID;
+import static busy.util.SQLUtil.ID;
+import static busy.util.SQLUtil.NAME;
+import static busy.util.SQLUtil.TABLE_CITY;
+import static busy.util.SQLUtil.TABLE_COUNTRY;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,10 +26,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
-import busy.util.SecureSetter;
-
-import static busy.util.SQLUtil.*;
 
 /**
  * City persistence implementation for Database storing.
@@ -123,11 +130,11 @@ public class CityDaoImpl implements CityDao {
         public City mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             City city = new City();
-            SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+            city.setId(rs.getInt(ALIAS_CITY_ID));
             city.setName(rs.getString(ALIAS_CITY_NAME));
 
             Country country = new Country();
-            SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+            country.setId(rs.getInt(ALIAS_COUNTRY_ID));
             country.setName(rs.getString(ALIAS_COUNTRY_NAME));
             country.setCode(rs.getString(CODE));
 

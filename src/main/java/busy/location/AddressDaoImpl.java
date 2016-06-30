@@ -1,5 +1,19 @@
 package busy.location;
 
+import static busy.util.SQLUtil.ADDR1;
+import static busy.util.SQLUtil.ADDR2;
+import static busy.util.SQLUtil.ADDRESS_SELECT_QUERY;
+import static busy.util.SQLUtil.ALIAS_ADDR_ID;
+import static busy.util.SQLUtil.ALIAS_CITY_ID;
+import static busy.util.SQLUtil.ALIAS_CITY_NAME;
+import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
+import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
+import static busy.util.SQLUtil.CITYID;
+import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.ID;
+import static busy.util.SQLUtil.TABLE_ADDRESS;
+import static busy.util.SQLUtil.ZIPCODE;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -16,10 +30,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
-
-import busy.util.SecureSetter;
-
-import static busy.util.SQLUtil.*;
 
 /**
  * Address persistence implementation for Database storing.
@@ -82,7 +92,7 @@ public class AddressDaoImpl implements AddressDao {
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
-                SecureSetter.setId(address, key.intValue());
+                address.setId(key.intValue());
             }
         }
 
@@ -94,17 +104,17 @@ public class AddressDaoImpl implements AddressDao {
         public Address mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             Address address = new Address();
-            SecureSetter.setId(address, rs.getInt(ALIAS_ADDR_ID));
+            address.setId(rs.getInt(ALIAS_ADDR_ID));
             address.setAddress1(rs.getString(ADDR1));
             address.setAddress2(rs.getString(ADDR2));
             address.setZipCode(rs.getString(ZIPCODE));
 
             City city = new City();
-            SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+            city.setId(rs.getInt(ALIAS_CITY_ID));
             city.setName(rs.getString(ALIAS_CITY_NAME));
 
             Country country = new Country();
-            SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+            country.setId(rs.getInt(ALIAS_COUNTRY_ID));
             country.setName(rs.getString(ALIAS_COUNTRY_NAME));
             country.setCode(rs.getString(CODE));
 

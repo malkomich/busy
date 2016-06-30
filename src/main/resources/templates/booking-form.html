@@ -1,36 +1,49 @@
-<form class="booking-form" id="bookingForm" action="javascript:saveBooking()" th:object="${bookingForm}"
+<form id="bookingForm" action="javascript:saveBooking()" th:object="${bookingForm}"
   method="POST">
 
-  <div class="row">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
 
-    <div class="col-sm-6 form-group">
-      <label for="role" th:text="#{role.label} + ':'"></label>
-      <select th:field="*{role}" id="role" tabindex="1" class="form-control"
-        th:errorclass="has-error">
-        <option value="" th:label="#{schedule.booking.role.select}"></option>
-        <option th:each="roleItem : ${roleList}" th:value="${roleItem.id}" th:text="${roleItem}"></option>
-      </select>
-    </div>
-    <!-- .col (ROLE) -->
+    <input type="hidden" th:field="*{timeSlotId}"></input>
 
-    <div class="col-sm-6 form-group">
-      <label for="time" th:text="#{time.label} + ':'"></label>
-      <select th:field="*{time}" id="time" tabindex="2" class="form-control"
-        th:errorclass="has-error">
-        <option value="" th:label="#{schedule.booking.time.select}"></option>
-        <option th:each="timeItem : ${timeList}" th:value="${timeItem.id}" th:text="${timeItem}"></option>
-      </select>
+    <h4 class="modal-title">
+      <input type="hidden" th:field="*{dateTime}"></input>
+      <label th:text="${#dates.format(bookingForm.dateTime, 'HH:mm, dd MMMM yyyy')}"></label>
+    </h4>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="row">
+
+      <div class="col-sm-10 form-group">
+        <select th:field="*{schedule}" tabindex="1" class="form-control role-select"
+          th:errorclass="has-error">
+          <option value="" th:label="#{schedule.booking.role.select}"></option>
+          <option th:each="scheduleItem : ${bookingSchedules}" th:value="${scheduleItem.id}" th:text="${scheduleItem.role.user}"></option>
+        </select>
+      </div>
+      <!-- .col (ROLE) -->
+
     </div>
-    <!-- .col (TIMESLOT) -->
+    <!-- .row -->
 
   </div>
-  <!-- .row (ROLE & TIMESLOT) -->
+  <!-- .modal-body -->
 
-  <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
-  <button id="submit" type="submit" class="btn btn-primary" tabindex="3" th:text="#{form.save}"></button>
-
-  <input th:field="*{id}" hidden="true" />
+  <div class="modal-footer">
+    <div class="col-xs-6">
+      <div class="row" th:each="err : ${#fields.errors()}">
+        <span  class="error fs-xs pull-left" th:text="${err}" />
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
+      <button id="submit" type="submit" class="btn btn-success" tabindex="3" th:text="#{form.save}"></button>
+    </div>
+  </div>
 </form>
-<!-- .modal-body -->
 
 <script type="text/javascript" th:src="@{/js/forms.js}"></script>

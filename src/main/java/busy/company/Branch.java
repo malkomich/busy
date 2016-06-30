@@ -60,8 +60,7 @@ public class Branch implements Serializable {
         return phone;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

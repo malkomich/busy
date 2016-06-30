@@ -32,5 +32,10 @@ public abstract class BusyController {
 
     // Temporary global request attributes (a handler must be implemented)
     protected static final String LOGIN_REQUEST = "loginForm";
+    
+    /**
+     * URL Paths.
+     */
+    protected static final String PATH_ROOT = "/";
 
 }
