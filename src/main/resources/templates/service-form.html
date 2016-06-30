@@ -14,7 +14,7 @@
 
     <div class="row service-row" th:each="service, status : ${serviceForm.services}">
 
-      <div class="col-xs-3 form-group">
+      <div class="col-sm-3 form-group">
         <div class="row">
 
           <div class="col-xs-10">
@@ -40,7 +40,7 @@
       </div>
       <!-- .form-group (SERVICE TYPE & REPETITION) -->
 
-      <div class="col-xs-9 form-group">
+      <div class="col-sm-9 form-group">
         <div class="row time-slot" th:each="timeSlot, timeStatus : ${service.timeSlots}">
 
           <div class="col-xs-1">

@@ -151,7 +151,7 @@
  * Position
  */
 .center-v {
-    vertical-align: -webkit-baseline-middle;
+    vertical-align: middle;
 }
 
 /*
