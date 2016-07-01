@@ -28,9 +28,9 @@ public class CompanyPage extends BusyPage {
     public static final int FORM_BOOKING = 1;
 
     // CSS Selectors
-    private static final String BOOKINGS_SECTION_SELECTOR = "#section-bookings";
-    private static final String BRANCH_LIST_SELECTOR = "#branch-list";
-    private static final String BRANCH_SELECTOR = "#branch-item";
+    private static final String BOOKINGS_SECTION_SELECTOR = "#booking-collapse";
+    private static final String BRANCH_SECTION_SELECTOR = "#branch-content";
+    private static final String BRANCH_SELECTOR = ".branch-item";
     private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
     private static final String DAY_CELL_SELECTOR = ".cal-month-day span";
     private static final String DAY_CELL_DATE = "data-cal-date";
@@ -75,7 +75,7 @@ public class CompanyPage extends BusyPage {
 
     public boolean branchesShown() {
 
-        return !findFirst(BRANCH_LIST_SELECTOR).find(BRANCH_SELECTOR).isEmpty();
+        return findFirst(BRANCH_SECTION_SELECTOR).isDisplayed() && !find(BRANCH_SELECTOR).isEmpty();
     }
 
     public CompanyPage selectBranch(String branch) {

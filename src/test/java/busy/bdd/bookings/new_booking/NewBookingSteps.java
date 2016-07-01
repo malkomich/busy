@@ -115,12 +115,11 @@ public class NewBookingSteps extends AbstractFunctionalTest {
     }
 
     @When("^I select the time \"([^\"]*)\" of the day \"([^\"]*)\" in the calendar$")
-    public void select_day(String time, String dayTmp) throws Throwable {
+    public void select_time_slot(String time, String dayTmp) throws Throwable {
 
         int day = Integer.parseInt(dayTmp);
         DateTime date = new DateTime().withDayOfMonth(day);
-        companyInfoPage.selectDayInCalendar(date);
-        companyInfoPage.selectTime(time);
+        companyInfoPage.selectTimeSlot(time, );
     }
 
     @Then("^I should see a dialog with the available workers$")
