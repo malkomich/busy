@@ -12,14 +12,13 @@ Feature: An user will be able to make a new booking in a service
         When I click on 'Bookings'
         Then I should see a list with the branches of the company
         When I select a branch
-        Then I should see a calendar with the available services
-        When I select the day <day> in the calendar
-        Then I should see a dialog with the available times and workers
-        When I select the time <time>
-        And I select the worker <worker>
+        Then I should see a calendar with the available time slots
+        When I select the time <time> of the day <day> in the calendar
+        Then I should see a dialog with the available workers
+        When I select the worker <worker>
+        And I submit the booking
         Then I should see a notification of the booking done
-        When I select the day <day> in the calendar
-        Then I shouldn't see the time <time> in the time options
+        And I shouldn't see the time <time> of the day <day> as available in the calendar
         
         Examples:
             | day | time | worker |
@@ -30,13 +29,13 @@ Feature: An user will be able to make a new booking in a service
         Then I should see a list with the branches of the company
         When I select a branch
         Then I should see a calendar with the available services
-        When I select the day <day> in the calendar
-        Then I should see a dialog with the available times and workers
+        When I select the time <time> of the day <day> in the calendar
+        Then I should see a dialog with the available workers
         When the time <time> is booked by anyone else
-        And I select the time <time>
         And I select the worker <worker>
+        And I submit the booking
         Then I should see an error message in the dialog
-        And I shouldn't see the time <time> in the time options
+        And I shouldn't see the time <time> of the day <day> as available in the calendar
     
         Examples:
             | day | time | worker |

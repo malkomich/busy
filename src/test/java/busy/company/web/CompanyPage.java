@@ -40,6 +40,7 @@ public class CompanyPage extends BusyPage {
     private static final String ITEM_NOTIFICATION_MESSAGE_SELECTOR = "div.item-notification-message";
     private static final String ERROR_SELECTOR = "span.error";
     private static final String MESSAGE_SELECTOR = "#infoMessage";
+    private static final String SUBMIT_SELECTOR = "#submit";
 
     private static final String BRANCH_NAME = "branch-name";
 
@@ -184,6 +185,13 @@ public class CompanyPage extends BusyPage {
     public boolean errorMessage() {
 
         return findFirst(MESSAGE_SELECTOR).isDisplayed();
+    }
+
+    public CompanyPage submit() {
+
+        submit(SUBMIT_SELECTOR);
+
+        return this;
     }
 
 }
