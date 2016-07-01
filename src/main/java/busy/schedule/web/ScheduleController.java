@@ -53,10 +53,10 @@ public class ScheduleController extends BusyController {
      */
     private static final String SERVICE_FORM_REQUEST = "serviceForm";
     private static final String REPETITION_TYPES_REQUEST = "repetitionTypes";
-    
+
     private static final String BOOKING_FORM_REQUEST = "bookingForm";
     private static final String BOOKING_ROLES_REQUEST = "bookingSchedules";
-    
+
     private static final String MESSAGE_CODE_REQUEST = "msgCode";
 
     /**
@@ -117,8 +117,7 @@ public class ScheduleController extends BusyController {
      * @return The list of resultant bookings in JSON format
      */
     @RequestMapping(value = PATH_SERVICES_OF_MONTH, method = RequestMethod.GET)
-    public @ResponseBody String getMonthServices(
-        @RequestParam(value = "role", required = true) String roleIdTmp,
+    public @ResponseBody String getMonthServices(@RequestParam(value = "role", required = true) String roleIdTmp,
         @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
         @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
         @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
@@ -159,13 +158,14 @@ public class ScheduleController extends BusyController {
                 JSONObject serviceJSON;
                 String id = String.valueOf(timeSlot.getId());
                 String name = sType.getName();
-                
+                String eventClass = (timeSlot.isAvailable()) ? "event-info" : "event-important";
+
                 DateTime startTime = timeSlot.getStartDateTime();
                 DateTime endTime = startTime.plusMinutes(sType.getDuration());
 
                 if (Repetition.NONE.equals(repetitionType)) {
 
-                    serviceJSON = getEvent(id, name, "event-info", startTime.getMillis(), endTime.getMillis());
+                    serviceJSON = getEvent(id, name, eventClass, startTime.getMillis(), endTime.getMillis());
                     jsonServices.put(serviceJSON);
 
                 } else if (Repetition.DAILY.equals(repetitionType)) {
@@ -173,9 +173,9 @@ public class ScheduleController extends BusyController {
                     DateTime dateTime = fromDateTime;
 
                     while (dateTime.isBefore(toDateTime)) {
-                        serviceJSON = getEvent(id, name, "event-warning",
-                            startTime.withDate(dateTime.toLocalDate()).getMillis(),
-                            endTime.withDate(dateTime.toLocalDate()).getMillis());
+                        serviceJSON =
+                            getEvent(id, name, eventClass, startTime.withDate(dateTime.toLocalDate()).getMillis(),
+                                endTime.withDate(dateTime.toLocalDate()).getMillis());
                         jsonServices.put(serviceJSON);
 
                         dateTime = dateTime.plusDays(1);
@@ -187,9 +187,9 @@ public class ScheduleController extends BusyController {
                     DateTime dateTime = fromDateTime.withDayOfWeek(dayOfWeek);
 
                     while (dateTime.isBefore(toDateTime)) {
-                        serviceJSON = getEvent(id, name, "event-warning",
-                            startTime.withDate(dateTime.toLocalDate()).getMillis(),
-                            endTime.withDate(dateTime.toLocalDate()).getMillis());
+                        serviceJSON =
+                            getEvent(id, name, eventClass, startTime.withDate(dateTime.toLocalDate()).getMillis(),
+                                endTime.withDate(dateTime.toLocalDate()).getMillis());
                         jsonServices.put(serviceJSON);
 
                         dateTime = dateTime.plusWeeks(1);
@@ -205,8 +205,7 @@ public class ScheduleController extends BusyController {
         return jsonResult.toString();
     }
 
-    private JSONObject getEvent(String id, String name, String eventClass, long startMillis,
-        long endMillis) {
+    private JSONObject getEvent(String id, String name, String eventClass, long startMillis, long endMillis) {
 
         JSONObject serviceJSON = new JSONObject();
 
@@ -340,7 +339,7 @@ public class ScheduleController extends BusyController {
 
         return "redirect:" + PATH_SCHEDULE + role.getId();
     }
-    
+
     /**
      * Adds a new time slot item to the services form
      * 
@@ -380,22 +379,22 @@ public class ScheduleController extends BusyController {
         BookingForm form = new BookingForm();
 
         TimeSlot timeSlot = scheduleService.findTimeSlotById(Integer.parseInt(timeSlotId));
-        
+
         form.setTimeSlotId(timeSlot.getId());
         form.setDateTime(timeSlot.getStartDateTime());
         model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getSchedules());
-        
+
         model.addAttribute(BOOKING_FORM_REQUEST, form);
 
         return BOOKING_FORM_PAGE;
     }
-    
+
     @RequestMapping(value = PATH_BOOKINGS_FORM_SAVE, method = RequestMethod.POST)
     public String saveBooking(@ModelAttribute(BOOKING_FORM_REQUEST) @Valid BookingForm form, BindingResult result,
         Model model) {
 
         TimeSlot timeSlot = scheduleService.findTimeSlotById(form.getTimeSlotId());
-        
+
         if (result.hasErrors()) {
             model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getSchedules());
             return BOOKING_FORM_PAGE;

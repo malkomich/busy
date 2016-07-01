@@ -115,4 +115,17 @@ public class TimeSlot implements Serializable {
         return false;
     }
 
+    public boolean isAvailable() {
+
+        int maxBookings = service.getServiceType().getMaxBookingsPerRole();
+
+        for (Schedule schedule : getSchedules()) {
+            if (schedule.getBookings().size() < maxBookings) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }
