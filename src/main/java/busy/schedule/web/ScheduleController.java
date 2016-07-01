@@ -394,6 +394,10 @@ public class ScheduleController extends BusyController {
         Model model) {
 
         TimeSlot timeSlot = scheduleService.findTimeSlotById(form.getTimeSlotId());
+        
+        BookingValidator validator = new BookingValidator(timeSlot);
+        
+        validator.validate(form, result);
 
         if (result.hasErrors()) {
             model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getSchedules());
