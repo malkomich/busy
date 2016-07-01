@@ -394,8 +394,9 @@ public class ScheduleController extends BusyController {
         Model model) {
 
         TimeSlot timeSlot = scheduleService.findTimeSlotById(form.getTimeSlotId());
+        User user = (User) model.asMap().get(USER_SESSION);
         
-        BookingValidator validator = new BookingValidator(timeSlot);
+        BookingValidator validator = new BookingValidator(timeSlot, user);
         
         validator.validate(form, result);
 
@@ -404,7 +405,6 @@ public class ScheduleController extends BusyController {
             return BOOKING_FORM_PAGE;
         }
 
-        User user = (User) model.asMap().get(USER_SESSION);
         scheduleService.saveBooking(user, form.getSchedule());
 
         return "redirect:" + PATH_ROOT;

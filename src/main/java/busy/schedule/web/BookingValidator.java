@@ -3,7 +3,9 @@ package busy.schedule.web;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import busy.schedule.Schedule;
 import busy.schedule.TimeSlot;
+import busy.user.User;
 
 /**
  * Booking Form Validator. It validates if the time slot and role selected for booking an
@@ -15,9 +17,11 @@ import busy.schedule.TimeSlot;
 public class BookingValidator implements Validator {
 
     private TimeSlot timeSlot;
+    private User user;
 
-    public BookingValidator(TimeSlot timeSlot) {
+    public BookingValidator(TimeSlot timeSlot, User user) {
         this.timeSlot = timeSlot;
+        this.user = user;
     }
 
     @Override
@@ -37,12 +41,19 @@ public class BookingValidator implements Validator {
 
             errors.rejectValue("dateTime", "schedule.booking.time.full");
 
-            System.out.println(bookingForm.getSchedule());
-            System.out.println(bookingForm.getSchedule().getBookings());
         } else if ((bookingForm.getSchedule() != null)
             && (bookingForm.getSchedule().getBookings().size() >= maxBookings)) {
 
             errors.rejectValue("schedule", "schedule.booking.role.full");
+
+        } else {
+            for (Schedule schedule : timeSlot.getSchedules()) {
+                for (User user : schedule.getBookings()) {
+                    if (this.user.equals(user)) {
+                        errors.rejectValue("dateTime", "schedule.booking.time.booked");
+                    }
+                }
+            }
         }
 
     }
