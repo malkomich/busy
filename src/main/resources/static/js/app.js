@@ -74,7 +74,8 @@ function setupListeners() {
       event.preventDefault();
       event.stopPropagation();
 
-      if (isBooking) {
+      var full = $(this).data('event-class') === "event-important";
+      if (isBooking && !full) {
         var timeSlotId = $(this).data('event-id');
         openBookingForm(timeSlotId);
       }
