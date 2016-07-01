@@ -5,14 +5,20 @@ import static busy.util.SQLUtil.ADDR1;
 import static busy.util.SQLUtil.ADDR2;
 import static busy.util.SQLUtil.ADMIN;
 import static busy.util.SQLUtil.ALIAS_ADDR_ID;
+import static busy.util.SQLUtil.ALIAS_CATEGORY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_NAME;
+import static busy.util.SQLUtil.ALIAS_COMPANY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
 import static busy.util.SQLUtil.ALIAS_ROLE_ID;
 import static busy.util.SQLUtil.ALIAS_SCHEDULE_ID;
+import static busy.util.SQLUtil.ALIAS_SERVICE_ID;
+import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_ID;
+import static busy.util.SQLUtil.ALIAS_SERVICE_TYPE_NAME;
 import static busy.util.SQLUtil.ALIAS_TIME_SLOT_ID;
 import static busy.util.SQLUtil.ALIAS_USER_ID;
+import static busy.util.SQLUtil.BOOKINGS_PER_ROLE;
 import static busy.util.SQLUtil.BOOKING_USER_ACTIVE;
 import static busy.util.SQLUtil.BOOKING_USER_ADMIN;
 import static busy.util.SQLUtil.BOOKING_USER_EMAIL;
@@ -21,18 +27,26 @@ import static busy.util.SQLUtil.BOOKING_USER_ID;
 import static busy.util.SQLUtil.BOOKING_USER_LASTNAME;
 import static busy.util.SQLUtil.BOOKING_USER_NIF;
 import static busy.util.SQLUtil.BOOKING_USER_PHONE;
+import static busy.util.SQLUtil.BUSINESS_NAME;
+import static busy.util.SQLUtil.CIF;
 import static busy.util.SQLUtil.CODE;
+import static busy.util.SQLUtil.CREATE_DATE;
+import static busy.util.SQLUtil.DESCRIPTION;
+import static busy.util.SQLUtil.DURATION;
 import static busy.util.SQLUtil.EMAIL;
 import static busy.util.SQLUtil.FIRSTNAME;
 import static busy.util.SQLUtil.ID;
 import static busy.util.SQLUtil.IS_MANAGER;
 import static busy.util.SQLUtil.LASTNAME;
+import static busy.util.SQLUtil.NAME;
 import static busy.util.SQLUtil.NIF;
 import static busy.util.SQLUtil.PHONE;
+import static busy.util.SQLUtil.REPETITION_TYPE;
 import static busy.util.SQLUtil.SCHEDULE_QUERY;
 import static busy.util.SQLUtil.SERVICE_ID;
 import static busy.util.SQLUtil.START_TIME;
 import static busy.util.SQLUtil.TABLE_TIME_SLOT;
+import static busy.util.SQLUtil.TRADE_NAME;
 import static busy.util.SQLUtil.ZIPCODE;
 
 import java.sql.ResultSet;
@@ -53,6 +67,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
+import busy.company.Category;
+import busy.company.Company;
 import busy.location.Address;
 import busy.location.City;
 import busy.location.Country;
@@ -120,6 +136,8 @@ public class TimeSlotDaoImpl implements TimeSlotDao {
 
     private class TimeSlotExtractor implements ResultSetExtractor<TimeSlot> {
 
+        private Service service;
+
         @Override
         public TimeSlot extractData(ResultSet rs) throws SQLException {
 
@@ -127,6 +145,46 @@ public class TimeSlotDaoImpl implements TimeSlotDao {
 
             TimeSlot timeSlot = new TimeSlot();
             timeSlot.setId(rs.getInt(ALIAS_TIME_SLOT_ID));
+
+            if (service == null) {
+
+                service = new Service();
+                service.setId(rs.getInt(ALIAS_SERVICE_ID));
+                service.setRepetition(rs.getInt(REPETITION_TYPE));
+
+                ServiceType serviceType = new ServiceType();
+                serviceType.setId(rs.getInt(ALIAS_SERVICE_TYPE_ID));
+                serviceType.setName(rs.getString(ALIAS_SERVICE_TYPE_NAME));
+                serviceType.setDescription(rs.getString(DESCRIPTION));
+                serviceType.setMaxBookingsPerRole(rs.getInt(BOOKINGS_PER_ROLE));
+                serviceType.setDuration(rs.getInt(DURATION));
+
+                Company company = new Company();
+                company.setId(rs.getInt(ALIAS_COMPANY_ID));
+                company.setTradeName(rs.getString(TRADE_NAME));
+                company.setBusinessName(rs.getString(BUSINESS_NAME));
+                company.setEmail(rs.getString(EMAIL));
+                company.setCif(rs.getString(CIF));
+                SecureSetter.setAttribute(company, "setActive", Boolean.class, rs.getBoolean(ACTIVE));
+                DateTime createDate = new DateTime(rs.getTimestamp(CREATE_DATE));
+                company.setCreateDate(createDate);
+
+                Integer categoryId = 0;
+                if ((categoryId = rs.getInt(ALIAS_CATEGORY_ID)) > 0) {
+
+                    Category category = new Category();
+                    category.setId(categoryId);
+                    category.setName(rs.getString(NAME));
+
+                    company.setCategory(category);
+                }
+
+                serviceType.setCompany(company);
+
+                service.setServiceType(serviceType);
+            }
+
+            timeSlot.setService(service);
 
             timeSlot.setStartTime(new DateTime(rs.getTimestamp(START_TIME)));
 
@@ -201,7 +259,7 @@ public class TimeSlotDaoImpl implements TimeSlotDao {
 
                 timeSlot.addSchedule(schedule);
             } while (hasNext && rs.getInt(ALIAS_TIME_SLOT_ID) == timeSlot.getId());
-            
+
             return timeSlot;
         }
 
