@@ -382,7 +382,7 @@ public class ScheduleController extends BusyController {
 
         form.setTimeSlotId(timeSlot.getId());
         form.setDateTime(timeSlot.getStartDateTime());
-        model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getSchedules());
+        model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getAvailableSchedules());
 
         model.addAttribute(BOOKING_FORM_REQUEST, form);
 

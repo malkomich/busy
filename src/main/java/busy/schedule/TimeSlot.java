@@ -128,4 +128,19 @@ public class TimeSlot implements Serializable {
         return false;
     }
 
+    public List<Schedule> getAvailableSchedules() {
+
+        int maxBookings = service.getServiceType().getMaxBookingsPerRole();
+
+        List<Schedule> availableSchedules = new ArrayList<>();
+        
+        for (Schedule schedule : getSchedules()) {
+            if (schedule.getBookings().size() < maxBookings) {
+                availableSchedules.add(schedule);
+            }
+        }
+        
+        return availableSchedules;
+    }
+
 }
