@@ -174,7 +174,7 @@ public class NewBookingSteps extends AbstractFunctionalTest {
         assertTrue(companyInfoPage.bookingFormError());
     }
 
-    @When("^the company is inactive$")
+    @When("^the company becomes inactive$")
     public void company_inactive() throws Throwable {
 
         String scriptPath = "classpath:database/set_company_inactive.sql";

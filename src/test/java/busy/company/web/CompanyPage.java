@@ -36,12 +36,12 @@ public class CompanyPage extends BusyPage {
     private static final String DAY_CELL_DATE = "data-cal-date";
     private static final String BOOKING_FORM_SELECTOR = "#bookingForm";
     private static final String BOOKING_FORM_WORKER = ".role-select";
-    private static final String ITEM_NOTIFICATION_MESSAGE_SELECTOR = "div.item-notification-message";
     private static final String ERROR_SELECTOR = "span.error";
     private static final String SUBMIT_SELECTOR = "#submit";
 
     private static final String BRANCH_NAME = "branch-name";
     private static final String AVAILABLE_EVENT_CLASS = "event-info";
+    private static final String MESSAGE_SELECTOR = "#infoMessage";
 
     private int id;
 
@@ -135,22 +135,19 @@ public class CompanyPage extends BusyPage {
             findFirst(BOOKING_FORM_WORKER).click();
             waitForJSandJQueryToLoad();
 
-            findFirst(".role-item", FilterConstructor.withText().contains(worker)).click();
+            findFirst("option", FilterConstructor.withText().contains(worker)).click();
         }
         return this;
     }
 
     public boolean bookingSuccess(MessageSource messageSource) {
 
+        FluentWebElement message = findFirst(MESSAGE_SELECTOR);
         String messageExpected = messageSource
             .getMessage(BookingMsg.BOOKING_SUCCESS.getMessageCode(), null, LocaleContextHolder.getLocale()).trim();
-        for (FluentWebElement notification : find(ITEM_NOTIFICATION_MESSAGE_SELECTOR)) {
-            String messageActual = notification.getText().trim();
-            if (messageActual.equals(messageExpected)) {
-                return true;
-            }
-        }
-        return false;
+        
+        return message.isDisplayed() && message.getText().contains(messageExpected);
+        
     }
 
     public boolean timeOptionShown(DateTime dateTime) {
@@ -158,7 +155,7 @@ public class CompanyPage extends BusyPage {
         FluentWebElement dayCell = getDayCell(dateTime);
         String startTime = DateTimeFormat.forPattern("HH:mm").print(dateTime);
         FluentWebElement event =
-            dayCell.findFirst("event", FilterConstructor.with("data-original-title").contains(startTime));
+            dayCell.findFirst(".event", FilterConstructor.with("data-original-title").contains(startTime));
         return event.getAttribute("data-event-class") == AVAILABLE_EVENT_CLASS;
     }
 
@@ -170,6 +167,7 @@ public class CompanyPage extends BusyPage {
     public CompanyPage submit() {
 
         submit(SUBMIT_SELECTOR);
+        waitForJSandJQueryToLoad();
 
         return this;
     }

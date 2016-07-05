@@ -35,13 +35,23 @@ Feature: An user will be able to make a new booking in a service
         And I select the worker <worker>
         And I submit the booking
         Then I should see a message with the error
-        And I shouldn't see the time <time> of the day <day> as available in the calendar
     
         Examples:
             | day | time | worker |
             | "15" | "09:00" | "Juan" |
     
-    Scenario: Book a service in an inactive company
-        When the company is inactive
-        And I click on 'Bookings'
+    Scenario Outline: Book a service in an inactive company
+        When I click on 'Bookings'
+        Then I should see a list with the branches of the company
+        When I select a branch
+        Then I should see a calendar with the available time slots
+        When I select the time <time> of the day <day> in the calendar
+        Then I should see a dialog with the available workers
+        When the company becomes inactive
+        And I select the worker <worker>
+        And I submit the booking
         Then I should see a message with the error
+
+        Examples:
+            | day | time | worker |
+            | "15" | "09:00" | "Juan" |
