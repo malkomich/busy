@@ -6,6 +6,7 @@ import static busy.util.SQLUtil.ADDR2;
 import static busy.util.SQLUtil.ADMIN;
 import static busy.util.SQLUtil.ALIAS_ADDR_ID;
 import static busy.util.SQLUtil.ALIAS_CATEGORY_ID;
+import static busy.util.SQLUtil.ALIAS_CATEGORY_NAME;
 import static busy.util.SQLUtil.ALIAS_CITY_ID;
 import static busy.util.SQLUtil.ALIAS_CITY_NAME;
 import static busy.util.SQLUtil.ALIAS_COMPANY_ID;
@@ -38,7 +39,6 @@ import static busy.util.SQLUtil.FIRSTNAME;
 import static busy.util.SQLUtil.ID;
 import static busy.util.SQLUtil.IS_MANAGER;
 import static busy.util.SQLUtil.LASTNAME;
-import static busy.util.SQLUtil.NAME;
 import static busy.util.SQLUtil.NIF;
 import static busy.util.SQLUtil.PHONE;
 import static busy.util.SQLUtil.REPETITION_TYPE;
@@ -174,7 +174,7 @@ public class TimeSlotDaoImpl implements TimeSlotDao {
 
                     Category category = new Category();
                     category.setId(categoryId);
-                    category.setName(rs.getString(NAME));
+                    category.setName(rs.getString(ALIAS_CATEGORY_NAME));
 
                     company.setCategory(category);
                 }
