@@ -3,14 +3,14 @@ var calendar;
 
 $(function() {
 
-    var date = new Date();
+    var date = moment();
 
     options = {
         events_source : EVENTS_PATH + "?role=" + roleId + "&is_booking=" + isBooking,
         view : 'month',
         tmpl_path : '/tmpls/',
         tmpl_cache : false,
-        day : date.toString('yyyy-MM-dd'),
+        day : date.format('YYYY-MM-DD'),
         onAfterViewLoad : function(view) {
             $('.page-header h3').text(this.getTitle());
             $('.btn-group button').removeClass('active');
