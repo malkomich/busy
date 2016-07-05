@@ -1,12 +1,13 @@
 /* Busy 
  * Author: Juan Carlos González Cabrero 
  *
- * Database rollback for the feature about creating services
+ * Database rollback
  */
 
 DELETE FROM booking;
 
 DELETE FROM schedule;
+DELETE FROM time_slot;
 DELETE FROM service;
 DELETE FROM service_type;
 

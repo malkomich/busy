@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.fluentlenium.assertj.FluentLeniumAssertions;
 import org.fluentlenium.core.annotation.Page;
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -32,6 +33,7 @@ public class NewBookingSteps extends AbstractFunctionalTest {
     private CompanyPage companyInfoPage;
 
     private String date;
+    private DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
 
     @Before
     public void runOnce() {
@@ -39,10 +41,9 @@ public class NewBookingSteps extends AbstractFunctionalTest {
         String scriptPath = "classpath:database/new_booking-prepare.sql";
         template.execute(getSQLScript(scriptPath));
 
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        date = dtfOut.print(new DateTime());
+        date = dtfOut.print(new DateTime().withDayOfMonth(15).withTime(9, 0, 0, 0));
 
-        scriptPath = INSERT_SERVICE + "VALUES((SELECT id FROM service_type WHERE name='Peluquero'), 0);"
+        String script = INSERT_SERVICE + "VALUES((SELECT id FROM service_type WHERE name='Peluquero'), 0);"
 
             + INSERT_TIMESLOT + "VALUES('" + date
             + "', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Peluquero')));"
@@ -50,7 +51,7 @@ public class NewBookingSteps extends AbstractFunctionalTest {
             + INSERT_SCHEDULE + "VALUES((SELECT id FROM time_slot WHERE start_time='" + date + "'),"
             + "(SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902202122')));";
 
-        template.execute(scriptPath);
+        template.execute(script);
     }
 
     @After
@@ -58,8 +59,6 @@ public class NewBookingSteps extends AbstractFunctionalTest {
 
         String scriptPath = "classpath:database/rollback.sql";
         template.execute(getSQLScript(scriptPath));
-
-        date = null;
     }
 
     @Given("^I am logged as an user$")
@@ -115,11 +114,12 @@ public class NewBookingSteps extends AbstractFunctionalTest {
     }
 
     @When("^I select the time \"([^\"]*)\" of the day \"([^\"]*)\" in the calendar$")
-    public void select_time_slot(String time, String dayTmp) throws Throwable {
+    public void select_time_slot(String timeTmp, String dayTmp) throws Throwable {
 
         int day = Integer.parseInt(dayTmp);
-        DateTime date = new DateTime().withDayOfMonth(day);
-        companyInfoPage.selectTimeSlot(time, );
+        LocalTime time = DateTimeFormat.forPattern("HH:mm").parseLocalTime(timeTmp);
+        DateTime date = new DateTime().withDayOfMonth(day).withTime(time);
+        companyInfoPage.selectTimeSlot(date);
     }
 
     @Then("^I should see a dialog with the available workers$")
@@ -147,20 +147,28 @@ public class NewBookingSteps extends AbstractFunctionalTest {
     }
 
     @Then("^I shouldn't see the time \"([^\"]*)\" of the day \"([^\"]*)\" as available in the calendar$")
-    public void booking_time_option_not_shown(String time, String day) throws Throwable {
+    public void booking_time_option_not_shown(String timeTmp, String dayTmp) throws Throwable {
 
-        assertFalse(companyInfoPage.timeOptionShown(time));
+        int day = Integer.parseInt(dayTmp);
+        LocalTime time = DateTimeFormat.forPattern("HH:mm").parseLocalTime(timeTmp);
+        DateTime date = new DateTime().withDayOfMonth(day).withTime(time);
+        assertFalse(companyInfoPage.timeOptionShown(date));
     }
 
-    @When("^the time \"([^\"]*)\" is booked by anyone else$")
-    public void time_booked() throws Throwable {
+    @When("^the time \"([^\"]*)\" of day \"([^\"]*)\" is booked by anyone else$")
+    public void time_booked(String timeTmp, String dayTmp) throws Throwable {
 
-        String scriptPath = INSERT_BOOKING + "VALUES((SELECT id FROM person WHERE email='user1@domain.com'), (SELECT "
-            + "id FROM schedule WHERE service_id=(SELECT id FROM service WHERE start_time='" + date + "')));";
-        template.execute(getSQLScript(scriptPath));
+        int day = Integer.parseInt(dayTmp);
+        LocalTime time = DateTimeFormat.forPattern("HH:mm").parseLocalTime(timeTmp);
+        DateTime date = new DateTime().withDayOfMonth(day).withTime(time);
+
+        String script = INSERT_BOOKING + "VALUES((SELECT id FROM person WHERE email='user1@domain.x'), (SELECT "
+            + "id FROM schedule WHERE time_slot_id=(SELECT id FROM time_slot WHERE start_time='" + dtfOut.print(date)
+            + "')));";
+        template.execute(script);
     }
 
-    @Then("^I should see an error message in the dialog$")
+    @Then("^I should see a message with the error$")
     public void booking_dialog_error() throws Throwable {
 
         assertTrue(companyInfoPage.bookingFormError());
@@ -171,12 +179,6 @@ public class NewBookingSteps extends AbstractFunctionalTest {
 
         String scriptPath = "classpath:database/set_company_inactive.sql";
         template.execute(getSQLScript(scriptPath));
-    }
-
-    @Then("^I should see a message with the error$")
-    public void error_message_shown() throws Throwable {
-
-        assertTrue(companyInfoPage.errorMessage());
     }
 
 }

@@ -29,20 +29,19 @@ public class CompanyPage extends BusyPage {
 
     // CSS Selectors
     private static final String BOOKINGS_SECTION_SELECTOR = "#booking-collapse";
-    private static final String BRANCH_SECTION_SELECTOR = "#branch-content";
+    private static final String BRANCH_SECTION_SELECTOR = "#booking-content";
     private static final String BRANCH_SELECTOR = ".branch-item";
     private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
-    private static final String DAY_CELL_SELECTOR = ".cal-month-day span";
+    private static final String DAY_CELL_SELECTOR = ".cal-month-day > span";
     private static final String DAY_CELL_DATE = "data-cal-date";
-    private static final String BOOKING_FORM_SELECTOR = ".booking-form";
-    private static final String BOOKING_FORM_TIME = "#booking-time";
-    private static final String BOOKING_FORM_WORKER = "#booking-worker";
+    private static final String BOOKING_FORM_SELECTOR = "#bookingForm";
+    private static final String BOOKING_FORM_WORKER = ".role-select";
     private static final String ITEM_NOTIFICATION_MESSAGE_SELECTOR = "div.item-notification-message";
     private static final String ERROR_SELECTOR = "span.error";
-    private static final String MESSAGE_SELECTOR = "#infoMessage";
     private static final String SUBMIT_SELECTOR = "#submit";
 
     private static final String BRANCH_NAME = "branch-name";
+    private static final String AVAILABLE_EVENT_CLASS = "event-info";
 
     private int id;
 
@@ -69,6 +68,7 @@ public class CompanyPage extends BusyPage {
     public CompanyPage clickOnBookings() {
 
         click(BOOKINGS_SECTION_SELECTOR);
+        waitForJSandJQueryToLoad();
         return this;
 
     }
@@ -85,7 +85,6 @@ public class CompanyPage extends BusyPage {
                 : findFirst(BRANCH_SELECTOR);
 
         click(branchItem);
-
         waitForJSandJQueryToLoad();
         return this;
     }
@@ -108,42 +107,35 @@ public class CompanyPage extends BusyPage {
             .parent();
     }
 
+    public CompanyPage selectTimeSlot(DateTime dateTime) {
+
+        FluentWebElement dayCell = getDayCell(dateTime);
+        String startTime = DateTimeFormat.forPattern("HH:mm").print(dateTime);
+        FluentWebElement event =
+            dayCell.findFirst("a.event-info", FilterConstructor.with("data-original-title").contains(startTime));
+        event.click();
+        waitForJSandJQueryToLoad();
+        return this;
+    }
+
     public boolean formIsShown(int formType) {
 
         String selector = null;
 
         if (formType == FORM_BOOKING) {
             selector = BOOKING_FORM_SELECTOR;
-
         }
 
         return findFirst(selector).isDisplayed();
     }
 
-    public CompanyPage selectTime(String time) {
-
-        if (!time.isEmpty()) {
-            FluentWebElement select = findFirst(BOOKING_FORM_TIME);
-
-            FluentWebElement option = select.findFirst("option", FilterConstructor.containingText(time));
-            if (!option.isDisplayed()) {
-                select.click();
-            }
-            option.click();
-        }
-        return this;
-    }
-
     public CompanyPage selectWorker(String worker) {
 
         if (!worker.isEmpty()) {
-            FluentWebElement select = findFirst(BOOKING_FORM_WORKER);
+            findFirst(BOOKING_FORM_WORKER).click();
+            waitForJSandJQueryToLoad();
 
-            FluentWebElement option = select.findFirst("option", FilterConstructor.containingText(worker));
-            if (!option.isDisplayed()) {
-                select.click();
-            }
-            option.click();
+            findFirst(".role-item", FilterConstructor.withText().contains(worker)).click();
         }
         return this;
     }
@@ -161,30 +153,18 @@ public class CompanyPage extends BusyPage {
         return false;
     }
 
-    public boolean timeOptionShown(String time) {
+    public boolean timeOptionShown(DateTime dateTime) {
 
-        if (!time.isEmpty()) {
-            FluentWebElement select = findFirst(BOOKING_FORM_TIME);
-
-            FluentWebElement option = select.findFirst("option", FilterConstructor.containingText(time));
-            if (!option.isDisplayed()) {
-                select.click();
-            }
-            if (option.isDisplayed()) {
-                return true;
-            }
-        }
-        return false;
+        FluentWebElement dayCell = getDayCell(dateTime);
+        String startTime = DateTimeFormat.forPattern("HH:mm").print(dateTime);
+        FluentWebElement event =
+            dayCell.findFirst("event", FilterConstructor.with("data-original-title").contains(startTime));
+        return event.getAttribute("data-event-class") == AVAILABLE_EVENT_CLASS;
     }
 
     public boolean bookingFormError() {
 
         return !find(ERROR_SELECTOR).isEmpty();
-    }
-
-    public boolean errorMessage() {
-
-        return findFirst(MESSAGE_SELECTOR).isDisplayed();
     }
 
     public CompanyPage submit() {

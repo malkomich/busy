@@ -1,10 +1,14 @@
 package busy;
 
+import java.util.concurrent.TimeUnit;
+
 import org.fluentlenium.core.FluentPage;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 
 /**
  * Extension of FluentPage which enable relative path delegating to Spring the assignment of the
@@ -54,7 +58,8 @@ public abstract class BusyPage extends FluentPage {
      */
     protected boolean waitForJSandJQueryToLoad() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), 30);
+        Wait<WebDriver> wait = new FluentWait<>(getDriver()).withTimeout(5, TimeUnit.SECONDS)
+            .ignoring(StaleElementReferenceException.class).pollingEvery(2, TimeUnit.SECONDS);
 
         // wait for jQuery to load
         ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
@@ -76,7 +81,7 @@ public abstract class BusyPage extends FluentPage {
             @Override
             public Boolean apply(WebDriver driver) {
                 return ((JavascriptExecutor) getDriver()).executeScript("return document.readyState").toString()
-                        .equals("complete");
+                    .equals("complete");
             }
         };
 
