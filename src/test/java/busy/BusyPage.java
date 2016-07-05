@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.fluentlenium.core.FluentPage;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.StaleElementReferenceException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -58,8 +58,9 @@ public abstract class BusyPage extends FluentPage {
      */
     protected boolean waitForJSandJQueryToLoad() {
 
-        Wait<WebDriver> wait = new FluentWait<>(getDriver()).withTimeout(5, TimeUnit.SECONDS)
-            .ignoring(StaleElementReferenceException.class).pollingEvery(2, TimeUnit.SECONDS);
+        // Configure time to wait till the conditions are fulfilled
+        Wait<WebDriver> wait = new FluentWait<>(getDriver()).withTimeout(30, TimeUnit.SECONDS)
+            .ignoring(NoSuchElementException.class).pollingEvery(2, TimeUnit.SECONDS);
 
         // wait for jQuery to load
         ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
