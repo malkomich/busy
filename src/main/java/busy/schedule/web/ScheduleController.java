@@ -156,12 +156,14 @@ public class ScheduleController extends BusyController {
             for (TimeSlot timeSlot : service.getTimeSlots()) {
 
                 JSONObject serviceJSON;
-                String id = String.valueOf(timeSlot.getId());
-                String name = sType.getName();
-                String eventClass = (timeSlot.isAvailable()) ? "event-info" : "event-important";
 
                 DateTime startTime = timeSlot.getStartDateTime();
                 DateTime endTime = startTime.plusMinutes(sType.getDuration());
+
+                String id = String.valueOf(timeSlot.getId());
+                org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
+                String name = formatter.print(startTime) + "-" + formatter.print(endTime) + " [" + sType.getName() + "]";
+                String eventClass = (timeSlot.isAvailable()) ? "event-info" : "event-important";
 
                 if (Repetition.NONE.equals(repetitionType)) {
 
@@ -395,9 +397,9 @@ public class ScheduleController extends BusyController {
 
         TimeSlot timeSlot = scheduleService.findTimeSlotById(form.getTimeSlotId());
         User user = (User) model.asMap().get(USER_SESSION);
-        
+
         BookingValidator validator = new BookingValidator(timeSlot, user);
-        
+
         validator.validate(form, result);
 
         if (result.hasErrors()) {
