@@ -4,6 +4,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import busy.schedule.Schedule;
+import busy.schedule.ServiceType;
 import busy.schedule.TimeSlot;
 import busy.user.User;
 
@@ -35,14 +36,18 @@ public class BookingValidator implements Validator {
 
         BookingForm bookingForm = (BookingForm) target;
 
-        int maxBookings = timeSlot.getService().getServiceType().getMaxBookingsPerRole();
+        ServiceType sType = timeSlot.getService().getServiceType();
 
-        if (!timeSlot.isAvailable()) {
+        if(!sType.getCompany().isActive()) {
+        
+            errors.rejectValue("timeSlotId", "schedule.booking.company.inactive");
+            
+        } else if (!timeSlot.isAvailable()) {
 
             errors.rejectValue("dateTime", "schedule.booking.time.full");
 
         } else if ((bookingForm.getSchedule() != null)
-            && (bookingForm.getSchedule().getBookings().size() >= maxBookings)) {
+            && (bookingForm.getSchedule().getBookings().size() >= sType.getMaxBookingsPerRole())) {
 
             errors.rejectValue("schedule", "schedule.booking.role.full");
 
