@@ -14,8 +14,9 @@ import busy.user.User;
  */
 public class OnBookingComplete extends ApplicationEvent {
 
-    private static final long serialVersionUID = 1L;
 
+    private static final long serialVersionUID = 2725808275387573672L;
+    
     private String appUrl;
     private Locale locale;
     private User user;

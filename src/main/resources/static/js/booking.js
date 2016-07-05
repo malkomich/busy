@@ -13,7 +13,7 @@ sections.branch = "#branch-content";
 
 var selectors = {
     'MODAL' : '#modalForm',
-    'BOOKING_FORM' : '#bookingForm'
+    'BOOKING_FORM' : '#booking-form'
 };
 
 /*
