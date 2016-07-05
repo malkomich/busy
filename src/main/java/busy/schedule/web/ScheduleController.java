@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
 import busy.BusyController;
 import busy.company.Company;
@@ -98,6 +100,9 @@ public class ScheduleController extends BusyController {
     public Repetition[] loadRepetitions() {
         return Repetition.values();
     }
+    
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     /**
      * Request to get all bookings made between the given dates in the specific branch
@@ -393,7 +398,7 @@ public class ScheduleController extends BusyController {
 
     @RequestMapping(value = PATH_BOOKINGS_FORM_SAVE, method = RequestMethod.POST)
     public String saveBooking(@ModelAttribute(BOOKING_FORM_REQUEST) @Valid BookingForm form, BindingResult result,
-        Model model) {
+        Model model, WebRequest request) {
 
         TimeSlot timeSlot = scheduleService.findTimeSlotById(form.getTimeSlotId());
         User user = (User) model.asMap().get(USER_SESSION);
@@ -408,8 +413,11 @@ public class ScheduleController extends BusyController {
         }
 
         scheduleService.saveBooking(user, form.getSchedule());
+        
+        eventPublisher.publishEvent(new OnBookingComplete(user, request.getLocale(), request.getContextPath()));
 
-        return "redirect:" + PATH_ROOT;
+        model.addAttribute(MESSAGE_CODE_REQUEST, "notification.message.booking.complete");
+        return MESSAGE_VIEW;
     }
 
     /**

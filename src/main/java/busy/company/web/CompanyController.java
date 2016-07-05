@@ -53,7 +53,6 @@ public class CompanyController extends BusyController {
     static final String REGISTER_COMPANY_REQUEST = "companyForm";
     static final String COUNTRY_ITEMS_REQUEST = "countryItems";
     static final String CATEGORY_ITEMS_REQUEST = "categoryItems";
-    static final String MESSAGE_REQUEST = "messageFromController";
     static final String COMPANY_REQUEST = "company";
     static final String SERVICE_TYPE_FORM_REQUEST = "serviceTypeForm";
     static final String SERVICE_TYPE_REQUEST = "serviceType";

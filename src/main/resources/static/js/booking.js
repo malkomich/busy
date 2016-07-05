@@ -97,6 +97,7 @@ function saveBooking() {
         } else {
             modalContainer.modal('hide');
             calendar.view();
+            messageModal($(data).text());
         }
 
     });
