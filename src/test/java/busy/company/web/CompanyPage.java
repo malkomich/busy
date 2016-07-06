@@ -34,7 +34,7 @@ public class CompanyPage extends BusyPage {
     private static final String CALENDAR_MONTH_SELECTOR = ".cal-month-box";
     private static final String DAY_CELL_SELECTOR = ".cal-month-day > span";
     private static final String DAY_CELL_DATE = "data-cal-date";
-    private static final String BOOKING_FORM_SELECTOR = "#booking-form";
+    private static final String BOOKING_FORM_ID = "booking-form";
     private static final String BOOKING_FORM_WORKER = ".role-select";
     private static final String ERROR_SELECTOR = "span.error";
     private static final String SUBMIT_SELECTOR = "#submit";
@@ -123,10 +123,10 @@ public class CompanyPage extends BusyPage {
         String selector = null;
 
         if (formType == FORM_BOOKING) {
-            selector = BOOKING_FORM_SELECTOR;
+            selector = BOOKING_FORM_ID;
         }
 
-        return findFirst(selector).isDisplayed();
+        return getWhenVisible(selector).isDisplayed();
     }
 
     public CompanyPage selectWorker(String worker) {
