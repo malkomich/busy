@@ -53,8 +53,7 @@ public class Role implements Serializable {
         return (manager != null) ? manager: false;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

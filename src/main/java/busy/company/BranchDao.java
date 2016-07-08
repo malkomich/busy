@@ -1,5 +1,7 @@
 package busy.company;
 
+import java.util.List;
+
 /**
  * Branch persistence interface.
  * 
@@ -23,5 +25,23 @@ public interface BranchDao {
      * @return The resultant branch
      */
     Branch findById(int id);
+
+    /**
+     * Gets the list of branch offices from the given company.
+     * 
+     * @param company
+     *            company of the branch offices
+     * @return The list of resultant branch offices
+     */
+    List<Branch> findByCompany(Company company);
+
+    /**
+     * Gets the headquarters office of a given company.
+     * 
+     * @param company
+     *            company which headquarters is requested
+     * @return The resultant headquarters
+     */
+    Branch findHeadQuarters(Company company);
 
 }

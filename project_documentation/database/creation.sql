@@ -189,7 +189,7 @@ CREATE TABLE schedule(
 CREATE TABLE booking(
     person_id           integer             NOT NULL REFERENCES person(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    schedule_id          integer             NOT NULL REFERENCES schedule(id)
+    schedule_id         integer             NOT NULL REFERENCES schedule(id)
         ON DELETE NO ACTION ON UPDATE CASCADE,
     UNIQUE(person_id, schedule_id)
 );

@@ -14,7 +14,9 @@
 
     <div class="row service-row" th:each="service, status : ${serviceForm.services}">
 
-      <div class="col-xs-3 form-group">
+      <input type="hidden" th:field="*{services[__${status.index}__].id}"></input>
+
+      <div class="col-sm-3 form-group">
         <div class="row">
 
           <div class="col-xs-10">
@@ -40,8 +42,10 @@
       </div>
       <!-- .form-group (SERVICE TYPE & REPETITION) -->
 
-      <div class="col-xs-9 form-group">
+      <div class="col-sm-9 form-group">
         <div class="row time-slot" th:each="timeSlot, timeStatus : ${service.timeSlots}">
+
+          <input type="hidden" th:field="*{services[__${status.index}__].timeSlots[__${timeStatus.index}__].id}"></input>
 
           <div class="col-xs-1">
             <span class="glyphicon glyphicon-time center-v"></span>
@@ -79,7 +83,7 @@
         <div class="row">
           <div class="col-xs-1">
             <a href="#" data-toggle="tooltip" data-placement="right" th:title="#{schedule.service.button.new_timeslot}">
-              <span class="glyphicon glyphicon-plus darkseagreen add_timeslot"></span>
+              <span class="glyphicon glyphicon-plus color-lightgreen add_timeslot"></span>
             </a>
           </div>
         </div>

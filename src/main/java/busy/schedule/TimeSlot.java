@@ -27,7 +27,7 @@ public class TimeSlot implements Serializable {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -57,7 +57,7 @@ public class TimeSlot implements Serializable {
 
     public void setService(Service service) {
         this.service = service;
-        if(startTime != null) {
+        if (startTime != null) {
             startTime = startTime.withDate(service.getDate());
         }
     }
@@ -113,6 +113,34 @@ public class TimeSlot implements Serializable {
             }
         }
         return false;
+    }
+
+    public boolean isAvailable() {
+
+        int maxBookings = service.getServiceType().getMaxBookingsPerRole();
+
+        for (Schedule schedule : getSchedules()) {
+            if (schedule.getBookings().size() < maxBookings) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public List<Schedule> getAvailableSchedules() {
+
+        int maxBookings = service.getServiceType().getMaxBookingsPerRole();
+
+        List<Schedule> availableSchedules = new ArrayList<>();
+        
+        for (Schedule schedule : getSchedules()) {
+            if (schedule.getBookings().size() < maxBookings) {
+                availableSchedules.add(schedule);
+            }
+        }
+        
+        return availableSchedules;
     }
 
 }

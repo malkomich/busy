@@ -19,12 +19,12 @@ INSERT INTO address(address1, address2, zip_code, city_id) VALUES('Calle Mayor',
 INSERT INTO address(address1, address2, zip_code, city_id) VALUES('Calle Toreros', '3, s/n', '47007', (SELECT id FROM city WHERE name='Valladolid'));
 
 INSERT INTO category(name) VALUES('Peluquería');
-INSERT INTO company(trade_name, business_name, email, cif, active, category_id) VALUES('El Corta Pelos', 'El Corta Pelos S.A.', 'peluqueria@domain.x', 'B12345678', false, (SELECT id FROM category WHERE name='Mobiliario'));
+INSERT INTO company(trade_name, business_name, email, cif, active, category_id) VALUES('El Corta Pelos', 'El Corta Pelos S.A.', 'peluqueria@domain.x', 'B12345678', false, (SELECT id FROM category WHERE name='Peluquería'));
 INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM company WHERE email='peluqueria@domain.x'), (SELECT id FROM address WHERE address1='Calle Mayor'), true, '902202122');
 INSERT INTO role(person_id, branch_id, is_manager) VALUES((SELECT id FROM person WHERE email='peluqueria@domain.x'), (SELECT id FROM branch WHERE phone='902202122'), true);
 
 INSERT INTO category(name) VALUES('Academia');
-INSERT INTO company(trade_name, business_name, email, cif, active, category_id) VALUES('AprendeMás', 'AprendeMás S.A.', 'academia@domain.x', 'B12345679', true, (SELECT id FROM category WHERE name='Software'));
+INSERT INTO company(trade_name, business_name, email, cif, active, category_id) VALUES('AprendeMás', 'AprendeMás S.A.', 'academia@domain.x', 'B12345679', true, (SELECT id FROM category WHERE name='Academia'));
 INSERT INTO branch(company_id, address_id, main, phone) VALUES((SELECT id FROM company WHERE email='academia@domain.x'), (SELECT id FROM address WHERE address1='Calle Mayor'), true, '902202123');
 INSERT INTO role(person_id, branch_id, is_manager) VALUES((SELECT id FROM person WHERE email='academia@domain.x'), (SELECT id FROM branch WHERE phone='902202123'), true);
 

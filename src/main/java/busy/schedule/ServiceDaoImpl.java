@@ -78,14 +78,17 @@ import busy.util.SecureSetter;
 @Repository
 public class ServiceDaoImpl implements ServiceDao {
 
-    private static final String SQL_SELECT_BETWEEN_DAYS =
-        SCHEDULE_QUERY + " WHERE ((? <= " + START_TIME + " AND ? >= " + START_TIME + ") OR " + REPETITION_TYPE + "<> 0)";
+    private static final String SQL_SELECT_BETWEEN_DAYS = SCHEDULE_QUERY + " WHERE ((? <= " + START_TIME + " AND ? >= "
+        + START_TIME + ") OR " + REPETITION_TYPE + "<> 0)";
 
     private static final String SQL_ROLE_FILTER = " AND " + ALIAS_ROLE_ID + "=?";
 
     private static final String SQL_BRANCH_FILTER = " AND " + ALIAS_BRANCH_ID + "=?";
 
     private static final String SQL_SERVICE_TYPE_FILTER = " AND " + SERVICE_TYPE_ID + "=?";
+
+    private static final String SQL_ORDER_CLAUSE =
+        " ORDER BY " + ALIAS_SERVICE_ID + ", " + ALIAS_TIME_SLOT_ID + ", " + ALIAS_SCHEDULE_ID + ", " + BOOKING_USER_ID;
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_SERVICE + " SET " + SERVICE_TYPE_ID + "= ?,"
         + REPETITION_TYPE + "= ?" + " WHERE " + ID + "= ?";
@@ -137,6 +140,8 @@ public class ServiceDaoImpl implements ServiceDao {
             params.add(serviceType.getId());
             resultSetExtractor.setServiceType(serviceType);
         }
+        
+        query += SQL_ORDER_CLAUSE;
 
         return jdbcTemplate.query(query, resultSetExtractor, params.toArray());
     }
@@ -164,7 +169,7 @@ public class ServiceDaoImpl implements ServiceDao {
 
             Integer id = jdbcTemplate.queryForObject(query, parameters.values().toArray(), Integer.class);
             if (id != null) {
-                SecureSetter.setId(service, id.intValue());
+                service.setId(id.intValue());
             }
         }
     }
@@ -219,13 +224,13 @@ public class ServiceDaoImpl implements ServiceDao {
 
                     service = new Service();
                     int id = rs.getInt(ALIAS_SERVICE_ID);
-                    SecureSetter.setId(service, id);
+                    service.setId(rs.getInt(ALIAS_SERVICE_ID));
                     service.setRepetition(rs.getInt(REPETITION_TYPE));
 
                     ServiceType serviceType = this.serviceType;
                     if (serviceType == null) {
                         serviceType = new ServiceType();
-                        SecureSetter.setId(serviceType, rs.getInt(ALIAS_SERVICE_TYPE_ID));
+                        serviceType.setId(rs.getInt(ALIAS_SERVICE_TYPE_ID));
                         serviceType.setName(rs.getString(ALIAS_SERVICE_TYPE_NAME));
                         serviceType.setDescription(rs.getString(DESCRIPTION));
                         serviceType.setMaxBookingsPerRole(rs.getInt(BOOKINGS_PER_ROLE));
@@ -238,23 +243,22 @@ public class ServiceDaoImpl implements ServiceDao {
                 }
 
                 TimeSlot timeSlot = new TimeSlot();
-                SecureSetter.setId(timeSlot, rs.getInt(ALIAS_TIME_SLOT_ID));
-
+                timeSlot.setId(rs.getInt(ALIAS_TIME_SLOT_ID));
                 timeSlot.setService(service);
                 timeSlot.setStartTime(new DateTime(rs.getTimestamp(START_TIME)));
 
                 do {
                     Schedule schedule = new Schedule();
-                    SecureSetter.setId(schedule, rs.getInt(ALIAS_SCHEDULE_ID));
+                    schedule.setId(rs.getInt(ALIAS_SCHEDULE_ID));
 
                     Role role = this.role;
                     if (role == null) {
                         role = new Role();
-                        SecureSetter.setId(role, rs.getInt(ALIAS_ROLE_ID));
+                        role.setId(rs.getInt(ALIAS_ROLE_ID));
 
                         // Set User
                         User roleUser = new User();
-                        SecureSetter.setId(roleUser, rs.getInt(ALIAS_USER_ID));
+                        roleUser.setId(rs.getInt(ALIAS_USER_ID));
                         roleUser.setFirstName(rs.getString(FIRSTNAME));
                         roleUser.setLastName(rs.getString(LASTNAME));
                         roleUser.setEmail(rs.getString(EMAIL));
@@ -268,17 +272,17 @@ public class ServiceDaoImpl implements ServiceDao {
 
                             Address address = new Address();
 
-                            SecureSetter.setId(address, addressId);
+                            address.setId(addressId);
                             address.setAddress1(rs.getString(ADDR1));
                             address.setAddress2(rs.getString(ADDR2));
                             address.setZipCode(rs.getString(ZIPCODE));
 
                             City city = new City();
-                            SecureSetter.setId(city, rs.getInt(ALIAS_CITY_ID));
+                            city.setId(rs.getInt(ALIAS_CITY_ID));
                             city.setName(rs.getString(ALIAS_CITY_NAME));
 
                             Country country = new Country();
-                            SecureSetter.setId(country, rs.getInt(ALIAS_COUNTRY_ID));
+                            country.setId(rs.getInt(ALIAS_COUNTRY_ID));
                             country.setName(rs.getString(ALIAS_COUNTRY_NAME));
                             country.setCode(rs.getString(CODE));
 
@@ -301,7 +305,7 @@ public class ServiceDaoImpl implements ServiceDao {
                         Integer userId = rs.getInt(BOOKING_USER_ID);
                         if (userId != INVALID_ID) {
                             User bookingUser = new User();
-                            SecureSetter.setId(bookingUser, userId);
+                            bookingUser.setId(userId);
                             bookingUser.setFirstName(rs.getString(BOOKING_USER_FIRSTNAME));
                             bookingUser.setLastName(rs.getString(BOOKING_USER_LASTNAME));
                             bookingUser.setEmail(rs.getString(BOOKING_USER_EMAIL));
@@ -314,6 +318,7 @@ public class ServiceDaoImpl implements ServiceDao {
                             schedule.addBooking(bookingUser);
                         }
                         hasNext = rs.next();
+
                     } while (hasNext && rs.getInt(ALIAS_SCHEDULE_ID) == schedule.getId());
 
                     timeSlot.addSchedule(schedule);

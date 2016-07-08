@@ -51,13 +51,13 @@ public class ServiceDBTest extends AbstractDBTest {
 
         Branch branch = new Branch();
         role = new Role();
-        SecureSetter.setId(role, 1);
+        role.setId(1);
         SecureSetter.setAttribute(role, "setManager", Boolean.class, true);
-        SecureSetter.setId(branch, 1);
+        branch.setId(1);
         role.setBranch(branch);
 
         serviceType = new ServiceType();
-        SecureSetter.setId(serviceType, 1);
+        serviceType.setId(1);
     }
 
     @Test(expected = InvalidDataAccessApiUsageException.class)
@@ -102,7 +102,7 @@ public class ServiceDBTest extends AbstractDBTest {
     public void findByInvalidRole() {
 
         role = new Role();
-        SecureSetter.setId(role, INVALID_ID);
+        role.setId(INVALID_ID);
 
         List<Service> services = repository.findBetweenDays(initDay, endDay, role, serviceType);
 
@@ -134,7 +134,7 @@ public class ServiceDBTest extends AbstractDBTest {
     @DatabaseSetup("../schedule/serviceSet.xml")
     public void findByInvalidServiceType() {
 
-        SecureSetter.setId(serviceType, INVALID_ID);
+        serviceType.setId(INVALID_ID);
 
         List<Service> services = repository.findBetweenDays(initDay, endDay, role, serviceType);
 
@@ -203,7 +203,7 @@ public class ServiceDBTest extends AbstractDBTest {
     public void insertWithServiceTypeInvalid() {
 
         Service service = new Service();
-        SecureSetter.setId(serviceType, INVALID_ID);
+        serviceType.setId(INVALID_ID);
         service.setServiceType(serviceType);
 
         repository.save(service);

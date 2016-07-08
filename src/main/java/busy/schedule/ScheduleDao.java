@@ -18,4 +18,13 @@ public interface ScheduleDao {
      */
     void save(Schedule schedule, int timeSlotId);
 
+    /**
+     * Gets a specific schedule given its ID.
+     * 
+     * @param id
+     *            unique ID of the schedule
+     * @return The resultant schedule
+     */
+    Schedule findById(Integer id);
+
 }

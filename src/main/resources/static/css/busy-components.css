@@ -56,20 +56,18 @@
 /*
  * Loading span
  */
-.glyphicon-refresh-animate {
-    -animation: spin .7s infinite linear;
-    -webkit-animation: spin2 .7s infinite linear;
+.spin {
+    -animation: spin 1s infinite linear;
+    -webkit-animation: circular 1s infinite linear;
 }
 
-@
--webkit-keyframes spin2 {from { -webkit-transform:rotate(0deg);
-
-}
-
-to {
+@-webkit-keyframes circular {
+  from {
+    -webkit-transform:rotate(0deg);
+  }
+  to {
     -webkit-transform: rotate(360deg);
-}
-
+  }
 }
 
 /*
@@ -170,14 +168,21 @@ to {
     margin-left: -2px;
 }
 
-.profile-content {
+/*
+ * Sections style
+ */
+.section {
     padding: 50px;
     background: #fff;
-    min-height: 460px;
+    display: none;
+}
+
+.section.active {
+    display: block;
 }
 
 @media screen and (max-width: 991px) {
-    .profile-content {
+    .section {
         margin-top: 30px;
     }
 }
@@ -223,6 +228,10 @@ to {
  * Colors
  */
 
-.darkseagreen {
+.color-lightgreen {
     color: darkseagreen;
+}
+
+.color-lightblue {
+    color: cornflowerblue;
 }

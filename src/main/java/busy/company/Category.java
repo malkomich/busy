@@ -29,8 +29,7 @@ public class Category implements Serializable {
         return name;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

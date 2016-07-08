@@ -31,7 +31,6 @@ import org.springframework.stereotype.Repository;
 import busy.company.Company;
 import busy.util.OperationResult;
 import busy.util.OperationResult.ResultCode;
-import busy.util.SecureSetter;
 
 /**
  * Service type persistence implementation for Database storing.
@@ -206,7 +205,7 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
         public ServiceType mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             ServiceType serviceType = new ServiceType();
-            SecureSetter.setId(serviceType, rs.getInt(ALIAS_SERVICE_TYPE_ID));
+            serviceType.setId(rs.getInt(ALIAS_SERVICE_TYPE_ID));
             serviceType.setName(rs.getString(ALIAS_SERVICE_TYPE_NAME));
             serviceType.setDescription(rs.getString(DESCRIPTION));
             serviceType.setMaxBookingsPerRole(rs.getInt(BOOKINGS_PER_ROLE));

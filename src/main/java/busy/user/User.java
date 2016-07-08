@@ -26,7 +26,8 @@ public class User implements Serializable {
     private Boolean admin;
 
     public User(String firstName, String lastName, String email, String password, String nif, String phone,
-            Boolean active, Boolean admin, Address address) {
+        Boolean active, Boolean admin, Address address) {
+
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -113,8 +114,7 @@ public class User implements Serializable {
         return address;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -129,6 +129,23 @@ public class User implements Serializable {
 
     public Integer getAddressId() {
         return (address != null) ? address.getId() : null;
+    }
+
+    private long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof User && ((User) object).getSerialVersionUID() == serialVersionUID
+            && ((User) object).getId() == id) {
+
+            return true;
+        }
+
+        return false;
+
     }
 
 }

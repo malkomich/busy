@@ -7,7 +7,7 @@ package busy.schedule;
  *
  */
 public interface TimeSlotDao {
-    
+
     /**
      * Persists a new time slot or update an existing one.
      * 
@@ -17,5 +17,14 @@ public interface TimeSlotDao {
      *            the unique id of the service to attach the time slot
      */
     void save(TimeSlot timeSlot, int serviceId);
-    
+
+    /**
+     * Gets a specific time slot given its ID.
+     * 
+     * @param id
+     *            unique ID of the time slot
+     * @return The resultant time slot
+     */
+    TimeSlot findById(int id);
+
 }

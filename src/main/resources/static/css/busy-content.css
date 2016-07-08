@@ -111,7 +111,6 @@
 
 .admin-box-loading {
     opacity: 0;
-    color: #327CDB;
 }
 
 /*
@@ -152,7 +151,11 @@
  * Position
  */
 .center-v {
-    vertical-align: -webkit-baseline-middle;
+    vertical-align: middle;
+}
+
+.inline {
+    display: inline-block !important;
 }
 
 /*

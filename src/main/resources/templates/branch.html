@@ -22,6 +22,8 @@
     <link th:href="@{/css/forms.css}" rel="stylesheet"></link>
     <link th:href="@{/css/multiple-select.css}" rel="stylesheet"/>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
   </head>
 
   <body>
@@ -30,9 +32,8 @@
     <div class="container">
       <div class="content">
 
+        <!-- Section selector -->
         <div class="row">
-
-          <!-- Section selector -->
           <div class="col-sm-3 col-xs-3">
             <button id="select-role" class="btn btn-default btn-lg collapse-switch" type="button" data-toggle="collapse" data-target="#role-menu"
               aria-expanded="false" aria-controls="#role-menu">
@@ -53,7 +54,6 @@
             </div>
             <!-- .role-select-menu -->
           </div>
-
           <!-- .col -->
           <div class="col-xs-9 pull-right">
             <div class="table-list-filters pull-right">
@@ -76,47 +76,13 @@
         </div>
         <!-- .row -->
 
-        <!-- Calendar Header -->
-        <div class="page-header">
-
-          <div class="pull-right form-inline">
-            <div class="btn-group">
-              <button class="btn btn-primary calendar-nav" data-calendar-nav="prev" th:text="#{calendar.prev}"></button>
-              <button class="btn calendar-nav" data-calendar-nav="today" th:text="#{calendar.today}"></button>
-              <button class="btn btn-primary calendar-nav" data-calendar-nav="next" th:text="#{calendar.next}"></button>
-            </div>
-          </div>
-
-          <h3></h3>
-        </div>
-        <!-- .page-header -->
-
-        <div class="row">
-          <div id="calendar"></div>
-        </div>
-        <!-- .row -->
+        <div th:include="calendar"></div>
 
       </div>
       <!-- .content -->
       <div th:include="fragments/footer"></div>
     </div>
     <!-- container -->
-
-    <!-- Calendar Events Modal -->
-    <div class="modal fade" id="events-modal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Event</h3>
-          </div>
-          <div class="modal-body" style="height: 400px"></div>
-          <div class="modal-footer">
-            <a href="#" data-dismiss="modal" class="btn" th:text="#{modal.close}"></a>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- Message Modal -->
     <div class="modal fade" id="messageModal" tabindex="-1" role="dialog">
@@ -138,22 +104,19 @@
     </div>
 
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
     <script type="text/javascript" th:inline="javascript">
+      const
+        EVENTS_PATH = "/get_month_services",
+        DBL_CLICK_PATH = "/service_form";
+
       /*<![CDATA[*/
       var message = /*[[${messageFromController}]]*/ null;
-      var roleId = /*[[${role.id}]]*/ null;
+      var isBooking = false;
       /*]]>*/
     </script>
     <script type="text/javascript" th:src="@{/js/jquery.autocomplete.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/busy-logic.js}"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <script type="text/javascript" th:src="@{/js/calendar.js}"></script>
-    <script type="text/javascript" th:src="@{/js/language/es-ES.js}"></script>
-    <script type="text/javascript" th:src="@{/js/date.js}"></script>
-    <script type="text/javascript" th:src="@{/js/app.js}"></script>
   </body>
 
 </html>

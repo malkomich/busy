@@ -7,6 +7,7 @@ import org.joda.time.LocalDate;
 
 import busy.company.Company;
 import busy.role.Role;
+import busy.user.User;
 import busy.util.OperationResult;
 
 /**
@@ -106,4 +107,32 @@ public interface ScheduleService {
      * @return The resultant list of services
      */
     List<Service> findServicesByDay(LocalDate date, Role role, ServiceType serviceType);
+
+    /**
+     * Gets a specific time slot given its ID.
+     * 
+     * @param parseInt
+     *            unique ID of the time slot
+     * @return The resultant time slot
+     */
+    TimeSlot findTimeSlotById(int id);
+
+    /**
+     * Gets a specific schedule given its ID.
+     * 
+     * @param id
+     *            unique ID of the schedule
+     * @return The resultant schedule
+     */
+    Schedule findScheduleById(Integer id);
+
+    /**
+     * Saves or updates a booking of the given schedule to a user.
+     * 
+     * @param user
+     *            user which requests the booking
+     * @param schedule
+     *            schedule which is being booked
+     */
+    void saveBooking(User user, Schedule schedule);
 }

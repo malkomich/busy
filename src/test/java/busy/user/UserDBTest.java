@@ -17,7 +17,6 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 
 import busy.AbstractDBTest;
 import busy.location.Address;
-import busy.util.SecureSetter;
 
 /**
  * Test Case for the UserDao implementation class.
@@ -171,7 +170,7 @@ public class UserDBTest extends AbstractDBTest {
     public void insertUserWithAddressSuccesfully() {
 
         Address address = new Address();
-        SecureSetter.setId(address, 1);
+        address.setId(1);
 
         User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71121212D",
                 "902202122", null, null, address);

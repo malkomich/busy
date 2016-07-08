@@ -19,7 +19,7 @@ public class ServiceTypeFormatter implements Formatter<ServiceType> {
     @Override
     public String print(ServiceType object, Locale locale) {
 
-        return (object != null) ? object.getId().toString() : null;
+        return (object != null) ? String.valueOf(object.getId()) : null;
     }
 
     @Override

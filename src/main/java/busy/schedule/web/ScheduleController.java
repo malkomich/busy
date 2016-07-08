@@ -13,6 +13,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.request.WebRequest;
 
 import busy.BusyController;
 import busy.company.Company;
@@ -33,6 +35,7 @@ import busy.schedule.Service;
 import busy.schedule.Service.Repetition;
 import busy.schedule.ServiceType;
 import busy.schedule.TimeSlot;
+import busy.user.User;
 
 /**
  * Controller for schedule operations.
@@ -52,17 +55,23 @@ public class ScheduleController extends BusyController {
      */
     private static final String SERVICE_FORM_REQUEST = "serviceForm";
     private static final String REPETITION_TYPES_REQUEST = "repetitionTypes";
+
+    private static final String BOOKING_FORM_REQUEST = "bookingForm";
+    private static final String BOOKING_ROLES_REQUEST = "bookingSchedules";
+
     private static final String MESSAGE_CODE_REQUEST = "msgCode";
 
     /**
      * URL Paths.
      */
-    private static final String PATH_BOOKINGS_OF_MONTH = "/get_month_bookings";
+    private static final String PATH_SERVICES_OF_MONTH = "/get_month_services";
     private static final String PATH_SERVICES_FORM = "/service_form";
     private static final String PATH_SERVICES_FORM_NEW = "/service_form/new";
     private static final String PATH_SERVICES_FORM_SAVE = "/service_form/save";
     private static final String PATH_SERVICES_FORM_ADD_TIMESLOT = "/service_form/{index}/add_timeslot";
     private static final String PATH_SCHEDULE = "/schedule/";
+    private static final String PATH_BOOKING_SERVICE = "/booking_form";
+    private static final String PATH_BOOKINGS_FORM_SAVE = "/booking_form/save";
 
     /**
      * JSP's
@@ -70,6 +79,7 @@ public class ScheduleController extends BusyController {
     private static final String SERVICE_FORM_PAGE = "service-form";
     private static final String MESSAGE_VIEW = "message";
     private static final String BRANCH_PAGE = "branch";
+    private static final String BOOKING_FORM_PAGE = "booking-form";
 
     /**
      * HTTP params.
@@ -90,6 +100,9 @@ public class ScheduleController extends BusyController {
     public Repetition[] loadRepetitions() {
         return Repetition.values();
     }
+    
+    @Autowired
+    private ApplicationEventPublisher eventPublisher;
 
     /**
      * Request to get all bookings made between the given dates in the specific branch
@@ -108,8 +121,8 @@ public class ScheduleController extends BusyController {
      *            Spring model instance
      * @return The list of resultant bookings in JSON format
      */
-    @RequestMapping(value = PATH_BOOKINGS_OF_MONTH, method = RequestMethod.GET)
-    public @ResponseBody String getMonthBookings(@RequestParam(value = "role", required = true) String roleIdTmp,
+    @RequestMapping(value = PATH_SERVICES_OF_MONTH, method = RequestMethod.GET)
+    public @ResponseBody String getMonthServices(@RequestParam(value = "role", required = true) String roleIdTmp,
         @RequestParam(value = PARAM_DATE_FROM, required = true) String fromTmp,
         @RequestParam(value = PARAM_DATE_TO, required = true) String toTmp,
         @RequestParam(value = PARAM_DATE_OFFSET_FROM, required = true) String offSetFromTmp,
@@ -143,41 +156,53 @@ public class ScheduleController extends BusyController {
         for (Service service : serviceList) {
 
             Repetition repetitionType = service.getRepetition();
-            JSONObject serviceJSON;
+            ServiceType sType = service.getServiceType();
 
-            if (Repetition.NONE.equals(repetitionType)) {
+            for (TimeSlot timeSlot : service.getTimeSlots()) {
 
-                serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
-                    "event-info", service.getStartTime().getMillis(), service.getEndTime().getMillis());
-                jsonServices.put(serviceJSON);
+                JSONObject serviceJSON;
 
-            } else if (Repetition.DAILY.equals(repetitionType)) {
+                DateTime startTime = timeSlot.getStartDateTime();
+                DateTime endTime = startTime.plusMinutes(sType.getDuration());
 
-                DateTime dateTime = fromDateTime;
+                String id = String.valueOf(timeSlot.getId());
+                org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
+                String name = formatter.print(startTime) + "-" + formatter.print(endTime) + " [" + sType.getName() + "]";
+                String eventClass = (timeSlot.isAvailable()) ? "event-info" : "event-important";
 
-                while (dateTime.isBefore(toDateTime)) {
-                    serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
-                        "event-warning", service.getStartTime().withDate(dateTime.toLocalDate()).getMillis(),
-                        service.getEndTime().withDate(dateTime.toLocalDate()).getMillis());
+                if (Repetition.NONE.equals(repetitionType)) {
+
+                    serviceJSON = getEvent(id, name, eventClass, startTime.getMillis(), endTime.getMillis());
                     jsonServices.put(serviceJSON);
 
-                    dateTime = dateTime.plusDays(1);
+                } else if (Repetition.DAILY.equals(repetitionType)) {
+
+                    DateTime dateTime = fromDateTime;
+
+                    while (dateTime.isBefore(toDateTime)) {
+                        serviceJSON =
+                            getEvent(id, name, eventClass, startTime.withDate(dateTime.toLocalDate()).getMillis(),
+                                endTime.withDate(dateTime.toLocalDate()).getMillis());
+                        jsonServices.put(serviceJSON);
+
+                        dateTime = dateTime.plusDays(1);
+                    }
+
+                } else if (Repetition.WEEKLY.equals(repetitionType)) {
+
+                    int dayOfWeek = startTime.getDayOfWeek();
+                    DateTime dateTime = fromDateTime.withDayOfWeek(dayOfWeek);
+
+                    while (dateTime.isBefore(toDateTime)) {
+                        serviceJSON =
+                            getEvent(id, name, eventClass, startTime.withDate(dateTime.toLocalDate()).getMillis(),
+                                endTime.withDate(dateTime.toLocalDate()).getMillis());
+                        jsonServices.put(serviceJSON);
+
+                        dateTime = dateTime.plusWeeks(1);
+                    }
+
                 }
-
-            } else if (Repetition.WEEKLY.equals(repetitionType)) {
-
-                int dayOfWeek = service.getStartTime().getDayOfWeek();
-                DateTime dateTime = fromDateTime.withDayOfWeek(dayOfWeek);
-
-                while (dateTime.isBefore(toDateTime)) {
-                    serviceJSON = getEvent(service.getId().toString(), service.getServiceType().getName(), null,
-                        "event-warning", service.getStartTime().withDate(dateTime.toLocalDate()).getMillis(),
-                        service.getEndTime().withDate(dateTime.toLocalDate()).getMillis());
-                    jsonServices.put(serviceJSON);
-
-                    dateTime = dateTime.plusWeeks(1);
-                }
-
             }
         }
 
@@ -187,15 +212,13 @@ public class ScheduleController extends BusyController {
         return jsonResult.toString();
     }
 
-    private JSONObject getEvent(String id, String name, String url, String eventClass, long startMillis,
-        long endMillis) {
+    private JSONObject getEvent(String id, String name, String eventClass, long startMillis, long endMillis) {
 
         JSONObject serviceJSON = new JSONObject();
 
-        serviceJSON.put("id", name);
+        serviceJSON.put("id", id);
 
         serviceJSON.put("title", name);
-        serviceJSON.put("url", url);
         serviceJSON.put("class", eventClass);
 
         serviceJSON.put("start", String.valueOf(startMillis));
@@ -355,6 +378,46 @@ public class ScheduleController extends BusyController {
         model.addAttribute(SERVICE_FORM_REQUEST, form);
 
         return SERVICE_FORM_PAGE;
+    }
+
+    @RequestMapping(value = PATH_BOOKING_SERVICE, method = RequestMethod.GET)
+    public String requestBooking(@RequestParam("time_slot_id") String timeSlotId, Model model) {
+
+        BookingForm form = new BookingForm();
+
+        TimeSlot timeSlot = scheduleService.findTimeSlotById(Integer.parseInt(timeSlotId));
+
+        form.setTimeSlotId(timeSlot.getId());
+        form.setDateTime(timeSlot.getStartDateTime());
+        model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getAvailableSchedules());
+
+        model.addAttribute(BOOKING_FORM_REQUEST, form);
+
+        return BOOKING_FORM_PAGE;
+    }
+
+    @RequestMapping(value = PATH_BOOKINGS_FORM_SAVE, method = RequestMethod.POST)
+    public String saveBooking(@ModelAttribute(BOOKING_FORM_REQUEST) @Valid BookingForm form, BindingResult result,
+        Model model, WebRequest request) {
+
+        TimeSlot timeSlot = scheduleService.findTimeSlotById(form.getTimeSlotId());
+        User user = (User) model.asMap().get(USER_SESSION);
+
+        BookingValidator validator = new BookingValidator(timeSlot, user);
+
+        validator.validate(form, result);
+
+        if (result.hasErrors()) {
+            model.addAttribute(BOOKING_ROLES_REQUEST, timeSlot.getSchedules());
+            return BOOKING_FORM_PAGE;
+        }
+
+        scheduleService.saveBooking(user, form.getSchedule());
+        
+        eventPublisher.publishEvent(new OnBookingComplete(user, request.getLocale(), request.getContextPath()));
+
+        model.addAttribute(MESSAGE_CODE_REQUEST, "notification.message.booking.complete");
+        return MESSAGE_VIEW;
     }
 
     /**
