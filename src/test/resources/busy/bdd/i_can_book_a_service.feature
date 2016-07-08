@@ -8,6 +8,7 @@ Feature: An user will be able to make a new booking in a service
         And I have a registered company with my account
         And I am on the info page of a company
     
+    @ignore
     Scenario Outline: Book a service successfully
         When I click on 'Bookings'
         Then I should see a list with the branches of the company
@@ -24,6 +25,7 @@ Feature: An user will be able to make a new booking in a service
             | day | time | worker |
             | "15" | "09:00" | "Juan" |
     
+    @ignore
     Scenario Outline: Book a service in an already booked time
         When I click on 'Bookings'
         Then I should see a list with the branches of the company
@@ -40,6 +42,7 @@ Feature: An user will be able to make a new booking in a service
             | day | time | worker |
             | "15" | "09:00" | "Juan" |
     
+    @ignore
     Scenario Outline: Book a service in an inactive company
         When I click on 'Bookings'
         Then I should see a list with the branches of the company
