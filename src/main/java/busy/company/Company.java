@@ -91,8 +91,7 @@ public class Company implements Serializable {
         return category;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

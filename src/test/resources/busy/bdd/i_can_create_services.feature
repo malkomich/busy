@@ -55,14 +55,13 @@ Feature: An user will be able to create new services in his company schedule
         And I select the service type <service_type>
         And I select the role/roles <roles>
         And I select the repetition type <rep_type>
-        And I introduce the repetition date <repetition_date>
         And I click on 'Save'
         Then I should see the service created on the day "15"
-        And I should see the service of day "15" until <repetition_date> with repetition type <rep_type>
+        And I should see the service of day "15" repeated with repetition type <rep_type>
     
         Examples:
-            | start_time | service_type | roles | rep_type | repetition_date |
-            | "9:00" | "Tipo 1" | "Juan" | "Daily" | "18" |
-            | "9:00" | "Tipo 1" | "Juan" | "Weekly" | "28" |
-            | "9:00" | "Tipo 1" | "Juan, Carlos" | "Daily" | "18" |
-            | "9:00" | "Tipo 1" | "Juan, Carlos"  | "Weekly" | "28" |
+            | start_time | service_type | roles | rep_type |
+            | "9:00" | "Tipo 1" | "Juan" | "Daily" |
+            | "9:00" | "Tipo 1" | "Juan" | "Weekly" |
+            | "9:00" | "Tipo 1" | "Juan, Carlos" | "Daily" |
+            | "9:00" | "Tipo 1" | "Juan, Carlos"  | "Weekly" |

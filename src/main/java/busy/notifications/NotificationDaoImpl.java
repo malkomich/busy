@@ -84,7 +84,7 @@ public class NotificationDaoImpl implements NotificationDao {
 
             Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
             if (key != null) {
-                SecureSetter.setId(notification, key.intValue());
+                notification.setId(key.intValue());
             }
         }
     }
@@ -121,7 +121,7 @@ public class NotificationDaoImpl implements NotificationDao {
         public Notification mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             Notification notification = new Notification();
-            SecureSetter.setId(notification, rs.getInt(ID));
+            notification.setId(rs.getInt(ID));
             notification.setUser(user);
             Type type = Type.fromCode(rs.getString(NOTIFICATION_TYPE));
             notification.setType(type);

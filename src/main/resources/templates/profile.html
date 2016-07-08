@@ -1,0 +1,31 @@
+<table class="table table-user-information">
+  <tbody>
+    <tr>
+      <td th:text="#{company.info.trade_name} + ':'"></td>
+      <td th:text="${company.tradeName}"></td>
+    </tr>
+    <tr>
+      <td th:text="#{company.info.business_name} + ':'"></td>
+      <td th:text="${company.businessName}"></td>
+    </tr>
+    <tr>
+      <td th:text="#{company.info.email} + ':'"></td>
+      <td>
+        <a href="mailto:${company.email}" th:text="${company.email}"></a>
+      </td>
+    </tr>
+    <tr>
+      <td th:text="#{company.info.cif} + ':'"></td>
+      <td th:text="${company.cif}"></td>
+    </tr>
+    <tr>
+      <td th:text="#{company.info.create_date} + ':'"></td>
+      <td th:text="${#dates.format(company.createDate.toDate(), 'dd MMMM yyyy')}"></td>
+    </tr>
+    <tr>
+      <td th:text="#{company.info.category} + ':'"></td>
+      <td th:text="${company.category.name}" th:if="${company.category}"></td>
+      <td th:utext="#{company.category.default}" th:unless="${company.category}"></td>
+    </tr>
+  </tbody>
+</table>

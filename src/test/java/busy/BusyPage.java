@@ -1,10 +1,18 @@
 package busy;
 
+import java.util.concurrent.TimeUnit;
+
 import org.fluentlenium.core.FluentPage;
+import org.fluentlenium.core.domain.FluentWebElement;
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+
+import com.google.common.base.Function;
 
 /**
  * Extension of FluentPage which enable relative path delegating to Spring the assignment of the
@@ -54,7 +62,9 @@ public abstract class BusyPage extends FluentPage {
      */
     protected boolean waitForJSandJQueryToLoad() {
 
-        WebDriverWait wait = new WebDriverWait(getDriver(), 30);
+        // Configure time to wait till the conditions are fulfilled
+        Wait<WebDriver> wait = new FluentWait<>(getDriver()).withTimeout(30, TimeUnit.SECONDS)
+            .ignoring(NoSuchElementException.class).pollingEvery(2, TimeUnit.SECONDS);
 
         // wait for jQuery to load
         ExpectedCondition<Boolean> jQueryLoad = new ExpectedCondition<Boolean>() {
@@ -76,11 +86,25 @@ public abstract class BusyPage extends FluentPage {
             @Override
             public Boolean apply(WebDriver driver) {
                 return ((JavascriptExecutor) getDriver()).executeScript("return document.readyState").toString()
-                        .equals("complete");
+                    .equals("complete");
             }
         };
 
         return wait.until(jQueryLoad) && wait.until(jsLoad);
+    }
+
+    protected FluentWebElement getWhenVisible(String id) {
+
+        Wait<BusyDriver> wait = new FluentWait<BusyDriver>((BusyDriver) getDriver()).withTimeout(10, TimeUnit.SECONDS)
+            .pollingEvery(1, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+
+        FluentWebElement element = wait.until(new Function<WebDriver, FluentWebElement>() {
+
+            public FluentWebElement apply(WebDriver driver) {
+                return new FluentWebElement(driver.findElement(By.id(id)));
+            }
+        });
+        return element;
     }
 
 }

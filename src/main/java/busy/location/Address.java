@@ -59,8 +59,7 @@ public class Address implements Serializable {
         return city;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -111,7 +111,6 @@
 
 .admin-box-loading {
     opacity: 0;
-    color: #327CDB;
 }
 
 /*
@@ -146,14 +145,17 @@
  */
 .fs-xs {
     font-size: x-small;
-    line-height: 80%;
 }
 
 /*
  * Position
  */
 .center-v {
-    vertical-align: -webkit-baseline-middle;
+    vertical-align: middle;
+}
+
+.inline {
+    display: inline-block !important;
 }
 
 /*
@@ -166,5 +168,10 @@
 .service-roles-summary ul {
     margin-left: 0px;
     padding-left: 0px;
+    margin-top: 5px;
     list-style-type: none;
+}
+
+.no-padding {
+    padding: 0px !important;
 }

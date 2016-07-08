@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import busy.company.Branch;
+import busy.company.BranchDao;
 import busy.company.Company;
 import busy.user.User;
 
@@ -22,6 +23,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleDao roleDao;
+    
+    @Autowired
+    private BranchDao branchDao;
 
     /*
      * (non-Javadoc)
@@ -53,7 +57,18 @@ public class RoleServiceImpl implements RoleService {
     @Transactional(readOnly = true)
     public Role findCompanyManager(Company company) {
 
-        return roleDao.findManagerByCompany(company);
+        Branch headquarters = branchDao.findHeadQuarters(company);
+        
+        return findManagerOfBranch(headquarters);
+    }
+    
+    /* (non-Javadoc)
+     * @see busy.role.RoleService#findManagerOfBranch(busy.company.Branch)
+     */
+    @Override
+    public Role findManagerOfBranch(Branch branch) {
+
+        return roleDao.findManagerOfBranch(branch);
     }
 
     /* (non-Javadoc)

@@ -43,7 +43,7 @@ public class Notification implements Serializable {
     }
 
     public enum Type {
-        COMPANY("notification.type.company");
+        COMPANY("notification.type.company"), BOOKING("notification.type.booking");
 
         private final String code;
 
@@ -59,7 +59,10 @@ public class Notification implements Serializable {
             switch (code) {
                 case "notification.type.company":
                     return Type.COMPANY;
-
+                    
+                case "notification.type.booking":
+                    return Type.BOOKING;
+                    
                 default:
                     return null;
             }
@@ -120,8 +123,7 @@ public class Notification implements Serializable {
         return createDate;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

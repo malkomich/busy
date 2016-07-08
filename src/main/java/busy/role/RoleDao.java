@@ -3,7 +3,6 @@ package busy.role;
 import java.util.List;
 
 import busy.company.Branch;
-import busy.company.Company;
 import busy.user.User;
 
 /**
@@ -31,13 +30,13 @@ public interface RoleDao {
     List<Role> findByUser(User user);
 
     /**
-     * Gets the main role (manager) of the given company.
+     * Gets the main role (manager) of the given branch office.
      * 
-     * @param company
-     *            company which role are attached to with manager status
+     * @param branch
+     *            branch office which role are attached to with manager status
      * @return The resultant role object
      */
-    Role findManagerByCompany(Company company);
+    Role findManagerOfBranch(Branch branch);
 
     /**
      * Gets the list of role objects by their IDs.

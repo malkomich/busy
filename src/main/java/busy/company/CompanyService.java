@@ -111,4 +111,13 @@ public interface CompanyService {
      */
     int countAllCompanies();
 
+    /**
+     * Get the list of branch offices of a given company.
+     * 
+     * @param companyId
+     *            unique ID of the company
+     * @return The list of resultant branch offices
+     */
+    List<Branch> findBranchesByCompanyId(int companyId);
+
 }

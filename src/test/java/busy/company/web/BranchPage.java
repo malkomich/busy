@@ -5,6 +5,7 @@ import static org.fest.assertions.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fluentlenium.core.domain.FluentList;
 import org.fluentlenium.core.domain.FluentWebElement;
 import org.fluentlenium.core.filter.FilterConstructor;
 import org.joda.time.DateTime;
@@ -63,13 +64,11 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_TYPE_FORM_DURATION_SELECTOR = "#duration";
 
     private static final String SERVICE_FORM_SELECTOR = ".service-form";
-    private static final String SERVICE_FORM_START_TIME = "#service-start-time";
-    private static final String SERVICE_FORM_ROLE_DROPDOWN = "#role-dropdown";
-    private static final String SERVICE_FORM_ROLE_LIST = ".role-list";
-    private static final String SERVICE_FORM_ROLE_ITEM = "li.role-item";
-    private static final String SERVICE_FORM_STYPE = "#service-type";
-    private static final String SERVICE_FORM_REPETITION_TYPE = "#service-repetition-type";
-    private static final String SERVICE_FORM_REPETITION_DATE = "#service-repetition-date";
+    private static final String SERVICE_FORM_START_TIME = ".service-start-time";
+    private static final String SERVICE_FORM_ROLE_DROPDOWN = ".roles-select + .ms-parent > button.ms-choice";
+    private static final String SERVICE_FORM_ROLE_LIST = ".ms-drop > ul";
+    private static final String SERVICE_FORM_STYPE = ".service-type";
+    private static final String SERVICE_FORM_REPETITION_TYPE = ".service-repetition-type";
 
     private static final String MESSAGE_SELECTOR = "#infoMessage";
     private static final String ERROR_SELECTOR = "span.error";
@@ -250,16 +249,26 @@ public class BranchPage extends BusyPage {
 
             findFirst(SERVICE_FORM_ROLE_DROPDOWN).click();
 
-            FluentWebElement list = findFirst(SERVICE_FORM_ROLE_LIST);
+            FluentList<FluentWebElement> list = findFirst(SERVICE_FORM_ROLE_LIST).find("li");
 
             String[] roles = rolesTmp.split(",");
             for (String role : roles) {
 
-                for (FluentWebElement item : list.find(SERVICE_FORM_ROLE_ITEM)) {
-
-                    if (item.find("label").getText().contains(role)) {
-                        item.findFirst("input[type=checkbox]").click();
+                boolean found = false;
+                
+                for (int i = 0; i < list.size() && !found; i++) {
+                    
+                    FluentWebElement item = list.get(i);
+                    
+                    try {
+                        if (item.findFirst("label").getText().contains(role)) {
+                            item.findFirst("input[type=checkbox]").click();
+                            found = true;
+                        }    
+                    } catch(NoSuchElementException e) {
+                        continue;
                     }
+                    
                 }
             }
         }
@@ -282,13 +291,6 @@ public class BranchPage extends BusyPage {
         return this;
     }
 
-    public BranchPage setRepetitionDate(DateTime date, MessageSource messageSource) {
-
-        DateTimeFormatter dtfOut = DateTimeFormat.forPattern("MM/dd/yyyy");
-        fill(SERVICE_FORM_REPETITION_DATE).with(dtfOut.print(date));
-        return this;
-    }
-
     public boolean errorShown(int formType) {
 
         return !find(ERROR_SELECTOR).isEmpty();
@@ -308,21 +310,23 @@ public class BranchPage extends BusyPage {
         return !eventList.find(EVENT_SELECTOR).isEmpty();
     }
 
-    public boolean serviceRepeated(DateTime servDate, String repetitionTmp, DateTime repDate) {
+    public boolean serviceRepeated(DateTime servDate, String repetitionTmp) {
 
         Repetition repetition = parseRepetition(repetitionTmp);
 
         List<Integer> repeatedDayList = new ArrayList<>();
+        
+        DateTime lastDayOfMonth = servDate.dayOfMonth().withMaximumValue();
 
         switch (repetition) {
             case DAILY:
-                while (servDate.isBefore(repDate)) {
+                while (servDate.isBefore(lastDayOfMonth)) {
                     repeatedDayList.add(servDate.getDayOfMonth());
                     servDate = servDate.plusDays(1);
                 }
                 break;
             case WEEKLY:
-                while (servDate.isBefore(repDate)) {
+                while (servDate.isBefore(lastDayOfMonth)) {
                     repeatedDayList.add(servDate.getDayOfMonth());
                     servDate = servDate.plusDays(7);
                 }

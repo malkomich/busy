@@ -14,90 +14,91 @@
 
     <div class="row service-row" th:each="service, status : ${serviceForm.services}">
 
-      <div class="col-sm-3 form-group">
-        <div class="col-sm-4">
-          <span class="glyphicon glyphicon-time center-v"></span>
-        </div>
-        <div class="col-sm-8">
-          <div class="row">
-            <input th:field="*{services[__${status.index}__].startTime}" id="service-start-time" type="text" tabindex="1" class="form-control"
-              data-toggle="tooltip" data-placement="top" th:title="#{schedule.service.tooltip.start_time}"></input>
-            <span th:each="err : ${#fields.errors('services[__${status.index}__].startTime')}" class="error fs-xs" th:text="${err}"></span>
-          </div>
-          <div class="row">
-            <input id="service-end-time" type="text" tabindex="-1" class="form-control" readonly="true" data-toggle="tooltip" data-placement="left"
-              title="#{schedule.service.tooltip.end_time}"></input>
-          </div>
-        </div>
-      </div>
-      <!-- .form-group (TIME) -->
-
-      <div class="col-sm-3 form-group">
-        <select th:field="*{services[__${status.index}__].serviceType}" id="service-type" tabindex="2" class="form-control" data-toggle="tooltip"
-          data-placement="top" th:title="#{schedule.service.tooltip.service_type}">
-          <option value="" th:label="#{schedule.service.service_type.select}"></option>
-          <option th:each="sType : ${serviceTypes}" th:value="${sType.id}" th:text="${sType}" th:attr="duration=${sType.duration}"></option>
-        </select>
-        <span th:each="err : ${#fields.errors('services[__${status.index}__].serviceType')}" class="error fs-xs" th:text="${err}"></span>
-      </div>
-      <!-- .form-group (SERVICE TYPE) -->
+      <input type="hidden" th:field="*{services[__${status.index}__].id}"></input>
 
       <div class="col-sm-3 form-group">
         <div class="row">
-          <a id="role-dropdown" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-            <span th:text="#{schedule.service.roles.dropdown}"></span>
-            <b class="caret"> </b>
-          </a>
-          <ul class="dropdown-menu role-list" role="menu" aria-labelledby="role-dropdown">
-            <li th:each="branchRole : ${branchRoles}" class="role-item">
-              <input type="checkbox" th:field="*{services[__${status.index}__].roles}" th:value="${branchRole.key}"></input>
-              <label th:text="${branchRole.value}"></label>
-            </li>
-          </ul>
-        </div>
-        <div class="row service-roles-summary">
-          <span th:each="err : ${#fields.errors('services[__${status.index}__].roles')}" class="error fs-xs" th:text="${err}"></span>
-          <ul>
-            <li th:each="item : ${service.roles}" th:id="${item}" class="fs-xs" th:text="${branchRoles[__${item}__]}"></li>
-          </ul>
-        </div>
-      </div>
-      <!-- .form-group (ROLES) -->
 
-      <div class="col-sm-3 form-group">
-        <button th:if="${service.repeated}" type="button" class="btn btn-default" disabled="disabled" th:text="#{schedule.service.repetition.repeated}"></button>
+          <div class="col-xs-10">
+            <div class="row">
+              <select th:field="*{services[__${status.index}__].serviceType}" tabindex="1" class="form-control input-sm service-type" data-toggle="tooltip"
+                data-placement="left" th:errorclass="has-error" th:title="#{schedule.service.tooltip.service_type}">
+                <option value="" th:label="#{schedule.service.service_type.select}"></option>
+                <option th:each="sType : ${serviceTypes}" th:value="${sType.id}" th:text="${sType}" th:attr="duration=${sType.duration}"></option>
+              </select>
+            </div>
+            <!-- .row (SERVICE TYPE) -->
 
-        <div class="row" th:unless="${service.repeated}">
-          <select th:field="*{services[__${status.index}__].repetitionType}" id="service-repetition-type" tabindex="4" class="form-control"
-            data-toggle="tooltip" data-placement="right" th:title="#{schedule.service.tooltip.repetition_type}">
-            <option th:each="rType : ${repetitionTypes}" th:value="${rType}" th:text="#{${rType.msgCode}}"></option>
-          </select>
-          <span id="rep-date-error" th:each="err : ${#fields.errors('services[__${status.index}__].repetitionType')}" class="error fs-xs"
-            th:text="${err}"></span>
-        </div>
-        <div class="row" th:unless="${service.repeated}">
-          <input th:field="*{services[__${status.index}__].repetitionDate}" id="service-repetition-date" type="text" tabindex="5" class="form-control"
-            th:value="${service.repetitionDate}" data-toggle="tooltip" data-placement="right" th:title="#{schedule.service.tooltip.repetition_date}"></input>
-          <span id="rep-date-error" th:each="err : ${#fields.errors('services[__${status.index}__].repetitionDate')}" class="error fs-xs"
-            th:text="${err}"></span>
+            <div class="row">
+              <select th:field="*{services[__${status.index}__].repetition}" tabindex="4" class="form-control input-sm service-repetition-type"
+                data-toggle="tooltip" data-placement="left" th:title="#{schedule.service.tooltip.repetition_type}">
+                <option th:each="rType : ${repetitionTypes}" th:value="${rType.type}" th:text="#{${rType.msgCode}}"></option>
+              </select>
+            </div>
+            <!-- .row (REPETITION) -->
+          </div>
         </div>
 
       </div>
-      <!-- .form-group (REPETITION) -->
+      <!-- .form-group (SERVICE TYPE & REPETITION) -->
 
+      <div class="col-sm-9 form-group">
+        <div class="row time-slot" th:each="timeSlot, timeStatus : ${service.timeSlots}">
+
+          <input type="hidden" th:field="*{services[__${status.index}__].timeSlots[__${timeStatus.index}__].id}"></input>
+
+          <div class="col-xs-1">
+            <span class="glyphicon glyphicon-time center-v"></span>
+          </div>
+          <!-- .col (ICON) -->
+
+          <div class="col-xs-3">
+            <div class="row">
+              <input th:field="*{services[__${status.index}__].timeSlots[__${timeStatus.index}__].startTime}" type="text" tabindex="2" class="form-control input-sm service-start-time"
+                data-toggle="tooltip" data-placement="top" th:errorclass="has-error" th:title="#{schedule.service.tooltip.start_time}" th:placeholder="#{schedule.service.start_time.placeholder}"></input>
+            </div>
+          </div>
+          <!-- .col (START TIME) -->
+
+          <div class="col-xs-3">
+            <div class="row">
+              <input type="text" tabindex="-1" class="form-control input-sm service-end-time" readonly="true" data-toggle="tooltip" data-placement="top"
+                th:title="#{schedule.service.tooltip.end_time}"></input>
+            </div>
+          </div>
+          <!-- .col (END TIME) -->
+
+          <div class="col-xs-5" data-toggle="tooltip" data-placement="top" th:title="#{schedule.service.tooltip.roles}">
+            <div class="row">
+              <select th:field="*{services[__${status.index}__].timeSlots[__${timeStatus.index}__].roles}" multiple="multiple" class="input-sm no-padding roles-select" th:errorclass="has-error" tabindex="3">
+                <option th:each="branchRole : ${branchRoles}" th:value="${branchRole.key}" th:text="${branchRole.value}"></option>
+              </select>
+            </div>
+          </div>
+          <!-- .col (ROLES) -->
+
+        </div>
+        <!-- .row (TIME SLOT) -->
+
+        <div class="row">
+          <div class="col-xs-1">
+            <a href="#" data-toggle="tooltip" data-placement="right" th:title="#{schedule.service.button.new_timeslot}">
+              <span class="glyphicon glyphicon-plus color-lightgreen add_timeslot"></span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+      <!-- .form-group -->
     </div>
     <!-- .service-row -->
 
     <div class="row">
-      <div class="col-sm-3 form-group">
-        <div class="col-sm-4">
-          <span class="glyphicon glyphicon-time"></span>
-        </div>
-        <div class="col-sm-8">
-          <a href="javascript:newService()">
-            <span class="service-add glyphicon glyphicon-plus"></span>
-          </a>
-        </div>
+      <div class="col-xs-3 form-group">
+        <button type="button" class="btn btn-primary service-add">
+          <span class="glyphicon glyphicon-plus"></span>
+          <span th:text="#{schedule.service.button.new_service}"></span>
+        </button>
       </div>
     </div>
 
@@ -105,8 +106,15 @@
   <!-- .modal-body -->
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
-    <button id="submit" type="submit" class="btn btn-primary" tabindex="6" th:text="#{form.save}"></button>
+    <div class="col-xs-6">
+      <div class="row" th:each="err : ${#fields.errors()}">
+        <span  class="error fs-xs pull-left" th:text="${err}" />
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
+      <button id="submit" type="submit" class="btn btn-success" tabindex="6" th:text="#{form.save}"></button>
+    </div>
   </div>
 </form>
 
@@ -114,4 +122,12 @@
 <script type="text/javascript" th:src="@{/js/moment.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap-timepicker.js}"></script>
 <script type="text/javascript" th:src="@{/js/bootstrap-datepicker.js}"></script>
+<script th:src="@{/js/multiple-select.js}"></script>
+<script th:inline="javascript">
+/*<![CDATA[*/
+  var placeholder = /*[[#{schedule.service.roles.dropdown}]]*/ "Add worker";
+  var txtSelectAll = /*[[#{schedule.service.roles.select_all}]]*/ "Select All";
+  var txtSelectedAll = /*[[#{schedule.service.roles.all_selected}]]*/ "All selected";
+/*]]>*/
+</script>
 <script type="text/javascript" th:src="@{/js/services.js}"></script>

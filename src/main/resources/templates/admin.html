@@ -36,7 +36,7 @@
               <div class="admin-box-content">
                 <span class="admin-box-text" th:text="#{admin.companies.box_text}"></span>
                 <span class="admin-box-number" th:text="${numOfcompanies}"></span>
-                <span class="admin-box-loading glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+                <span class="admin-box-loading glyphicon glyphicon-refresh spin color-lightblue"></span>
               </div>
             </div>
             <!-- /.admin-box -->
@@ -63,6 +63,7 @@
                             <th th:text="#{company.email.label}"></th>
                             <th th:text="#{company.cif.label}"></th>
                             <th th:text="#{category.name.label}"></th>
+                            <th th:text="#{switch.label}" class="borderless small"></th>
                           </tr>
                         </thead>
                         <tbody>

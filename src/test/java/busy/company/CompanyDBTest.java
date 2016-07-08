@@ -1,6 +1,7 @@
 package busy.company;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class CompanyDBTest extends AbstractDBTest {
     public void setUp() {
 
         category = new Category();
-        SecureSetter.setId(category, 1);
+        category.setId(1);
     }
 
     @Test(expected = DataIntegrityViolationException.class)
@@ -161,7 +162,7 @@ public class CompanyDBTest extends AbstractDBTest {
     public void updateCompanyNotExists() {
 
         Company company = new Company();
-        SecureSetter.setId(company, INVALID_ID);
+        company.setId(INVALID_ID);
         company.setBusinessName("Boom S.A.");
         company.setEmail("jefe@boom.com");
         company.setCif("B12345678");

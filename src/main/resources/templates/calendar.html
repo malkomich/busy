@@ -1,0 +1,36 @@
+<!-- Calendar Header -->
+<div class="page-header">
+
+  <div class="pull-right form-inline">
+    <div class="btn-group">
+      <button class="btn btn-primary calendar-nav" data-calendar-nav="prev" th:text="#{calendar.prev}"></button>
+      <button class="btn calendar-nav" data-calendar-nav="today" th:text="#{calendar.today}"></button>
+      <button class="btn btn-primary calendar-nav" data-calendar-nav="next" th:text="#{calendar.next}"></button>
+    </div>
+  </div>
+
+  <h3></h3>
+
+  <div>
+    <i class="event event-info inline center-v"></i>
+    <span><small th:text="#{event.tooltip.available}"></small></span>
+    <i class="event event-important inline center-v"></i>
+    <span><small th:text="#{event.tooltip.full}"></small></span>
+  </div>
+</div>
+<!-- .page-header -->
+
+<div class="row">
+  <div id="calendar"></div>
+</div>
+<!-- .row -->
+
+<script type="text/javascript" th:inline="javascript">
+  /*<![CDATA[*/
+  var roleId = /*[[${role.id}]]*/ null;
+  /*]]>*/
+</script>
+<script type="text/javascript" th:src="@{/js/calendar.js}"></script>
+<script type="text/javascript" th:src="@{/js/language/es-ES.js}"></script>
+<script type="text/javascript" th:src="@{/js/moment.js}"></script>
+<script type="text/javascript" th:src="@{/js/app.js}"></script>

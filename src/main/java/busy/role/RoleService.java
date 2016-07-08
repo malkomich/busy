@@ -43,6 +43,16 @@ public interface RoleService {
     Role findCompanyManager(Company company);
 
     /**
+     * Gets the main role of the given branch office, typically the manager or the person in charge
+     * of the branch.
+     * 
+     * @param branch
+     *            the branch office which role are attached to with manager status
+     * @return The resultant role
+     */
+    Role findManagerOfBranch(Branch branch);
+
+    /**
      * Gets a role by his ID
      * 
      * @param id

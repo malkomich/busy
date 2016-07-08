@@ -1,0 +1,49 @@
+<form id="booking-form" action="javascript:saveBooking()" th:object="${bookingForm}"
+  method="POST">
+
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+    <input type="hidden" th:field="*{timeSlotId}"></input>
+
+    <h4 class="modal-title">
+      <input type="hidden" th:field="*{dateTime}"></input>
+      <label th:text="${#dates.format(bookingForm.dateTime, 'HH:mm, dd MMMM yyyy')}"></label>
+    </h4>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="row">
+
+      <div class="col-sm-10 form-group">
+        <select th:field="*{schedule}" tabindex="1" class="form-control role-select"
+          th:errorclass="has-error">
+          <option value="" th:label="#{schedule.booking.role.select}"></option>
+          <option th:each="scheduleItem : ${bookingSchedules}" th:value="${scheduleItem.id}" th:text="${scheduleItem.role.user}"></option>
+        </select>
+      </div>
+      <!-- .col (ROLE) -->
+
+    </div>
+    <!-- .row -->
+
+  </div>
+  <!-- .modal-body -->
+
+  <div class="modal-footer">
+    <div class="col-xs-6">
+      <div class="row" th:each="err : ${#fields.errors()}">
+        <span  class="error fs-xs pull-left" th:text="${err}" />
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
+      <button id="submit" type="submit" class="btn btn-success" tabindex="3" th:text="#{form.save}"></button>
+    </div>
+  </div>
+</form>
+
+<script type="text/javascript" th:src="@{/js/forms.js}"></script>

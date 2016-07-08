@@ -39,8 +39,7 @@ public class City implements Serializable {
         return country;
     }
 
-    @SuppressWarnings("unused")
-    private void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

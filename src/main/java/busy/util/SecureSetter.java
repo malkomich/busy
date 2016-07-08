@@ -13,7 +13,6 @@ import java.lang.reflect.Method;
  */
 public class SecureSetter {
 
-    private static final String SET_ID_METHOD = "setId";
 
     /**
      * Sets an attribute of the DTO, whose setter is inaccessible.
@@ -36,20 +35,6 @@ public class SecureSetter {
         } catch (IllegalAccessException | InvocationTargetException e) {
             System.out.println(e);
         }
-    }
-
-    /**
-     * Sets the ID attribute of the DTO, whose setter is inaccessible.
-     * 
-     * @param dto
-     *            domain object to modify
-     * @param value
-     *            value of the ID to set
-     */
-    public static void setId(Serializable dto, Integer value) {
-
-        setAttribute(dto, SET_ID_METHOD, Integer.class, value);
-
     }
 
     /**

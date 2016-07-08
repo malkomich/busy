@@ -94,12 +94,15 @@ function updateBox(targetDiv) {
                         rows += '<tr role="row" class="company-item bg-inactive">';
                         checked = "";
                     }
+
+                    var categoryName = (data[i].category) ? data[i].category.name : "";
+
                     rows += '<input type="hidden" name="company-id" value="' + data[i].id + '"/>';
                     rows += '<td>' + data[i].tradeName + '</td>';
                     rows += '<td>' + data[i].businessName + '</td>';
                     rows += '<td>' + data[i].email + '</td>';
                     rows += '<td>' + data[i].cif + '</td>';
-                    rows += '<td>' + data[i].category.name + '</td>';
+                    rows += '<td>' + categoryName + '</td>';
                     rows +=
                             '<td class="borderless bg-none"><div class="onoffswitch"><input type="checkbox" name="onoffswitch" '
                                     + 'class="onoffswitch-checkbox" id="onoffswitch' + i + '" ' + checked

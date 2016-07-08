@@ -31,7 +31,6 @@ import org.springframework.stereotype.Repository;
 import busy.company.Company;
 import busy.util.OperationResult;
 import busy.util.OperationResult.ResultCode;
-import busy.util.SecureSetter;
 
 /**
  * Service type persistence implementation for Database storing.
@@ -48,6 +47,7 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
             + " LEFT JOIN (" + COMPANY_SELECT_QUERY + ") AS companyJoin ON " + TABLE_SERVICE_TYPE + "." + COMPANYID
             + "=companyJoin." + ALIAS_COMPANY_ID;
 
+    private static final String SQL_SELECT_BY_ID = SQL_SELECT_ALL + " WHERE " + ID + "=?";
     private static final String SQL_SELECT_BY_COMPANY = SQL_SELECT_ALL + " WHERE " + COMPANYID + "=?";
     private static final String SQL_SELECT_BY_COMPANY_AND_NAME =
             SQL_SELECT_BY_COMPANY + " AND " + TABLE_SERVICE_TYPE + "." + NAME + "=?";
@@ -101,6 +101,22 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
             ServiceType sType = jdbcTemplate.queryForObject(query, parameters.values().toArray(), rowMapper);
             return sType;
 
+        }
+    }
+    
+    /* (non-Javadoc)
+     * @see busy.schedule.ServiceTypeDao#findById(int)
+     */
+    @Override
+    public ServiceType findById(int id) {
+        
+        try {
+            
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new ServiceTypeRowMapper(), id);
+            
+        }  catch (EmptyResultDataAccessException e) {
+
+            return null;
         }
     }
 
@@ -189,7 +205,7 @@ public class ServiceTypeDaoImpl implements ServiceTypeDao {
         public ServiceType mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             ServiceType serviceType = new ServiceType();
-            SecureSetter.setId(serviceType, rs.getInt(ALIAS_SERVICE_TYPE_ID));
+            serviceType.setId(rs.getInt(ALIAS_SERVICE_TYPE_ID));
             serviceType.setName(rs.getString(ALIAS_SERVICE_TYPE_NAME));
             serviceType.setDescription(rs.getString(DESCRIPTION));
             serviceType.setMaxBookingsPerRole(rs.getInt(BOOKINGS_PER_ROLE));
