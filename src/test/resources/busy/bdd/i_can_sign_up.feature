@@ -8,6 +8,7 @@ Feature: A new user will be able to sign up in the system
         When the user clicks on "Sign Up"
         Then the register page is shown
     
+    @ignore
     Scenario Outline: Sign up succesfully 
         When the user introduces the first name <firstname>
         And the user introduces the last name <lastname>
