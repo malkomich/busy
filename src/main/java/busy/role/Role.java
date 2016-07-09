@@ -50,7 +50,7 @@ public class Role implements Serializable {
     }
 
     public Boolean isManager() {
-        return (manager != null) ? manager: false;
+        return (manager != null) ? manager : false;
     }
 
     public void setId(int id) {
@@ -77,5 +77,21 @@ public class Role implements Serializable {
     public String toString() {
         return (user != null) ? user.toString() : null;
     }
-    
+
+    private long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+
+        if (object instanceof Role && ((Role) object).getSerialVersionUID() == serialVersionUID
+            && ((Role) object).getId() == id) {
+
+            return true;
+        }
+
+        return false;
+    }
+
 }
