@@ -100,6 +100,7 @@ public class SQLUtil {
     public static final String ALIAS_SERVICE_ID = "serviceId";
     public static final String ALIAS_TIME_SLOT_ID = "timeSlotId";
     public static final String ALIAS_SCHEDULE_ID = "scheduleId";
+    public static final String ALIAS_NOTIFICATION_ID = "notificationId";
 
     public static final String ALIAS_COUNTRY_NAME = "countryName";
     public static final String ALIAS_CITY_NAME = "cityName";
