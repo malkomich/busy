@@ -42,10 +42,13 @@ import busy.util.SecureSetter;
 public class NotificationDaoImpl implements NotificationDao {
 
     private static final String SQL_SELECT_BY_USERID =
-            "SELECT * FROM " + TABLE_NOTIFICATION + " WHERE " + USERID + "=? ORDER BY " + CREATE_DATE + " DESC";
+        "SELECT * FROM " + TABLE_NOTIFICATION + " WHERE " + USERID + "=? ORDER BY " + CREATE_DATE + " DESC";
+
+    private static final String SQL_SELECT_BY_ID =
+        "SELECT * FROM " + TABLE_NOTIFICATION + " WHERE " + ID + "=? ORDER BY " + CREATE_DATE + " DESC";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NOTIFICATION + " SET " + USERID + "= ?,"
-            + NOTIFICATION_TYPE + "=?," + MESSAGE + "=?," + IS_READ + "=?," + " WHERE " + ID + "= ?";
+        + NOTIFICATION_TYPE + "=?," + MESSAGE + "=?," + IS_READ + "=?" + " WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -72,7 +75,7 @@ public class NotificationDaoImpl implements NotificationDao {
         if (notification.getId() > 0) {
 
             jdbcTemplate.update(SQL_UPDATE, notification.getUserId(), notification.getTypeCode(),
-                    notification.getMessageCode(), notification.isRead(), notification.getId());
+                notification.getMessageCode(), notification.isRead(), notification.getId());
 
         } else {
 
@@ -135,8 +138,15 @@ public class NotificationDaoImpl implements NotificationDao {
     }
 
     public Notification findById(int id) {
-        // TODO Auto-generated method stub
-        return null;
+
+        try {
+
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new NotificationRowMapper(), id);
+
+        } catch (EmptyResultDataAccessException e) {
+
+            return null;
+        }
     }
 
 }
