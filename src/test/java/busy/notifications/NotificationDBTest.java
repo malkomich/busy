@@ -1,5 +1,8 @@
 package busy.notifications;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +77,17 @@ public class NotificationDBTest extends AbstractDBTest {
         notification.setType(Notification.Type.COMPANY);
         notification.setMessage(CompanyMsg.COMPANY_PENDING);
         repository.save(notification);
+    }
+
+    @Test
+    @DatabaseSetup("../notification/notificationSet.xml")
+    public void markAsRead() {
+        Notification notification = repository.findById(1);
+        assertFalse(notification.isRead());
+        notification.setRead(true);
+        repository.save(notification);
+        notification = repository.findById(1);
+        assertTrue(notification.isRead());
     }
 
 }

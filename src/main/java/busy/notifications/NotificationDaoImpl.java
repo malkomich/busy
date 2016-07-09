@@ -134,4 +134,9 @@ public class NotificationDaoImpl implements NotificationDao {
         }
     }
 
+    public Notification findById(int id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }
