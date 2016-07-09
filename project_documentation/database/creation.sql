@@ -183,7 +183,8 @@ CREATE TABLE schedule(
     time_slot_id          integer             NOT NULL REFERENCES time_slot(id)
         ON DELETE CASCADE ON UPDATE CASCADE,
     role_id             integer             NOT NULL REFERENCES role(id)
-        ON DELETE CASCADE ON UPDATE CASCADE
+        ON DELETE CASCADE ON UPDATE CASCADE,
+    UNIQUE(time_slot_id, role_id)
 );
 
 CREATE TABLE booking(

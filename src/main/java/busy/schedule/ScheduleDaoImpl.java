@@ -11,6 +11,7 @@ import static busy.util.SQLUtil.ALIAS_COUNTRY_ID;
 import static busy.util.SQLUtil.ALIAS_COUNTRY_NAME;
 import static busy.util.SQLUtil.ALIAS_ROLE_ID;
 import static busy.util.SQLUtil.ALIAS_SCHEDULE_ID;
+import static busy.util.SQLUtil.ALIAS_TIME_SLOT_ID;
 import static busy.util.SQLUtil.ALIAS_USER_ID;
 import static busy.util.SQLUtil.BOOKING_USER_ACTIVE;
 import static busy.util.SQLUtil.BOOKING_USER_ADMIN;
@@ -72,6 +73,10 @@ public class ScheduleDaoImpl implements ScheduleDao {
 
     private static final String SQL_SELECT_BY_ID = SCHEDULE_QUERY + " WHERE " + TABLE_SCHEDULE + "." + ID + "=?";
 
+    private static final String RECOVER_ID = "SELECT scheduleQuery." + ALIAS_SCHEDULE_ID + " FROM (" + SCHEDULE_QUERY
+        + ") as scheduleQuery WHERE scheduleQuery." + ALIAS_TIME_SLOT_ID + "=? AND scheduleQuery." + ALIAS_ROLE_ID
+        + "=?";
+
     private JdbcTemplate jdbcTemplate;
 
     private SimpleJdbcInsert jdbcInsert;
@@ -105,9 +110,15 @@ public class ScheduleDaoImpl implements ScheduleDao {
             parameters.put(TIME_SLOT_ID, timeSlot);
             parameters.put(ROLE_ID, schedule.getRoleId());
 
-            Number key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-            if (key != null) {
-                schedule.setId(key.intValue());
+            Number key;
+            // Only save if there is not a previous schedule with same data stored
+            try {
+                key = jdbcTemplate.queryForObject(RECOVER_ID, parameters.values().toArray(), Integer.class);
+            } catch (EmptyResultDataAccessException e) {
+                key = jdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
+                if (key != null) {
+                    schedule.setId(key.intValue());
+                }
             }
 
         }
