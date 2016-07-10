@@ -4,8 +4,11 @@
 </a>
 <div class="notifications-content">
   <div class="notifications-title">
-    <h4 th:text="#{navbar.notifications.title(${#lists.size(notifications)})}">
+    <h4 th:text="#{navbar.notifications.title(${#lists.size(notifications)})}" th:if="${#lists.size(notifications) > 0}">
       Notifications
+    </h4>
+    <h4 th:text="#{navbar.notifications.title-empty}" th:unless="${#lists.size(notifications) > 0}">
+      You haven't any notification
     </h4>
   </div>
   <div class="item-notification-content" th:each="item : ${notifications}">
