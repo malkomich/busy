@@ -4,9 +4,9 @@
 
       <div class="row">
         <div class="col-sm-12 form-group">
-          <input th:field="*{user.email}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.email.placeholder}"></input>
+          <input th:field="*{user.email}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.email.placeholder}" th:errorclass="has-error"></input>
           <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-          <!-- <span th:each="err : ${#fields.errors('name')}" class="error" th:text="${err}"></span> -->
+          <span th:each="err : ${#fields.errors('user.email')}" class="error" th:text="${err}"></span>
         </div>
       </div>
       <!-- .row (EMAIL) -->
@@ -15,7 +15,7 @@
         <div class="col-sm-6 form-group">
           <div class="row">
             <div class="col-sm-12 form-group">
-              <input th:field="*{user.firstName}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.firstname.placeholder}"></input>
+              <input th:field="*{user.firstName}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.firstname.placeholder}" th:errorclass="has-error"></input>
               <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
               <span th:each="err : ${#fields.errors('user.firstName')}" class="error" th:text="${err}"></span>
             </div>
@@ -23,7 +23,7 @@
           <!-- .row (FIRSTNAME) -->
           <div class="row">
             <div class="col-sm-12 form-group">
-              <input th:field="*{user.lastName}" id="lastname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.lastname.placeholder}"></input>
+              <input th:field="*{user.lastName}" id="lastname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.lastname.placeholder}" th:errorclass="has-error"></input>
               <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
               <span th:each="err : ${#fields.errors('user.lastName')}" class="error" th:text="${err}"></span>
             </div>
@@ -31,8 +31,7 @@
           <!-- .row (LASTNAME) -->
         </div>
         <div class="col-sm-6 form-group">
-          <input th:field="*{user.phone}" id="phone" tabindex="1" class="form-control mandatory" th:placeholder="#{role.phone.placeholder}"></input>
-          <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+          <input th:field="*{user.phone}" id="phone" tabindex="1" class="form-control" th:placeholder="#{role.phone.placeholder}" th:errorclass="has-error"></input>
           <span th:each="err : ${#fields.errors('user.phone')}" class="error" th:text="${err}"></span>
         </div>
         <!-- .row (PHONE) -->

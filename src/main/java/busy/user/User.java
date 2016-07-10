@@ -101,7 +101,9 @@ public class User implements Serializable {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        
+        if (phone != "")
+            this.phone = phone;
     }
 
     public String getPhone() {

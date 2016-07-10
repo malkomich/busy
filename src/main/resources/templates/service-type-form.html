@@ -4,7 +4,7 @@
 
       <div class="row">
         <div class="col-sm-12 form-group">
-          <input th:field="*{name}" id="name" tabindex="1" class="form-control mandatory" th:placeholder="#{name.placeholder}"></input>
+          <input th:field="*{name}" id="name" tabindex="1" class="form-control mandatory" th:placeholder="#{name.placeholder}" th:errorclass="has-error"></input>
           <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
           <span th:each="err : ${#fields.errors('name')}" class="error" th:text="${err}"></span>
         </div>
