@@ -1,5 +1,7 @@
 package busy.company.web;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,6 +36,7 @@ import busy.schedule.ServiceType;
 import busy.schedule.web.ServiceTypeForm;
 import busy.schedule.web.ServiceTypeValidator;
 import busy.user.User;
+import busy.user.UserService;
 import busy.util.OperationResult;
 import busy.util.OperationResult.ResultCode;
 import busy.util.SecureSetter;
@@ -94,6 +97,9 @@ public class CompanyController extends BusyController {
 
     @Autowired
     private LocationService locationService;
+    
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private RoleService roleService;
@@ -498,7 +504,16 @@ public class CompanyController extends BusyController {
             return ROLE_FORM_PAGE;
         }
         
-        // Save the Role here
+        User user = roleForm.getUser();
+        if (user.getId() == 0) {
+            SecureRandom random = new SecureRandom();
+            String password = new BigInteger(130, random).toString(32);
+            user.setPassword(password);
+            
+            userService.saveUser(user);
+        }
+
+        roleService.saveRole(roleForm);
 
         return ROLES_FRAGMENT;
     }
