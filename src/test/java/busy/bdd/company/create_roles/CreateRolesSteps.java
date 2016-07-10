@@ -72,11 +72,17 @@ public class CreateRolesSteps extends AbstractFunctionalTest {
 
         mainPage.selectCompanySection(companyName);
     }
+    
+    @When("^I click on the roles dropdown$")
+    public void click_roles_dropdown() throws Throwable {
+        
+        branchPage.clickOnRolesDropdown();
+    }
 
-    @Then("^I should see an empty list of employees$")
-    public void empty_service_type_list() throws Throwable {
+    @Then("^I should see the list of employees with just my name \"([^\"]*)\"$")
+    public void empty_service_type_list(String name) throws Throwable {
 
-        assertTrue(branchPage.roleListEmpty());
+        assertTrue(branchPage.roleShown(name));
     }
 
     @When("^I click on Add$")
@@ -91,10 +97,16 @@ public class CreateRolesSteps extends AbstractFunctionalTest {
         assertTrue(branchPage.formIsShown(BranchPage.ROLE));
     }
 
-    @When("^I enter the name \"([^\"]*)\"$")
-    public void enter_name(String name) throws Throwable {
+    @When("^I enter the firstname \"([^\"]*)\"$")
+    public void enter_firstname(String firstname) throws Throwable {
 
-        branchPage.setRoleName(name);
+        branchPage.setRoleFirstName(firstname);
+    }
+    
+    @When("^I enter the lastname \"([^\"]*)\"$")
+    public void enter_lastname(String lastname) throws Throwable {
+
+        branchPage.setRoleLastName(lastname);
     }
 
     @When("^I enter the email \"([^\"]*)\"$")
@@ -109,7 +121,7 @@ public class CreateRolesSteps extends AbstractFunctionalTest {
         branchPage.setRolePhoneNumber(phoneNumber);
     }
 
-    @When("^I click on Accept$")
+    @When("^I click on Save$")
     public void submit() throws Throwable {
 
         branchPage.submitForm(BranchPage.ROLE);

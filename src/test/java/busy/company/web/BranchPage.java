@@ -58,10 +58,11 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_TYPE_MODIFY_SELECTOR = ".service-type_modify";
     private static final String SERVICE_TYPE_DELETE_SELECTOR = ".service-type_delete";
 
+    private static final String ROLE_DROPDOWN_SELECTOR = "#roles-collapse";
     private static final String ROLE_LIST_SELECTOR = ".role-list";
     private static final String ROLE_ITEM_SELECTOR = ".role-item";
     private static final String ROLE_ADD_SELECTOR = ".role_add";
-    private static final String ROLE_PARAMS_NAME = ".name";
+    private static final String ROLE_PARAMS_NAME = ".firstname";
     
     private static final String SERVICE_TYPE_FORM_SELECTOR = ".service-type-form";
     private static final String SERVICE_TYPE_FORM_NAME_SELECTOR = "#name";
@@ -77,7 +78,8 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_FORM_REPETITION_TYPE = ".service-repetition-type";
 
     private static final String ROLE_FORM_SELECTOR = ".role-form";
-    private static final String ROLE_FORM_NAME_SELECTOR = "#name";
+    private static final String ROLE_FORM_FIRSTNAME_SELECTOR = "#firstname";
+    private static final String ROLE_FORM_LASTNAME_SELECTOR = "#lastname";
     private static final String ROLE_FORM_EMAIL_SELECTOR = "#email";
     private static final String ROLE_FORM_PHONE_SELECTOR = "#phone";
     
@@ -402,15 +404,15 @@ public class BranchPage extends BusyPage {
             .parent();
     }
 
-    public boolean roleListEmpty() {
+    public BranchPage setRoleFirstName(String name) {
 
-        FluentWebElement serviceTypeList = findFirst(ROLE_LIST_SELECTOR);
-        return serviceTypeList.find(ROLE_ITEM_SELECTOR).isEmpty();
+        fill(ROLE_FORM_FIRSTNAME_SELECTOR).with(name);
+        return this;
     }
+    
+    public BranchPage setRoleLastName(String lastname) {
 
-    public BranchPage setRoleName(String name) {
-
-        fill(ROLE_FORM_NAME_SELECTOR).with(name);
+        fill(ROLE_FORM_LASTNAME_SELECTOR).with(lastname);
         return this;
     }
 
@@ -435,6 +437,12 @@ public class BranchPage extends BusyPage {
             }
         }
         return false;
+    }
+
+    public BranchPage clickOnRolesDropdown() {
+
+        findFirst(ROLE_DROPDOWN_SELECTOR).click();
+        return this;
     }
 
 }
