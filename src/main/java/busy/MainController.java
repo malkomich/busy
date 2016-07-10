@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import busy.notifications.Notification;
 import busy.notifications.NotificationService;
@@ -92,6 +93,7 @@ public class MainController extends BusyController {
     }
     
     @RequestMapping(value = PATH_NOTIFICATION_READ, method = RequestMethod.POST)
+    @ResponseBody
     public boolean readNotification(@RequestParam(value = "id", required = true) String notificationId, Model model) {
         Notification notification = notificationService.findNotificationById(Integer.parseInt(notificationId));
         notification.setRead(true);
@@ -100,6 +102,7 @@ public class MainController extends BusyController {
     }
     
     @RequestMapping(value = PATH_NOTIFICATION_READ_ALL, method = RequestMethod.POST)
+    @ResponseBody
     public boolean readAllNotifications(Model model) {
         
         User user = (User) model.asMap().get(USER_SESSION);
