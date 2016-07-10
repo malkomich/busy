@@ -49,6 +49,7 @@
     display: block;
     text-align: center;
     cursor: pointer;
+    font-style: italic;
 }
 .notifications-content > .footer > a:hover, .notifications-content > .item-notification-content > a:hover {
     background-color: #F2F2F2;
