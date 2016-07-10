@@ -2,7 +2,7 @@
   <span class="glyphicon glyphicon-bell"></span>
   <span class="badge" th:text="${#lists.size(notifications)}"></span>
 </a>
-<div class="notifications-content dialog">
+<div class="notifications-content">
   <div class="notifications-title">
     <h4 th:text="#{navbar.notifications.title(${#lists.size(notifications)})}">
       Notifications
@@ -15,8 +15,10 @@
     </a>
   </div>
   <div class="footer">
-    <a th:text="#{navbar.notifications.all-read}">
+    <a th:text="#{navbar.notifications.all-read}" th:if="${#lists.size(notifications) > 0}">
       Mark all as read
     </a>
   </div>
 </div>
+
+<script th:src="@{/js/notification.js}" />

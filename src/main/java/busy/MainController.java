@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import busy.notifications.Notification;
 import busy.notifications.NotificationService;
@@ -40,6 +39,7 @@ public class MainController extends BusyController {
      * JSP's
      */
     private static final String MAIN_PAGE = "main";
+    private static final String FRAGMENT_NOTIFICATIONS = "fragments/notifications";
 
     @Autowired
     private NotificationService notificationService;
@@ -93,21 +93,29 @@ public class MainController extends BusyController {
     }
     
     @RequestMapping(value = PATH_NOTIFICATION_READ, method = RequestMethod.POST)
-    @ResponseBody
-    public boolean readNotification(@RequestParam(value = "id", required = true) String notificationId, Model model) {
+    public String readNotification(@RequestParam(value = "id", required = true) String notificationId, Model model) {
+        
         Notification notification = notificationService.findNotificationById(Integer.parseInt(notificationId));
         notification.setRead(true);
         notificationService.saveNotification(notification);
-        return true;
+        
+        User user = (User) model.asMap().get(USER_SESSION);
+        List<Notification> notifications = notificationService.findNotificationsByUser(user);
+        model.addAttribute(NOTIFICATIONS_SESSION, notifications);
+        
+        return FRAGMENT_NOTIFICATIONS;
     }
     
     @RequestMapping(value = PATH_NOTIFICATION_READ_ALL, method = RequestMethod.POST)
-    @ResponseBody
-    public boolean readAllNotifications(Model model) {
+    public String readAllNotifications(Model model) {
         
         User user = (User) model.asMap().get(USER_SESSION);
         notificationService.setNotificationsAsRead(user);
-        return true;
+        
+        List<Notification> notifications = notificationService.findNotificationsByUser(user);
+        model.addAttribute(NOTIFICATIONS_SESSION, notifications);
+        
+        return FRAGMENT_NOTIFICATIONS;
     }
 
 }

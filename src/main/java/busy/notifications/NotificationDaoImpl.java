@@ -66,7 +66,7 @@ public class NotificationDaoImpl implements NotificationDao {
 
     private static final String SQL_SELECT_BY_USERID = "SELECT " + TABLE_NOTIFICATION + "." + ID + " AS "
         + ALIAS_NOTIFICATION_ID + "," + NOTIFICATION_TYPE + "," + MESSAGE + "," + IS_READ + "," + CREATE_DATE + " FROM "
-        + TABLE_NOTIFICATION + " WHERE " + USERID + "=? ORDER BY " + CREATE_DATE + " DESC";
+        + TABLE_NOTIFICATION + " WHERE " + IS_READ + "='false' AND " + USERID + "=? ORDER BY " + CREATE_DATE + " DESC";
 
     private static final String SQL_SELECT_BY_ID =
         "SELECT " + TABLE_NOTIFICATION + "." + ID + " AS " + ALIAS_NOTIFICATION_ID + "," + NOTIFICATION_TYPE + ","

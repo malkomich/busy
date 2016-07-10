@@ -10,6 +10,9 @@
 
 /* Notifications */
 .notifications-content {
+    position: fixed;
+    display: none;
+    z-index: 10;
     width: 300px;
     min-height: 100px;
     margin-top: 20px;
