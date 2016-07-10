@@ -419,6 +419,7 @@ public class BranchPage extends BusyPage {
     public BranchPage setRoleEmail(String email) {
 
         fill(ROLE_FORM_EMAIL_SELECTOR).with(email);
+        waitForJSandJQueryToLoad();
         return this;
     }
 
