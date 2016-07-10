@@ -77,6 +77,9 @@ public class NotificationDaoImpl implements NotificationDao {
     private static final String SQL_UPDATE = "UPDATE " + TABLE_NOTIFICATION + " SET " + USERID + "= ?,"
         + NOTIFICATION_TYPE + "=?," + MESSAGE + "=?," + IS_READ + "=?" + " WHERE " + ID + "= ?";
 
+    private static final String SQL_UPDATE_READ =
+        "UPDATE " + TABLE_NOTIFICATION + " SET " + IS_READ + "=?" + " WHERE " + USERID + "=?";
+
     private JdbcTemplate jdbcTemplate;
 
     private SimpleJdbcInsert jdbcInsert;
@@ -137,6 +140,34 @@ public class NotificationDaoImpl implements NotificationDao {
 
             return null;
         }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.notifications.NotificationDao#findById(int)
+     */
+    @Override
+    public Notification findById(int id) {
+
+        try {
+
+            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new NotificationRowMapper(), id);
+
+        } catch (EmptyResultDataAccessException e) {
+
+            return null;
+        }
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.notifications.NotificationDao#updateReadStatus(boolean, busy.user.User)
+     */
+    @Override
+    public void updateReadStatus(boolean read, User user) {
+
+        jdbcTemplate.update(SQL_UPDATE_READ, read, user.getId());
+
     }
 
     private class NotificationRowMapper implements RowMapper<Notification> {
@@ -202,18 +233,6 @@ public class NotificationDaoImpl implements NotificationDao {
             notification.setUser(user);
 
             return notification;
-        }
-    }
-
-    public Notification findById(int id) {
-
-        try {
-
-            return jdbcTemplate.queryForObject(SQL_SELECT_BY_ID, new NotificationRowMapper(), id);
-
-        } catch (EmptyResultDataAccessException e) {
-
-            return null;
         }
     }
 

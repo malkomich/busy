@@ -28,4 +28,23 @@ public interface NotificationDao {
      */
     List<Notification> findByUser(User user);
 
+    /**
+     * Gets a specific notification given his ID.
+     * 
+     * @param id
+     *            unique ID of the notification
+     * @return The resultant notification
+     */
+    Notification findById(int id);
+
+    /**
+     * Update read status for all notifications attached to the given user.
+     * 
+     * @param read
+     *            value of the read property. True if the notification has been read
+     * @param user
+     *            Owner of the notifications to update
+     */
+    void updateReadStatus(boolean read, User user);
+
 }
