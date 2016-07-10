@@ -1,53 +1,53 @@
-<div class="modal-body">
-  <form class="role-form" id="roleForm" action="javascript:saveRole()" th:object="${roleForm}"
-    method="POST">
+<form class="role-form" id="roleForm" action="javascript:saveRole()" th:object="${roleForm}"
+  method="POST">
+  <div class="modal-body">
 
-    <div class="row">
-      <div class="col-sm-12 form-group">
-        <input th:field="*{user.email}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.email.placeholder}"></input>
-        <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-        <!-- <span th:each="err : ${#fields.errors('name')}" class="error" th:text="${err}"></span> -->
-      </div>
-    </div>
-    <!-- .row (EMAIL) -->
-
-    <div class="row">
-      <div class="col-sm-6 form-group">
-        <div class="row">
-          <div class="col-sm-12 form-group">
-            <input th:field="*{user.firstName}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.firstname.placeholder}"></input>
-            <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-            <span th:each="err : ${#fields.errors('user.firstName')}" class="error" th:text="${err}"></span>
-          </div>
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <input th:field="*{user.email}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.email.placeholder}"></input>
+          <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+          <!-- <span th:each="err : ${#fields.errors('name')}" class="error" th:text="${err}"></span> -->
         </div>
-        <!-- .row (FIRSTNAME) -->
-        <div class="row">
-          <div class="col-sm-12 form-group">
-            <input th:field="*{user.lastName}" id="lastname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.lastname.placeholder}"></input>
-            <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-            <span th:each="err : ${#fields.errors('user.lastName')}" class="error" th:text="${err}"></span>
+      </div>
+      <!-- .row (EMAIL) -->
+
+      <div class="row">
+        <div class="col-sm-6 form-group">
+          <div class="row">
+            <div class="col-sm-12 form-group">
+              <input th:field="*{user.firstName}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.firstname.placeholder}"></input>
+              <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+              <span th:each="err : ${#fields.errors('user.firstName')}" class="error" th:text="${err}"></span>
+            </div>
           </div>
+          <!-- .row (FIRSTNAME) -->
+          <div class="row">
+            <div class="col-sm-12 form-group">
+              <input th:field="*{user.lastName}" id="lastname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.lastname.placeholder}"></input>
+              <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+              <span th:each="err : ${#fields.errors('user.lastName')}" class="error" th:text="${err}"></span>
+            </div>
+          </div>
+          <!-- .row (LASTNAME) -->
         </div>
-        <!-- .row (LASTNAME) -->
+        <div class="col-sm-6 form-group">
+          <input th:field="*{user.phone}" id="phone" tabindex="1" class="form-control mandatory" th:placeholder="#{role.phone.placeholder}"></input>
+          <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+          <span th:each="err : ${#fields.errors('user.phone')}" class="error" th:text="${err}"></span>
+        </div>
+        <!-- .row (PHONE) -->
+
       </div>
-      <div class="col-sm-6 form-group">
-        <input th:field="*{user.phone}" id="phone" tabindex="1" class="form-control mandatory" th:placeholder="#{role.phone.placeholder}"></input>
-        <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
-        <span th:each="err : ${#fields.errors('user.phone')}" class="error" th:text="${err}"></span>
-      </div>
-      <!-- .row (PHONE) -->
+      <!-- .row (NAME & PHONE) -->
 
-    </div>
-    <!-- .row (NAME & PHONE) -->
+      <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
+      <button id="submit" type="submit" class="btn btn-primary" tabindex="5" th:text="#{form.save}"></button>
 
-    <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
-    <button id="submit" type="submit" class="btn btn-primary" tabindex="5" th:text="#{form.save}"></button>
-
-    <input th:field="*{id}" hidden="true" />
-    <input th:field="*{user.id}" hidden="true" />
-    <input th:field="*{branch.id}" hidden="true" />
-  </form>
-</div>
-<!-- .modal-body -->
+      <input th:field="*{id}" hidden="true" />
+      <input th:field="*{user.id}" hidden="true" />
+      <input th:field="*{branch.id}" hidden="true" />
+  </div>
+  <!-- .modal-body -->
+</form>
 
 <script type="text/javascript" th:src="@{/js/forms.js}"></script>

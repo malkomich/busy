@@ -134,7 +134,7 @@ function saveServiceType() {
         var modalContainer = $('#modalForm');
 
         if ($(data).is("form")) {
-            $('.modal-body', modalContainer).html(data);
+            $('.modal-content', modalContainer).html(data);
             modalContainer.modal('show');
         }
 
@@ -155,7 +155,7 @@ function saveRole() {
     var modalContainer = $('#modalForm');
 
     if ($(data).is("form")) {
-        $('.modal-body', modalContainer).html(data);
+        $('.modal-content', modalContainer).html(data);
         modalContainer.modal('show');
     }
 
