@@ -40,13 +40,13 @@
               </h4>
             </div>
             <div class="item-notification-content" th:each="item : ${notifications}">
-              <a href="#">
+              <a th:attr="notificationId=${item.id}">
                 <h5 th:text="#{${item.typeCode}}"></h5>
                 <div class="item-notification-message" th:text="#{${item.messageCode}}"></div>
               </a>
             </div>
             <div class="footer">
-              <a href="#" th:text="#{navbar.notifications.all-read}">
+              <a th:text="#{navbar.notifications.all-read}">
                 Mark all as read
               </a>
             </div>
@@ -80,3 +80,5 @@
   </div>
 
 </nav>
+
+<script th:src="@{js/menu.js}" />

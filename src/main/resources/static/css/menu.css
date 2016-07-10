@@ -38,12 +38,14 @@
     padding: 7px 10px;
     display: block;
     border-bottom: 1px solid #f4f4f4;
+    cursor: pointer;
 }
 .notifications-content > .footer > a {
     color: #444;
     padding: 7px 10px;
     display: block;
     text-align: center;
+    cursor: pointer;
 }
 .notifications-content > .footer > a:hover, .notifications-content > .item-notification-content > a:hover {
     background-color: #F2F2F2;
