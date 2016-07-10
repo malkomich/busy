@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <notification id="1" person_id="1" notif_type="notification.type.company" message="notification.message.company.pending" read="false" />
+    <notification id="2" person_id="1" notif_type="notification.type.company" message="notification.message.company.approved" read="false" />
+</dataset>

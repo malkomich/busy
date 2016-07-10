@@ -29,4 +29,21 @@ public interface NotificationService {
      * @return The list of resultant notifications
      */
     List<Notification> findNotificationsByUser(User user);
+
+    /**
+     * Gets a specific notification given his ID.
+     * 
+     * @param id
+     *            unique ID of the notification
+     * @return The resultant notification
+     */
+    Notification findNotificationById(int id);
+
+    /**
+     * Mark all the notifications attached to the given user.
+     * 
+     * @param user
+     *            Owner of the notifications to update
+     */
+    void setNotificationsAsRead(User user);
 }

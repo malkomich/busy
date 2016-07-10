@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import busy.notifications.Notification;
 import busy.notifications.NotificationService;
@@ -31,11 +32,14 @@ public class MainController extends BusyController {
      */
     private static final String PATH_LOGIN = "/login";
     private static final String PATH_ADMIN = "/admin";
+    private static final String PATH_NOTIFICATION_READ = "/notification/read";
+    private static final String PATH_NOTIFICATION_READ_ALL = "/notification/read/all";
 
     /**
      * JSP's
      */
     private static final String MAIN_PAGE = "main";
+    private static final String FRAGMENT_NOTIFICATIONS = "fragments/notifications";
 
     @Autowired
     private NotificationService notificationService;
@@ -86,6 +90,32 @@ public class MainController extends BusyController {
         model.addAttribute(LOGIN_REQUEST, loginForm);
 
         return "redirect:" + PATH_LOGIN;
+    }
+    
+    @RequestMapping(value = PATH_NOTIFICATION_READ, method = RequestMethod.POST)
+    public String readNotification(@RequestParam(value = "id", required = true) String notificationId, Model model) {
+        
+        Notification notification = notificationService.findNotificationById(Integer.parseInt(notificationId));
+        notification.setRead(true);
+        notificationService.saveNotification(notification);
+        
+        User user = (User) model.asMap().get(USER_SESSION);
+        List<Notification> notifications = notificationService.findNotificationsByUser(user);
+        model.addAttribute(NOTIFICATIONS_SESSION, notifications);
+        
+        return FRAGMENT_NOTIFICATIONS;
+    }
+    
+    @RequestMapping(value = PATH_NOTIFICATION_READ_ALL, method = RequestMethod.POST)
+    public String readAllNotifications(Model model) {
+        
+        User user = (User) model.asMap().get(USER_SESSION);
+        notificationService.setNotificationsAsRead(user);
+        
+        List<Notification> notifications = notificationService.findNotificationsByUser(user);
+        model.addAttribute(NOTIFICATIONS_SESSION, notifications);
+        
+        return FRAGMENT_NOTIFICATIONS;
     }
 
 }

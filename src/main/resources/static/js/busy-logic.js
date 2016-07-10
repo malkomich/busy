@@ -2,8 +2,6 @@
  * Selectors constants declaration
  */
 const
-dialogSwitchSelector = ".dialog-switch";
-const
 collapseSwitchSelector = ".collapse-switch";
 const
 dialogDivSelector = ".dialog";
@@ -26,11 +24,9 @@ $(function() {
     $(document).mouseup(
             function(e) {
 
-                var dialog_switch = $(dialogSwitchSelector);
                 var dialog_div = $(dialogDivSelector);
 
-                if (!dialog_switch.is(e.target) && dialog_switch.has(e.target).length === 0 && !dialog_div.is(e.target)
-                        && dialog_div.has(e.target).length === 0) {
+                if (!dialog_div.is(e.target) && dialog_div.has(e.target).length === 0) {
                     dialog_div.hide();
                 }
 
@@ -43,12 +39,6 @@ $(function() {
                 }
 
             });
-
-    // Toggle the div with the selector given in 'data-target' attribute of a
-    // 'dialog-switch'
-    $(dialogSwitchSelector).click(function() {
-        $($(this).data("target")).toggle();
-    });
 
     /*
      * Autocomplete of the search bar sending AJAX requests to update the list of companies matching
