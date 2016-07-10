@@ -7,8 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import busy.notifications.Notification;
-import busy.notifications.NotificationDao;
 import busy.user.User;
 
 /**
@@ -48,6 +46,24 @@ public class NotificationServiceImpl implements NotificationService {
     public List<Notification> findNotificationsByUser(User user) {
 
         return notificationDao.findByUser(user);
+    }
+
+    /* (non-Javadoc)
+     * @see busy.notifications.NotificationService#findNotificationById(int)
+     */
+    @Override
+    public Notification findNotificationById(int id) {
+        
+        return notificationDao.findById(id);
+    }
+
+    /* (non-Javadoc)
+     * @see busy.notifications.NotificationService#setNotificationsAsRead(busy.user.User)
+     */
+    @Override
+    public void setNotificationsAsRead(User user) {
+
+        notificationDao.updateReadStatus(true, user);
     }
 
 }

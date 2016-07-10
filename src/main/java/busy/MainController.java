@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import busy.notifications.Notification;
 import busy.notifications.NotificationService;
@@ -31,6 +32,8 @@ public class MainController extends BusyController {
      */
     private static final String PATH_LOGIN = "/login";
     private static final String PATH_ADMIN = "/admin";
+    private static final String PATH_NOTIFICATION_READ = "/notification/read";
+    private static final String PATH_NOTIFICATION_READ_ALL = "/notification/read/all";
 
     /**
      * JSP's
@@ -86,6 +89,22 @@ public class MainController extends BusyController {
         model.addAttribute(LOGIN_REQUEST, loginForm);
 
         return "redirect:" + PATH_LOGIN;
+    }
+    
+    @RequestMapping(value = PATH_NOTIFICATION_READ, method = RequestMethod.POST)
+    public boolean readNotification(@RequestParam(value = "id", required = true) String notificationId, Model model) {
+        Notification notification = notificationService.findNotificationById(Integer.parseInt(notificationId));
+        notification.setRead(true);
+        notificationService.saveNotification(notification);
+        return true;
+    }
+    
+    @RequestMapping(value = PATH_NOTIFICATION_READ_ALL, method = RequestMethod.POST)
+    public boolean readAllNotifications(Model model) {
+        
+        User user = (User) model.asMap().get(USER_SESSION);
+        notificationService.setNotificationsAsRead(user);
+        return true;
     }
 
 }
