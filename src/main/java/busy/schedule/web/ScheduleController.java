@@ -1,8 +1,6 @@
 package busy.schedule.web;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -26,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.WebRequest;
 
 import busy.BusyController;
+import busy.company.Branch;
 import busy.company.Company;
 import busy.company.web.CompanyController;
 import busy.role.Role;
@@ -100,7 +99,7 @@ public class ScheduleController extends BusyController {
     public Repetition[] loadRepetitions() {
         return Repetition.values();
     }
-    
+
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
@@ -167,7 +166,8 @@ public class ScheduleController extends BusyController {
 
                 String id = String.valueOf(timeSlot.getId());
                 org.joda.time.format.DateTimeFormatter formatter = DateTimeFormat.forPattern("HH:mm");
-                String name = formatter.print(startTime) + "-" + formatter.print(endTime) + " [" + sType.getName() + "]";
+                String name =
+                    formatter.print(startTime) + "-" + formatter.print(endTime) + " [" + sType.getName() + "]";
                 String eventClass = (timeSlot.isAvailable()) ? "event-info" : "event-important";
 
                 if (Repetition.NONE.equals(repetitionType)) {
@@ -243,6 +243,7 @@ public class ScheduleController extends BusyController {
         model.addAttribute(ROLE_SESSION, role);
 
         updateServiceTypes(role.getCompany(), model);
+        updateRoles(role.getBranch(), model);
 
         return BRANCH_PAGE;
     }
@@ -270,12 +271,7 @@ public class ScheduleController extends BusyController {
         }
 
         updateServiceTypes(role.getCompany(), model);
-
-        Map<Integer, Role> roles = new HashMap<>();
-        for (Role roleItem : roleService.findRolesByBranch(role.getBranch())) {
-            roles.put(roleItem.getId(), roleItem);
-        }
-        model.addAttribute(BRANCH_ROLES_SESSION, roles);
+        updateRoles(role.getBranch(), model);
 
         LocalDate date = DateTimeFormat.forPattern("yyyy-MM-dd").parseLocalDate(dateTmp);
         form.setDate(date);
@@ -323,7 +319,7 @@ public class ScheduleController extends BusyController {
 
     /**
      * Tries to save the services from the input form values, validating them previously.
-     * 
+     *
      * @param form
      *            form with the services to save
      * @param result
@@ -349,7 +345,7 @@ public class ScheduleController extends BusyController {
 
     /**
      * Adds a new time slot item to the services form
-     * 
+     *
      * @param form
      *            form with the services data
      * @param result
@@ -413,7 +409,7 @@ public class ScheduleController extends BusyController {
         }
 
         scheduleService.saveBooking(user, form.getSchedule());
-        
+
         eventPublisher.publishEvent(new OnBookingComplete(user, request.getLocale(), request.getContextPath()));
 
         model.addAttribute(MESSAGE_CODE_REQUEST, "notification.message.booking.complete");
@@ -432,5 +428,19 @@ public class ScheduleController extends BusyController {
 
         List<ServiceType> serviceTypes = scheduleService.findServiceTypesByCompany(company);
         model.addAttribute(SERVICE_TYPES_SESSION, serviceTypes);
+    }
+
+    /**
+     * Load the roles of the branch
+     *
+     * @param branch
+     *            the branch office which roles will be loaded
+     * @param model
+     *            Spring model instance
+     */
+    private void updateRoles(Branch branch, Model model) {
+
+        List<Role> roles = roleService.findRolesByBranch(branch);
+        model.addAttribute(BRANCH_ROLES_SESSION, roles);
     }
 }

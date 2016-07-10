@@ -57,6 +57,20 @@
           <!-- .col -->
           <div class="col-xs-9 pull-right">
             <div class="table-list-filters pull-right">
+
+              <div class="select-menu pull-left">
+                <button id="roles-button" class="btn btn-default btn-lg" href="#roles-collapse" data-toggle="collapse" aria-expanded="false"
+                  aria-controls="roles-collapse">
+                  <span th:text="#{menu.filters.role.title}"></span>
+                  <span class="glyphicon glyphicon-triangle-bottom"></span>
+                </button>
+                <div class="collapse select-menu-modal" id="roles-collapse">
+                  <div th:include="roles"></div>
+                </div>
+                <!-- .select-menu-modal -->
+              </div>
+              <!-- .select-menu -->
+
               <div class="select-menu pull-left">
                 <button id="service-types-button" class="btn btn-default btn-lg" href="#service-types-collapse" data-toggle="collapse" aria-expanded="false"
                   aria-controls="service-types-collapse">
@@ -69,6 +83,7 @@
                 <!-- .select-menu-modal -->
               </div>
               <!-- .select-menu -->
+
             </div>
             <!-- .table-list-filters -->
           </div>
