@@ -58,6 +58,7 @@ public class CompanyController extends BusyController {
     static final String SERVICE_TYPE_REQUEST = "serviceType";
     static final String BRANCHES_REQUEST = "branches";
     static final String SECTION_REQUEST = "companySection";
+    static final String ROLE_FORM_REQUEST = "roleForm";
 
     /**
      * URL Paths.
@@ -73,6 +74,7 @@ public class CompanyController extends BusyController {
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
     private static final String PATH_GET_BRANCHES = "/get_branches";
     private static final String PATH_BRANCH_DATA = "/get_branch_data";
+    private static final String PATH_ROLE_SAVE = "/role/save";
 
     /**
      * JSP's
@@ -81,8 +83,11 @@ public class CompanyController extends BusyController {
     private static final String COMPANY_INFO_PAGE = "company-info";
 
     private static final String SERVICE_TYPE_FORM_PAGE = "service-type-form";
+    private static final String SERVICE_TYPES_FRAGMENT = "service-types";
     private static final String BRANCHES_FRAGMENT = "branches";
     private static final String CALENDAR_FRAGMENT = "calendar";
+    private static final String ROLE_FORM_PAGE = "role-form";
+    private static final String ROLES_FRAGMENT = "roles";
 
     @Autowired
     private CompanyService companyService;
@@ -338,7 +343,7 @@ public class CompanyController extends BusyController {
             list.add(sType);
         }
 
-        return "service-types";
+        return SERVICE_TYPES_FRAGMENT;
     }
 
     /**
@@ -448,6 +453,54 @@ public class CompanyController extends BusyController {
         }
 
         return null;
+    }
+
+    /**
+     * Shows the form to save a new role.
+     * 
+     * @param model
+     *            Spring Model instance
+     * @return The JSP view of the form
+     */
+    @RequestMapping(value = PATH_ROLE_SAVE, method = RequestMethod.GET)
+    public String showRoleForm(Model model) {
+
+        if (!model.containsAttribute(ROLE_FORM_REQUEST)) {
+            Role roleForm = new Role();
+            Branch branch = ((Role)model.asMap().get(ROLE_SESSION)).getBranch();
+            roleForm.setBranch(branch);
+
+            model.addAttribute(ROLE_FORM_REQUEST, roleForm);
+        }
+
+        return ROLE_FORM_PAGE;
+    }
+
+    /**
+     * Request to save a role.
+     * 
+     * @param roleForm
+     *            form with the data of the role
+     * @param result
+     *            result of the form validation
+     * @param model
+     *            Spring Model instance
+     * @return The operation result
+     */
+    @RequestMapping(value = PATH_ROLE_SAVE, method = RequestMethod.POST)
+    public String saveRoleForm(@ModelAttribute(ROLE_FORM_REQUEST) @Valid Role roleForm, BindingResult result,
+        Model model) {
+
+        RoleValidator validator = new RoleValidator();
+        validator.validate(roleForm, result);
+
+        if (result.hasErrors()) {
+            return ROLE_FORM_PAGE;
+        }
+        
+        // Save the Role here
+
+        return ROLES_FRAGMENT;
     }
 
 }

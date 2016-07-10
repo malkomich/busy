@@ -2,6 +2,8 @@ package busy.role;
 
 import java.io.Serializable;
 
+import javax.validation.Valid;
+
 import busy.company.Branch;
 import busy.company.Company;
 import busy.user.User;
@@ -17,6 +19,8 @@ public class Role implements Serializable {
     private static final long serialVersionUID = 6259212594249963055L;
 
     private int id;
+    
+    @Valid
     private User user;
     private Branch branch;
     private Boolean manager;

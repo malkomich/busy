@@ -102,6 +102,7 @@ function setServiceTypesListeners() {
     $('.service-type_delete').click(deleteServiceType);
     $('.service-type_modify').click(showServiceTypeForm);
     $('.service-type_add').click(showServiceTypeForm);
+    $('.role_add').click(showRoleForm);
 }
 
 function showServiceTypeForm() {
@@ -111,6 +112,16 @@ function showServiceTypeForm() {
     $.get("/service-type/save", {
         id : sTypeId
     }, function(data) {
+        var modalContainer = $('#modalForm');
+        $('.modal-content', modalContainer).html(data);
+        modalContainer.modal();
+    });
+}
+
+function showRoleForm() {
+
+    $.get("/role/save",
+      function(data) {
         var modalContainer = $('#modalForm');
         $('.modal-content', modalContainer).html(data);
         modalContainer.modal();
@@ -136,6 +147,27 @@ function saveServiceType() {
         }
 
     });
+}
+
+function saveRole() {
+  var form = $('#roleForm');
+  $.post("/role/save", form.serialize(), function(data) {
+    var modalContainer = $('#modalForm');
+
+    if ($(data).is("form")) {
+        $('.modal-body', modalContainer).html(data);
+        modalContainer.modal('show');
+    }
+
+    if($(data).is("div")) {
+        var collapseContainer = $('#roles-collapse');
+        collapseContainer.html(data);
+        collapseContainer.collapse('show');
+        setServiceTypesListeners();
+        modalContainer.modal('hide')
+    }
+
+  });
 }
 
 function deleteServiceType() {
