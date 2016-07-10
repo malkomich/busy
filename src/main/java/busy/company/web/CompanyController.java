@@ -514,6 +514,11 @@ public class CompanyController extends BusyController {
         }
 
         roleService.saveRole(roleForm);
+        
+        List<Role> list = (List<Role>) model.asMap().get(BRANCH_ROLES_SESSION);
+        if (!list.contains(roleForm)) {
+            list.add(roleForm);
+        }
 
         return ROLES_FRAGMENT;
     }

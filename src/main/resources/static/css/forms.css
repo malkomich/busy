@@ -27,6 +27,10 @@ span.error {
     color: #a94442;
 }
 
+.modal-footer span.error {
+    text-align: left;
+}
+
 .mandatory-mark {
     position: absolute;
     top: 15px;
