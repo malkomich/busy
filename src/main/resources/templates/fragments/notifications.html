@@ -1,0 +1,22 @@
+<a id="notifications-switch" role="button" class="dialog-switch" data-target=".notifications-content">
+  <span class="glyphicon glyphicon-bell"></span>
+  <span class="badge" th:text="${#lists.size(notifications)}"></span>
+</a>
+<div class="notifications-content dialog">
+  <div class="notifications-title">
+    <h4 th:text="#{navbar.notifications.title(${#lists.size(notifications)})}">
+      Notifications
+    </h4>
+  </div>
+  <div class="item-notification-content" th:each="item : ${notifications}">
+    <a th:attr="notificationId=${item.id}">
+      <h5 th:text="#{${item.typeCode}}"></h5>
+      <div class="item-notification-message" th:text="#{${item.messageCode}}"></div>
+    </a>
+  </div>
+  <div class="footer">
+    <a th:text="#{navbar.notifications.all-read}">
+      Mark all as read
+    </a>
+  </div>
+</div>
