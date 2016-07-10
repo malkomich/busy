@@ -3,13 +3,20 @@
   <div class="modal-body">
 
       <div class="row">
-        <div class="col-sm-6 form-group">
-          <input th:field="*{user.email}" id="firstname" tabindex="1" class="form-control mandatory" th:placeholder="#{role.email.placeholder}" th:errorclass="has-error"></input>
+        <div class="col-sm-6 col-xs-10 form-group">
+          <input th:field="*{user.email}" id="email" tabindex="1" class="form-control mandatory" th:placeholder="#{role.email.placeholder}" th:errorclass="has-error"></input>
           <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
         </div>
         <!-- .col (EMAIL) -->
-        <div class="col-sm-6 form-group">
-          <input th:field="*{user.phone}" id="phone" tabindex="4" class="form-control" th:placeholder="#{role.phone.placeholder}" th:errorclass="has-error"></input>
+
+        <div class="col-xs-2 form-group">
+          <a class="check-email">
+            <span class="glyphicon glyphicon-refresh center-v spin color-lightblue" data-toggle="tooltip" data-placement="top" th:title="#{role.tooltip.check}"></span>
+          </a>
+        </div>
+
+        <div class="col-sm-4 form-group">
+          <input th:field="*{user.phone}" id="phone" tabindex="4" class="form-control user-dependant" th:placeholder="#{role.phone.placeholder}" th:errorclass="has-error"></input>
         </div>
         <!-- .col (PHONE) -->
       </div>
@@ -17,12 +24,12 @@
 
       <div class="row">
         <div class="col-sm-12 form-group">
-          <input th:field="*{user.firstName}" id="firstname" tabindex="2" class="form-control mandatory" th:placeholder="#{role.firstname.placeholder}" th:errorclass="has-error"></input>
+          <input th:field="*{user.firstName}" id="firstname" tabindex="2" class="form-control mandatory user-dependant" th:placeholder="#{role.firstname.placeholder}" th:errorclass="has-error"></input>
           <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
         </div>
         <!-- .col (FIRSTNAME) -->
         <div class="col-sm-12 form-group">
-          <input th:field="*{user.lastName}" id="lastname" tabindex="3" class="form-control mandatory" th:placeholder="#{role.lastname.placeholder}" th:errorclass="has-error"></input>
+          <input th:field="*{user.lastName}" id="lastname" tabindex="3" class="form-control mandatory user-dependant" th:placeholder="#{role.lastname.placeholder}" th:errorclass="has-error"></input>
           <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
         </div>
         <!-- .col (LASTNAME) -->
@@ -30,7 +37,7 @@
       <!-- .row (FIRSTNAME & LASTNAME) -->
 
       <input th:field="*{id}" hidden="true" />
-      <input th:field="*{user.id}" hidden="true" />
+      <input id="user-id" th:field="*{user.id}" hidden="true" />
       <input th:field="*{branch.id}" hidden="true" />
   </div>
   <!-- .modal-body -->
@@ -49,4 +56,5 @@
   <!-- .modal-footer -->
 </form>
 
-<script type="text/javascript" th:src="@{/js/forms.js}"></script>
+<script th:src="@{/js/forms.js}"></script>
+<script th:src="@{/js/roles.js}"></script>

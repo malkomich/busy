@@ -78,6 +78,7 @@ public class CompanyController extends BusyController {
     private static final String PATH_GET_BRANCHES = "/get_branches";
     private static final String PATH_BRANCH_DATA = "/get_branch_data";
     private static final String PATH_ROLE_SAVE = "/role/save";
+    private static final String PATH_ROLE_CHECK_EMAIL = "/role/check_email";
 
     /**
      * JSP's
@@ -97,7 +98,7 @@ public class CompanyController extends BusyController {
 
     @Autowired
     private LocationService locationService;
-    
+
     @Autowired
     private UserService userService;
 
@@ -473,7 +474,7 @@ public class CompanyController extends BusyController {
 
         if (!model.containsAttribute(ROLE_FORM_REQUEST)) {
             Role roleForm = new Role();
-            Branch branch = ((Role)model.asMap().get(ROLE_SESSION)).getBranch();
+            Branch branch = ((Role) model.asMap().get(ROLE_SESSION)).getBranch();
             roleForm.setBranch(branch);
 
             model.addAttribute(ROLE_FORM_REQUEST, roleForm);
@@ -497,30 +498,61 @@ public class CompanyController extends BusyController {
     public String saveRoleForm(@ModelAttribute(ROLE_FORM_REQUEST) @Valid Role roleForm, BindingResult result,
         Model model) {
 
-        RoleValidator validator = new RoleValidator();
-        validator.validate(roleForm, result);
-
         if (result.hasErrors()) {
             return ROLE_FORM_PAGE;
         }
-        
+
         User user = roleForm.getUser();
         if (user.getId() == 0) {
             SecureRandom random = new SecureRandom();
             String password = new BigInteger(130, random).toString(32);
             user.setPassword(password);
-            
+
             userService.saveUser(user);
         }
 
         roleService.saveRole(roleForm);
-        
+
+        @SuppressWarnings("unchecked")
         List<Role> list = (List<Role>) model.asMap().get(BRANCH_ROLES_SESSION);
         if (!list.contains(roleForm)) {
             list.add(roleForm);
         }
 
         return ROLES_FRAGMENT;
+    }
+
+    /**
+     * Checks for a existing user with the given email.
+     * 
+     * @param roleForm
+     *            form with the data of the role
+     * @param result
+     *            result of the form validation
+     * @param model
+     *            Spring Model instance
+     * @return The operation result
+     */
+    @RequestMapping(value = PATH_ROLE_CHECK_EMAIL, method = RequestMethod.POST)
+    public String checkRoleEmail(@ModelAttribute(ROLE_FORM_REQUEST) Role roleForm, Model model) {
+
+        User user = null;
+        String email = roleForm.getUser().getEmail();
+        if (email != null && email != "") {
+            user = userService.findUserByEmail(email);
+        }
+
+        if (user == null) {
+            user = new User();
+            user.setEmail(email);
+            user.setFirstName(roleForm.getUser().getFirstName());
+            user.setLastName(roleForm.getUser().getLastName());
+            user.setPhone(roleForm.getUser().getPhone());
+        }
+
+        roleForm.setUser(user);
+
+        return ROLE_FORM_PAGE;
     }
 
 }
