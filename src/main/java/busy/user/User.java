@@ -2,6 +2,12 @@ package busy.user;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Pattern;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
+
 import busy.location.Address;
 
 /**
@@ -15,12 +21,25 @@ public class User implements Serializable {
     private static final long serialVersionUID = 4782710436663959256L;
 
     private int id;
+    
+    @NotEmpty(message = "{firstname.required}")
+    @Length(max = 35, message = "{firstname.maxlength}")
     private String firstName;
+    
+    @NotEmpty(message = "{lastname.required}")
+    @Length(max = 35, message = "{lastname.maxlength}")
     private String lastName;
+    
+    @Email(message = "{email.wrong_format}")
+    @NotEmpty(message = "{email.required}")
+    @Length(max = 50, message = "{email.maxlength}")
     private String email;
     private String pasword;
     private String nif;
     private Address address;
+    
+    @Length(min = 8, max = 12, message = "{phone.length}")
+    @Pattern(regexp = "[0-9]*", message = "{phone.wrong_format}")
     private String phone;
     private Boolean active;
     private Boolean admin;
@@ -82,7 +101,9 @@ public class User implements Serializable {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
+        
+        if (phone != "")
+            this.phone = phone;
     }
 
     public String getPhone() {
@@ -94,7 +115,7 @@ public class User implements Serializable {
     }
 
     public Boolean isActive() {
-        return active;
+        return (active != null) ? active : false;
     }
 
     @SuppressWarnings("unused")
@@ -103,7 +124,7 @@ public class User implements Serializable {
     }
 
     public Boolean isAdmin() {
-        return admin;
+        return (admin != null) ? admin : false;
     }
 
     public void setAddress(Address address) {

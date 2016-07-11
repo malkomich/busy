@@ -71,7 +71,7 @@
           <div class="col-xs-5" data-toggle="tooltip" data-placement="top" th:title="#{schedule.service.tooltip.roles}">
             <div class="row">
               <select th:field="*{services[__${status.index}__].timeSlots[__${timeStatus.index}__].roles}" multiple="multiple" class="input-sm no-padding roles-select" th:errorclass="has-error" tabindex="3">
-                <option th:each="branchRole : ${branchRoles}" th:value="${branchRole.key}" th:text="${branchRole.value}"></option>
+                <option th:each="branchRole : ${branchRoles}" th:value="${branchRole.id}" th:text="${branchRole}"></option>
               </select>
             </div>
           </div>

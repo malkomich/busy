@@ -1,0 +1,60 @@
+<form class="role-form" id="roleForm" action="javascript:saveRole()" th:object="${roleForm}"
+  method="POST">
+  <div class="modal-body">
+
+      <div class="row">
+        <div class="col-sm-6 col-xs-10 form-group">
+          <input th:field="*{user.email}" id="email" tabindex="1" class="form-control mandatory" th:placeholder="#{role.email.placeholder}" th:errorclass="has-error"></input>
+          <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+        </div>
+        <!-- .col (EMAIL) -->
+
+        <div class="col-xs-2 form-group">
+          <a class="check-email">
+            <span class="glyphicon glyphicon-refresh center-v spin color-lightblue" data-toggle="tooltip" data-placement="top" th:title="#{role.tooltip.check}"></span>
+          </a>
+        </div>
+
+        <div class="col-sm-4 form-group">
+          <input th:field="*{user.phone}" id="phone" tabindex="4" class="form-control user-dependant" th:placeholder="#{role.phone.placeholder}" th:errorclass="has-error"></input>
+        </div>
+        <!-- .col (PHONE) -->
+      </div>
+      <!-- .row (EMAIL & PHONE) -->
+
+      <div class="row">
+        <div class="col-sm-12 form-group">
+          <input th:field="*{user.firstName}" id="firstname" tabindex="2" class="form-control mandatory user-dependant" th:placeholder="#{role.firstname.placeholder}" th:errorclass="has-error"></input>
+          <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+        </div>
+        <!-- .col (FIRSTNAME) -->
+        <div class="col-sm-12 form-group">
+          <input th:field="*{user.lastName}" id="lastname" tabindex="3" class="form-control mandatory user-dependant" th:placeholder="#{role.lastname.placeholder}" th:errorclass="has-error"></input>
+          <span class="mandatory-mark glyphicon glyphicon-asterisk error"></span>
+        </div>
+        <!-- .col (LASTNAME) -->
+      </div>
+      <!-- .row (FIRSTNAME & LASTNAME) -->
+
+      <input th:field="*{id}" hidden="true" />
+      <input id="user-id" th:field="*{user.id}" hidden="true" />
+      <input th:field="*{branch.id}" hidden="true" />
+  </div>
+  <!-- .modal-body -->
+
+  <div class="modal-footer">
+    <div class="col-xs-6">
+      <div class="row" th:each="err : ${#fields.errors()}">
+        <span  class="error fs-xs pull-left" th:text="${err}" />
+      </div>
+    </div>
+    <div class="col-xs-6">
+      <button type="button" class="btn btn-default" data-dismiss="modal" th:text="#{modal.close}"></button>
+      <button id="submit" type="submit" class="btn btn-success" tabindex="5" th:text="#{form.save}"></button>
+    </div>
+  </div>
+  <!-- .modal-footer -->
+</form>
+
+<script th:src="@{/js/forms.js}"></script>
+<script th:src="@{/js/roles.js}"></script>

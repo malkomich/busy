@@ -32,8 +32,9 @@ public class BranchPage extends BusyPage {
      * Method flow modifiers
      */
     public static final int MESSAGE_SERVICE_TYPE = 0;
-    public static final int FORM_SERVICE_TYPE = 0;
-    public static final int FORM_SERVICE = 1;
+    public static final int SERVICE_TYPE = 0;
+    public static final int SERVICE = 1;
+    public static final int ROLE = 2;
 
     private static final String PARTIAL_PATH = "/company/"; // "/company/{id}/branch/{id}"
     private static final String DESCRIPTION = "Branch Page";
@@ -57,6 +58,12 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_TYPE_MODIFY_SELECTOR = ".service-type_modify";
     private static final String SERVICE_TYPE_DELETE_SELECTOR = ".service-type_delete";
 
+    private static final String ROLE_DROPDOWN_SELECTOR = "#roles-collapse";
+    private static final String ROLE_LIST_SELECTOR = ".role-list";
+    private static final String ROLE_ITEM_SELECTOR = ".role-item";
+    private static final String ROLE_ADD_SELECTOR = ".role_add";
+    private static final String ROLE_PARAMS_NAME = ".firstname";
+    
     private static final String SERVICE_TYPE_FORM_SELECTOR = ".service-type-form";
     private static final String SERVICE_TYPE_FORM_NAME_SELECTOR = "#name";
     private static final String SERVICE_TYPE_FORM_DESCRIPTION_SELECTOR = "#description";
@@ -70,6 +77,12 @@ public class BranchPage extends BusyPage {
     private static final String SERVICE_FORM_STYPE = ".service-type";
     private static final String SERVICE_FORM_REPETITION_TYPE = ".service-repetition-type";
 
+    private static final String ROLE_FORM_SELECTOR = ".role-form";
+    private static final String ROLE_FORM_FIRSTNAME_SELECTOR = "#firstname";
+    private static final String ROLE_FORM_LASTNAME_SELECTOR = "#lastname";
+    private static final String ROLE_FORM_EMAIL_SELECTOR = "#email";
+    private static final String ROLE_FORM_PHONE_SELECTOR = "#phone";
+    
     private static final String MESSAGE_SELECTOR = "#infoMessage";
     private static final String ERROR_SELECTOR = "span.error";
 
@@ -141,9 +154,20 @@ public class BranchPage extends BusyPage {
         return false;
     }
 
-    public BranchPage clickOnAddServiceType() {
+    public BranchPage clickOnAdd(int section) {
 
-        findFirst(SERVICE_TYPE_ADD_SELECTOR).click();
+        switch (section) {
+            case SERVICE_TYPE:
+                findFirst(SERVICE_TYPE_ADD_SELECTOR).click();
+                break;
+            case ROLE:
+                findFirst(ROLE_ADD_SELECTOR).click();
+                break;
+
+            default:
+                break;
+        }
+
         waitForJSandJQueryToLoad();
         return this;
     }
@@ -162,16 +186,25 @@ public class BranchPage extends BusyPage {
         return this;
     }
 
-    public boolean formIsShown(int formType) {
+    public boolean formIsShown(int section) {
 
         String selector = null;
 
-        if (formType == FORM_SERVICE_TYPE) {
-            selector = SERVICE_TYPE_FORM_SELECTOR;
+        switch (section) {
+            case SERVICE_TYPE:
+                selector = SERVICE_TYPE_FORM_SELECTOR;
+                break;
+            case SERVICE:
+                selector = SERVICE_FORM_SELECTOR;
+                break;
+            case ROLE:
+                selector = ROLE_FORM_SELECTOR;
+                break;
 
-        } else if (formType == FORM_SERVICE) {
-            selector = SERVICE_FORM_SELECTOR;
+            default:
+                return false;
         }
+        
         return findFirst(selector).isDisplayed();
     }
 
@@ -217,7 +250,7 @@ public class BranchPage extends BusyPage {
         return !find(FORM_ERROR_SELECTOR).isEmpty();
     }
 
-    public boolean messageShown(int messageType) {
+    public boolean messageShown(int section) {
 
         return findFirst(MESSAGE_SELECTOR).isDisplayed();
     }
@@ -255,20 +288,20 @@ public class BranchPage extends BusyPage {
             for (String role : roles) {
 
                 boolean found = false;
-                
+
                 for (int i = 0; i < list.size() && !found; i++) {
-                    
+
                     FluentWebElement item = list.get(i);
-                    
+
                     try {
                         if (item.findFirst("label").getText().contains(role)) {
                             item.findFirst("input[type=checkbox]").click();
                             found = true;
-                        }    
-                    } catch(NoSuchElementException e) {
+                        }
+                    } catch (NoSuchElementException e) {
                         continue;
                     }
-                    
+
                 }
             }
         }
@@ -315,7 +348,7 @@ public class BranchPage extends BusyPage {
         Repetition repetition = parseRepetition(repetitionTmp);
 
         List<Integer> repeatedDayList = new ArrayList<>();
-        
+
         DateTime lastDayOfMonth = servDate.dayOfMonth().withMaximumValue();
 
         switch (repetition) {
@@ -369,6 +402,47 @@ public class BranchPage extends BusyPage {
         DateTimeFormatter dtfOut = DateTimeFormat.forPattern("yyyy-MM-dd");
         return findFirst(DAY_CELL_SELECTOR, FilterConstructor.with(DAY_CELL_DATE).equalTo(dtfOut.print(day))).axes()
             .parent();
+    }
+
+    public BranchPage setRoleFirstName(String name) {
+
+        fill(ROLE_FORM_FIRSTNAME_SELECTOR).with(name);
+        return this;
+    }
+    
+    public BranchPage setRoleLastName(String lastname) {
+
+        fill(ROLE_FORM_LASTNAME_SELECTOR).with(lastname);
+        return this;
+    }
+
+    public BranchPage setRoleEmail(String email) {
+
+        fill(ROLE_FORM_EMAIL_SELECTOR).with(email);
+        return this;
+    }
+
+    public BranchPage setRolePhoneNumber(String phoneNumber) {
+
+        getWhenVisible("phone").fill().with(phoneNumber);
+        return this;
+    }
+
+    public boolean roleShown(String name) {
+
+        FluentWebElement serviceTypeList = findFirst(ROLE_LIST_SELECTOR);
+        for (FluentWebElement item : serviceTypeList.find(ROLE_ITEM_SELECTOR)) {
+            if (item.findFirst(ROLE_PARAMS_NAME).getText().contains(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public BranchPage clickOnRolesDropdown() {
+
+        findFirst(ROLE_DROPDOWN_SELECTOR).click();
+        return this;
     }
 
 }

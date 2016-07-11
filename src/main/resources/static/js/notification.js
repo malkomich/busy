@@ -27,7 +27,7 @@ $(function() {
   $(notificationSwitch).click(function() {
       $($(this).data("target")).toggle();
   });
-var dialog_switch = $(notificationSwitch);
+
   $(document).mouseup(
     function(e) {
       if (!$('.notification-section').is(e.target) && $('.notification-section').has(e.target).length === 0) {

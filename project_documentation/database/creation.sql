@@ -73,7 +73,7 @@ CREATE TABLE person (
     password            varchar(50)         NOT NULL,
     nif                 varchar(9)          NULL UNIQUE,
     phone               varchar(12)         NULL,
-    active              boolean             NOT NULL DEFAULT true,
+    active              boolean             NOT NULL DEFAULT false,
     admin_role          boolean             NOT NULL DEFAULT false,
     address_id          integer             NULL REFERENCES address(id)
         ON DELETE SET NULL ON UPDATE CASCADE

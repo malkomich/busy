@@ -105,7 +105,7 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     @Then("^I should see a dialog to enter the data of the new service$")
     public void form_dialog_shown() throws Throwable {
 
-        assertTrue(branchPage.formIsShown(BranchPage.FORM_SERVICE));
+        assertTrue(branchPage.formIsShown(BranchPage.SERVICE));
     }
 
     @When("^I introduce the start time \"([^\"]*)\"$")
@@ -135,13 +135,13 @@ public class CreateServicesSteps extends AbstractFunctionalTest {
     @When("^I click on 'Save'$")
     public void click_save() throws Throwable {
 
-        branchPage.submitForm(BranchPage.FORM_SERVICE);
+        branchPage.submitForm(BranchPage.SERVICE);
     }
 
     @Then("^I should see an error message in the form$")
     public void form_error_shown() throws Throwable {
 
-        assertTrue(branchPage.errorShown(BranchPage.FORM_SERVICE));
+        assertTrue(branchPage.errorShown(BranchPage.SERVICE));
     }
 
     @Then("^I should see the service created on the day \"([^\"]*)\"$")

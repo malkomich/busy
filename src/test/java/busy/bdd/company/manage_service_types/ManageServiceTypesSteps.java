@@ -82,7 +82,7 @@ public class ManageServiceTypesSteps extends AbstractFunctionalTest {
     @When("^I click on Add$")
     public void click_on_add() throws Throwable {
 
-        branchPage.clickOnAddServiceType();
+        branchPage.clickOnAdd(BranchPage.SERVICE_TYPE);
     }
 
     @When("^I click on Modify$")
@@ -100,7 +100,7 @@ public class ManageServiceTypesSteps extends AbstractFunctionalTest {
     @Then("^I should see a window with a form to input the data$")
     public void form_shown() throws Throwable {
 
-        assertTrue(branchPage.formIsShown(BranchPage.FORM_SERVICE_TYPE));
+        assertTrue(branchPage.formIsShown(BranchPage.SERVICE_TYPE));
     }
 
     @When("^I enter the name \"([^\"]*)\"$")
@@ -130,7 +130,7 @@ public class ManageServiceTypesSteps extends AbstractFunctionalTest {
     @When("^I click on Accept$")
     public void submit() throws Throwable {
 
-        branchPage.submitForm(BranchPage.FORM_SERVICE_TYPE);
+        branchPage.submitForm(BranchPage.SERVICE_TYPE);
     }
 
     @Then("^I should see \"([^\"]*)\" in the list of services with the data \"([^\"]*)\", \"([^\"]*)\", \"([^\"]*)\"$")

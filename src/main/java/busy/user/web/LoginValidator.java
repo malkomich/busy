@@ -37,6 +37,10 @@ public class LoginValidator implements Validator {
 
             errors.rejectValue("email", "email.wrong");
 
+        } else if (!user.isActive()) {
+
+            errors.rejectValue("email", "email.inactive");
+
         } else if (!loginForm.getPassword().equals(user.getPassword())) {
 
             errors.rejectValue("password", "password.wrong");

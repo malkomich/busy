@@ -7,6 +7,7 @@ import org.fluentlenium.core.domain.FluentWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -95,8 +96,8 @@ public abstract class BusyPage extends FluentPage {
 
     protected FluentWebElement getWhenVisible(String id) {
 
-        Wait<BusyDriver> wait = new FluentWait<BusyDriver>((BusyDriver) getDriver()).withTimeout(10, TimeUnit.SECONDS)
-            .pollingEvery(1, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
+        Wait<BusyDriver> wait = new FluentWait<BusyDriver>((BusyDriver) getDriver()).withTimeout(20, TimeUnit.SECONDS)
+            .pollingEvery(2, TimeUnit.SECONDS).ignoring(NoSuchElementException.class);
 
         FluentWebElement element = wait.until(new Function<WebDriver, FluentWebElement>() {
 

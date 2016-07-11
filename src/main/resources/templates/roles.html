@@ -1,0 +1,35 @@
+<div class="role-list">
+
+  <div class="select-menu-item role-item" th:each="branchRole : ${branchRoles}">
+    <div class="row">
+      <div class="col-xs-8">
+        <a href="#">
+          <div class="select-menu-item-text">
+            <div class="row">
+              <span class="firstname" th:text="${branchRole.user.firstName}"></span>
+              <span class="lastname" th:text="${branchRole.user.lastName}"></span>
+            </div>
+            <div class="row tip-text">
+              <span class="info">
+                <span class="email" th:text="#{menu.filters.role.tip.email(${branchRole.user.email})}"></span>
+              </span>
+            </div>
+          </div>
+          <!-- .select-menu-item-text -->
+        </a>
+      </div>
+      <!-- .col -->
+
+    </div>
+    <!-- .row -->
+  </div>
+  <!-- .select-menu-item -->
+
+  <a href="#" class="select-menu-item role_add">
+    <div class="select-menu-item-text">
+      <span class="glyphicon glyphicon-plus"></span>
+      <span th:text="#{menu.filters.role.add}"></span>
+    </div>
+  </a>
+
+</div>
