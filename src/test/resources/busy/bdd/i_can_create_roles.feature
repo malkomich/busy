@@ -8,6 +8,7 @@ Feature: The manager of a company will be able to register new employees in his 
         And I have a registered company with my account
         And I am on the main page
     
+    @ignore
     Scenario Outline: Add a new employee successfully
         When I select my company name "Busy" in the dropdown
         And I click on the roles dropdown
@@ -26,6 +27,7 @@ Feature: The manager of a company will be able to register new employees in his 
             | firstname | lastname | email | phone |
             | "Pepito" | "González" | "pepito@domain.x" | "666789012" |
 
+    @ignore
     Scenario Outline: Add a new employee unsuccessfully
         When I select my company name "Busy" in the dropdown
         And I click on the roles dropdown
