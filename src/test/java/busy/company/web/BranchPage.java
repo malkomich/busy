@@ -419,13 +419,12 @@ public class BranchPage extends BusyPage {
     public BranchPage setRoleEmail(String email) {
 
         fill(ROLE_FORM_EMAIL_SELECTOR).with(email);
-        waitForJSandJQueryToLoad();
         return this;
     }
 
     public BranchPage setRolePhoneNumber(String phoneNumber) {
 
-        fill(ROLE_FORM_PHONE_SELECTOR).with(phoneNumber);
+        getWhenVisible("phone").fill().with(phoneNumber);
         return this;
     }
 
