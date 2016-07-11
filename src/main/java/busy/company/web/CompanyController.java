@@ -1,5 +1,7 @@
 package busy.company.web;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Locale;
 
@@ -34,6 +36,7 @@ import busy.schedule.ServiceType;
 import busy.schedule.web.ServiceTypeForm;
 import busy.schedule.web.ServiceTypeValidator;
 import busy.user.User;
+import busy.user.UserService;
 import busy.util.OperationResult;
 import busy.util.OperationResult.ResultCode;
 import busy.util.SecureSetter;
@@ -58,6 +61,7 @@ public class CompanyController extends BusyController {
     static final String SERVICE_TYPE_REQUEST = "serviceType";
     static final String BRANCHES_REQUEST = "branches";
     static final String SECTION_REQUEST = "companySection";
+    static final String ROLE_FORM_REQUEST = "roleForm";
 
     /**
      * URL Paths.
@@ -73,6 +77,8 @@ public class CompanyController extends BusyController {
     private static final String PATH_RETURN_OBJECT = "/return-model-object";
     private static final String PATH_GET_BRANCHES = "/get_branches";
     private static final String PATH_BRANCH_DATA = "/get_branch_data";
+    private static final String PATH_ROLE_SAVE = "/role/save";
+    private static final String PATH_ROLE_CHECK_EMAIL = "/role/check_email";
 
     /**
      * JSP's
@@ -81,14 +87,20 @@ public class CompanyController extends BusyController {
     private static final String COMPANY_INFO_PAGE = "company-info";
 
     private static final String SERVICE_TYPE_FORM_PAGE = "service-type-form";
+    private static final String SERVICE_TYPES_FRAGMENT = "service-types";
     private static final String BRANCHES_FRAGMENT = "branches";
     private static final String CALENDAR_FRAGMENT = "calendar";
+    private static final String ROLE_FORM_PAGE = "role-form";
+    private static final String ROLES_FRAGMENT = "roles";
 
     @Autowired
     private CompanyService companyService;
 
     @Autowired
     private LocationService locationService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private RoleService roleService;
@@ -338,7 +350,7 @@ public class CompanyController extends BusyController {
             list.add(sType);
         }
 
-        return "service-types";
+        return SERVICE_TYPES_FRAGMENT;
     }
 
     /**
@@ -448,6 +460,99 @@ public class CompanyController extends BusyController {
         }
 
         return null;
+    }
+
+    /**
+     * Shows the form to save a new role.
+     * 
+     * @param model
+     *            Spring Model instance
+     * @return The JSP view of the form
+     */
+    @RequestMapping(value = PATH_ROLE_SAVE, method = RequestMethod.GET)
+    public String showRoleForm(Model model) {
+
+        if (!model.containsAttribute(ROLE_FORM_REQUEST)) {
+            Role roleForm = new Role();
+            Branch branch = ((Role) model.asMap().get(ROLE_SESSION)).getBranch();
+            roleForm.setBranch(branch);
+
+            model.addAttribute(ROLE_FORM_REQUEST, roleForm);
+        }
+
+        return ROLE_FORM_PAGE;
+    }
+
+    /**
+     * Request to save a role.
+     * 
+     * @param roleForm
+     *            form with the data of the role
+     * @param result
+     *            result of the form validation
+     * @param model
+     *            Spring Model instance
+     * @return The operation result
+     */
+    @RequestMapping(value = PATH_ROLE_SAVE, method = RequestMethod.POST)
+    public String saveRoleForm(@ModelAttribute(ROLE_FORM_REQUEST) @Valid Role roleForm, BindingResult result,
+        Model model) {
+
+        if (result.hasErrors()) {
+            return ROLE_FORM_PAGE;
+        }
+
+        User user = roleForm.getUser();
+        if (user.getId() == 0) {
+            SecureRandom random = new SecureRandom();
+            String password = new BigInteger(130, random).toString(32);
+            user.setPassword(password);
+
+            userService.saveUser(user);
+        }
+
+        roleService.saveRole(roleForm);
+
+        @SuppressWarnings("unchecked")
+        List<Role> list = (List<Role>) model.asMap().get(BRANCH_ROLES_SESSION);
+        if (!list.contains(roleForm)) {
+            list.add(roleForm);
+        }
+
+        return ROLES_FRAGMENT;
+    }
+
+    /**
+     * Checks for a existing user with the given email.
+     * 
+     * @param roleForm
+     *            form with the data of the role
+     * @param result
+     *            result of the form validation
+     * @param model
+     *            Spring Model instance
+     * @return The operation result
+     */
+    @RequestMapping(value = PATH_ROLE_CHECK_EMAIL, method = RequestMethod.POST)
+    public String checkRoleEmail(@ModelAttribute(ROLE_FORM_REQUEST) Role roleForm, Model model) {
+
+        User user = null;
+        String email = roleForm.getUser().getEmail();
+        if (email != null && email != "") {
+            user = userService.findUserByEmail(email);
+        }
+
+        if (user == null) {
+            user = new User();
+            user.setEmail(email);
+            user.setFirstName(roleForm.getUser().getFirstName());
+            user.setLastName(roleForm.getUser().getLastName());
+            user.setPhone(roleForm.getUser().getPhone());
+        }
+
+        roleForm.setUser(user);
+
+        return ROLE_FORM_PAGE;
     }
 
 }
