@@ -355,7 +355,7 @@ public class ScheduleController extends BusyController {
      * @return The service form dialog view with a new time slot row
      */
     @RequestMapping(value = PATH_SERVICES_FORM_ADD_TIMESLOT, method = RequestMethod.POST)
-    public String addTimeslot(@PathVariable("index") Integer serviceIndex,
+    public String newTimeslot(@PathVariable("index") Integer serviceIndex,
         @ModelAttribute(SERVICE_FORM_REQUEST) @Valid ServiceListForm form, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
@@ -377,7 +377,7 @@ public class ScheduleController extends BusyController {
     }
 
     @RequestMapping(value = PATH_BOOKING_SERVICE, method = RequestMethod.GET)
-    public String requestBooking(@RequestParam("time_slot_id") String timeSlotId, Model model) {
+    public String showBookingForm(@RequestParam("time_slot_id") String timeSlotId, Model model) {
 
         BookingForm form = new BookingForm();
 

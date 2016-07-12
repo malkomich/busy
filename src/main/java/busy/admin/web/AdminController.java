@@ -64,7 +64,7 @@ public class AdminController {
      * @return The admin page or redirect request to root path
      */
     @RequestMapping(value = PATH_ADMIN, method = RequestMethod.GET)
-    public String admin(Model model, HttpSession session) {
+    public String showAdminZone(Model model, HttpSession session) {
 
         if (model.containsAttribute(USER_SESSION) && ((User) model.asMap().get(USER_SESSION) != null)) {
 
