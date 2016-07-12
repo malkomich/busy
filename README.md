@@ -4,4 +4,4 @@
 
 Aplicación de organización de servicios de facturación por horas.
 
-[**ENTRA AQUÍ A buSy**] (http://busy-app.herokuapp.com/)
+[**ENTRA AQUÍ A buSy**] (http://busy-web.herokuapp.com/)
