@@ -16,6 +16,9 @@ import busy.BusyPage;
  */
 public class AdminPage extends BusyPage {
 
+    public static final int COMPANY = 0;
+    public static final int USER = 1;
+    
     private static final String PATH = "/admin";
     private static final String DESCRIPTION = "Admin Page";
 
@@ -24,6 +27,7 @@ public class AdminPage extends BusyPage {
      */
     private static final String SHOW_COMPANIES_SELECTOR = "#admin-companies-button";
     private static final String COMPANY_SELECTOR = ".company-item";
+    private static final String USER_SELECTOR = ".user-item";
     private static final String SWITCH_SELECTOR = ".onoffswitch-checkbox";
 
     private FluentWebElement companyItem;
@@ -56,9 +60,20 @@ public class AdminPage extends BusyPage {
         return this;
     }
 
-    public AdminPage clickApprove() {
+    public AdminPage toogleActiveStatus(int section, String name) {
 
-        click(companyItem.find(SWITCH_SELECTOR));
+        switch (section) {
+            case COMPANY:
+                click(companyItem.find(SWITCH_SELECTOR));
+                break;
+            case USER:
+                FluentWebElement userItem = findFirst(USER_SELECTOR, FilterConstructor.withText().contains(name));
+                click(userItem.find(SWITCH_SELECTOR));
+                break;
+
+            default:
+                break;
+        }
         return this;
     }
 
@@ -84,6 +99,26 @@ public class AdminPage extends BusyPage {
 
         // Nothing to check, the operation is done in back end.
         return true;
+    }
+
+    public AdminPage clickOnUsersSection() {
+        // TODO Auto-generated method stub
+        return this;
+    }
+
+    public AdminPage userListShown() {
+        // TODO Auto-generated method stub
+        return this;
+    }
+
+    public boolean userActiveStatus(String name, boolean b) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public boolean blockUserConfirmationShown() {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }
