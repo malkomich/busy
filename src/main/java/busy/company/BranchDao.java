@@ -29,11 +29,11 @@ public interface BranchDao {
     /**
      * Gets the list of branch offices from the given company.
      * 
-     * @param company
-     *            company of the branch offices
+     * @param companyId
+     *            unique ID of the company with the branch offices requested
      * @return The list of resultant branch offices
      */
-    List<Branch> findByCompany(Company company);
+    List<Branch> findByCompanyId(int companyId);
 
     /**
      * Gets the headquarters office of a given company.

@@ -81,28 +81,28 @@ public interface CompanyService {
     List<Company> findActiveCompaniesByPartialName(String partialName);
 
     /**
-     * Saves or updates a branch.
+     * Saves or updates a branch office.
      * 
      * @param branch
      *            the branch to be saved
      */
-    void saveBranch(Branch branch);
+    void saveBranchOffice(Branch branch);
 
     /**
-     * Gets a branch by his ID
+     * Gets a branch office by his ID
      * 
      * @param id
      *            unique ID of the branch
      * @return The resultant branch
      */
-    Branch findBranchById(int id);
+    Branch findBranchOfficeById(int id);
 
     /**
      * Gets the list of all the categories currently available.
      * 
      * @return The list of current categories
      */
-    List<Category> findCategories();
+    List<Category> findAllCategories();
 
     /**
      * Gets the number of companies currently available.

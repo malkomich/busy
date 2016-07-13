@@ -130,16 +130,9 @@ public class BranchDaoImpl implements BranchDao {
      * @see busy.company.BranchDao#findByCompany(busy.company.Company)
      */
     @Override
-    public List<Branch> findByCompany(Company company) {
+    public List<Branch> findByCompanyId(int companyId) {
 
-        if (company == null) {
-            throw new IllegalArgumentException("The company cannot be null");
-        }
-
-        BranchRowMapper rowMapper = new BranchRowMapper();
-        rowMapper.setCompany(company);
-
-        return jdbcTemplate.query(SQL_SELECT_BY_COMPANY, new BranchRowMapper(), company.getId());
+        return jdbcTemplate.query(SQL_SELECT_BY_COMPANY, new BranchRowMapper(), companyId);
     }
 
     /*

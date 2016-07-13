@@ -61,7 +61,7 @@ public class NotificationServiceImpl implements NotificationService {
      * @see busy.notifications.NotificationService#setNotificationsAsRead(busy.user.User)
      */
     @Override
-    public void setNotificationsAsRead(User user) {
+    public void setUserNotificationsAsRead(User user) {
 
         notificationDao.updateReadStatus(true, user);
     }
