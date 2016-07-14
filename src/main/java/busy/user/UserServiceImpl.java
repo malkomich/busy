@@ -1,5 +1,7 @@
 package busy.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -99,6 +101,36 @@ public class UserServiceImpl implements UserService {
     public Verification getVerification(String token) {
 
         return verificationDao.findByToken(token);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.user.UserService#toogleUserActiveStatus(int, boolean)
+     */
+    @Override
+    public void toogleUserActiveStatus(int userId, boolean active) {
+
+        userDao.changeActiveStatus(userId, active);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.user.UserService#findAll()
+     */
+    @Override
+    public List<User> findAll() {
+
+        return userDao.findAll();
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.user.UserService#countAllUsers()
+     */
+    @Override
+    public int countAllUsers() {
+
+        return userDao.countAll();
     }
 
 }
