@@ -220,18 +220,22 @@ public class UserDBTest extends AbstractDBTest {
         assertTrue(userList.isEmpty());
     }
 
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test
     public void blockUserByInvalidId() {
 
-        repository.changeActiveStatus(INVALID_ID, false);
+        int rows = repository.changeActiveStatus(INVALID_ID, false);
+
+        assertEquals(0, rows);
     }
 
     @Test
     @DatabaseSetup("userSet.xml")
     public void blockUserByIdSuccessfully() {
 
-        repository.changeActiveStatus(1, false);
-        
+        int rows = repository.changeActiveStatus(1, false);
+
+        assertEquals(1, rows);
+
         assertFalse(repository.findByEmail("user@domain.com").isActive());
     }
 

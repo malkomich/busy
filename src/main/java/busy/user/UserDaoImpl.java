@@ -67,6 +67,9 @@ public class UserDaoImpl implements UserDao {
         + EMAIL + "= ?, " + PASSWORD + "= ?," + NIF + "= ?," + PHONE + "= ?," + ACTIVE + "= ?," + ADMIN + "= ?,"
         + ADDRID + "= ? " + "WHERE " + ID + "= ?";
 
+    private static final String SQL_UPDATE_ACTIVE_STATUS =
+        "UPDATE " + TABLE_USER + " SET " + ACTIVE + "= ? " + "WHERE " + ID + "= ?";
+
     private JdbcTemplate jdbcTemplate;
 
     private SimpleJdbcInsert jdbcInsert;
@@ -150,9 +153,9 @@ public class UserDaoImpl implements UserDao {
      * @see busy.user.UserDao#changeActiveStatus(java.lang.Integer, boolean)
      */
     @Override
-    public void changeActiveStatus(Integer userId, boolean active) {
-        // TODO Auto-generated method stub
+    public int changeActiveStatus(Integer userId, boolean active) {
 
+        return jdbcTemplate.update(SQL_UPDATE_ACTIVE_STATUS, active, userId);
     }
 
     private class UserRowMapper implements RowMapper<User> {

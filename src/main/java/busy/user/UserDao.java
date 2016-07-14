@@ -40,7 +40,8 @@ interface UserDao {
      *            unique ID of the user
      * @param active
      *            active status of the user
+     * @return The number of rows affected
      */
-    void changeActiveStatus(Integer userId, boolean active);
+    int changeActiveStatus(Integer userId, boolean active);
 
 }
