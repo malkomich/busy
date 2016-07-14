@@ -57,15 +57,15 @@ import busy.util.SecureSetter;
 public class UserDaoImpl implements UserDao {
 
     private static final String SQL_SELECT_ALL = "SELECT " + TABLE_USER + "." + ID + " AS " + ALIAS_USER_ID + ","
-            + FIRSTNAME + "," + LASTNAME + "," + EMAIL + "," + PASSWORD + "," + NIF + "," + PHONE + "," + ACTIVE + ","
-            + ADMIN + ", addressJoin.* FROM " + TABLE_USER + " LEFT JOIN (" + ADDRESS_SELECT_QUERY
-            + ") AS addressJoin ON " + TABLE_USER + "." + ADDRID + "= addressJoin." + ALIAS_ADDR_ID;
+        + FIRSTNAME + "," + LASTNAME + "," + EMAIL + "," + PASSWORD + "," + NIF + "," + PHONE + "," + ACTIVE + ","
+        + ADMIN + ", addressJoin.* FROM " + TABLE_USER + " LEFT JOIN (" + ADDRESS_SELECT_QUERY + ") AS addressJoin ON "
+        + TABLE_USER + "." + ADDRID + "= addressJoin." + ALIAS_ADDR_ID;
 
     private static final String SQL_SELECT_BY_EMAIL = SQL_SELECT_ALL + " WHERE " + EMAIL + "= ?";
 
     private static final String SQL_UPDATE = "UPDATE " + TABLE_USER + " SET " + FIRSTNAME + "= ?," + LASTNAME + "= ?,"
-            + EMAIL + "= ?, " + PASSWORD + "= ?," + NIF + "= ?," + PHONE + "= ?," + ACTIVE + "= ?," + ADMIN + "= ?,"
-            + ADDRID + "= ? " + "WHERE " + ID + "= ?";
+        + EMAIL + "= ?, " + PASSWORD + "= ?," + NIF + "= ?," + PHONE + "= ?," + ACTIVE + "= ?," + ADMIN + "= ?,"
+        + ADDRID + "= ? " + "WHERE " + ID + "= ?";
 
     private JdbcTemplate jdbcTemplate;
 
@@ -80,7 +80,7 @@ public class UserDaoImpl implements UserDao {
         jdbcInsert.withTableName(TABLE_USER);
         jdbcInsert.setGeneratedKeyName(ID);
         jdbcInsert
-                .setColumnNames(Arrays.asList(FIRSTNAME, LASTNAME, EMAIL, PASSWORD, NIF, PHONE, ACTIVE, ADMIN, ADDRID));
+            .setColumnNames(Arrays.asList(FIRSTNAME, LASTNAME, EMAIL, PASSWORD, NIF, PHONE, ACTIVE, ADMIN, ADDRID));
     }
 
     /*
@@ -122,8 +122,8 @@ public class UserDaoImpl implements UserDao {
         if (user.getId() > 0) {
 
             jdbcTemplate.update(SQL_UPDATE, user.getFirstName(), user.getLastName(), user.getEmail(),
-                    user.getPassword(), user.getNif(), user.getPhone(), user.isActive(), user.isAdmin(),
-                    user.getAddressId(), user.getId());
+                user.getPassword(), user.getNif(), user.getPhone(), user.isActive(), user.isAdmin(),
+                user.getAddressId(), user.getId());
         } else {
 
             Map<String, Object> parameters = new HashMap<String, Object>();
@@ -142,6 +142,16 @@ public class UserDaoImpl implements UserDao {
                 user.setId(key.intValue());
             }
         }
+
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.user.UserDao#changeActiveStatus(java.lang.Integer, boolean)
+     */
+    @Override
+    public void changeActiveStatus(Integer userId, boolean active) {
+        // TODO Auto-generated method stub
 
     }
 

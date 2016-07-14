@@ -33,4 +33,14 @@ interface UserDao {
      */
     void save(User user);
 
+    /**
+     * Change the active status of a user to active or block.
+     * 
+     * @param userId
+     *            unique ID of the user
+     * @param active
+     *            active status of the user
+     */
+    void changeActiveStatus(Integer userId, boolean active);
+
 }
