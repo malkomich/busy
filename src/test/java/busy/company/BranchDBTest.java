@@ -144,19 +144,11 @@ public class BranchDBTest extends AbstractDBTest {
 
     // Read operation tests
 
-    @Test(expected = InvalidDataAccessApiUsageException.class)
-    @DatabaseSetup("../company/branchSet.xml")
-    public void findByNullCompany() {
-
-        repository.findByCompany(null);
-    }
-
     @Test
     @DatabaseSetup("../company/branchSet.xml")
     public void findByInvalidCompany() {
 
-        company.setId(INVALID_ID);
-        List<Branch> branches = repository.findByCompany(company);
+        List<Branch> branches = repository.findByCompanyId(INVALID_ID);
 
         assertTrue(branches.isEmpty());
     }
@@ -165,7 +157,7 @@ public class BranchDBTest extends AbstractDBTest {
     @DatabaseSetup("../company/branchSet.xml")
     public void findByCompanySuccessfully() {
 
-        List<Branch> branches = repository.findByCompany(company);
+        List<Branch> branches = repository.findByCompanyId(1);
 
         assertEquals(2, branches.size());
     }

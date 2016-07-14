@@ -86,7 +86,7 @@ public class ApproveCompanySteps extends AbstractFunctionalTest {
     @When("^I click on \"Approve company\"$")
     public void click_approve() throws Throwable {
 
-        adminPage.clickApprove();
+        adminPage.toogleActiveStatus(AdminPage.COMPANY, null);
         // Waiting for event to be executed
         Thread.sleep(500);
     }

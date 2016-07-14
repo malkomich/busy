@@ -73,7 +73,7 @@ public class UserDBTest extends AbstractDBTest {
     public void insertWithNameTooLong() {
 
         User user = new User("aaaaabbbbbcccccdddddeeeeefffffgggggh", "González Cabrero", "malkomich@gmail.com",
-                "123456", null, null, null, null, null);
+            "123456", null, null, null, null, null);
         repository.save(user);
     }
 
@@ -81,7 +81,7 @@ public class UserDBTest extends AbstractDBTest {
     public void insertWithSurnameTooLong() {
 
         User user = new User("Juan Carlos", "aaaaabbbbbcccccdddddeeeeefffffgggggh", "malkomich@gmail.com", "123456",
-                null, null, null, null, null);
+            null, null, null, null, null);
         repository.save(user);
     }
 
@@ -89,7 +89,7 @@ public class UserDBTest extends AbstractDBTest {
     public void insertWithEmailTooLong() {
 
         User user = new User("Juan Carlos", "González Cabrero", "aaaaabbbbbcccccdddddeeeeefffffggggghhhhhi@gmail.com",
-                "123456", null, null, null, null, null);
+            "123456", null, null, null, null, null);
         repository.save(user);
     }
 
@@ -97,7 +97,7 @@ public class UserDBTest extends AbstractDBTest {
     public void insertWithNifTooLong() {
 
         User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "711526341B", null,
-                null, null, null);
+            null, null, null);
         repository.save(user);
     }
 
@@ -105,7 +105,7 @@ public class UserDBTest extends AbstractDBTest {
     public void insertWithPhoneTooLong() {
 
         User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152634B",
-                "1231231231231", null, null, null);
+            "1231231231231", null, null, null);
         repository.save(user);
     }
 
@@ -113,9 +113,9 @@ public class UserDBTest extends AbstractDBTest {
     public void insertWithEmailDuplicated() {
 
         User user1 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152639B", null,
-                null, null, null);
+            null, null, null);
         User user2 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152634B", null,
-                null, null, null);
+            null, null, null);
         repository.save(user1);
         repository.save(user2);
     }
@@ -124,9 +124,9 @@ public class UserDBTest extends AbstractDBTest {
     public void insertWithNifDuplicated() {
 
         User user1 = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152634B", null,
-                null, null, null);
+            null, null, null);
         User user2 = new User("Juan Carlos", "González Cabrero", "diferente@gmail.com", "123456", "71152634B", null,
-                null, null, null);
+            null, null, null);
         repository.save(user1);
         repository.save(user2);
     }
@@ -136,7 +136,7 @@ public class UserDBTest extends AbstractDBTest {
 
         Address address = new Address();
         User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71152634B", null,
-                null, null, address);
+            null, null, address);
         repository.save(user);
     }
 
@@ -144,7 +144,7 @@ public class UserDBTest extends AbstractDBTest {
     public void insertUserWithoutAddressSuccesfully() {
 
         User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71121212D",
-                "902202122", null, null, null);
+            "902202122", null, null, null);
         repository.save(user);
         assertTrue(user.getId() > 0);
 
@@ -173,7 +173,7 @@ public class UserDBTest extends AbstractDBTest {
         address.setId(1);
 
         User user = new User("Juan Carlos", "González Cabrero", "malkomich@gmail.com", "123456", "71121212D",
-                "902202122", null, null, address);
+            "902202122", null, null, address);
         repository.save(user);
         assertTrue(user.getId() > 0);
 
@@ -218,6 +218,25 @@ public class UserDBTest extends AbstractDBTest {
 
         List<User> userList = repository.findAll();
         assertTrue(userList.isEmpty());
+    }
+
+    @Test
+    public void blockUserByInvalidId() {
+
+        int rows = repository.changeActiveStatus(INVALID_ID, false);
+
+        assertEquals(0, rows);
+    }
+
+    @Test
+    @DatabaseSetup("userSet.xml")
+    public void blockUserByIdSuccessfully() {
+
+        int rows = repository.changeActiveStatus(1, false);
+
+        assertEquals(1, rows);
+
+        assertFalse(repository.findByEmail("user@domain.com").isActive());
     }
 
 }

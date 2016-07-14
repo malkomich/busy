@@ -23,6 +23,7 @@ const
 adminBoxes = {};
 
 adminBoxes.companies = "#admin-companies-content";
+adminBoxes.users = "#admin-users-content";
 
 /*
  * JQuery execute this abstract function when page is totally loaded.
@@ -137,6 +138,13 @@ function updateBox(targetDiv) {
                 $(adminLoadingSelector).css('opacity', '0');
             });
             break;
+        case adminBoxes.users:
+          $.get("/get_user_list", function(data) {
+            $(adminBoxes.users).html(data);
+            $(targetDiv).fadeIn();
+            $(adminLoadingSelector).css('opacity', '0');
+          });
+          break;
         default:
             break;
     }

@@ -54,7 +54,7 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<Category> findCategories() {
+    public List<Category> findAllCategories() {
 
         return categoryDao.findAll();
     }
@@ -76,7 +76,7 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW)
-    public void saveBranch(Branch branch) {
+    public void saveBranchOffice(Branch branch) {
 
         branchDao.save(branch);
     }
@@ -87,7 +87,7 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Branch findBranchById(int id) {
+    public Branch findBranchOfficeById(int id) {
 
         return branchDao.findById(id);
     }
@@ -169,12 +169,13 @@ public class CompanyServiceImpl implements CompanyService {
         return companyDao.countAll();
     }
 
+    /* (non-Javadoc)
+     * @see busy.company.CompanyService#findBranchesByCompanyId(int)
+     */
     @Override
     public List<Branch> findBranchesByCompanyId(int companyId) {
 
-        Company company = companyDao.findById(companyId);
-
-        return branchDao.findByCompany(company);
+        return branchDao.findByCompanyId(companyId);
     }
 
 }

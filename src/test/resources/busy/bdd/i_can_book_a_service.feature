@@ -33,7 +33,7 @@ Feature: An user will be able to make a new booking in a service
         Then I should see a calendar with the available time slots
         When I select the time <time> of the day <day> in the calendar
         Then I should see a dialog with the available workers
-        When the time <time> of day <day> is booked by anyone else
+        When the time <time> of day <day> is being booked by anyone else
         And I select the worker <worker>
         And I submit the booking
         Then I should see a message with the error

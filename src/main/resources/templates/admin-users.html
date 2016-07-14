@@ -1,0 +1,64 @@
+<div class="box-header">
+  <h3 class="box-title" th:text="#{admin.users.table_title}"></h3>
+</div>
+<div class="box-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="table-responsive">
+        <table class="table" role="grid">
+          <thead>
+            <tr role="row">
+              <th th:text="#{user.firstname.label}"></th>
+              <th th:text="#{user.lastname.label}"></th>
+              <th th:text="#{user.email.label}"></th>
+              <th th:text="#{user.nif.label}"></th>
+              <th th:text="#{user.phone.label}"></th>
+              <th th:text="#{switch.label}" class="borderless small"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr role="row" th:each="userItem, status : ${userList}" class="user-item" th:classappend="${userItem.active} ? bg-active : bg-inactive">
+              <input type="hidden" name="user-id" th:value="${userItem.id}"></input>
+              <td th:text="${userItem.firstName}"></td>
+              <td th:text="${userItem.lastName}"></td>
+              <td th:text="${userItem.email}"></td>
+              <td th:text="${userItem.nif}"></td>
+              <td th:text="${userItem.phone}"></td>
+              <td class="borderless bg-none">
+                <div class="onoffswitch">
+                  <input type="checkbox" name="onoffswitch" class="onoffswitch-checkbox" th:id="'onoffswitch' + ${status.index}" th:checked="${userItem.active}"></input>
+                  <label class="onoffswitch-label" th:for="'onoffswitch' + ${status.index}"></label>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /.box-body -->
+
+<script>
+  var targetDiv = $('#admin-users-content');
+  var tbody = $("tbody", targetDiv);
+  // Checkbox change listener
+  $('tr', tbody).each(function() {
+      var entry = $(this);
+      $('.onoffswitch > :checkbox', this).change(function() {
+          var active = $(this).is(':checked');
+          var userId = $('input[name=user-id]', entry).val();
+          $.post('/admin/toogle-user', {
+              "id" : userId,
+              "active" : active
+          });
+          if (active) {
+              $(entry).removeClass("bg-inactive");
+              $(entry).addClass("bg-active");
+          } else {
+              $(entry).removeClass("bg-active");
+              $(entry).addClass("bg-inactive");
+          }
+      });
+  });
+</script>

@@ -128,7 +128,7 @@ public class CompanyController extends BusyController {
             model.addAttribute(REGISTER_COMPANY_REQUEST, new CompanyForm());
 
         model.addAttribute(COUNTRY_ITEMS_REQUEST, locationService.findCountries());
-        model.addAttribute(CATEGORY_ITEMS_REQUEST, companyService.findCategories());
+        model.addAttribute(CATEGORY_ITEMS_REQUEST, companyService.findAllCategories());
 
         return REGISTER_COMPANY_PAGE;
     }
@@ -209,7 +209,7 @@ public class CompanyController extends BusyController {
         branch.setPhone(form.getPhone());
         SecureSetter.setAttribute(branch, "setHeadquarters", Boolean.class, true);
 
-        companyService.saveBranch(branch);
+        companyService.saveBranchOffice(branch);
 
         Role role = new Role();
         role.setUser((User) session.getAttribute(USER_SESSION));
@@ -248,7 +248,7 @@ public class CompanyController extends BusyController {
      *            Web request interface
      */
     @RequestMapping(value = PATH_COMPANY_CHANGE_STATE, method = RequestMethod.POST)
-    public void updateState(@RequestParam(value = "id", required = true) String companyId,
+    public void updateActiveState(@RequestParam(value = "id", required = true) String companyId,
         @RequestParam(value = "active", required = true) boolean active, WebRequest request) {
 
         Company company = companyService.findCompanyById(Integer.parseInt(companyId));
@@ -421,7 +421,7 @@ public class CompanyController extends BusyController {
      * @return The page with all branches for the company
      */
     @RequestMapping(value = PATH_GET_BRANCHES, method = RequestMethod.GET)
-    public String getBranches(@RequestParam("company_id") String companyIdTmp, @RequestParam("section") String section,
+    public String getBranchOffices(@RequestParam("company_id") String companyIdTmp, @RequestParam("section") String section,
         Model model) {
 
         int companyId = Integer.parseInt(companyIdTmp);
@@ -445,12 +445,12 @@ public class CompanyController extends BusyController {
      * @return The page with the requested data of the branch office
      */
     @RequestMapping(value = PATH_BRANCH_DATA, method = RequestMethod.GET)
-    public String getBranchData(@RequestParam("branch_id") String branchIdTmp, @RequestParam("section") String section,
+    public String getBranchOfficeData(@RequestParam("branch_id") String branchIdTmp, @RequestParam("section") String section,
         Model model) {
 
         int branchId = Integer.parseInt(branchIdTmp);
 
-        Branch branch = companyService.findBranchById(branchId);
+        Branch branch = companyService.findBranchOfficeById(branchId);
 
         if (section.equals("booking")) {
             Role role = roleService.findManagerOfBranch(branch);

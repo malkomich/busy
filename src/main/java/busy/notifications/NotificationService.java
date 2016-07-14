@@ -45,5 +45,5 @@ public interface NotificationService {
      * @param user
      *            Owner of the notifications to update
      */
-    void setNotificationsAsRead(User user);
+    void setUserNotificationsAsRead(User user);
 }

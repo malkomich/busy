@@ -1,5 +1,7 @@
 package busy.user;
 
+import java.util.List;
+
 /**
  * User service logic interface. Connects the UI Application layer with the Persistence one,
  * according to the business's processes and workflows.
@@ -52,5 +54,29 @@ public interface UserService {
      * @return The resultant verification
      */
     Verification getVerification(String token);
+
+    /**
+     * Change the active status of an user with the given ID.
+     * 
+     * @param userId
+     *            unique ID of the user
+     * @param active
+     *            active status
+     */
+    void toogleUserActiveStatus(int userId, boolean active);
+
+    /**
+     * Retrieves all the registered users.
+     * 
+     * @return The list of resultant users.
+     */
+    List<User> findAll();
+
+    /**
+     * Counts the number of users registered in the application.
+     * 
+     * @return The number of users
+     */
+    int countAllUsers();
 
 }

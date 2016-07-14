@@ -155,7 +155,7 @@ public class NewBookingSteps extends AbstractFunctionalTest {
         assertFalse(companyInfoPage.timeOptionShown(date));
     }
 
-    @When("^the time \"([^\"]*)\" of day \"([^\"]*)\" is booked by anyone else$")
+    @When("^the time \"([^\"]*)\" of day \"([^\"]*)\" is being booked by anyone else$")
     public void time_booked(String timeTmp, String dayTmp) throws Throwable {
 
         int day = Integer.parseInt(dayTmp);

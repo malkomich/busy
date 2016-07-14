@@ -33,4 +33,22 @@ interface UserDao {
      */
     void save(User user);
 
+    /**
+     * Change the active status of a user to active or block.
+     * 
+     * @param userId
+     *            unique ID of the user
+     * @param active
+     *            active status of the user
+     * @return The number of rows affected
+     */
+    int changeActiveStatus(Integer userId, boolean active);
+
+    /**
+     * Counts the number of users registered in the application.
+     * 
+     * @return The number of users
+     */
+    int countAll();
+
 }

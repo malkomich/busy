@@ -110,7 +110,7 @@ public class MainController extends BusyController {
     public String readAllNotifications(Model model) {
         
         User user = (User) model.asMap().get(USER_SESSION);
-        notificationService.setNotificationsAsRead(user);
+        notificationService.setUserNotificationsAsRead(user);
         
         List<Notification> notifications = notificationService.findNotificationsByUser(user);
         model.addAttribute(NOTIFICATIONS_SESSION, notifications);
