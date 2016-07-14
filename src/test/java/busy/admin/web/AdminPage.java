@@ -18,7 +18,7 @@ public class AdminPage extends BusyPage {
 
     public static final int COMPANY = 0;
     public static final int USER = 1;
-    
+
     private static final String PATH = "/admin";
     private static final String DESCRIPTION = "Admin Page";
 
@@ -26,9 +26,11 @@ public class AdminPage extends BusyPage {
      * CSS Selectors
      */
     private static final String SHOW_COMPANIES_SELECTOR = "#admin-companies-button";
+    private static final String SHOW_USERS_SELECTOR = "#admin-users-button";
     private static final String COMPANY_SELECTOR = ".company-item";
     private static final String USER_SELECTOR = ".user-item";
     private static final String SWITCH_SELECTOR = ".onoffswitch-checkbox";
+    private static final String MESSAGE_SELECTOR = "#infoMessage";
 
     private FluentWebElement companyItem;
 
@@ -102,23 +104,32 @@ public class AdminPage extends BusyPage {
     }
 
     public AdminPage clickOnUsersSection() {
-        // TODO Auto-generated method stub
+
+        click(SHOW_USERS_SELECTOR);
+        waitForJSandJQueryToLoad();
         return this;
     }
 
-    public AdminPage userListShown() {
-        // TODO Auto-generated method stub
-        return this;
+    public boolean userListShown() {
+
+        return !find(USER_SELECTOR).isEmpty();
     }
 
-    public boolean userActiveStatus(String name, boolean b) {
-        // TODO Auto-generated method stub
+    public boolean userActiveStatus(String name, boolean active) {
+
+        if (!name.isEmpty()) {
+            FluentWebElement userItem = findFirst(USER_SELECTOR, FilterConstructor.withText().contains(name));
+            if ((active && userItem.findFirst(SWITCH_SELECTOR).isSelected())
+                || (!active && !userItem.findFirst(SWITCH_SELECTOR).isSelected())) {
+                return true;
+            }
+        }
         return false;
     }
 
     public boolean blockUserConfirmationShown() {
-        // TODO Auto-generated method stub
-        return false;
+
+        return findFirst(MESSAGE_SELECTOR).isDisplayed();
     }
 
 }

@@ -1,6 +1,5 @@
 package busy.bdd.admin.block_users;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.fluentlenium.assertj.FluentLeniumAssertions;
@@ -67,9 +66,9 @@ public class BlockUserSteps extends AbstractFunctionalTest {
     @Then("^I should see a detailed list of all the users in the system$")
     public void user_list_shown() throws Throwable {
 
-        adminPage.userListShown();
+        assertTrue(adminPage.userListShown());
     }
-    
+
     @Then("^I should see the user \"([^\"]*)\" as active$")
     public void user_active(String name) throws Throwable {
 
@@ -84,14 +83,14 @@ public class BlockUserSteps extends AbstractFunctionalTest {
 
     @Then("^I should see a confirmation message$")
     public void confirmation_shown() throws Throwable {
-        
+
         assertTrue(adminPage.blockUserConfirmationShown());
     }
 
     @Then("^I should see the user \"([^\"]*)\" as blocked$")
     public void user_blocked(String name) throws Throwable {
 
-        assertFalse(adminPage.userActiveStatus(name, true));
+        assertTrue(adminPage.userActiveStatus(name, false));
     }
 
 }
