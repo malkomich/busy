@@ -108,7 +108,9 @@ public class AdminController {
     @RequestMapping(value = PATH_USERS_UPDATE, method = RequestMethod.GET)
     public String updateUsers(Model model) {
 
-        model.addAttribute(USERS_REQUEST, userService.findAll());
+        List<User> userList = userService.findAll();
+        model.addAttribute(USERS_REQUEST, userList);
+        
         return USERS_FRAGMENT;
     }
 

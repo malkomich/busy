@@ -139,8 +139,10 @@ function updateBox(targetDiv) {
             });
             break;
         case adminBoxes.users:
-          $.getJSON("/get_user_list", function(data) {
-            $('#admin-content').html(data);
+          $.get("/get_user_list", function(data) {
+            $(adminBoxes.users).html(data);
+            $(targetDiv).fadeIn();
+            $(adminLoadingSelector).css('opacity', '0');
           });
           break;
         default:
