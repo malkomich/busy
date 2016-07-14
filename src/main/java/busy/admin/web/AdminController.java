@@ -37,6 +37,7 @@ public class AdminController {
 
     static final String MESSAGE_REQUEST = "messageFromController";
     static final String COMPANIES_NUM_REQUEST = "numOfcompanies";
+    static final String USERS_NUM_REQUEST = "numOfUsers";
     static final String USERS_REQUEST = "userList";
 
     /**
@@ -86,6 +87,9 @@ public class AdminController {
 
             int numOfCompanies = companyService.countAllCompanies();
             model.addAttribute(COMPANIES_NUM_REQUEST, numOfCompanies);
+            
+            int numOfUsers = userService.countAllUsers();
+            model.addAttribute(USERS_NUM_REQUEST, numOfUsers);
 
             return ADMIN_PAGE;
         }

@@ -70,6 +70,8 @@ public class UserDaoImpl implements UserDao {
     private static final String SQL_UPDATE_ACTIVE_STATUS =
         "UPDATE " + TABLE_USER + " SET " + ACTIVE + "= ? " + "WHERE " + ID + "= ?";
 
+    private static final String SQL_COUNT_ALL = "SELECT COUNT(*) FROM (" + SQL_SELECT_ALL + ") AS countTable";
+
     private JdbcTemplate jdbcTemplate;
 
     private SimpleJdbcInsert jdbcInsert;
@@ -156,6 +158,16 @@ public class UserDaoImpl implements UserDao {
     public int changeActiveStatus(Integer userId, boolean active) {
 
         return jdbcTemplate.update(SQL_UPDATE_ACTIVE_STATUS, active, userId);
+    }
+
+    /*
+     * (non-Javadoc)
+     * @see busy.user.UserDao#countAll()
+     */
+    @Override
+    public int countAll() {
+
+        return jdbcTemplate.queryForObject(SQL_COUNT_ALL, Integer.class);
     }
 
     private class UserRowMapper implements RowMapper<User> {

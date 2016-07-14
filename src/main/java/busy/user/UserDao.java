@@ -44,4 +44,11 @@ interface UserDao {
      */
     int changeActiveStatus(Integer userId, boolean active);
 
+    /**
+     * Counts the number of users registered in the application.
+     * 
+     * @return The number of users
+     */
+    int countAll();
+
 }

@@ -169,6 +169,9 @@ public class CompanyServiceImpl implements CompanyService {
         return companyDao.countAll();
     }
 
+    /* (non-Javadoc)
+     * @see busy.company.CompanyService#findBranchesByCompanyId(int)
+     */
     @Override
     public List<Branch> findBranchesByCompanyId(int companyId) {
 

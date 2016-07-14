@@ -72,4 +72,11 @@ public interface UserService {
      */
     List<User> findAll();
 
+    /**
+     * Counts the number of users registered in the application.
+     * 
+     * @return The number of users
+     */
+    int countAllUsers();
+
 }
