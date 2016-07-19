@@ -290,33 +290,40 @@ INSERT INTO service_type(name, description, bookings_per_role, company_id) VALUE
 
 /* table service */
 INSERT INTO service(service_type_id, repetition_type) VALUES((SELECT id FROM service_type WHERE name='Cambio de aceite'), 0);
-INSERT INTO service(service_type_id, repetition_type) VALUES((SELECT id FROM service_type WHERE name='Revisión oficial'), 1);
+INSERT INTO service(service_type_id, repetition_type) VALUES((SELECT id FROM service_type WHERE name='Revisión oficial'), 2);
+
+/* table time_slot */
 
 INSERT INTO time_slot(start_time, service_id) VALUES('2016-07-22 16:00:00', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Cambio de aceite')));
 INSERT INTO time_slot(start_time, service_id) VALUES('2016-07-26 13:00:00', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Revisión oficial')));
 
+INSERT INTO time_slot(start_time, service_id) VALUES('2016-07-21 17:00:00', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Cambio de aceite')));
+
+INSERT INTO time_slot(start_time, service_id) VALUES('2016-07-23 12:00:00', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Cambio de aceite')));
+INSERT INTO time_slot(start_time, service_id) VALUES('2016-07-28 18:00:00', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Revisión oficial')));
+
+INSERT INTO time_slot(start_time, service_id) VALUES('2016-07-25 13:00:00', (SELECT id FROM service WHERE service_type_id=(SELECT id FROM service_type WHERE name='Cambio de aceite')));
+
+/* table schedule */
+
 INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-22 16:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296126') ORDER BY id ASC LIMIT 1));
 INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-26 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296126') ORDER BY id ASC LIMIT 1));
 
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-22 16:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296129') ORDER BY id ASC LIMIT 1));
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-26 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296129') ORDER BY id ASC LIMIT 1));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-21 17:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296129') ORDER BY id ASC LIMIT 1));
 
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-22 16:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296130') ORDER BY id ASC LIMIT 1));
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-26 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296130') ORDER BY id ASC LIMIT 1));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-23 12:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296130') ORDER BY id ASC LIMIT 1));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-28 18:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296130') ORDER BY id ASC LIMIT 1));
 
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-22 16:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296132') ORDER BY id ASC LIMIT 1));
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-26 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296132') ORDER BY id ASC LIMIT 1));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-25 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296132') ORDER BY id ASC LIMIT 1));
 
 /* */
 
 INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-22 16:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296126') ORDER BY id DESC LIMIT 1));
 INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-26 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296126') ORDER BY id DESC LIMIT 1));
 
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-22 16:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296129') ORDER BY id DESC LIMIT 1));
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-26 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296129') ORDER BY id DESC LIMIT 1));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-21 17:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296129') ORDER BY id DESC LIMIT 1));
 
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-22 16:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296130') ORDER BY id DESC LIMIT 1));
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-26 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296130') ORDER BY id DESC LIMIT 1));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-23 12:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296130') ORDER BY id DESC LIMIT 1));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-28 18:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296130') ORDER BY id DESC LIMIT 1));
 
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-22 16:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296132') ORDER BY id DESC LIMIT 1));
-INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-26 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296132') ORDER BY id DESC LIMIT 1));
+INSERT INTO schedule(time_slot_id, role_id) VALUES((SELECT id FROM time_slot WHERE start_time='2016-07-25 13:00:00'), (SELECT id FROM role WHERE branch_id=(SELECT id FROM branch WHERE phone='902296132') ORDER BY id DESC LIMIT 1));
