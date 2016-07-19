@@ -117,9 +117,11 @@ CREATE TABLE branch (
         ON DELETE NO ACTION ON UPDATE CASCADE,
     main                boolean             NOT NULL DEFAULT false,
     phone               varchar(12)         NULL,
-    UNIQUE (company_id, address_id),
-    UNIQUE (company_id, main)
+    UNIQUE (company_id, address_id)
 );
+
+CREATE UNIQUE INDEX headquarter_key ON branch (company_id)
+WHERE (main is true);
 
 CREATE SEQUENCE role_seq;
 
