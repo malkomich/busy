@@ -1016,8 +1016,6 @@ if(!String.prototype.formatNum) {
 	Calendar.prototype._update_modal = function() {
 		var self = this;
 
-		$('a[data-event-id]', this.context).unbind('click');
-
 		if(!self.options.modal) {
 			return;
 		}
@@ -1106,17 +1104,7 @@ if(!String.prototype.formatNum) {
 			})
 			.on('mouseleave', function() {
 				downbox.hide();
-			})
-			.on('click', function(event) {
-				if($('.events-list', this).length == 0) {
-					return;
-				}
-				if($(this).children('[data-cal-date]').text() == self.activecell) {
-					return;
-				}
-				showEventsList(event, downbox, slider, self);
-			})
-		;
+			});
 
 		var slider = $(document.createElement('div')).attr('id', 'cal-slide-box');
 		slider.hide().click(function(event) {
